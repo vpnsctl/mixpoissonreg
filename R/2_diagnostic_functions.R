@@ -771,9 +771,9 @@ summary.mixpoissonreg <- function(object, ...) {
 
 #############################################################################################
 #' @title residuals.mixpoissonreg
-#' @description Function to return 'Pearson' or 'score' residuals for mixed Poisson regression model.
+#' @description Function to return 'pearson' or 'score' residuals for mixed Poisson regression model.
 #' @param object an object of class "mixpoissonreg" containing results from the fitted model.
-#' @param type the type of residual to be returned. Currently, the options are 'Pearson' or 'score'. The default is set to 'Pearson'. Notice that these
+#' @param type the type of residual to be returned. Currently, the options are 'pearson' or 'score'. The default is set to 'pearson'. Notice that these
 #' residuals coincide for Negative-Binomial models.
 #' @param ... further arguments passed to or from other methods.
 #' @seealso
@@ -786,12 +786,12 @@ summary.mixpoissonreg <- function(object, ...) {
 #' summary(fit)
 #' }
 #' @export
-residuals.mixpoissonreg <- function(object, type = c("Pearson", "score")) {
+residuals.mixpoissonreg <- function(object, type = c("pearson", "score")) {
   if(length(type)>1){
     type = type[1]
   }
-  if(!(type%in%c("Pearson", "score"))){
-    stop("the type must be 'Pearson' or 'score'")
+  if(!(type%in%c("pearson", "score"))){
+    stop("the type must be 'pearson' or 'score'")
   }
 if(is.null(object$y)){
   y = object$residuals + object$fitted.values
@@ -815,7 +815,7 @@ if(is.null(object$y)){
 
 
   residuals <- switch(type,
-                      "Pearson" = {
+                      "pearson" = {
                       (y-mu)/sqrt(mu*(1+ddB(qsi0)*mu/phi))
                         },
                       "score" = {

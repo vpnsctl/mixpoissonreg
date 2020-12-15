@@ -20,7 +20,7 @@
 #'
 #' For \code{mixpoissonreg.fit} a matrix of covariates with respect to the precision parameter. The default is \code{NULL}. If not \code{NULL} must be of dimension \code{(n,nalpha)}.
 #' @param method estimation method to be chosen between "EM" (Expectation-Maximization) and "ML" (Maximum-Likelihood). The default method is "EM".
-#' @param residual character indicating the type of residual to be evaluated ("Pearson" or "score"). The default is "Pearson". Notice that they coincide for Negative-Binomial models.
+#' @param residual character indicating the type of residual to be evaluated ("pearson" or "score"). The default is "pearson". Notice that they coincide for Negative-Binomial models.
 #' @param envelope number of simulations (synthetic data sets) to build envelopes for residuals (with \code{100*prob\%} confidence level).
 #' The default \code{envelope = 0} dismisses the envelope analysis.
 #' @param prob probability indicating the confidence level for the envelopes (default: \code{prob} = 0.95).
@@ -46,7 +46,7 @@
 #'   \item \code{call} - the formula used by the model. If using \code{mixpoissonreg.fit}, this returns \code{NULL}.
 #'   \item \code{modelname} - the fitted model, NB or PIG;
 #'   \item \code{modeltype} - the abbreviated model name
-#'   \item \code{residualname} - the name of the chosen residual in the call, 'Pearson' or 'score';
+#'   \item \code{residualname} - the name of the chosen residual in the call, 'pearson' or 'score';
 #'   \item \code{niter} - number of iterations of the EM algorithm if method = "EM" and number of iterations
 #'   of the \code{optim} function, if method = "ML";
 #'   \item \code{start} - the initial guesses of the parameters
@@ -115,7 +115,7 @@
 #' Therefore, the \code{mixpoissonreg} package handles up to two regression structures
 #' at the same time: one for the mean parameter, one for the precision parameter.
 #'
-#' In Barreto-Souza and Simas (2015) two residuals were studied: the Pearson residuals
+#' In Barreto-Souza and Simas (2015) two residuals were studied: the pearson residuals
 #' and the score residuals. Both these residuals are implemented in the \code{mixpoissonreg}
 #' package.
 #'
@@ -177,7 +177,7 @@
 mixpoissonreg <- function(formula, data, link.mean = c("log", "sqrt"),
                   link.precision = c("identity", "log", "inverse.sqrt"),
                   model = c("NB", "PIG"), method = c("EM", "ML"),
-                  residual = c("Pearson", "score"), y = TRUE, x = TRUE, w = TRUE,
+                  residual = c("pearson", "score"), y = TRUE, x = TRUE, w = TRUE,
                   envelope = 0, prob = 0.95, model.frame = TRUE, em_controls = list(maxit = 5000, em_tol = 10^(-5), em_tolgrad = 10^(-2)),
                   optim_method = "L-BFGS-B", optim_controls = list()) {
   call_mixpoissonreg <- match.call()
@@ -268,7 +268,7 @@ mixpoissonreg <- function(formula, data, link.mean = c("log", "sqrt"),
 mixpoissonreg.fit <- function(y, x, w = NULL, link.mean = c("log", "sqrt"),
                       link.precision = c("identity", "log", "inverse.sqrt"),
                       model = c("NB", "PIG"), method = c("EM", "ML"),
-                      residual = c("Pearson", "score"), envelope = 0,
+                      residual = c("pearson", "score"), envelope = 0,
                       prob = 0.95, em_controls = list(maxit = 5000, em_tol = 10^(-5), em_tolgrad = 10^(-2)), optim_method = "L-BFGS-B", optim_controls = list()) {
 
   #Processing em_controls:
@@ -322,10 +322,10 @@ mixpoissonreg.fit <- function(y, x, w = NULL, link.mean = c("log", "sqrt"),
     residual <- residual[1]
   }
   if (is.character(residual) == FALSE) {
-    stop("residual must be a character (Pearson, score)")
+    stop("residual must be a character (pearson, score)")
   }
   if (is.character(residual) == TRUE) {
-    residual <- match.arg(residual, c("Pearson", "score"))
+    residual <- match.arg(residual, c("pearson", "score"))
   }
   #
   if (is.numeric(envelope) == FALSE) {
@@ -422,7 +422,7 @@ mixpoissonreg.fit <- function(y, x, w = NULL, link.mean = c("log", "sqrt"),
       coefficients_mpreg <- fitted_mpreg$coefficients # coefficients
       fitted_values <- fitted_mpreg$fitted.values # mu
       residuals_mpreg <- switch(residual,
-                    "Pearson" = {pearson_residual_mixpoisson(coefficients_mpreg, y, x, w,
+                    "pearson" = {pearson_residual_mixpoisson(coefficients_mpreg, y, x, w,
                                          link.mean, link.precision, aux_model)},
                     "score" = {score_residual_mixpoisson(coefficients_mpreg, y, x, w,
                                                            link.mean, link.precision, aux_model)}
@@ -540,7 +540,7 @@ mixpoissonreg.fit <- function(y, x, w = NULL, link.mean = c("log", "sqrt"),
 #' @param w For \code{mixpoissonregML}: logical values indicating if the model matrix \code{w} should be returned as component.
 #'
 #' For \code{mixpoissonregML.fit} a matrix of covariates with respect to the precision parameter. The default is \code{NULL}. If not \code{NULL} must be of dimension \code{(n,nalpha)}.
-#' @param residual character indicating the type of residual to be evaluated ("Pearson" or "score"). The default is "Pearson". Notice that they coincide for Negative-Binomial models.
+#' @param residual character indicating the type of residual to be evaluated ("pearson" or "score"). The default is "pearson". Notice that they coincide for Negative-Binomial models.
 #' @param envelope number of simulations (synthetic data sets) to build envelopes for residuals (with \code{100*prob\%} confidence level).
 #' The default \code{envelope = 0} dismisses the envelope analysis.
 #' @param prob probability indicating the confidence level for the envelopes (default: \code{prob} = 0.95).
@@ -566,7 +566,7 @@ mixpoissonreg.fit <- function(y, x, w = NULL, link.mean = c("log", "sqrt"),
 #'   \item \code{call} - the formula used by the model. If using \code{mixpoissonreg.fit}, this returns \code{NULL}.
 #'   \item \code{modelname} - the fitted model, NB or PIG;
 #'   \item \code{modeltype} - the abbreviated model name
-#'   \item \code{residualname} - the name of the chosen residual in the call, 'Pearson' or 'score';
+#'   \item \code{residualname} - the name of the chosen residual in the call, 'pearson' or 'score';
 #'   \item \code{niter} - number of iterations of the EM algorithm if method = "EM" and number of iterations
 #'   of the \code{optim} function, if method = "ML";
 #'   \item \code{start} - the initial guesses of the parameters
@@ -636,7 +636,7 @@ mixpoissonreg.fit <- function(y, x, w = NULL, link.mean = c("log", "sqrt"),
 #' Therefore, the \code{mixpoissonreg} package handles up to two regression structures
 #' at the same time: one for the mean parameter, one for the precision parameter.
 #'
-#' In Barreto-Souza and Simas (2015) two residuals were studied: the Pearson residuals
+#' In Barreto-Souza and Simas (2015) two residuals were studied: the pearson residuals
 #' and the score residuals. Both these residuals are implemented in the \code{mixpoissonreg}
 #' package. These residuals coincide for Negative-Binomial models.
 #'
@@ -698,7 +698,7 @@ mixpoissonreg.fit <- function(y, x, w = NULL, link.mean = c("log", "sqrt"),
 mixpoissonregML <- function(formula, data, link.mean = c("log", "sqrt"),
                           link.precision = c("identity", "log", "inverse.sqrt"),
                           model = c("NB", "PIG"),
-                          residual = c("Pearson", "score"), y = TRUE, x = TRUE, w = TRUE,
+                          residual = c("pearson", "score"), y = TRUE, x = TRUE, w = TRUE,
                           envelope = 0, prob = 0.95, model.frame = TRUE, em_controls = list(maxit = 5000, em_tol = 10^(-5), em_tolgrad = 10^(-2)),
                           optim_method = "L-BFGS-B", optim_controls = list()) {
   call_mixpoissonreg <- match.call()
@@ -725,7 +725,7 @@ mixpoissonregML <- function(formula, data, link.mean = c("log", "sqrt"),
 mixpoissonregML.fit <- function(y, x, w = NULL, link.mean = c("log", "sqrt"),
                               link.precision = c("identity", "log", "inverse.sqrt"),
                               model = c("NB", "PIG"),
-                              residual = c("Pearson", "score"), envelope = 0,
+                              residual = c("pearson", "score"), envelope = 0,
                               prob = 0.95, em_controls = list(maxit = 5000, em_tol = 10^(-5), em_tolgrad = 10^(-2)), optim_method = "L-BFGS-B", optim_controls = list()) {
 
   object <- mixpoissonreg.fit(y=y, x=x, w = w, link.mean = link.mean,

@@ -85,7 +85,7 @@ h = switch(hat,
 dist <- switch(type,
                "CD" = {
                  p <- length(model$coefficients$mean)
-                 pearson_residuals <- residuals(model, type = "Pearson")
+                 pearson_residuals <- residuals(model, type = "pearson")
                  h*(pearson_residuals^2)/(p*(1-h)^2)
                },
                "GCD" = {
@@ -409,5 +409,10 @@ if(do.coef){
   colnames(influence_mpreg$coefficients.precision) <- names(model$coefficients$precision)
   rownames(influence_mpreg$coefficients.precision) <- 1:nrow(influence_mpreg$coefficients.precision)
 }
+
+influence_mpreg$pear.res <- residuals(model, type = "pearson")
+
+influence_mpreg$score.res <- residuals(model, type = "score")
+
 influence_mpreg
 }

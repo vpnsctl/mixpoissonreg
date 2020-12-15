@@ -198,7 +198,7 @@ generate_data_mixpoisson <- function(coefficients, x, w,
 #############################################################################################
 #' @title envelope_mixpoisson
 #' @description Function to calculate envelopes based on residuals for the mixed Poisson regression models.
-#' @param residual character indicating the type of residual ("Pearson" or "score").
+#' @param residual character indicating the type of residual ("pearson" or "score").
 #' @param estimation_method character indicating the estimation method ("EM" or "ML").
 #' @param coefficients a list containing elements 'mean' and 'precision'. 'mean' and 'precision' are vectors of estimated parameters of the model.
 #' @param x matrix containing the covariates for the mean submodel. Each column is a different covariate.
@@ -229,7 +229,7 @@ envelope_mixpoisson <- function(residual, estimation_method,
   ysim <- generate_data_mixpoisson(coefficients, x, w, nsim_env, link.mean, link.precision, model)
 
   residuals_envelope <- switch(residual,
-                "Pearson" = {
+                "pearson" = {
                   residuals_env <- pblapply(ysim, function(y_env) {
                     coeff_env <- switch(estimation_method,
                            "EM" = {EM_mixpoisson(coefficients$mean, coefficients$precision, y_env, x, w, link.mean, link.precision,
@@ -267,7 +267,7 @@ envelope_mixpoisson <- function(residual, estimation_method,
 
 #############################################################################################
 #' @title pearson_residual_mixpoisson
-#' @description Function to calculate the Pearson residuals for mixed Poisson regression models.
+#' @description Function to calculate the pearson residuals for mixed Poisson regression models.
 #' @param coefficients a list containing elements 'beta' and 'alpha'. 'beta' and 'alpha' are vectors of estimated parameters of the model.
 #' @param y response vector with y_i>=0 and integer.
 #' @param x matrix containing the covariates for the mean submodel. Each column is a different covariate.
@@ -279,7 +279,7 @@ envelope_mixpoisson <- function(residual, estimation_method,
 #' @param model the mixed Poisson model, "NB" or "PIG".
 #' @seealso
 #' \code{\link{score_residual_bet}}
-#' @return Vector containing the Pearson residuals.
+#' @return Vector containing the pearson residuals.
 pearson_residual_mixpoisson <- function(coefficients, y, x, w,
                             link.mean, link.precision, model){
   link_mean <- build_links_mpreg(link.mean)
