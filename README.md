@@ -30,7 +30,7 @@ devtools::install_github("vpnsctl/mixpoissonreg", build_vignettes = TRUE)
 
 This repository will always contain the most recent version of the *mixpoissonreg* package.
 
-## Vignette
+## Vignettes
 
 The *mixpoissonreg* package currently has the following vignettes:
 
