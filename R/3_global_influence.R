@@ -255,11 +255,14 @@ dist <- switch(type,
 
                  covariates_matrix <- cbind(x, matrix(0,nrow=nrow(x), ncol = ncol(w)))
                  covariates_matrix <- rbind(covariates_matrix, cbind(matrix(0, nrow = nrow(x), ncol = ncol(x)), w))
-                 coeff <- c(model$coefficients$mean, model$coefficients$precision)
+                 coeff_beta <- model$coefficients$mean
+                 coeff_alpha <- model$coefficients$precision
                  new_coeff <- lapply(1:nrow(x), function(i){
-                   W_Q <- obs_fisher_weight_matrix_mixpoisson(model, parameters = "all")
-                   coeff + solve(t(covariates_matrix)%*% W_Q %*% covariates_matrix)%*%covariates_matrix[i ,] * c(rep(a[i], n_beta), rep(0, n_alpha)) +
-                     solve(t(covariates_matrix)%*% W_Q %*% covariates_matrix)%*%covariates_matrix[nrow(x)+i ,] * c(rep(0, n_beta), rep(b[i], n_alpha))
+                   W_Q_mean <- obs_fisher_weight_matrix_mixpoisson(model, parameters = "mean")
+                   W_Q_precision <- obs_fisher_weight_matrix_mixpoisson(model, parameters = "precision")
+                   new_beta <- coeff_beta + solve(t(x)%*% W_Q_mean %*% x)%*% x[i ,] * a[i]
+                   new_alpha <- coeff_alpha + solve(t(w)%*% W_Q_precision %*% w)%*% w[i ,] * b[i]
+                   c(new_beta, new_alpha)
                  })
                  lik_disp <- lapply(new_coeff, function(i){2*(loglik_mixpoisson(coeff, y, x, w, model$link.mean, model$link.precision, model$modeltype) - loglik_mixpoisson(i, y, x, w, model$link.mean, model$link.precision, model$modeltype))})
                  lik_disp <- c(unlist(lik_disp))
@@ -312,11 +315,14 @@ dist <- switch(type,
 
                  covariates_matrix <- cbind(x, matrix(0,nrow=nrow(x), ncol = ncol(w)))
                  covariates_matrix <- rbind(covariates_matrix, cbind(matrix(0, nrow = nrow(x), ncol = ncol(x)), w))
-                 coeff <- c(model$coefficients$mean, model$coefficients$precision)
+                 coeff_beta <- model$coefficients$mean
+                 coeff_alpha <- model$coefficients$precision
                  new_coeff <- lapply(1:nrow(x), function(i){
-                   W_Q <- obs_fisher_weight_matrix_mixpoisson(model, parameters = "all")
-                   coeff + solve(t(covariates_matrix)%*% W_Q %*% covariates_matrix)%*%covariates_matrix[i ,] * c(rep(a[i], n_beta), rep(0, n_alpha)) +
-                     solve(t(covariates_matrix)%*% W_Q %*% covariates_matrix)%*%covariates_matrix[nrow(x)+i ,] * c(rep(0, n_beta), rep(b[i], n_alpha))
+                   W_Q_mean <- obs_fisher_weight_matrix_mixpoisson(model, parameters = "mean")
+                   W_Q_precision <- obs_fisher_weight_matrix_mixpoisson(model, parameters = "precision")
+                   new_beta <- coeff_beta + solve(t(x)%*% W_Q_mean %*% x)%*% x[i ,] * a[i]
+                   new_alpha <- coeff_alpha + solve(t(w)%*% W_Q_precision %*% w)%*% w[i ,] * b[i]
+                   c(new_beta, new_alpha)
                  })
                  Q_disp <- lapply(new_coeff, function(i){2*(Q_function_mixpoisson(coeff, mu, phi, y, x, w, model$link.mean, model$link.precision, model$modeltype) - Q_function_mixpoisson(i, mu, phi, y, x, w, model$link.mean, model$link.precision, model$modeltype))})
                  Q_disp <- c(unlist(Q_disp))
@@ -357,6 +363,7 @@ if(do.coef){
 
   lambda = lambda_r(y,mu,phi,model$modeltype)
 
+
   a = mu*lambda - y
 
   link_precision <- build_links_mpreg(model$link.precision)
@@ -385,22 +392,22 @@ if(do.coef){
   n_beta <- length(model$coefficients$mean)
   n_alpha <- length(model$coefficients$precision)
 
-  covariates_matrix <- cbind(x, matrix(0,nrow=nrow(x), ncol = ncol(w)))
-  covariates_matrix <- rbind(covariates_matrix, cbind(matrix(0, nrow = nrow(x), ncol = ncol(x)), w))
-  coeff <- c(model$coefficients$mean, model$coefficients$precision)
+  coeff_beta <- model$coefficients$mean
+  coeff_alpha <- model$coefficients$precision
   new_coeff <- lapply(1:nrow(x), function(i){
-    W_Q <- obs_fisher_weight_matrix_mixpoisson(model, parameters = "all")
-    coeff + solve(t(covariates_matrix)%*% W_Q %*% covariates_matrix)%*%covariates_matrix[i ,] * c(rep(a[i], n_beta), rep(0, n_alpha)) +
-      solve(t(covariates_matrix)%*% W_Q %*% covariates_matrix)%*%covariates_matrix[nrow(x)+i ,] * c(rep(0, n_beta), rep(b[i], n_alpha))
+    W_Q_mean <- obs_fisher_weight_matrix_mixpoisson(model, parameters = "mean")
+    W_Q_precision <- obs_fisher_weight_matrix_mixpoisson(model, parameters = "precision")
+    new_beta <- coeff_beta + solve(t(x)%*% W_Q_mean %*% x)%*% x[i ,] * a[i]
+    new_alpha <- coeff_alpha + solve(t(w)%*% W_Q_precision %*% w)%*% w[i ,] * b[i]
+    c(new_beta, new_alpha)
   })
+
   influence_mpreg$coefficients.mean <- matrix(sapply(new_coeff, function(coeffs){coeffs[1:n_beta]}), nrow = nrow(x))
   colnames(influence_mpreg$coefficients.mean) <- names(model$coefficients$mean)
   rownames(influence_mpreg$coefficients.mean) <- 1:nrow(influence_mpreg$coefficients.mean)
   influence_mpreg$coefficients.precision <- matrix(sapply(new_coeff, function(coeffs){coeffs[(n_beta+1):(n_beta+n_alpha)]}), nrow = nrow(w))
   colnames(influence_mpreg$coefficients.precision) <- names(model$coefficients$precision)
   rownames(influence_mpreg$coefficients.precision) <- 1:nrow(influence_mpreg$coefficients.precision)
-
-
 }
 influence_mpreg
 }
