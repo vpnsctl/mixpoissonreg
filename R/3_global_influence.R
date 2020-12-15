@@ -15,7 +15,7 @@
 #' if 'hat' is set to 'precision', the model must be fitted with 'w' set to TRUE.
 #' @param parameters the parameter to which the hat values will be computed. The options are 'mean' and 'precision'. The default is 'mean'. For hatvalues with respect to the mean
 #' the model must be fitted with 'x' set to TRUE, and for hatvalues with respect to the precision the model must be fitted with 'w' set to TRUE.
-#' @param do.coef logical indicating if the the approximation to the change of coefficients values after case removal are desired. See details for further explanations.
+#' @param do.coef logical indicating if the the approximation to the change of coefficients values after case removal are desired. The model must be fitted with x = TRUE. See details for further explanations.
 #' @details Preencher
 #'
 #' @references Zhu et al.; Barreto-Souza and Simas; Cook and Preigibon; etc..
@@ -45,7 +45,9 @@ hatvalues.mixpoissonreg <- function(model, parameters = c("mean", "precision")){
                sqrt_W %*% x %*% solve(t(x)%*%W%*%x)%*%t(x)%*% sqrt_W},
              "precision" = {w = model$w
              sqrt_W %*% w %*% solve(t(w)%*%W%*%w)%*%t(w)%*% sqrt_W})
-  return(diag(H))
+ h <- diag(H)
+ names(h) <- 1:length(h)
+ h
 }
 
 #' @rdname global.influence.mixpoissonreg
@@ -256,7 +258,8 @@ dist <- switch(type,
                  coeff <- c(model$coefficients$mean, model$coefficients$precision)
                  new_coeff <- lapply(1:nrow(x), function(i){
                    W_Q <- obs_fisher_weight_matrix_mixpoisson(model, parameters = "all")
-                   coeff + solve(t(covariates_matrix)%*% W_Q %*% covariates_matrix)%*%covariates_matrix[i ,] * c(rep(a[i], ncol(model$x)), rep(b[i], ncol(model$w)))
+                   coeff + solve(t(covariates_matrix)%*% W_Q %*% covariates_matrix)%*%covariates_matrix[i ,] * c(rep(a[i], n_beta), rep(0, n_alpha)) +
+                     solve(t(covariates_matrix)%*% W_Q %*% covariates_matrix)%*%covariates_matrix[nrow(x)+i ,] * c(rep(0, n_beta), rep(b[i], n_alpha))
                  })
                  lik_disp <- lapply(new_coeff, function(i){2*(loglik_mixpoisson(coeff, y, x, w, model$link.mean, model$link.precision, model$modeltype) - loglik_mixpoisson(i, y, x, w, model$link.mean, model$link.precision, model$modeltype))})
                  lik_disp <- c(unlist(lik_disp))
@@ -312,7 +315,8 @@ dist <- switch(type,
                  coeff <- c(model$coefficients$mean, model$coefficients$precision)
                  new_coeff <- lapply(1:nrow(x), function(i){
                    W_Q <- obs_fisher_weight_matrix_mixpoisson(model, parameters = "all")
-                   coeff + solve(t(covariates_matrix)%*% W_Q %*% covariates_matrix)%*%covariates_matrix[i ,] * c(rep(a[i], ncol(model$x)), rep(b[i], ncol(model$w)))
+                   coeff + solve(t(covariates_matrix)%*% W_Q %*% covariates_matrix)%*%covariates_matrix[i ,] * c(rep(a[i], n_beta), rep(0, n_alpha)) +
+                     solve(t(covariates_matrix)%*% W_Q %*% covariates_matrix)%*%covariates_matrix[nrow(x)+i ,] * c(rep(0, n_beta), rep(b[i], n_alpha))
                  })
                  Q_disp <- lapply(new_coeff, function(i){2*(Q_function_mixpoisson(coeff, mu, phi, y, x, w, model$link.mean, model$link.precision, model$modeltype) - Q_function_mixpoisson(i, mu, phi, y, x, w, model$link.mean, model$link.precision, model$modeltype))})
                  Q_disp <- c(unlist(Q_disp))
@@ -328,6 +332,75 @@ dist
 #' @export
 
 influence.mixpoissonreg <- function(model, do.coef = TRUE){
-#Retornar hat values para media, hat values para a precisão
-#Retornar coef change media coef change precisão
+influence_mpreg <- list()
+hat_mean <- hatvalues(model, parameters = "mean")
+hat_precision <- hatvalues(model, parameters = "precision")
+influence_mpreg$hat.mean <- hat_mean
+influence_mpreg$hat.precision <- hat_precision
+
+if(do.coef){
+  if(is.null(model$x)){
+    stop("x component not found. fit the model again with argument x = TRUE")
+  }
+  if(is.null(model$w)){
+    stop("w component not found. fit the model again with argument w = TRUE")
+  }
+  x = model$x
+  w = model$w
+  mu = model$fitted.values
+  phi = model$fitted.precisions
+  if(is.null(model$y)){
+    y = model$residuals + model$fitted.values
+  } else{
+    y = model$y
+  }
+
+  lambda = lambda_r(y,mu,phi,model$modeltype)
+
+  a = mu*lambda - y
+
+  link_precision <- build_links_mpreg(model$link.precision)
+  eta_prec <- link_precision$linkfun(phi)
+  dphideta <- link_precision$mu.eta(eta_prec)
+
+  qsi0 <- switch(model$modeltype,
+                 "NB" = {-1},
+                 "PIG" = {-1/2}
+  )
+
+  B<- switch(model$modeltype,
+             "PIG" = {function(x) {-sqrt((-2*x))}},
+             "NB" = {function(x) {-log(-x)}}
+  )
+
+  dD<-switch(model$modeltype,
+             "PIG" = {function(x) {1/(2*x)}},
+             "NB" = {function(x) {log(x)+1-digamma(x)}}
+  )
+
+  kappa = kappa_r(y,mu,phi, model$modeltype)
+
+  b = dphideta*(B(qsi0)-kappa - dD(phi)-qsi0*lambda)
+
+  n_beta <- length(model$coefficients$mean)
+  n_alpha <- length(model$coefficients$precision)
+
+  covariates_matrix <- cbind(x, matrix(0,nrow=nrow(x), ncol = ncol(w)))
+  covariates_matrix <- rbind(covariates_matrix, cbind(matrix(0, nrow = nrow(x), ncol = ncol(x)), w))
+  coeff <- c(model$coefficients$mean, model$coefficients$precision)
+  new_coeff <- lapply(1:nrow(x), function(i){
+    W_Q <- obs_fisher_weight_matrix_mixpoisson(model, parameters = "all")
+    coeff + solve(t(covariates_matrix)%*% W_Q %*% covariates_matrix)%*%covariates_matrix[i ,] * c(rep(a[i], n_beta), rep(0, n_alpha)) +
+      solve(t(covariates_matrix)%*% W_Q %*% covariates_matrix)%*%covariates_matrix[nrow(x)+i ,] * c(rep(0, n_beta), rep(b[i], n_alpha))
+  })
+  influence_mpreg$coefficients.mean <- matrix(sapply(new_coeff, function(coeffs){coeffs[1:n_beta]}), nrow = nrow(x))
+  colnames(influence_mpreg$coefficients.mean) <- names(model$coefficients$mean)
+  rownames(influence_mpreg$coefficients.mean) <- 1:nrow(influence_mpreg$coefficients.mean)
+  influence_mpreg$coefficients.precision <- matrix(sapply(new_coeff, function(coeffs){coeffs[(n_beta+1):(n_beta+n_alpha)]}), nrow = nrow(w))
+  colnames(influence_mpreg$coefficients.precision) <- names(model$coefficients$precision)
+  rownames(influence_mpreg$coefficients.precision) <- 1:nrow(influence_mpreg$coefficients.precision)
+
+
+}
+influence_mpreg
 }
