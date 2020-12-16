@@ -24,7 +24,12 @@
 #' and 'simultaneous-explanatory'
 #' perturbation schemes. If NULL, the 'precision-explanatory' and 'simultaneous-explanatory' perturbation schemes will be computed by perturbing all
 #' precision-related covariates. The default is NULL.
-#' @return a list containing the resulting perturbation schemes as elements.
+#' @return a list containing the resulting perturbation schemes as elements. Each returned element has an attribute 'benchmark', which for
+#' the conformal normal curvature, it is computed following Zhu and Lee (2001), and for normal curvature it is computed following Verbeke and ...
+#' If the 'direction' is 'max.eigen' the 'benchmark' attribute is NA.
+#'
+#' The 'mean_explanatory', 'precision_explanatory' and 'simultaneous_explanatory' elements of the list contain an attribute 'covariates' indicating
+#' which covariates were used in the perturbation schemes.
 #' @details Preencher
 #'
 #' @references Zhu and Lee; Barreto-Souza and Simas; Cook;  etc..
@@ -202,8 +207,72 @@ for(pert in perturbation){
   )
 
   attr(loc_infl[[pert]], "benchmark") = benchmark
+
+  if(pert == "mean_explanatory"){
+    attr(loc_infl[[pert]], "covariates") = mean.covariates
+    if(is.null(attr(loc_infl[[pert]], "covariates"))){
+      attr(loc_infl[[pert]], "covariates") = "all"
+    }
+  }
+  if(pert == "precision_explanatory"){
+    attr(loc_infl[[pert]], "covariates") = precision.covariates
+    if(is.null(attr(loc_infl[[pert]], "covariates"))){
+      attr(loc_infl[[pert]], "covariates") = "all"
+    }
+  }
+  if(pert == "simultaneous_explanatory"){
+    attr(loc_infl[[pert]], "covariates") = list("mean" = mean.covariates, "precision" = precision.covariates)
+    if(is.null(attr(loc_infl[[pert]], "covariates")$mean)){
+      attr(loc_infl[[pert]], "covariates")$mean = "all"
+    }
+    if(is.null(attr(loc_infl[[pert]], "covariates")$precision)){
+      attr(loc_infl[[pert]], "covariates")$precision = "all"
+    }
+  }
 }
 
 
 loc_infl
+}
+
+#' @rdname local_influence.mixpoissonreg
+#' @export
+
+local_influence_plot.mixpoissonreg <- function(model, which = c(1,2,3,5), kind = c("base", "ggplot"),
+                                               detect.influential = TRUE, n.influential = 5,
+                                               curvature = c("conformal", "normal"),
+                                               direction = c("canonical", "max.eigen"), parameters = c("all", "mean", "precision"),
+                                               mean.covariates = NULL, precision.covariates = NULL)
+
+
+#############################################################################################
+#' @name local_influence
+#' @aliases local_influence local_influence_plot local_influence_ggplot
+#' @title Local Influence Diagnostics
+#' @usage local_influence(model, ...)
+#' @param model an object for which the local influence is desired
+#' @param ... further arguments passed to or from other methods.
+#' @details Preencher
+#' @references Cook, Zhu and Lee, Poon and Poon, etc..
+#' @seealso Preencher
+#'
+#' @rdname local_influence
+#' @export
+
+local_influence <- function(model, ...){
+UseMethod("local_influence", model)
+}
+
+#' @rdname local_influence
+#' @export
+
+local_influence_plot <- function(model, ...){
+  UseMethod("local_influence_plot", model)
+}
+
+#' @rdname local_influence
+#' @export
+
+local_influence_ggplot <- function(model, ...){
+  UseMethod("local_influence_ggplot", model)
 }
