@@ -1,5 +1,5 @@
 #############################################################################################
-#' @name global.influence.mixpoissonreg
+#' @name global_influence.mixpoissonreg
 #' @title Global Influence Diagnostics for Mixed Poisson Regression Models
 #' @aliases cooks.distance.mixpoissonreg hatvalues.mixpoissonreg
 #' @description These functions provides global influence diagnostic quantities such as Cook's distance, hat values, generalized Cook's distance (through argument
@@ -20,7 +20,7 @@
 #'
 #' @references Zhu et al.; Barreto-Souza and Simas; Cook and Preigibon; etc..
 
-#' @rdname global.influence.mixpoissonreg
+#' @rdname global_influence.mixpoissonreg
 #' @export
 
 hatvalues.mixpoissonreg <- function(model, parameters = c("mean", "precision")){
@@ -50,7 +50,7 @@ hatvalues.mixpoissonreg <- function(model, parameters = c("mean", "precision")){
  h
 }
 
-#' @rdname global.influence.mixpoissonreg
+#' @rdname global_influence.mixpoissonreg
 #' @export
 
 cooks.distance.mixpoissonreg <- function(model, type = c("CD", "GCD", "GCDmean", "GCDprecision", "LD", "QD"), hat = c("mean", "precision")){
@@ -334,7 +334,7 @@ dist <- switch(type,
 dist
 }
 
-#' @rdname global.influence.mixpoissonreg
+#' @rdname global_influence.mixpoissonreg
 #' @export
 
 influence.mixpoissonreg <- function(model, do.coef = TRUE){
