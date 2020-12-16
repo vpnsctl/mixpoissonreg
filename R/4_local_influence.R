@@ -24,6 +24,23 @@
 #' and 'simultaneous-explanatory'
 #' perturbation schemes. If NULL, the 'precision-explanatory' and 'simultaneous-explanatory' perturbation schemes will be computed by perturbing all
 #' precision-related covariates. The default is NULL.
+#' @param which a list or vector indicating which plots should be displayed. 	If a subset of the plots is required, specify a subset of the numbers 1:5, see caption below (and the 'Details') for the different kinds.
+#' @param caption captions to appear above the plots; character vector or list of valid graphics annotations. Can be set to "" or NA to suppress all captions.
+#' @param sub.caption	common title-above the figures if there are more than one. If NULL, as by default, a possible abbreviated version of deparse(x$call) is used.
+#' @param kind character indicating if the plots should be done with base R or 'ggplot'.
+#' @param detect.influential logical. Indicates whether the benchmark should be used to detect influential observations and identify them on the plot. If there is no benchmark available,
+#' the top 'n.influential' observations will be identified in the plot by their indexes.
+#' @param n.influential interger. The maximum number of influential observations to be identified on the plot.
+#' @param draw.benchmark logical. Indicates whether a horizontal line identifying the benchmark should be drawn.
+#' @param lty.benchmark the line type of the benchmark if drawn.
+#' @param type_plot what type of plot should be drawn. The default is 'h'.
+#' @param ask logical; if \code{TRUE}, the user is asked before each plot.
+#' @param main character; title to be placed at each plot additionally (and above) all captions.
+#' @param cex.id magnification of point labels.
+#' @param cex.caption	controls the size of caption.
+#' @param cex.oma.main controls the size of the sub.caption only if that is above the figures when there is more than one.
+#' @param include.modeltype logical. Indicates whether the model type ('NB' or 'PIG') should be displayed on the captions.
+#' @param ... other graphical arguments to be passed.
 #' @return a list containing the resulting perturbation schemes as elements. Each returned element has an attribute 'benchmark', which for
 #' the conformal normal curvature, it is computed following Zhu and Lee (2001), and for normal curvature it is computed following Verbeke and ...
 #' If the 'direction' is 'max.eigen' the 'benchmark' attribute is NA.
@@ -238,11 +255,128 @@ loc_infl
 #' @rdname local_influence.mixpoissonreg
 #' @export
 
-local_influence_plot.mixpoissonreg <- function(model, which = c(1,2,3,5), kind = c("base", "ggplot"),
+local_influence_plot.mixpoissonreg <- function(model, which = c(1,2,3,5),
+                                               caption = list("Case Weights Perturbation",
+                                                               "Hidden Variable Perturbation",
+                                                               "Mean Explanatory Perturbation",
+                                                               "Precision Explanatory Perturbation",
+                                                               "Simultaneous Explanatory Perturbation"),
+                                               sub.caption = NULL,
+                                               kind = c("base", "ggplot"),
                                                detect.influential = TRUE, n.influential = 5,
+                                               draw.benchmark = FALSE, lty.benchmark = 2,
+                                               type_plot = "h",
                                                curvature = c("conformal", "normal"),
                                                direction = c("canonical", "max.eigen"), parameters = c("all", "mean", "precision"),
-                                               mean.covariates = NULL, precision.covariates = NULL)
+                                               mean.covariates = NULL, precision.covariates = NULL, main = "",
+                                               ask = prod(par("mfcol")) <
+                                                 length(which) && dev.interactive(),
+                                               cex.id = 0.75,
+                                               cex.oma.main = 1.25,
+                                               cex.caption = 1,
+                                               include.modeltype = TRUE,
+                                               ...){
+if(length(kind)>1){
+  kind = kind[1]
+}
+
+  getCaption <- function(k) if (length(caption) < k)
+    NA_character_
+  else {
+    if(include.modeltype){
+      as.graphicsAnnot(paste0(caption[[k]], " - ", model$modeltype, " Regression"))
+    } else {
+      as.graphicsAnnot(caption[[k]])
+    }
+  }
+
+  if (is.null(sub.caption)) {
+    cal <- model$call
+    if (!is.na(m.f <- match("formula", names(cal)))) {
+      cal <- cal[c(1, m.f)]
+      names(cal)[2L] <- ""
+    }
+    cc <- deparse(cal, 80)
+    nc <- nchar(cc[1L], "c")
+    abbr <- length(cc) > 1 || nc > 75
+    sub.caption <- if (abbr)
+      paste(substr(cc[1L], 1L, min(75L, nc)), "...")
+    else cc[1L]
+  }
+
+  one.fig <- prod(par("mfcol")) == 1
+
+loc_infl <- local_influence(model, curvature = curvature,
+                            direction = direction, parameters = parameters,
+                            mean.covariates = mean.covariates,
+                            precision.covariates = precision.covariates)
+
+if (ask) {
+  oask <- devAskNewPage(TRUE)
+  on.exit(devAskNewPage(oask))
+}
+
+if(kind == "base"){
+pert <- c("case_weights", "hidden_variable",
+          "mean_explanatory", "precision_explanatory",
+          "simultaneous_explanatory")
+for(i in 1:length(pert)){
+  if(i %in% which){
+
+    xlab <- paste0("Index\n ", sub.caption)
+
+    graphics::plot(loc_infl[[pert[i]]], type = type_plot, main = main, ...)
+    graphics::mtext(getCaption(i), side = 3, cex = cex.caption)
+
+    if (one.fig)
+      title(sub = sub.caption, ...)
+
+    if(detect.influential){
+      bm <- attr(loc_infl[[pert[i]]], "benchmark")
+      infl_points <- as.vector(nth(abs(loc_infl[[pert[i]]]), k = n.influential,
+                                   num.of.nths = n.influential,
+                                   index.return = TRUE, descending = TRUE))
+
+      if(!is.na(bm)){
+        infl_points <- (loc_infl[[pert[i]]][infl_points] > bm)
+        idx_x <- as.integer(names(which(infl_points == TRUE)))
+        idx_y <- loc_infl[[pert[i]]][idx_x]
+        text(idx_x, idx_y, labels = idx_x, cex = cex.id, xpd = TRUE, pos = 3, offset = 0.1)
+      } else{
+        idx_x_pos <- infl_points[which(loc_infl[[pert[i]]][infl_points] >= 0)]
+        idx_x_neg <- setdiff(infl_points, idx_x_pos)
+        idx_y_pos <- loc_infl[[pert[i]]][idx_x_pos]
+        idx_y_neg <- loc_infl[[pert[i]]][idx_x_neg]
+        if(length(idx_x_pos)>0){
+          text(idx_x_pos, idx_y_pos, labels = idx_x_pos, cex = cex.id, xpd = TRUE, pos = 3, offset = 0.1)
+        }
+        if(length(idx_x_neg)>0){
+          text(idx_x_neg, idx_y_neg, labels = idx_x_neg, cex = cex.id, xpd = TRUE, pos = 1, offset = 0.1)
+        }
+      }
+
+
+    }
+    if(draw.benchmark & !is.na(bm)){
+      bm <- attr(loc_infl[[pert[i]]], "benchmark")
+      abline(a = bm, b = 0, lty = lty.benchmark)
+    }
+
+    dev.flush()
+  }
+}
+
+
+
+} else if(kind == "ggplot"){
+
+  }
+
+if (!one.fig && par("oma")[3L] >= 1)
+  mtext(sub.caption, outer = TRUE, cex = 1.25)
+
+invisible()
+}
 
 
 #############################################################################################

@@ -32,7 +32,8 @@
 #' plot(fit, which = c(1, 4), ask = FALSE)
 #' }
 #' @export
-plot.mixpoissonreg <- function(x, which = c(1, 2, 3, 4), ask = TRUE, main = "", qqline = TRUE, ...) {
+plot.mixpoissonreg <- function(x, which = c(1, 2, 3, 4), ask = TRUE, main = "", qqline = TRUE,
+                                include.modeltype = TRUE, ...) {
   if (length(which) == 1) {
     ask <- FALSE
   }
