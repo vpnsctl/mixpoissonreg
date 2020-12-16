@@ -15,7 +15,8 @@
 #' @param direction the 'max.eigen' returns the eigenvector associated to the largest eigenvalue of the perturbation matrix. The 'canonical' considers
 #' the curvatures under the canonical directions, which is known as "total local curvature" (see Lesaffre and Verbeke, 1998). For conformal
 #' normal curvatures both of them coincide. The default is 'canonical'.
-#' @param parameters the parameter to which the local influence will be computed. The options are 'all', 'mean' and 'precision'. The default is 'all'.
+#' @param parameters the parameter to which the local influence will be computed. The options are 'all', 'mean' and 'precision'.
+#' This argument affects the 'case_weights' and 'hidden_variable' perturbation schemes. The default is 'all'.
 #' @param mean.covariates a list of characters containing the mean-explanatory variables to be used in the 'mean-explanatory' and 'simultaneous-explanatory'
 #' perturbation schemes. If NULL, the 'mean-explanatory' and 'simultaneous-explanatory' perturbation schemes will be computed by perturbing all
 #' mean-related covariates. The default is NULL.
