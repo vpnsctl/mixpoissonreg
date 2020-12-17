@@ -279,6 +279,13 @@ local_influence_plot.mixpoissonreg <- function(model, which = c(1,2,3,5),
 if(length(kind)>1){
   kind = kind[1]
 }
+  if(length(direction)>1){
+    direction = direction[1]
+  }
+
+  if(length(curvature)>1){
+    curvature = curvature[1]
+  }
 
   getCaption <- function(k) if (length(caption) < k)
     NA_character_
@@ -304,6 +311,20 @@ if(length(kind)>1){
     else cc[1L]
   }
 
+  ylab_infl <- switch(curvature,
+                      "conformal" = {
+                        yl <- switch(direction,
+                                           "canonical" = "Total Local Influence (Conformal)",
+                                           "max.eigen" = "Largest Curvature Direction (Conformal)")
+                        yl
+                      },
+                      "normal" = {
+                        yl <- switch(direction,
+                                        "canonical" = "Total Local Influence (Normal)",
+                                        "max.eigen" = "Largest Curvature Direction (Normal)")
+                      }
+  )
+
   one.fig <- prod(par("mfcol")) == 1
 
 loc_infl <- local_influence(model, curvature = curvature,
@@ -325,7 +346,7 @@ for(i in 1:length(pert)){
 
     xlab <- paste0("Index\n ", sub.caption)
 
-    graphics::plot(loc_infl[[pert[i]]], type = type_plot, main = main, ...)
+    graphics::plot(loc_infl[[pert[i]]], type = type_plot, main = main, ylab = ylab_infl, ...)
     graphics::mtext(getCaption(i), side = 3, cex = cex.caption)
 
     if (one.fig)
