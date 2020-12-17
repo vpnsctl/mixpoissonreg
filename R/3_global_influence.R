@@ -257,6 +257,7 @@ dist <- switch(type,
                  covariates_matrix <- rbind(covariates_matrix, cbind(matrix(0, nrow = nrow(x), ncol = ncol(x)), w))
                  coeff_beta <- model$coefficients$mean
                  coeff_alpha <- model$coefficients$precision
+                 coeff <- c(coeff_beta, coeff_alpha)
                  new_coeff <- lapply(1:nrow(x), function(i){
                    W_Q_mean <- obs_fisher_weight_matrix_mixpoisson(model, parameters = "mean")
                    W_Q_precision <- obs_fisher_weight_matrix_mixpoisson(model, parameters = "precision")
@@ -317,6 +318,7 @@ dist <- switch(type,
                  covariates_matrix <- rbind(covariates_matrix, cbind(matrix(0, nrow = nrow(x), ncol = ncol(x)), w))
                  coeff_beta <- model$coefficients$mean
                  coeff_alpha <- model$coefficients$precision
+                 coeff <- c(coeff_beta, coeff_alpha)
                  new_coeff <- lapply(1:nrow(x), function(i){
                    W_Q_mean <- obs_fisher_weight_matrix_mixpoisson(model, parameters = "mean")
                    W_Q_precision <- obs_fisher_weight_matrix_mixpoisson(model, parameters = "precision")

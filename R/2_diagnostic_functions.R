@@ -46,7 +46,7 @@ plot.mixpoissonreg <- function(x, which = c(1, 2, 3, 4), ask = TRUE, main = "", 
   current_ask = grDevices::devAskNewPage()
 
   grDevices::devAskNewPage(ask = ask)
-  res <- x$residuals
+  res <- residuals(x, type = x$residualname)
   call_mod <- deparse(x$call)
   name <- x$modelname
   residualname <- paste0(toupper(substring(x$residualname, 1, 1)), substring(x$residualname, 2))

@@ -184,9 +184,9 @@ generate_data_mixpoisson <- function(coefficients, x, w,
 
   y <- lapply(1:repetitions, function(x) {
     y_temp <- switch(model,
-                "NB" = {rNBI(n, mu = mu, sigma = 1/phi)},
-                "PIG" = {ig = rIG(n,mu=1,sigma=1/sqrt(phi))
-                  y  = rpois(n,ig*mu)
+                "NB" = {rNBI(n = n, mu = mu, sigma = 1/phi)},
+                "PIG" = {ig = rIG(n = n,mu=1,sigma=1/sqrt(phi))
+                  y  = rpois(n = n, lambda = ig*mu)
                   y}
                 )
     return(y_temp) #
