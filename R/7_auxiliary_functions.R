@@ -1,4 +1,4 @@
-#' @import gamlss.dist
+#' @import statmod
 
 #############################################################################################
 #' @title startvalues_mpreg
@@ -184,8 +184,8 @@ generate_data_mixpoisson <- function(coefficients, x, w,
 
   y <- lapply(1:repetitions, function(x) {
     y_temp <- switch(model,
-                "NB" = {rNBI(n = n, mu = mu, sigma = 1/phi)},
-                "PIG" = {ig = rIG(n = n,mu=1,sigma=1/sqrt(phi))
+                "NB" = {stats::rnbinom(n = n, mu = mu, size = phi)},
+                "PIG" = {ig = rinvgauss(n = n,mean=1,dispersion=1/phi)
                   y  = rpois(n = n, lambda = ig*mu)
                   y}
                 )
