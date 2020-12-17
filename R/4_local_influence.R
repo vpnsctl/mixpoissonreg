@@ -3,7 +3,7 @@
 #############################################################################################
 #' @name local_influence.mixpoissonreg
 #' @title Local Influence Diagnostics for Mixed Poisson Regression Models
-#' @aliases local_influence.mixpoissonreg local_influence_plot.mixpoissonreg local_influence_ggplot.mixpoissonreg
+#' @aliases local_influence.mixpoissonreg local_influence_plot.mixpoissonreg
 #' @description These functions provides local influence diagnostic quantities. Currently the conformal normal and normal curvatures are available
 #' under several perturbation schemes. The default is the conformal normal curvature since
 #' it takes values on [0,1] and other nice properties (see Zhu and Lee, 2001 and Poon and Poon, 1999 for further details).
@@ -27,7 +27,6 @@
 #' @param which a list or vector indicating which plots should be displayed. 	If a subset of the plots is required, specify a subset of the numbers 1:5, see caption below (and the 'Details') for the different kinds.
 #' @param caption captions to appear above the plots; character vector or list of valid graphics annotations. Can be set to "" or NA to suppress all captions.
 #' @param sub.caption	common title-above the figures if there are more than one. If NULL, as by default, a possible abbreviated version of deparse(x$call) is used.
-#' @param kind character indicating if the plots should be done with base R or 'ggplot'.
 #' @param detect.influential logical. Indicates whether the benchmark should be used to detect influential observations and identify them on the plot. If there is no benchmark available,
 #' the top 'n.influential' observations will be identified in the plot by their indexes.
 #' @param n.influential interger. The maximum number of influential observations to be identified on the plot.
@@ -402,7 +401,7 @@ invisible()
 
 #############################################################################################
 #' @name local_influence
-#' @aliases local_influence local_influence_plot local_influence_ggplot
+#' @aliases local_influence local_influence_plot
 #' @title Local Influence Diagnostics
 #' @usage local_influence(model, ...)
 #' @param model an object for which the local influence is desired
@@ -428,6 +427,4 @@ local_influence_plot <- function(model, ...){
 #' @rdname local_influence
 #' @export
 
-local_influence_ggplot <- function(model, ...){
-  UseMethod("local_influence_ggplot", model)
-}
+
