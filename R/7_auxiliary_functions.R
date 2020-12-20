@@ -220,7 +220,7 @@ generate_data_mixpoisson <- function(coefficients, x, w,
 #' @param model the mixed Poisson model, "NB" or "PIG".
 #' @seealso
 #' \code{\link{mixpoisson}}, \code{\link{pearson_residual_mixpoisson}}, \code{\link{score_residual_mixpoisson}}, \code{\link{generate_data_mixpoisson}}
-#' @return Matrix with dimension 2 x n (1st row = upper bound, second row = lower bound).
+#' @return Matrix with dimension 3 x n (first row = upper bound, second row = median, third row = lower bound).
 envelope_mixpoisson <- function(residual, estimation_method,
                     coefficients, x, w, nsim_env,
                     prob, n, link.mean,
@@ -260,8 +260,8 @@ envelope_mixpoisson <- function(residual, estimation_method,
   residuals_envelope <- apply(residuals_envelope, 2, sort)
   id1 <- max(1, round(nsim_env * (1 - prob) / 2))
   id2 <- round(nsim_env * (1 + prob) / 2)
-  envelopes <- rbind(residuals_envelope[id2, ], apply(residuals_envelope, 2, mean), residuals_envelope[id1, ])
-  rownames(envelopes) <- c("upper", "mean", "lower")
+  envelopes <- rbind(residuals_envelope[id2, ], apply(residuals_envelope, 2, median), residuals_envelope[id1, ])
+  rownames(envelopes) <- c("upper", "median", "lower")
   return(envelopes)
 }
 

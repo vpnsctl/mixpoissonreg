@@ -3,12 +3,21 @@
 #' @description Function to build useful plots for mixed Poisson regression models.
 #' @param x object of class "mixpoissonreg" containing results from the fitted model.
 #' If the model is fitted with envelope = 0, the Q-Q plot will be produced without envelopes.
-#' @param which a number of a vector of numbers between 1 and 4. Plot 1:
-#' Residuals vs. Index; Plot 2: Q-Q Plot (if the fit contains simulated envelopes,
-#' the plot will be with the simulated envelopes); Plot 3: Fitted means vs. Response;
-#' Plot 4: Residuals vs. Fitted means.
+#' @param which a list or vector indicating which plots should be displayed. 	If a subset of the plots is required, specify a subset of the numbers 1:6, see caption below for the different kinds. In
+#' plot number 2, 'Normal Q-Q', if the \code{mixpoissonreg} object was fitted with envelopes, a quantile-quantile plot with simulated envelopes will be displayed.
+#' @param caption captions to appear above the plots; character vector or list of valid graphics annotations. Can be set to "" or NA to suppress all captions.
+#' @param sub.caption	common title-above the figures if there are more than one. If NULL, as by default, a possible abbreviated version of deparse(x$call) is used.
 #' @param ask logical; if \code{TRUE}, the user is asked before each plot.
+#' @param id.n number of points to be labelled in each plot, starting with the most extreme.
 #' @param main character; title to be placed at each plot additionally (and above) all captions.
+#' @param labels.id	 vector of labels, from which the labels for extreme points will be chosen. The default uses the observation numbers.
+#' @param label.pos positioning of labels, for the left half and right half of the graph respectively, for plots 2 and 6.
+#' @param type.cookplot character; what type of plot should be drawn for Cook's and Generalized Cook's distances (plots 3 and 4). The default is 'h'.
+#' @param cex.id magnification of point labels.
+#' @param cex.caption	controls the size of caption.
+#' @param cex.oma.main controls the size of the sub.caption only if that is above the figures when there is more than one.
+#' @param include.modeltype logical. Indicates whether the model type ('NB' or 'PIG') should be displayed on the captions.
+#' @param include.residualtype local. Indicates whether the name of the residual ('Pearson' or 'Score') should be displayed on the caption of plot 1 (Residuals vs. Index).
 #' @param qqline logical; if \code{TRUE} and the fit does *not* contain simulated
 #' envelopes, a qqline will be added to the normal Q-Q plot.
 #' @param ... graphical parameters to be passed.
@@ -32,54 +41,133 @@
 #' plot(fit, which = c(1, 4), ask = FALSE)
 #' }
 #' @export
-plot.mixpoissonreg <- function(x, which = c(1, 2, 3, 4), ask = TRUE, main = "", qqline = TRUE,
-                                include.modeltype = TRUE, ...) {
-  if (length(which) == 1) {
-    ask <- FALSE
+plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
+                               caption = list("Residuals vs Obs. number",
+                                              "Normal Q-Q",
+                                              "Cook's distance",
+                                              "Generalized Cook's distance",
+                                              "Cook's dist vs Generalized Cook's dist",
+                                              "Response vs Fitted means"
+                                              ),
+                               sub.caption = NULL, qqline = TRUE, main = "",
+                               ask = prod(par("mfcol")) <
+                                 length(which) && dev.interactive(),
+                               labels.id = names(residuals(x)),
+                               label.pos = c(4,2),
+                               type.cookplot = 'h',
+                               id.n = 3,
+                               cex.id = 0.75,
+                               cex.oma.main = 1.25,
+                               cex.caption = 1,
+                               include.modeltype = TRUE,
+                               include.residualtype = FALSE,
+                               ...) {
+  
+  getCaption <- function(k) if (length(caption) < k)
+    NA_character_
+  else {
+    if(include.modeltype){
+      as.graphicsAnnot(paste0(caption[[k]], " - ", x$modeltype, " Regression"))
+    } else {
+      as.graphicsAnnot(caption[[k]])
+    }
+  }
+  
+  if (is.null(sub.caption)) {
+    cal <- x$call
+    if (!is.na(m.f <- match("formula", names(cal)))) {
+      cal <- cal[c(1, m.f)]
+      names(cal)[2L] <- ""
+    }
+    cc <- deparse(cal, 80)
+    nc <- nchar(cc[1L], "c")
+    abbr <- length(cc) > 1 || nc > 75
+    sub.caption <- if (abbr)
+      paste(substr(cc[1L], 1L, min(75L, nc)), "...")
+    else cc[1L]
+  }
+  
+  place_ids <- function(x_coord, y_coord, offset, dif_pos_neg){
+    extreme_points <- as.vector(nth(abs(y_coord), k = id.n,
+                                    num.of.nths = id.n,
+                                    index.return = TRUE, descending = TRUE))
+
+    if(dif_pos_neg){
+      idx_x_pos <- extreme_points[which(y_coord[extreme_points] >= 0)]
+      idx_x_neg <- setdiff(extreme_points, idx_x_pos)
+      idx_y_pos <- y_coord[idx_x_pos]
+      idx_y_neg <- y_coord[idx_x_neg]
+      idx_x_pos_id <- x_coord[idx_x_pos]
+      idx_x_neg_id <- x_coord[idx_x_neg]
+      if(length(idx_x_pos)>0){
+        graphics::text(idx_x_pos_id, idx_y_pos, labels = labels.id[idx_x_pos], cex = cex.id, xpd = TRUE, pos = 3, offset = offset)
+      }
+      if(length(idx_x_neg)>0){
+        graphics::text(idx_x_neg_id, idx_y_neg, labels = labels.id[idx_x_neg], cex = cex.id, xpd = TRUE, pos = 1, offset = offset)
+      }
+    } else{
+      idx_x <- extreme_points
+      idx_y <- y_coord[idx_x]
+      idx_x_id <- x_coord[idx_x]
+      labpos <- label.pos[1 + as.numeric(idx_x_id > mean(range(x_coord)))]
+      graphics::text(idx_x_id, idx_y, labels = labels.id[idx_x], cex = cex.id, pos = labpos, xpd = TRUE, offset = offset)
+    }
+  }
+  
+  one.fig <- prod(par("mfcol")) == 1
+  
+  if (ask) {
+    oask <- grDevices::devAskNewPage(TRUE)
+    on.exit(grDevices::devAskNewPage(oask))
   }
 
-  call_name <- switch(x$estimation_method,
-                      "EM" = {"mixpoissonreg"},
-                      "ML" = {"mixpoissonregML"}
-)
-
-  current_ask = grDevices::devAskNewPage()
-
-  grDevices::devAskNewPage(ask = ask)
-  res <- residuals(x, type = x$residualname)
-  call_mod <- deparse(x$call)
-  name <- x$modelname
-  residualname <- paste0(toupper(substring(x$residualname, 1, 1)), substring(x$residualname, 2))
-  residualname <- paste0(residualname, " residuals")
-  mu_est <- stats::fitted(x, type = "response")
 
   if (1 %in% which) {
     # First plot (residuals vs index)
-    ylab <- residualname
-    xlab <- paste0("Index\n ",call_name,"(", call_mod, ", model = \"",x$modeltype, "\")")
-    title_1 <- paste0(residualname, " vs Index - ", name)
-    graphics::plot(res, xlab = xlab, ylab = ylab, main = main, ...)
+    res <- residuals(x, type = x$residualname)
+    ylim <- range(res, na.rm = TRUE)
+    if (id.n > 0) 
+      ylim <- extendrange(r = ylim, f = 0.08)
+    grDevices::dev.hold()
+    residualname <- paste0(toupper(substring(x$residualname, 1, 1)), substring(x$residualname, 2))
+    
+    if(include.residualtype){
+      caption[[1]] = paste(residualname, caption[[1]])
+    }
+    
+    ylab <- paste0(residualname, " residuals")
+    graphics::plot(res, ylab = ylab, xlab = "Obs. number", main = main, ylim = ylim, ...)
     graphics::abline(0, 0, lty = 3)
-    graphics::mtext(title_1, side = 3)
+    
+    if (one.fig)
+      title(sub = sub.caption, ...)
+    
+    graphics::mtext(getCaption(1), side = 3, cex = cex.caption)
+    
+    place_ids(1:length(res), res, 0.5, TRUE)
+    grDevices::dev.flush()
   }
 
   # Second plot (QQ-plot)
   if (2 %in% which) {
     env <- x$envelope
-    n <- length(res)
+    res <- residuals(x, type = x$residualname)
+    ylim <- range(res, env, na.rm = TRUE)
+    ylim[2L] <- ylim[2L] + diff(ylim) * 0.075
+    grDevices::dev.hold()
+    n <- length(x$residuals)
     residualname <- paste0(toupper(substring(x$residualname, 1, 1)), substring(x$residualname, 2))
-    ylim <- range(res, env)
-    xlim <- c(stats::qnorm(0.5 / n), stats::qnorm(1 - 0.5 / n))
-    xlab <- paste0("Theoretical quantiles\n ",call_name,"(", call_mod, ", model = \"",x$modeltype, "\")")
     ylab <- paste0(residualname, " residuals")
+    if (!is.null(env)) {
+      caption[[2]] <- paste0(caption[[2]]," with simulated envelopes")
+    } 
+    qq <- stats::qqnorm(res, xlab = "Theoretical quantiles", ylab = ylab, ylim = ylim, main = main, ...)
+    
+    if (one.fig)
+      title(sub = sub.caption, ...)
+    
     if (is.null(env) == FALSE) {
-      title_2 <- paste0("Q-Q Plot with simulated envelopes - ", name)
-    } else {
-      title_2 <- paste0("Q-Q Plot - ", name)
-    }
-    RR <- stats::qqnorm(res, xlab = xlab, ylab = ylab, xlim = xlim, ylim = ylim, main = main, ...)
-    if (is.null(env) == FALSE) {
-      aux <- sort(RR$x)
+      aux <- sort(qq$x)
       graphics::lines(aux, env[1, ], col = grDevices::rgb(0.7, 0.7, 0.7))
       graphics::lines(aux, env[3, ], col = grDevices::rgb(0.7, 0.7, 0.7))
       graphics::polygon(c(aux, rev(aux)), c(env[3, ], rev(env[1, ])), col = grDevices::rgb(0.7, 0.7, 0.7), border = NA)
@@ -89,36 +177,125 @@ plot.mixpoissonreg <- function(x, which = c(1, 2, 3, 4), ask = TRUE, main = "", 
         stats::qqline(res, lty = 3)
       }
     }
-    graphics::points(RR$x, RR$y, ...)
-    graphics::mtext(title_2, side = 3)
+    graphics::points(qq$x, qq$y, ...)
+    if (id.n > 0) 
+      place_ids(qq$x, qq$y, 0.5, FALSE)
+    graphics::mtext(getCaption(2), side = 3, cex = cex.caption)
+    grDevices::dev.flush()
   }
-
-  # Third plot (fitted vs response)
-
+  
+  # Third plot (Cook's distance)
+  
   if (3 %in% which) {
-    obs <- x$y
-
-    title_3 <- paste0("Response vs Fitted means - ", name)
-    ylab <- "Response"
-    xlab <- paste0("Predicted values\n ",call_name,"(", call_mod, ", model = \"",x$modeltype, "\")")
-    graphics::plot(mu_est, obs, xlab = xlab, ylab = ylab, main = main, ...)
-    graphics::abline(0, 1, lty = 3)
-    graphics::mtext(title_3, side = 3)
+    CD <- cooks.distance(x, type = "CD")
+    
+    ylab = "Cook's distance"
+    ylim <- range(CD, na.rm = TRUE)
+    
+    grDevices::dev.hold()
+    
+    if(id.n >0)
+      ylim <- grDevices::extendrange(r = ylim, f = 0.08)
+    
+    graphics::plot(CD, type = type.cookplot, main = main, xlab = "Obs. number", ylab = ylab, ylim=ylim, ...)
+    if (one.fig)
+      title(sub = sub.caption, ...)
+    
+    graphics::mtext(getCaption(3), side = 3, cex = cex.caption)
+    
+    if (id.n > 0) 
+      place_ids(1:length(CD), CD, 0.2, TRUE)
+    grDevices::dev.flush()
   }
-
-
-  # Fourth plot
-
+  
+  # Fourth plot (Generalized Cook's distance)
+  
   if (4 %in% which) {
-    title_4 <- paste0(residualname, " vs Fitted means - ", name)
-    ylab <- paste0(residualname, " residuals")
-    xlab <- paste0("Predicted values\n ",call_name,"(", call_mod, ", model = \"",x$modeltype, "\")")
-    graphics::plot(mu_est, res, xlab = xlab, ylab = ylab, main = main, ...)
-    graphics::abline(0, 0, lty = 3)
-    graphics::mtext(title_4, side = 3)
+    GCD <- cooks.distance(x, type = "GCD")
+    
+    ylab = "Generalized Cook's distance"
+    ylim <- range(GCD, na.rm = TRUE)
+    
+    grDevices::dev.hold()
+    
+    if(id.n >0)
+      ylim <- grDevices::extendrange(r = ylim, f = 0.08)
+    
+    graphics::plot(GCD, type = type.cookplot, main = main, ylab = ylab, 
+                   xlab = "Obs. number", ylim=ylim, ...)
+    if (one.fig)
+      title(sub = sub.caption, ...)
+    
+    graphics::mtext(getCaption(4), side = 3, cex = cex.caption)
+    
+    if (id.n > 0) 
+      place_ids(1:length(GCD), GCD, 0.2, TRUE)
+    grDevices::dev.flush()
+  }
+  
+  # Fifth plot (Cook's dist vs Generalized Cook's dist)
+  
+  if(5 %in% which) {
+    CD <- cooks.distance(x, type = "CD")
+    GCD <- cooks.distance(x, type = "GCD")
+    
+    ylim <- range(CD, na.rm = TRUE)
+    
+    if (id.n > 0) 
+      ylim <- extendrange(r = ylim, f = 0.08)
+    
+    grDevices::dev.hold()
+    
+    graphics::plot(GCD, CD, main = main, ylab = "Cook's distance", xlab = "Generalized Cook's distance", ylim=ylim, ...)
+    if (one.fig)
+      title(sub = sub.caption, ...)
+    
+    graphics::mtext(getCaption(5), side = 3, cex = cex.caption)
+    
+    if (id.n > 0){
+      extreme_points <- as.vector(nth((CD/sum(CD))^2 + (GCD/sum(GCD))^2, k = id.n,
+                                      num.of.nths = id.n,
+                                      index.return = TRUE, descending = TRUE))
+      labpos <- label.pos[1 + as.numeric(GCD[extreme_points] > mean(range(GCD)))]
+      graphics::text(GCD[extreme_points], CD[extreme_points], labels = labels.id[extreme_points], cex = cex.id, pos = labpos, 
+                     xpd = TRUE, offset = 0.5)
+    }
+    
+    grDevices::dev.flush()
   }
 
-  grDevices::devAskNewPage(ask = current_ask)
+  # Sixth plot (Response vs Fitted means)
+
+  if (6 %in% which) {
+    mu_est <- stats::fitted(x, type = "response")
+    if(is.null(x$y)){
+      y = x$residuals + x$fitted.values
+    } else{
+      y = x$y
+    }
+    
+    graphics::plot(mu_est, y, xlab = "Predicted values", ylab = "Response values", main = main, ...)
+    if (one.fig)
+      title(sub = sub.caption, ...)
+    graphics::abline(0, 1, lty = 3)
+    graphics::mtext(getCaption(6), side = 3, cex = cex.caption)
+    
+    if (id.n > 0){
+      extreme_points <- as.vector(nth(abs(y - mu_est), k = id.n,
+                                      num.of.nths = id.n,
+                                      index.return = TRUE, descending = TRUE))
+      labpos <- label.pos[1 + as.numeric(mu_est[extreme_points] > mean(range(mu_est)))]
+      graphics::text(mu_est[extreme_points], y[extreme_points], labels = labels.id[extreme_points], cex = cex.id, pos = labpos, 
+                     xpd = TRUE, offset = 0.5)
+    }
+    
+    grDevices::dev.flush()
+  }
+
+  if (!one.fig && par("oma")[3L] >= 1)
+    mtext(sub.caption, outer = TRUE, cex = 1.25)
+  
+  invisible()
 }
 
 

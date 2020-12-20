@@ -35,6 +35,7 @@
 #' @param type_plot what type of plot should be drawn. The default is 'h'.
 #' @param ask logical; if \code{TRUE}, the user is asked before each plot.
 #' @param main character; title to be placed at each plot additionally (and above) all captions.
+#' @param labels.id	 vector of labels, from which the labels for extreme points will be chosen. The default uses the observation numbers.
 #' @param cex.id magnification of point labels.
 #' @param cex.caption	controls the size of caption.
 #' @param cex.oma.main controls the size of the sub.caption only if that is above the figures when there is more than one.
@@ -254,14 +255,13 @@ loc_infl
 #' @rdname local_influence.mixpoissonreg
 #' @export
 
-local_influence_plot.mixpoissonreg <- function(model, which = c(1,2,3,5),
+local_influence_plot.mixpoissonreg <- function(model, which = c(1,2,3,4),
                                                caption = list("Case Weights Perturbation",
                                                                "Hidden Variable Perturbation",
                                                                "Mean Explanatory Perturbation",
                                                                "Precision Explanatory Perturbation",
                                                                "Simultaneous Explanatory Perturbation"),
                                                sub.caption = NULL,
-                                               kind = c("base", "ggplot"),
                                                detect.influential = TRUE, n.influential = 5,
                                                draw.benchmark = FALSE, lty.benchmark = 2,
                                                type_plot = "h",
@@ -270,14 +270,12 @@ local_influence_plot.mixpoissonreg <- function(model, which = c(1,2,3,5),
                                                mean.covariates = NULL, precision.covariates = NULL, main = "",
                                                ask = prod(par("mfcol")) <
                                                  length(which) && dev.interactive(),
+                                               labels.id = names(residuals(model)),
                                                cex.id = 0.75,
                                                cex.oma.main = 1.25,
                                                cex.caption = 1,
                                                include.modeltype = TRUE,
                                                ...){
-if(length(kind)>1){
-  kind = kind[1]
-}
   if(length(direction)>1){
     direction = direction[1]
   }
@@ -336,7 +334,6 @@ if (ask) {
   on.exit(devAskNewPage(oask))
 }
 
-if(kind == "base"){
 pert <- c("case_weights", "hidden_variable",
           "mean_explanatory", "precision_explanatory",
           "simultaneous_explanatory")
@@ -344,8 +341,12 @@ for(i in 1:length(pert)){
   if(i %in% which){
 
     xlab <- paste0("Index\n ", sub.caption)
+    if(detect.influential) {
+      ylim <- range(loc_infl[[pert[i]]], na.rm = TRUE)
+      ylim <- grDevices::extendrange(r = ylim, f = 0.08)
+    }
 
-    graphics::plot(loc_infl[[pert[i]]], type = type_plot, main = main, ylab = ylab_infl, ...)
+    graphics::plot(loc_infl[[pert[i]]], type = type_plot, main = main, ylab = ylab_infl, ylim = ylim, ...)
     graphics::mtext(getCaption(i), side = 3, cex = cex.caption)
 
     if (one.fig)
@@ -361,36 +362,33 @@ for(i in 1:length(pert)){
         infl_points <- (loc_infl[[pert[i]]][infl_points] > bm)
         idx_x <- as.integer(names(which(infl_points == TRUE)))
         idx_y <- loc_infl[[pert[i]]][idx_x]
-        text(idx_x, idx_y, labels = idx_x, cex = cex.id, xpd = TRUE, pos = 3, offset = 0.1)
+        text(idx_x, idx_y, labels = labels.id[idx_x], cex = cex.id, xpd = TRUE, pos = 3, offset = 0.2)
       } else{
         idx_x_pos <- infl_points[which(loc_infl[[pert[i]]][infl_points] >= 0)]
         idx_x_neg <- setdiff(infl_points, idx_x_pos)
         idx_y_pos <- loc_infl[[pert[i]]][idx_x_pos]
         idx_y_neg <- loc_infl[[pert[i]]][idx_x_neg]
         if(length(idx_x_pos)>0){
-          text(idx_x_pos, idx_y_pos, labels = idx_x_pos, cex = cex.id, xpd = TRUE, pos = 3, offset = 0.1)
+          text(idx_x_pos, idx_y_pos, labels = labels.id[idx_x_pos], cex = cex.id, xpd = TRUE, pos = 3, offset = 0.2)
         }
         if(length(idx_x_neg)>0){
-          text(idx_x_neg, idx_y_neg, labels = idx_x_neg, cex = cex.id, xpd = TRUE, pos = 1, offset = 0.1)
+          text(idx_x_neg, idx_y_neg, labels = labels.id[idx_x_neg], cex = cex.id, xpd = TRUE, pos = 1, offset = 0.2)
         }
       }
 
 
     }
-    if(draw.benchmark & !is.na(bm)){
+    if(draw.benchmark){
       bm <- attr(loc_infl[[pert[i]]], "benchmark")
-      abline(a = bm, b = 0, lty = lty.benchmark)
+      if(!is.na(bm)){
+        abline(a = bm, b = 0, lty = lty.benchmark)
+      }
     }
 
     dev.flush()
   }
 }
 
-
-
-} else if(kind == "ggplot"){
-
-  }
 
 if (!one.fig && par("oma")[3L] >= 1)
   mtext(sub.caption, outer = TRUE, cex = 1.25)
