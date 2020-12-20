@@ -60,17 +60,9 @@ local_influence.mixpoissonreg <- function(model, perturbation = c("case_weights"
                                           mean.covariates = NULL, precision.covariates = NULL){
 loc_infl <- list()
 
-if(length(parameters)>1){
-  parameters = parameters[1]
-}
-
-if(length(direction)>1){
-  direction = direction[1]
-}
-
-if(length(curvature)>1){
-  curvature = curvature[1]
-}
+parameters <- rlang::arg_match(parameters)
+direction <- rlang::arg_match(direction)
+curvature <- rlang::arg_match(curvature)
 
 modeltype <- model$modeltype
 
@@ -276,13 +268,8 @@ local_influence_plot.mixpoissonreg <- function(model, which = c(1,2,3,4),
                                                cex.caption = 1,
                                                include.modeltype = TRUE,
                                                ...){
-  if(length(direction)>1){
-    direction = direction[1]
-  }
-
-  if(length(curvature)>1){
-    curvature = curvature[1]
-  }
+  direction <- rlang::arg_match(direction)
+  curvature <- rlang::arg_match(curvature)
 
   getCaption <- function(k) if (length(caption) < k)
     NA_character_

@@ -408,9 +408,7 @@ predict.mixpoissonreg <- function(object, newdata = NULL, type = c("response", "
     stop("level must be a number between 0 and 1.")
   }
 
-  if(length(interval) > 1){
-    interval = interval[1]
-  }
+  interval <- rlang::arg_match(interval)
 
   possible_intervals <- c("none", "confidence", "prediction")
 
@@ -555,7 +553,7 @@ predict.mixpoissonreg <- function(object, newdata = NULL, type = c("response", "
       predictions <- predictions_temp
     }
   } else {
-    formula_temp <- Formula(fit$call)
+    formula_temp <- Formula(fit$formula)
     matrix_temp_x <- stats::model.matrix(object = formula_temp, data = newdata, rhs = 1)
     matrix_temp_w <- stats::model.matrix(object = formula_temp, data = newdata, rhs = 2)
 
@@ -795,9 +793,8 @@ print.mixpoissonreg <- function(x, ...) {
 #' }
 #' @export
 coef.mixpoissonreg <- function(object, parameters = c("all", "mean", "precision"), ...) {
-  if(length(parameters)>1){
-    parameters = parameters[1]
-  }
+  parameters <- rlang::arg_match(parameters)
+
   coef_ext <- switch(parameters,
                      "all" = {
                        coeff_beta <- object$coefficients$mean
@@ -965,9 +962,8 @@ summary.mixpoissonreg <- function(object, ...) {
 #' }
 #' @export
 residuals.mixpoissonreg <- function(object, type = c("pearson", "score")) {
-  if(length(type)>1){
-    type = type[1]
-  }
+  type <- rlang::arg_match(type)
+
   if(!(type%in%c("pearson", "score"))){
     stop("the type must be 'pearson' or 'score'")
   }

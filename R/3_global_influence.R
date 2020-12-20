@@ -24,9 +24,8 @@
 #' @export
 
 hatvalues.mixpoissonreg <- function(model, parameters = c("mean", "precision")){
-  if(length(parameters)>1){
-    parameters = parameters[1]
-  }
+  parameters <- rlang::arg_match(parameters)
+
   if(!(parameters%in% c("mean", "precision"))){
     stop("the parameter must be 'mean' or 'precision'")
   }
@@ -54,16 +53,13 @@ hatvalues.mixpoissonreg <- function(model, parameters = c("mean", "precision")){
 #' @export
 
 cooks.distance.mixpoissonreg <- function(model, type = c("CD", "GCD", "GCDmean", "GCDprecision", "LD", "QD"), hat = c("mean", "precision")){
-if(length(type)>1){
-  type = type[1]
-}
+type <- rlang::arg_match(type)
+
 if(!(type%in%c("CD", "GCD", "GCDmean", "GCDprecision", "LD", "QD"))){
   stop("type must be one of 'CD', 'GCD', 'GCDmean'', 'GCDprecision', 'LD', 'QD'")
 }
 
-if(length(hat)>1){
-  hat = hat[1]
-}
+hat <- rlang::arg_match(hat)
 
 if(!(hat%in%c("mean","precision"))){
   stop("hat must be one of 'mean' or 'precision'")

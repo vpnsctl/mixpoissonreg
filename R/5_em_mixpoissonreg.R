@@ -465,9 +465,8 @@ DQ2_Obs_Fisher_mixpoisson <- function(theta, y, x, w, link.mean, link.precision,
 #' @return Fisher's information matrix.
 
 obs_fisher_weight_matrix_mixpoisson <- function(object, parameters = c("all", "mean", "precision")) {
-  if(length(parameters)>1){
-    parameters = parameters[1]
-  }
+  parameters <- rlang::arg_match(parameters)
+
   link_mean <- build_links_mpreg(object$link.mean)
   link_precision <- build_links_mpreg(object$link.precision)
   mu <- object$fitted.values

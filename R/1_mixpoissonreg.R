@@ -347,20 +347,15 @@ mixpoissonreg.fit <- function(y, x, w = NULL, link.mean = c("log", "sqrt"),
     warning(paste0("prob = ", prob, " is ignored since envelope = 0"))
   }
   #
-  if(length(model)>1){
-    model = model[1]
-  }
+  model <- rlang::arg_match(model)
+  method <- rlang::arg_match(method)
 
-  if(length(method)>1){
-    method = method[1]
-  }
 
   #
 
   ## Checking and processing link functions
-  if (length(link.mean) > 1) {
-    link.mean <- link.mean[1]
-  }
+  link.mean <- rlang::arg_match(link.mean)
+
   possible_link_mean <- c("log", "sqrt")
 
   if (!(link.mean %in% possible_link_mean)) {
