@@ -1073,3 +1073,25 @@ logLik.mixpoissonreg <- function(object){
   class(logLik) = "logLik"
   logLik
 }
+
+#############################################################################################
+#' @title terms.mixpoissonreg
+#' @description Function to extract the terms of a fitted mixpoissonreg object.
+#' @param x an object of class "mixpoissonreg" containing results from the fitted model.
+#' @param parameters characters the parameters to be chosen. The options are 'mean' and 'precision'.
+#' @param ... further arguments passed to or from other methods.
+#' @seealso
+#' \code{\link{fitted.mixpoissonreg}}, \code{\link{coef.mixpoissonreg}},
+#' \code{\link{print.mixpoissonreg}}, \code{\link{vcov.mixpoissonreg}},
+#' \code{\link{plot.mixpoissonreg}}, \code{\link{predict.mixpoissonreg}}
+#' @examples
+#' \donttest{
+#' fit <- bbreg(agreement ~ priming + eliciting | priming, data = WT)
+#' summary(fit)
+#' }
+#' @export
+
+terms.mixpoissonreg <- function(x, parameters = c("mean", "precision")){
+  parameters <- rlang::arg_match(parameters)
+  x$terms[[parameters]]
+}

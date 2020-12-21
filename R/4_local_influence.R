@@ -341,7 +341,7 @@ for(i in 1:length(pert)){
 
     if(detect.influential){
       bm <- attr(loc_infl[[pert[i]]], "benchmark")
-      infl_points <- as.vector(nth(abs(loc_infl[[pert[i]]]), k = n.influential,
+      infl_points <- as.vector(Rfast::nth(abs(loc_infl[[pert[i]]]), k = n.influential,
                                    num.of.nths = n.influential,
                                    index.return = TRUE, descending = TRUE))
 
