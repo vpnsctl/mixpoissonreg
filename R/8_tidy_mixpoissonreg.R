@@ -90,13 +90,46 @@ tidy.mixpoissonreg <- function(x, conf.int = FALSE, conf.level = 0.95){
   ret
 }
   
-tidy_local_influence <- function(){
+tidy_local_influence.mixpoissonreg <- function(x, perturbation = c("case_weights", "hidden_variable",
+                                                     "mean_explanatory", "precision_explanatory",
+                                                     "simultaneous_explanatory"), curvature = c("conformal", "normal"),
+                                 direction = c("canonical", "max.eigen"), parameters = c("all", "mean", "precision"),
+                                 mean.covariates = NULL, precision.covariates = NULL){
+    loc_infl <- local_influence(x, perturbation = perturbation, curvature = curvature, direction = direction, 
+                                parameters = parameters, mean.covariates = mean.covariates, precision.covariates = precision.covariates)
+  
+    tidy_loc_infl <- tibble(.rows = nobs(x))
     
+    for(pert in perturbation){
+      tidy_loc_infl = tidy_loc_infl %>% add_column(!!pert := loc_infl[[pert]])
+    }
+    tidy_loc_infl
+}
+
+local_influence_benchmarks.mixpoissonreg <- function(x, perturbation = c("case_weights", "hidden_variable",
+                                                           "mean_explanatory", "precision_explanatory",
+                                                           "simultaneous_explanatory"), curvature = c("conformal", "normal"),
+                                       direction = c("canonical", "max.eigen"), parameters = c("all", "mean", "precision"),
+                                       mean.covariates = NULL, precision.covariates = NULL){
+  loc_infl <- local_influence(x, perturbation = perturbation, curvature = curvature, direction = direction, 
+                              parameters = parameters, mean.covariates = mean.covariates, precision.covariates = precision.covariates)
+  benchmarks <- c()
+  for(pert in perturbation){
+    benchmarks <- c(benchmarks, attr(loc_infl[[pert]], "benchmark"))
+  }
+  benchmarks <- matrix(benchmarks, nrow = 1)
+  colnames(benchmarks) <- perturbation
+  benchmarks_tbl <- as_tibble(benchmarks)
+  benchmarks_tbl
 }
   
-autoplot.mixpoissonreg <- function()
+autoplot.mixpoissonreg <- function(){
+  
+}
 
-local_influence_ggplot.mixpoissonreg <- function()
+local_influence_ggplot.mixpoissonreg <- function(){
+  
+}
 
   
 
@@ -108,4 +141,7 @@ tidy_local_influence <- function(model, ...){
   UseMethod("tidy_local_influence", model)
 }
 
+local_influence_benchmarks <- function(model, ...){
+  UseMethod("local_influence_benchmarks", model)
+}
 
