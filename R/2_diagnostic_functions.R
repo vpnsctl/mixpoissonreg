@@ -857,8 +857,6 @@ vcov.mixpoissonreg <- function(object, parameters = c("all", "mean", "precision"
 }
 
 
-
-
 #############################################################################################
 #' @title summary.mixpoissonreg
 #' @description Function providing a summary of results related to the mixed Poisson regression model.
@@ -875,15 +873,63 @@ vcov.mixpoissonreg <- function(object, parameters = c("all", "mean", "precision"
 #' }
 #' @export
 summary.mixpoissonreg <- function(object, ...) {
+  ans <- list()
+  
   nbeta <- length(object$coefficients$mean)
   nalpha <- length(object$coefficients$precision)
   #
-  coeff <- c(coef(object)$mean, coef(object)$precision)
+  coeff <- object$coefficients
+  coeff <- c(coeff$mean, coeff$precision)
   SEr <- object$std_errors
   tab <- cbind(coeff, SEr, coeff / SEr, 2 * stats::pnorm(-abs(coeff / SEr)))
   colnames(tab) <- c("Estimate", "Std.error", "z-value", "Pr(>|z|)")
   rownames(tab) <- names(coeff)
   tab <- list(mean = tab[seq.int(length.out = nbeta), , drop = FALSE], precision = tab[seq.int(length.out = nalpha) + nbeta, , drop = FALSE])
+  
+  ans$coeff_table <- tab
+
+  ans$estimation_method <- object$estimation_method
+  
+  ans$modelname <- object$modelname
+  
+  ans$call <- object$call
+  
+  ans$residualname <- paste0(toupper(substring(object$residualname, 1, 1)), substring(object$residualname, 2))
+  
+  ans$RSS <- sum(residuals(object, type = object$residualname)^2)
+  
+  ans$res_quantiles <- stats::quantile(residuals(object, type = object$residualname))
+  
+  ans$efron.pseudo.r2 <- object$efron.pseudo.r2
+  
+  ans$envelope_prop <- object$envelope_prop
+  
+  ans$envelope <- object$envelope
+  
+  ans$niter <- object$niter
+  
+  class(ans) <- "summary.mixpoissonreg"
+  ans
+}
+
+#############################################################################################
+#' @title print.summary.mixpoissonreg
+#' @description Function providing a summary of results related to the mixed Poisson regression model.
+#' @param object an object of class "mixpoissonreg" containing results from the fitted model.
+#' @param ... further arguments passed to or from other methods.
+#' @seealso
+#' \code{\link{fitted.mixpoissonreg}}, \code{\link{coef.mixpoissonreg}},
+#' \code{\link{print.mixpoissonreg}}, \code{\link{vcov.mixpoissonreg}},
+#' \code{\link{plot.mixpoissonreg}}, \code{\link{predict.mixpoissonreg}}
+#' @examples
+#' \donttest{
+#' fit <- bbreg(agreement ~ priming + eliciting | priming, data = WT)
+#' summary(fit)
+#' }
+#' @export
+print.summary.mixpoissonreg <- function(object, ...) {
+  tab <- object$coeff_table
+  
   #
   digits <- max(3, getOption("digits") - 3)
   #
@@ -908,10 +954,11 @@ summary.mixpoissonreg <- function(object, ...) {
 
 
   #
-  RSS <- sum(object$residuals^2)
-  residualname <- paste0(toupper(substring(object$residualname, 1, 1)), substring(object$residualname, 2))
+  RSS <- object$RSS
+  residualname <- object$residualname
+    
   cat(sprintf("\n%s:\n", paste0(residualname, " residuals")))
-  print(structure(round(c(RSS, as.vector(stats::quantile(object$residuals))), digits = digits), .Names = c("RSS", "Min", "1Q", "Median", "3Q", "Max")))
+  print(structure(round(c(RSS, as.vector(object$res_quantiles)), digits = digits), .Names = c("RSS", "Min", "1Q", "Median", "3Q", "Max")))
   #
   if (NROW(tab$mean)) {
     cat(paste0("\nCoefficients modeling the mean (with ", object$link.mean, " link):\n"))
@@ -935,7 +982,7 @@ summary.mixpoissonreg <- function(object, ...) {
   cat("Efron's pseudo R-squared: ", object$efron.pseudo.r2,"\n")
 
   if (is.null(object$envelope) == FALSE) {
-    message(sprintf("%s\n", paste0("Percentage of residual within the envelope = ", round(object$envelope_prop, digits = digits))))
+    cat(sprintf("%s\n", paste0("Percentage of residuals within the envelope = ", round(object$envelope_prop, digits = digits))))
   }
   if(object$estimation_method == "EM"){
     cat(paste0("Number of iterations of the EM algorithm = ", object$niter,"\n"))

@@ -38,9 +38,32 @@ augment.mixpoissonreg <- function(x, data = model.frame(x), newdata = NULL, type
   df
 }
   
-glance.mixpoissonreg <- function()
+glance.mixpoissonreg <- function(x, ...){
+  broom:::as_glance_tibble(efron.pseudo.r2 = as.numeric(x$efron.pseudo.r2), df.null = x$df.null, 
+                   logLik = as.numeric(stats::logLik(x)), AIC = stats::AIC(x), 
+                   BIC = stats::BIC(x), df.residual = stats::df.residual(x), 
+                   nobs = stats::nobs(x), model.type = x$modeltype, est.method = x$estimation_method,na_types = "rirrriicc")
+}
   
-tidy.mixpoissonreg <- function()
+tidy.mixpoissonreg <- function(x, conf.int = FALSE, conf.level = 0.95){
+  ret <- as_tibble(summary(x)$coefficients, rownames = "term")
+  colnames(ret) <- c("term", "estimate", "std.error", "statistic", 
+                     "p.value")
+  coefs <- tibble::enframe(stats::coef(x), name = "term", value = "estimate")
+  ret <- left_join(coefs, ret, by = c("term", "estimate"))
+  if (conf.int) {
+    ci <- broom_confint_terms(x, level = conf.level)
+    ret <- dplyr::left_join(ret, ci, by = "term")
+  }
+  if (exponentiate) {
+    ret <- exponentiate(ret)
+  }
+  ret
+}
+  
+tidy_local_influence <- function(){
+    
+}
   
 autoplot.mixpoissonreg <- function()
 
