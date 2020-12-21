@@ -562,8 +562,261 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
 #' @param 
 #' @return 
 
-local_influence_autoplot.mixpoissonreg <- function(){
+local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), title = list("Case Weights Perturbation",
+                                                                                            "Hidden Variable Perturbation",
+                                                                                            "Mean Explanatory Perturbation",
+                                                                                            "Precision Explanatory Perturbation",
+                                                                                            "Simultaneous Explanatory Perturbation"),
+                                                   curvature = c("conformal", "normal"),
+                                                   direction = c("canonical", "max.eigen"), parameters = c("all", "mean", "precision"),
+                                                   mean.covariates = NULL, precision.covariates = NULL,
+                                                   label.repel = TRUE,
+                                                   nrow = NULL, ncol = NULL,
+                                                   ask = prod(par("mfcol")) <
+                                                     length(which) && dev.interactive(), include.modeltype = TRUE,
+                                                  sub.caption = NULL,
+                                                   gpar_sub.caption = list(fontface = "bold"), detect.influential = TRUE, n.influential = 5,
+                                                  draw.benchmark = FALSE,
+                                                   colour = "#444444", size = NULL, linetype = NULL, alpha = NULL, fill = NULL, 
+                                                   shape = NULL, label = TRUE, label.label = NULL, label.colour = "#000000", 
+                                                   label.alpha = NULL, label.size = NULL, label.angle = NULL, 
+                                                   label.family = NULL, label.fontface = NULL, label.lineheight = NULL, 
+                                                   label.hjust = NULL, label.vjust = NULL, 
+                                                   ad.colour = "#888888", ad.linetype = "dashed", ad.size = 0.2, ...){
+  p <- list()
+  p[[1]] <- p[[2]] <- p[[3]] <- p[[4]] <- p[[5]] <- NULL
+  if (is.null(sub.caption)) {
+    cal <- model$call
+    if (!is.na(m.f <- match("formula", names(cal)))) {
+      cal <- cal[c(1, m.f)]
+      names(cal)[2L] <- ""
+    }
+    cc <- deparse(cal, 80)
+    nc <- nchar(cc[1L], "c")
+    abbr <- length(cc) > 1 || nc > 75
+    sub.caption <- if (abbr)
+      paste(substr(cc[1L], 1L, min(75L, nc)), "...")
+    else cc[1L]
+  }
   
+  direction <- rlang::arg_match(direction)
+  curvature <- rlang::arg_match(curvature)
+  
+  pert <- c("case_weights", "hidden_variable",
+            "mean_explanatory", "precision_explanatory",
+            "simultaneous_explanatory")
+  
+  plot.data <- tidy_local_influence(model, perturbation = pert[which], curvature = curvature,
+                                                            direction = direction, parameters = parameters,
+                                                            mean.covariates = mean.covariates,
+                                                            precision.covariates = precision.covariates)
+  n <- nobs(model)
+  plot.data$.index <- 1:n
+  
+  if(is.null(label.label)){
+    plot.data$.label <- rownames(plot.data)
+  } else{
+    plot.data$.label <- as.vector(label.label)
+  }
+  
+  plot_label_influential <- function (p, data, x = NULL, y = NULL, label = TRUE, label.label = "rownames", 
+                          label.colour = NULL, label.alpha = NULL, label.size = NULL, 
+                          label.angle = NULL, label.family = NULL, label.fontface = NULL, 
+                          label.lineheight = NULL, label.hjust = NULL, label.vjust = NULL, 
+                          label.repel = FALSE, label.show.legend = NA) 
+  {
+    if (!is.data.frame(data)) {
+      stop(paste0("Unsupported class: ", class(data)))
+    }
+    if (!missing(label.colour) && !is.null(label.colour) && missing(label)) {
+      label <- TRUE
+    }
+    if (label || label.repel) {
+      if (is.null(label.colour)) {
+        label.colour <- "#000000"
+      }
+      if (label.repel && "ggrepel" %in% rownames(installed.packages())) {
+        textfunc <- ggrepel::geom_text_repel
+      }
+      else {
+        textfunc <- ggplot2::geom_text
+      }
+      p <- p + geom_factory_influential(textfunc, data, x = x, y = y, label = ".label", 
+                            colour = label.colour, alpha = label.alpha, size = label.size, 
+                            angle = label.angle, family = label.family, fontface = label.fontface, 
+                            lineheight = label.lineheight, hjust = label.hjust, 
+                            vjust = label.vjust, show.legend = label.show.legend)
+    }
+    p
+  }
+  
+  flatten <- function (df) 
+  {
+    ismatrix <- vapply(df, is.matrix, logical(1))
+    if (any(ismatrix)) {
+      return(data.frame(c(df[!ismatrix], do.call(data.frame, 
+                                                 df[ismatrix])), stringsAsFactors = FALSE))
+    }
+    else {
+      return(df)
+    }
+  }
+  
+  geom_factory_influential <- function (geomfunc, data = NULL, ...) 
+  {
+    mapping <- list()
+    option <- list()
+    columns <- colnames(data)
+    for (key in names(list(...))) {
+      value <- list(...)[[key]]
+      if (is.null(value)) {
+      }
+      else if (value %in% columns) {
+        mapping[[key]] <- value
+      }
+      else {
+        option[[key]] <- value
+      }
+    }
+    if (!is.null(data)) {
+      option[["data"]] <- data
+    }
+    option[["mapping"]] <- do.call(ggplot2::aes_string, mapping)
+    return(do.call(geomfunc, option))
+  }
+  
+  if (is.logical(shape) && !shape) {
+    if (missing(label)) {
+      label <- TRUE
+    }
+    if (missing(n.influential)) {
+      n.influential <- nrow(plot.data)
+    }
+  }
+  
+  dev_ask <- is.null(nrow) & is.null(ncol)
+  
+  if(dev_ask){
+    if (ask) {
+      oask <- grDevices::devAskNewPage(TRUE)
+      on.exit(grDevices::devAskNewPage(oask))
+    }
+  }
+  
+  plot.data <- flatten(plot.data)
+  
+  if (detect.influential) {
+    bm <- local_influence_benchmarks(model, perturbation = pert[which], curvature = curvature,
+                                     direction = direction, parameters = parameters,
+                                     mean.covariates = mean.covariates,
+                                     precision.covariates = precision.covariates)
+    
+    p.data <- list()
+    
+    for(i in 1:length(pert)){
+      if(i %in% which){
+        p.data[[i]] <- plot.data %>% dplyr::mutate(tmp = !!as.name(pert[[i]]), tmp = abs(tmp)) %>% dplyr::arrange(dplyr::desc(tmp)) 
+        if(!is.na(bm[[pert[[i]]]])){
+          p.data[[i]] <- p.data[[i]] %>% dplyr::filter(tmp > bm[[pert[[i]]]])
+        }
+        p.data[[i]] <- utils::head(p.data[[i]], n.influential) %>% dplyr::select(-tmp)
+      }
+    }
+  }
+  
+  .decorate.label.influential <- function(p, data) {
+    if (label & n.influential > 0) {
+      p <- plot_label(p = p, data = data, label = label, 
+                      label.label = ".label", label.colour = label.colour, 
+                      label.alpha = label.alpha, label.size = label.size, 
+                      label.angle = label.angle, label.family = label.family, 
+                      label.fontface = label.fontface, label.lineheight = label.lineheight, 
+                      label.hjust = label.hjust, label.vjust = label.vjust, 
+                      label.repel = label.repel)
+    }
+    p
+  }
+  
+  .decorate.plot <- function(p, xlab = NULL, ylab = NULL, title = NULL) {
+    p + ggplot2::xlab(xlab) + ggplot2::ylab(ylab) + ggplot2::ggtitle(title)
+  }
+  
+  ylab_infl <- switch(curvature,
+                      "conformal" = {
+                        yl <- switch(direction,
+                                     "canonical" = "Total Local Influence (Conformal)",
+                                     "max.eigen" = "Largest Curvature Direction (Conformal)")
+                        yl
+                      },
+                      "normal" = {
+                        yl <- switch(direction,
+                                     "canonical" = "Total Local Influence (Normal)",
+                                     "max.eigen" = "Largest Curvature Direction (Normal)")
+                      }
+  )
+  
+  for(i in 1:length(pert)){
+    if(i %in% which){
+      
+      if(include.modeltype){
+        title[[i]] <- paste0(title[[i]], " - ", model$modeltype, " Regression")
+      } 
+      
+      t <- title[[i]]
+      mapping <- ggplot2::aes_string(x = ".index", y = pert[[i]], 
+                                     ymin = 0, ymax = pert[[i]])
+      p[[i]] <- ggplot2::ggplot(data = plot.data, mapping = mapping)
+      if (!is.logical(shape) || shape) {
+        p[[i]] <- p[[i]] + geom_factory_influential(geom_linerange, plot.data, 
+                                colour = colour, size = size, linetype = linetype, 
+                                alpha = alpha, fill = fill, shape = shape)
+      }
+      if(detect.influential){
+        p[[i]] <- .decorate.label.influential(p[[i]], p.data[[i]]) 
+      }
+      
+      if(sub.caption == "" | !dev_ask){
+        xlab = "Obs. Number"
+      } else {
+        xlab = paste0("Obs. Number\n", sub.caption)
+      }
+      
+      p[[i]] <- .decorate.plot(p[[i]], xlab = xlab, ylab = ylab_infl, 
+                           title = t)
+      
+      bm_i <- bm[[pert[[i]]]]
+      
+      if(draw.benchmark){
+        if(!is.na(bm_i)){
+          p[[i]] <- p[[i]] + ggplot2::geom_abline(intercept = bm_i, slope = 0, 
+                                                  linetype = ad.linetype, size = ad.size, colour = ad.colour)
+        }
+      }
+      
+      if(dev_ask){
+        print(p[[i]])
+      }
+      
+        }
+  }
+  
+  
+  if(!dev_ask){
+    grDevices::devAskNewPage(ask = FALSE)
+    plot.list <- lapply(which, function(i){p[[i]]})
+    if(is.null(nrow))
+      nrow <- 0
+    if(is.null(ncol))
+      ncol <- 0
+    p <- new("ggmultiplot", plots = plot.list, nrow = nrow, ncol = ncol)
+    
+    gpar <- do.call(grid::gpar, gpar_sub.caption)
+    title_multi <- grid::textGrob(sub.caption, gp=gpar)
+    gridExtra::grid.arrange(grobs = p@plots, top = title_multi, gp=gpar(fontface="bold"))
+    grDevices::devAskNewPage(ask = dev.interactive())
+  } else{
+    invisible()
+  }
 }
 
 #############################################################################################
@@ -573,7 +826,7 @@ local_influence_autoplot.mixpoissonreg <- function(){
 #' @return   
 
 local_influence_autoplot <- function(model, ...){
-  UseMethod("local_influence_ggplot", model)
+  UseMethod("local_influence_autoplot", model)
 }
 
 #############################################################################################

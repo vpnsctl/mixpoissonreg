@@ -141,7 +141,7 @@ for(pert in perturbation){
 
          },
          "mean_explanatory" = {
-           S_x = sqrt(colVars(x))
+           S_x = sqrt(Rfast::colVars(x))
            if(!is.null(mean.covariates)){
              expl_mean <- names(model$coefficients$mean) %in% mean.covariates
              S_x = S_x * expl_mean
@@ -155,7 +155,7 @@ for(pert in perturbation){
            Bmatrix =  T1 %*% solve(t(x)%*%Wbeta%*%x) %*% t(T1)
          },
          "precision_explanatory" = {
-           S_w = sqrt(colVars(w))
+           S_w = sqrt(Rfast::colVars(w))
            if(!is.null(precision.covariates)){
              expl_precision <- names(model$coefficients$precision) %in% precision.covariates
              S_w = S_w * expl_precision
@@ -171,13 +171,13 @@ for(pert in perturbation){
 
          },
          "simultaneous_explanatory" = {
-           S_x = sqrt(colVars(x))
+           S_x = sqrt(Rfast::colVars(x))
            if(!is.null(mean.covariates)){
              expl_mean <- names(model$coefficients$mean) %in% mean.covariates
              S_x = S_x * expl_mean
            }
 
-           S_w = sqrt(colVars(w))
+           S_w = sqrt(Rfast::colVars(w))
            if(!is.null(precision.covariates)){
              expl_precision <- names(model$coefficients$precision) %in% precision.covariates
              S_w = S_w * expl_precision
