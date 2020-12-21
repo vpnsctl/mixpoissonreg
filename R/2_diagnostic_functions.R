@@ -886,7 +886,7 @@ summary.mixpoissonreg <- function(object, ...) {
   rownames(tab) <- names(coeff)
   tab <- list(mean = tab[seq.int(length.out = nbeta), , drop = FALSE], precision = tab[seq.int(length.out = nalpha) + nbeta, , drop = FALSE])
   
-  ans$coeff_table <- tab
+  ans$coefficients <- tab
 
   ans$estimation_method <- object$estimation_method
   
@@ -928,7 +928,7 @@ summary.mixpoissonreg <- function(object, ...) {
 #' }
 #' @export
 print.summary.mixpoissonreg <- function(object, ...) {
-  tab <- object$coeff_table
+  tab <- object$coefficients
   
   #
   digits <- max(3, getOption("digits") - 3)
