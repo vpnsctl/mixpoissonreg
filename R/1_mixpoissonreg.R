@@ -137,10 +137,9 @@
 #' the \link[mixpoissonreg:residuals.mixpoissonreg]{residuals} method.
 #'
 #' It is also noteworthy that all the global and local influence analysis tools developed
-#' in Barreto-Souza and Simas (2015) are implemented in this package. See \link[mixpoissonreg]{influence.mixpoissonreg},
-#' \link[mixpoissonreg]{hatvalues.mixpoissonreg}, \link[mixpoissonreg]{cooks.distance.mixpoissonreg},
-#' \link[mixpoissonreg]{local_influence.mixpoissonreg}, \link[mixpoissonreg]{local_influence_plot.mixpoissonreg}
-#' and \link[mixpoissonreg]{local_influence_autoplot.mixpoissonreg}.
+#' in Barreto-Souza and Simas (2015) are implemented in this package. See \code{\link{global_influence.mixpoissonreg}},
+#' \code{\link{local_influence.mixpoissonreg}}, \code{\link{local_influence_plot.mixpoissonreg}}
+#' and \code{\link{local_influence_autoplot.mixpoissonreg}}.
 #'
 #' @references
 #' DOI:10.1007/s11222-015-9601-6 (\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
@@ -653,10 +652,9 @@ mixpoissonreg.fit <- function(y, x, w = NULL, link.mean = c("log", "sqrt"),
 #' the \link[mixpoissonreg:residuals.mixpoissonreg]{residuals} method.
 #'
 #' It is also noteworthy that all the global and local influence analysis tools developed
-#' in Barreto-Souza and Simas (2015) are implemented in this package. See \link[mixpoissonreg]{influence.mixpoissonreg},
-#' \link[mixpoissonreg]{hatvalues.mixpoissonreg}, \link[mixpoissonreg]{cooks.distance.mixpoissonreg},
-#' \link[mixpoissonreg]{local_influence.mixpoissonreg}, \link[mixpoissonreg]{local_influence_plot.mixpoissonreg}
-#' and \link[mixpoissonreg]{local_influence_autoplot.mixpoissonreg}.
+#' in Barreto-Souza and Simas (2015) are implemented in this package. See \code{\link{global_influence.mixpoissonreg}},
+#' \code{\link{local_influence.mixpoissonreg}}, \code{\link{local_influence_plot.mixpoissonreg}}
+#' and \code{\link{local_influence_autoplot.mixpoissonreg}}.
 #'
 #' @references
 #' DOI:10.1007/s11222-015-9601-6 (\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})

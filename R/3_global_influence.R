@@ -1,27 +1,51 @@
 #############################################################################################
 #' @name global_influence.mixpoissonreg
 #' @title Global Influence Diagnostics for Mixed Poisson Regression Models
-#' @aliases cooks.distance.mixpoissonreg hatvalues.mixpoissonreg
+#' @aliases cooks.distance.mixpoissonreg hatvalues.mixpoissonreg influence.mixpoissonreg
 #' @description These functions provides global influence diagnostic quantities such as Cook's distance, hat values, generalized Cook's distance (through argument
 #' on \code{cooks.distance.mixpoissonreg} function), likelihood displacement (through argument
 #' on \code{cooks.distance.mixpoissonreg} function) and Q-displacement (through argument
 #' on \code{cooks.distance.mixpoissonreg} function).
 #' @param model a \code{mixpoissonreg} object.
-#' @param hat hat values \code{H[i,i]}. The default is obtained through the second-derivative of the Q-function in the spirit of Zhu et al. ();
-#' @param type the type of Cook's distance to be used. The options are 'CD', the standard Cook's distance; 'GCD', the generalized Cook's distance with respect to all parameters;
-#' 'GCDmean', the generalized Cook's distance with respect to the mean parameters; 'GCDprecision', the generalized Cook's distance with respect to the precision parameters;
-#' 'LD', the likelihood displacement (also known as likelihood distance); 'QD', the Q-displacement. See 'details' for more informations. For 'GCD', 'GCDmean', 'LD' and 'QD', the model must be fitted with 'x' set to TRUE,
-#' and for 'GCD', 'GCDprecision', 'LD' and 'QD', the model must be fitted with 'w' set to TRUE. For 'CD', if 'hat' is set to 'mean', the model must be fitted with 'x' set to TRUE, whereas
+#' @param hat hat values \code{H[i,i]}. The default is obtained through the second-derivative of the Q-function in the spirit of Zhu et al. (2001) and Pregibon (1981), see details.
+#' @param type the type of Cook's distance to be used. The options are 'CD', the standard Cook's distance; 
+#' 'GCD', the generalized Cook's distance with respect to all parameters, Zhu et al. (2001);
+#' 'GCDmean', the generalized Cook's distance with respect to the mean parameters; 
+#' 'GCDprecision', the generalized Cook's distance with respect to the precision parameters;
+#' 'LD', the likelihood displacement (also known as likelihood distance), see Cook and Weisberg (1982); 'QD', the Q-displacement, see Zhu et al. (2001). 
+#' See 'details' for more informations. For 'GCD', 'GCDmean', 'LD' and 'QD', the model must be fitted with 'x' set to TRUE,
+#' and for 'GCD', 'GCDprecision', 'LD' and 'QD', the model must be fitted with 'w' set to TRUE. For 'CD', if 'hat' is set to 'mean', 
+#' the model must be fitted with 'x' set to TRUE, whereas
 #' if 'hat' is set to 'precision', the model must be fitted with 'w' set to TRUE.
 #' @param parameters the parameter to which the hat values will be computed. The options are 'mean' and 'precision'. The default is 'mean'. For hatvalues with respect to the mean
 #' the model must be fitted with 'x' set to TRUE, and for hatvalues with respect to the precision the model must be fitted with 'w' set to TRUE.
 #' @param do.coef logical indicating if the the approximation to the change of coefficients values after case removal are desired. The model must be fitted with x = TRUE. See details for further explanations.
-#' @details Preencher
+#' @details 
+#' For hatvalues of mixed Poisson regression models, we follow Zhu et al. (2001) to consider the negative of the hessian of the Q-function as weight matrix, and follow
+#' Pregibon (1981) to define the 'hat' matrix with respect to this weight matrix. We can consider the hessian of the Q-function with respect to mean-related parameters, 
+#' which usually considered. We can also consider the hessian of the Q-function with respect to the precision-related parameters to give rise to hatvalues related to the precision
+#' parameters. 
+#' 
+#' The Generalized Cook's distance and Q-displacement for EM-based models were defined in Zhu et al. (2001) and computed for mixed Poisson regression models 
+#' in Barreto-Souza and Simas (2015). We implemented first-order approximation to these quantities to be computationally feasible. These first-order approximations
+#' are available in Barreto-Souza and Simas (2015). We also provide versions of generalized Cook's distance for mean-related or precision-related parameters, whose
+#' details can be found in Barreto-Souza and Simas (2015).
+#' 
+#' In the influence method we provide a 'do.coef' argument that computes first-order approximations to the impact of removal of each case to each parameter, in the 
+#' same spirit as the 'do.coeff' argument in 'influence.lm'.
+#' 
+#' 
 #'
-#' @references Zhu et al.; Barreto-Souza and Simas; Cook and Preigibon; etc..
+#' @references 
+#' DOI:10.1007/s11222-015-9601-6 (\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
+#' 
+#' Cook, D.R. and Weisberg, S. (1982) *Residuals and Influence in Regression*. (New York: Chapman and Hall, 1982)
+#' 
+#' DOI:10.1214/aos/1176345513 (\href{https://projecteuclid.org/euclid.aos/1176345513}{Pregibon; 1981})
+#' 
+#' Zhu, H.T., Lee, S.Y., Wei, B.C., Zhu, J. (2001) *Case-deletion measures formodels with incomplete data.* Biometrika, 88, 727–737. \href{https://www.jstor.org/stable/2673442?seq=1}
 
 #' @rdname global_influence.mixpoissonreg
-#' @export
 
 hatvalues.mixpoissonreg <- function(model, parameters = c("mean", "precision")){
   parameters <- rlang::arg_match(parameters)
@@ -50,7 +74,6 @@ hatvalues.mixpoissonreg <- function(model, parameters = c("mean", "precision")){
 }
 
 #' @rdname global_influence.mixpoissonreg
-#' @export
 
 cooks.distance.mixpoissonreg <- function(model, type = c("CD", "GCD", "GCDmean", "GCDprecision", "LD", "QD"), hat = c("mean", "precision")){
 type <- rlang::arg_match(type)
@@ -333,7 +356,6 @@ dist
 }
 
 #' @rdname global_influence.mixpoissonreg
-#' @export
 
 influence.mixpoissonreg <- function(model, do.coef = TRUE){
 influence_mpreg <- list()

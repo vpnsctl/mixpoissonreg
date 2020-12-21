@@ -1,7 +1,8 @@
 #' @import statmod
 
 #############################################################################################
-#' @title startvalues_mpreg
+#' @name startvalues_mpreg
+#' @title Initial guesses for mixed Poisson regression models
 #' @description Function providing initial values for the optimization algorithms for mixed Poisson regression models.
 #' @param y response vector with z_i >= 0 and integers.
 #' @param x matrix containing the covariates for the mean submodel. Each column is a different covariate.
@@ -15,6 +16,7 @@
 #'   \item beta - the initial guesses for the mean-related parameters;
 #'   \item alpha - the initial guesses for the precision-relared parameters.
 #'   }
+#'   @noRd
 startvalues_mpreg <- function(y, x, w, link.mean, link.precision, model) {
   nbeta <- ncol(x)
   nalpha <- ncol(w)
@@ -46,10 +48,12 @@ startvalues_mpreg <- function(y, x, w, link.mean, link.precision, model) {
 
 
 #############################################################################################
-#' @title build_links_mpreg
+#' @name build_links_mpreg
+#' @title Build link functions
 #' @description Function to construct the link functions.
 #' @param link the name of the link function.
 #' @return A link function object of the class \code{link-glm}.
+#' @noRd
 build_links_mpreg <- function(link) {
   if(link %in% c("log", "sqrt", "identity")){
     return(stats::make.link(link))
@@ -76,11 +80,13 @@ build_links_mpreg <- function(link) {
 
 
 #############################################################################################
-#' @title d2mudeta2
+#' @name d2mudeta2
+#' @title Second derivative of the mean with respect to the linear predictor.
 #' @description Function to obtain the second derivatives of the mean parameter with respect to the linear predictor.
 #' @param link.mean a string containing the link function for the mean.
 #' The possible link functions for the mean are "log" or "sqrt".
 #' @param mu mean parameter.
+#' @noRd
 
 d2mudeta2 <- function(link.mean, mu) {
   d2mu <- switch(link.mean,
@@ -95,11 +101,13 @@ d2mudeta2 <- function(link.mean, mu) {
 }
 
 #############################################################################################
-#' @title d2phideta2
+#' @name d2phideta2
+#' @title Second derivative of the precision parameter with respect to the linear predictor.
 #' @description Function to obtain the second derivatives of the precision parameter with respect to the linear predictor.
 #' @param link.precision a string containing the link function the precision parameter.
 #' The possible link functions for the precision parameter are "identity", "log" or "inverse.sqrt".
 #' @param phi precision parameter.
+#' @noRd
 
 d2phideta2 <- function(link.precision, phi) {
   d2phi <- switch(link.precision,
@@ -121,7 +129,8 @@ d2phideta2 <- function(link.precision, phi) {
 
 
 #############################################################################################
-#' @title generate_data_mixpoisson
+#' @name generate_data_mixpoisson
+#' @title Auxiliar function to generate mixed Poisson random numbers
 #' @description Function to generate synthetic data from mixed Poisson regression models.
 #' @param coefficients a list containing elements 'beta' and 'alpha'. 'beta' and 'alpha' are vectors of estimated parameters of the model.
 #' @param x matrix containing the covariates for the mean submodel. Each column is a different covariate.
@@ -133,19 +142,8 @@ d2phideta2 <- function(link.precision, phi) {
 #' The possible link functions for the precision parameter are "identity", "log" and "inverse.sqrt".
 #' @param model the mixed Poisson model, "NB" or "PIG".
 #' @return a list of response vectors y, with y being nonnegative integers.
-#' @seealso
-#' \code{\link{envelope_mixpoisson}}, \code{\link{pearson_residual_mixpoisson}}, \code{\link{score_residual_mixpoisson}}
-#' @examples
-#' n <- 100
-#' x <- cbind(rbinom(n, 1, 0.5), runif(n, -1, 1))
-#' v <- runif(n, -1, 1)
-#' z <- simdata_bet(
-#'   kap = c(1, -1, 0.5), lam = c(0.5, -0.5), x, v, repetitions = 1,
-#'   link.mean = "logit", link.precision = "log"
-#' )
-#' z <- unlist(z)
-#' hist(z, xlim = c(0, 1), prob = TRUE)
-#' @export
+#' @noRd
+
 generate_data_mixpoisson <- function(coefficients, x, w,
                       repetitions, link.mean,
                       link.precision,model){
@@ -196,7 +194,8 @@ generate_data_mixpoisson <- function(coefficients, x, w,
 
 
 #############################################################################################
-#' @title envelope_mixpoisson
+#' @name envelope_mixpoisson
+#' @title Function to compute simulated envelopes.
 #' @description Function to calculate envelopes based on residuals for the mixed Poisson regression models.
 #' @param residual character indicating the type of residual ("pearson" or "score").
 #' @param estimation_method character indicating the estimation method ("EM" or "ML").
@@ -218,9 +217,7 @@ generate_data_mixpoisson <- function(coefficients, x, w,
 #' @param optim_controls a list of control arguments to be passed to the \code{optim} function in the optimization of the model. For the control options, see
 #' the 'Details' in the help of \code{\link[stats]{optim}} for the possible arguments.
 #' @param model the mixed Poisson model, "NB" or "PIG".
-#' @seealso
-#' \code{\link{mixpoisson}}, \code{\link{pearson_residual_mixpoisson}}, \code{\link{score_residual_mixpoisson}}, \code{\link{generate_data_mixpoisson}}
-#' @return Matrix with dimension 3 x n (first row = upper bound, second row = median, third row = lower bound).
+#' @noRd
 envelope_mixpoisson <- function(residual, estimation_method,
                     coefficients, x, w, nsim_env,
                     prob, n, link.mean,
@@ -266,7 +263,8 @@ envelope_mixpoisson <- function(residual, estimation_method,
 }
 
 #############################################################################################
-#' @title pearson_residual_mixpoisson
+#' @name pearson_residual_mixpoisson
+#' @title Pearson residuals for mixed Poisson regression models
 #' @description Function to calculate the pearson residuals for mixed Poisson regression models.
 #' @param coefficients a list containing elements 'beta' and 'alpha'. 'beta' and 'alpha' are vectors of estimated parameters of the model.
 #' @param y response vector with y_i>=0 and integer.
@@ -277,9 +275,7 @@ envelope_mixpoisson <- function(residual, estimation_method,
 #' @param link.precision a string containing the link function the precision parameter.
 #' The possible link functions for the precision parameter are "identity", "log" and "inverse.sqrt".
 #' @param model the mixed Poisson model, "NB" or "PIG".
-#' @seealso
-#' \code{\link{score_residual_bet}}
-#' @return Vector containing the pearson residuals.
+#' @noRd
 pearson_residual_mixpoisson <- function(coefficients, y, x, w,
                             link.mean, link.precision, model){
   link_mean <- build_links_mpreg(link.mean)
@@ -309,7 +305,8 @@ pearson_residual_mixpoisson <- function(coefficients, y, x, w,
 
 
 #############################################################################################
-#' @title score_residual_mixpoisson
+#' @name score_residual_mixpoisson
+#' @title Score residuals for mixed Poisson regression models
 #' @description Function to calculate the score residuals for mixed Poisson regression models.
 #' @param coefficients a list containing elements 'beta' and 'alpha'. 'beta' and 'alpha' are vectors of estimated parameters of the model.
 #' @param y response vector with y_i>=0 and integer.
@@ -320,13 +317,11 @@ pearson_residual_mixpoisson <- function(coefficients, y, x, w,
 #' @param link.precision a string containing the link function the precision parameter.
 #' The possible link functions for the precision parameter are "identity", "log" and "inverse.sqrt".
 #' @param model the mixed Poisson model, "NB" or "PIG".
-#' @seealso
-#' \code{\link{pearson_residual_mixpoisson}}
 #' @return Vector containing the score residuals. Notice that the score residuals for the PIG regression
 #' models are not variance-normalized, whereas the score residuals for the NB regression models are
 #' variance-normalized. See Barreto-Souza and Simas (2015) for further details.
-#' @references
-#' DOI:10.1007/s11222-015-9601-6 (\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
+#' @noRd
+
 
 score_residual_mixpoisson <- function(coefficients, y, x, w,
                             link.mean, link.precision, model){
@@ -362,7 +357,8 @@ score_residual_mixpoisson <- function(coefficients, y, x, w,
 }
 
 #############################################################################################
-#' @title std_error_mixpoisson
+#' @name std_error_mixpoisson
+#' @title Standard errors of coefficients of mixed Poisson regression models.
 #' @description Function to calculate the standard errors of the coefficients of a fitted mixed Poisson regression model.
 #' @param coefficients a list containing elements 'beta' and 'alpha'. 'beta' and 'alpha' are vectors of estimated parameters of the model.
 #' @param y response vector with y_i>=0 and integer.
@@ -373,9 +369,8 @@ score_residual_mixpoisson <- function(coefficients, y, x, w,
 #' @param link.precision a string containing the link function the precision parameter.
 #' The possible link functions for the precision parameter are "identity", "log" and "inverse.sqrt".
 #' @param model the mixed Poisson model, "NB" or "PIG".
-#' @seealso
-#' \code{\link{pearson_residual_mixpoisson}}
 #' @return Vector containing the score residuals.
+#' @noRd
 std_error_mixpoisson <- function(coefficients, y, x, w,
                 link.mean, link.precision, model){
   theta = c(coefficients$mean, coefficients$precision)
@@ -388,7 +383,8 @@ std_error_mixpoisson <- function(coefficients, y, x, w,
 
 
 #############################################################################################
-#' @title lambda_r
+#' @name lambda_r
+#' @title Auxiliary function for the E-step
 #' @description Auxiliary function given by the conditional expected value E(Z_i|Y; theta), where
 #' Z is the latent variable (for further details see Barreto-Souza and Simas, 2015).
 #' @param y nonnegative integers response vector.
@@ -396,8 +392,8 @@ std_error_mixpoisson <- function(coefficients, y, x, w,
 #' @param phi precision parameter (vector having the same size of z).
 #' @param model the mixed Poisson regression model, "NB" or "PIG".
 #' @return Vector of expected values.
-#' @references
-#' DOI:10.1007/s11222-015-9601-6 (\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
+#' @noRd
+
 
 lambda_r <- function(y, mu, phi, model) {
   out <- switch(model,
@@ -409,7 +405,8 @@ lambda_r <- function(y, mu, phi, model) {
 
 
 #############################################################################################
-#' @title kappa_r
+#' @name kappa_r
+#' @title Auxiliary function for the E-step
 #' @description Auxiliary function given by the conditional expected value E(g(Z_i)|Y; theta), where
 #' Z is the latent variable and the function g() is obtained in the decomposition of the function
 #' c( , ) of the expression of the density of Z in the exponential family (for further details see Barreto-Souza and Simas, 2015).
@@ -418,8 +415,8 @@ lambda_r <- function(y, mu, phi, model) {
 #' @param phi precision parameter (vector having the same size of z).
 #' @param model the mixed Poisson regression model, "NB" or "PIG".
 #' @return Vector of expected values.
-#' @references
-#' DOI:10.1007/s11222-015-9601-6 (\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
+#' @noRd
+
 kappa_r <- function(y, mu, phi, model) {
   out <- switch(model,
                 "NB" = {digamma(y+phi)-log(mu+phi)},
@@ -441,7 +438,7 @@ kappa_r <- function(y, mu, phi, model) {
 #' @param ... Additional arguments to the call, or arguments with changed values. Use name = NULL to remove the argument name.
 #' @param evaluate If true evaluate the new call else return the call.
 #' @return If evaluate = TRUE the fitted object, otherwise the updated call.
-#'
+#' @noRd
 update.mixpoissonreg <- function (object, formula., ..., evaluate = TRUE)
 {
   if (is.null(call <- getCall(object)))

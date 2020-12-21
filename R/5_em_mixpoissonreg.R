@@ -1,7 +1,8 @@
 #' @import gamlss.dist
 
 #############################################################################################
-#' @title EM_mixpoisson
+#' @name EM_mixpoisson
+#' @title Fitting EM mixed Poisson regression models
 #' @description Function to run the Expectation-Maximization algorithm for mixed Poisson regression models.
 #' @param beta initial values for the mean-related coefficients.
 #' @param alpha initial values for the precision-related coefficients.
@@ -26,6 +27,7 @@
 #'     \item coefficients - a list containing estimated vectors 'mean' (mean-related coefficients) and 'precision' (precision-related coefficients);
 #'     \item fitted.values - the estimated means.
 #' }
+#' @noRd
 EM_mixpoisson <- function(beta, alpha, y, x, w,
                           link.mean, link.precision, model, em_controls, optim_method, optim_controls) {
   nbeta <- length(beta)
@@ -162,7 +164,8 @@ EM_mixpoisson <- function(beta, alpha, y, x, w,
 
 
 #############################################################################################
-#' @title Q_function_mixpoisson
+#' @name Q_function_mixpoisson
+#' @title Q-function for mixed Poisson regression models
 #' @description Q-function for mixed Poisson regression models. This function is required in the EM-algorithm.
 #' @param theta vector of parameters (all coefficients).
 #' @param muold previous value of the mean parameter (mu).
@@ -176,6 +179,7 @@ EM_mixpoisson <- function(beta, alpha, y, x, w,
 #' The possible link functions for the precision parameter are "identity", "log" and "inverse.sqrt".
 #' @param model the mixed Poisson model, "NB" or "PIG".
 #' @return scalar representing the value of the Q-function at 'theta'.
+#' @noRd
 Q_function_mixpoisson <- function(theta, muold, phiold, y, x, w,
                                   link.mean, link.precision,
                                   model) {
@@ -211,7 +215,8 @@ Q_function_mixpoisson <- function(theta, muold, phiold, y, x, w,
 }
 
 #############################################################################################
-#' @title gradient_Q_function_mixpoisson
+#' @name gradient_Q_function_mixpoisson
+#' @title Gradient of the Q-function for mixed Poisson regression models
 #' @description Function to calculate the gradient of the Q-function of mixed Poisson regression models,
 #' which is required for optimization via \code{optim}.
 #' @param theta vector of parameters (all coefficients).
@@ -225,6 +230,7 @@ Q_function_mixpoisson <- function(theta, muold, phiold, y, x, w,
 #' The possible link functions for the precision parameter are "identity", "log" and "inverse.sqrt".
 #' @param model the mixed Poisson model, "NB" or "PIG".
 #' @return vector containing the gradient of the Q function at theta.
+#' @noRd
 gradient_Q_function_mixpoisson <- function(theta, muold, phiold, y, x, w,
                                            link.mean, link.precision, model) {
   nbeta <- ncol(x)
@@ -265,7 +271,8 @@ gradient_Q_function_mixpoisson <- function(theta, muold, phiold, y, x, w,
 
 
 #############################################################################################
-#' @title obs_fisher_information_mixpoisson
+#' @name obs_fisher_information_mixpoisson
+#' @title Observed Fisher's information matrix for mixed Poisson regression models
 #' @description Function to compute the Fisher's information matrix for mixed Poisson regression models.
 #' @param theta vector of parameters (all coefficients).
 #' @param y response vector with y_i>=0 and integer.
@@ -277,6 +284,7 @@ gradient_Q_function_mixpoisson <- function(theta, muold, phiold, y, x, w,
 #' The possible link functions for the precision parameter are "identity", "log" and "inverse.sqrt".
 #' @param model the mixed Poisson model, "NB" or "PIG".
 #' @return Fisher's information matrix.
+#' @noRd
 
 obs_fisher_information_mixpoisson <- function(theta, y, x, w,
                                               link.mean, link.precision, model) {
@@ -288,7 +296,8 @@ obs_fisher_information_mixpoisson <- function(theta, y, x, w,
 
 
 #############################################################################################
-#' @title D2Q_Obs_Fisher_mixpoisson
+#' @name D2Q_Obs_Fisher_mixpoisson
+#' @title Hessian of the Q-function
 #' @description Auxiliary function to compute the observed Fisher information matrix for mixed Poisson regression models.
 #' @param theta vector of parameters (all coefficients: kappa and lambda).
 #' @param y response vector with y_i>=0 and integer.
@@ -300,6 +309,7 @@ obs_fisher_information_mixpoisson <- function(theta, y, x, w,
 #' The possible link functions for the precision parameter are "identity", "log" and "inverse.sqrt".
 #' @param model the mixed Poisson model, "NB" or "PIG".
 #' @return Hessian of the Q-function.
+#' @noRd
 
 D2Q_Obs_Fisher_mixpoisson <- function(theta, y, x, w, link.mean, link.precision, model) {
 
@@ -356,7 +366,8 @@ D2Q_Obs_Fisher_mixpoisson <- function(theta, y, x, w, link.mean, link.precision,
 }
 
 #############################################################################################
-#' @title DQ2_Obs_Fisher_mixpoisson
+#' @name DQ2_Obs_Fisher_mixpoisson
+#' @title Conditional expectation of the gradient of the Q-function and its transpose.
 #' @description Auxiliary function to compute the observed Fisher information matrix for mixed Poisson regression models.
 #' @param theta vector of parameters (all coefficients: kappa and lambda).
 #' @param y response vector with y_i>=0 and integer.
@@ -367,7 +378,8 @@ D2Q_Obs_Fisher_mixpoisson <- function(theta, y, x, w, link.mean, link.precision,
 #' @param link.precision a string containing the link function the precision parameter.
 #' The possible link functions for the precision parameter are "identity", "log" and "inverse.sqrt".
 #' @param model the mixed Poisson model, "NB" or "PIG".
-#' @return matrix given by the conditional expectation of the gradient of the Q-function and its tranpose.
+#' @return matrix given by the conditional expectation of the gradient of the Q-function and its transpose.
+#' @noRd
 
 DQ2_Obs_Fisher_mixpoisson <- function(theta, y, x, w, link.mean, link.precision, model) {
   nbeta <- ncol(x)
@@ -458,11 +470,13 @@ DQ2_Obs_Fisher_mixpoisson <- function(theta, y, x, w, link.mean, link.precision,
 
 
 #############################################################################################
-#' @title obs_fisher_weight_matrix_mixpoisson
+#' @name obs_fisher_weight_matrix_mixpoisson
+#' @title Weight matrix induced by Hessian of Q-function
 #' @description Function to compute the weight matrix based on Fisher's information matrix for mixed Poisson regression models.
 #' @param object a \code{mixpoissonreg} object.
 #' @param parameters the parameter to which the matrix will be returned. The options are 'all', 'mean' and 'precision'. The default is 'all'.
 #' @return Fisher's information matrix.
+#' @noRd
 
 obs_fisher_weight_matrix_mixpoisson <- function(object, parameters = c("all", "mean", "precision")) {
   parameters <- rlang::arg_match(parameters)

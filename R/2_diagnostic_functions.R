@@ -32,8 +32,7 @@
 #' The \code{plot} method is implemented following the same structure as the \link[stats]{plot.lm}, so it will be easy to be used by practitioners that
 #' are familiar with \code{glm} objects.
 #' 
-#' These plots allows one to perform residuals analsysis and influence diagnostics. There are other global influence functions, see, for instance, \code{\link{influence.mixpoissonreg}},
-#' \code{\link{hatvalues.mixpoissonreg}} and \code{\link{cooks.distance.mixpoissonreg}}.
+#' These plots allows one to perform residuals analsysis and influence diagnostics. There are other global influence functions, see \code{\link{global_influence.mixpoissonreg}}.
 #' 
 #' See Barreto-Souza and Simas (2015), Cook and Weisberg (1982) and Zhu et al. (2001).
 #' 
@@ -46,8 +45,7 @@
 #' 
 #' @seealso
 #' \code{\link{autoplot.mixpoissonreg}}, \code{\link{local_influence_plot.mixpoissonreg}}, \code{\link{local_influence_autoplot.mixpoissonreg}},
-#' \code{\link{summary.mixpoissonreg}}, \code{\link{predict.mixpoissonreg}}, \code{\link{influence.mixpoissonreg}},
-#' \code{\link{hatvalues.mixpoissonreg}}, \code{\link{cooks.distance.mixpoissonreg}}
+#' \code{\link{summary.mixpoissonreg}}, \code{\link{predict.mixpoissonreg}}, \code{\link{global_influence.mixpoissonreg}}
 #' @examples
 #' \donttest{
 #' data("Attendance", package = "mixpoissonreg")

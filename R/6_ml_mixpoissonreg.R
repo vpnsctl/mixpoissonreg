@@ -1,7 +1,8 @@
 #' @import gamlss.dist
 
 #############################################################################################
-#' @title ML_mixpoisson
+#' @name ML_mixpoisson
+#' @title Fitting maximum-likelihood mixed Poisson regression models
 #' @description Function to run the obtain maximum-likelihood estimates of a mixed Poisson regression model.
 #' @param beta initial values for the mean-related coefficients.
 #' @param alpha initial values for the precision-related coefficients.
@@ -23,6 +24,7 @@
 #'     \item coefficients - a list containing estimated vectors 'beta' (mean-related coefficients) and 'alpha' (precision-related coefficients);
 #'     \item fitted.values - the estimated means.
 #' }
+#' @noRd
 ML_mixpoisson <- function(beta, alpha, y, x, w,
                           link.mean, link.precision, model, optim_method, optim_controls){
   nbeta <- length(beta)
@@ -131,7 +133,8 @@ ML_mixpoisson <- function(beta, alpha, y, x, w,
 
 
 #############################################################################################
-#' @title loglik_mixpoisson
+#' @name loglik_mixpoisson
+#' @title log-likelihood of mixed Poisson regression models
 #' @description log-likelihood function of the mixed Poisson regression model.
 #' @param theta vector of parameters (all coefficients).
 #' @param y response vector with y_i>=0 and integer.
@@ -143,6 +146,7 @@ ML_mixpoisson <- function(beta, alpha, y, x, w,
 #' The possible link functions for the precision parameter are "identity", "log" and "inverse.sqrt".
 #' @param model the mixed Poisson model, "NB" or "PIG".
 #' @return scalar representing the value of the log-likelihood function at 'theta'.
+#' @noRd
 loglik_mixpoisson <- function(theta, y, x, w,
                               link.mean, link.precision,
                               model) {
@@ -163,7 +167,8 @@ loglik_mixpoisson <- function(theta, y, x, w,
 }
 
 #############################################################################################
-#' @title score_mixpoisson
+#' @name score_mixpoisson
+#' @title Score vector of mixed Poisson regression models
 #' @description Function to calculate the score vector of a mixed Poisson regression model.
 #' @param theta vector of parameters (all coefficients).
 #' @param y response vector with y_i>=0 and integer.
@@ -175,6 +180,7 @@ loglik_mixpoisson <- function(theta, y, x, w,
 #' The possible link functions for the precision parameter are "identity", "log" and "inverse.sqrt".
 #' @param model the mixed Poisson model, "NB" or "PIG".
 #' @return vector containing the gradient of the Q function at theta.
+#' @noRd
 score_mixpoisson <- function(theta, y, x, w, link.mean, link.precision, model) {
   nbeta <- ncol(x)
   beta <- theta[1:nbeta]
