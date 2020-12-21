@@ -5,7 +5,6 @@
 #' @import dplyr
 #' @import ggfortify
 #' @import gridExtra
-#' @import grid
 
 #############################################################################################
 #' @title augment.mixpoissonreg
@@ -101,7 +100,7 @@ tidy.mixpoissonreg <- function(x, conf.int = FALSE, conf.level = 0.95){
                      "p.value")
   retprec <- retprec %>% add_column(component = "precision", .before = "term")
   
-  ret <- bind_rows(retmean,retprec)
+  ret <- dplyr::bind_rows(retmean,retprec)
   
   if (conf.int) {
     ret$join_term <- names(coef(x, parameters = "all"))

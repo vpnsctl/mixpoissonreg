@@ -1,12 +1,19 @@
+#' @import lmtest
+
 #############################################################################################
-#' @title plot.mixpoissonreg
-#' @description Function to build useful plots for mixed Poisson regression models.
+#' @name plot.mixpoissonreg
+#' @title Plot Diagnostics for \code{mixpoissonreg} Objects
+#' @description Currently there are six plots available. They contain residual analysis and global influence diagnostics. The plots are selectable by 
+#' the \code{which} argument. The plots are: Residuals vs. obs. numbers; Normal Q-Q plots, which may contain simulated envelopes, if the fitted object
+#' has simulated envelopes; Cook's distances vs. obs. numbers; Generalized Cook's distances vs. obs. numbers; Cook's distances vs. Generalized Cook's distances;
+#' Response variables vs. fitted means. By default, the first two plots and the last two plots are provided. 
 #' @param x object of class "mixpoissonreg" containing results from the fitted model.
-#' If the model is fitted with envelope = 0, the Q-Q plot will be produced without envelopes.
-#' @param which a list or vector indicating which plots should be displayed. 	If a subset of the plots is required, specify a subset of the numbers 1:6, see caption below for the different kinds. In
+#' If the model was fitted with envelope = 0, the Q-Q plot will be produced without envelopes.
+#' @param which a list or vector indicating which plots should be displayed. 	If a subset of the plots is required, specify a subset of the numbers 1:6, 
+#' see caption below for the different kinds. In
 #' plot number 2, 'Normal Q-Q', if the \code{mixpoissonreg} object was fitted with envelopes, a quantile-quantile plot with simulated envelopes will be displayed.
 #' @param caption captions to appear above the plots; character vector or list of valid graphics annotations. Can be set to "" or NA to suppress all captions.
-#' @param sub.caption	common title-above the figures if there are more than one. If NULL, as by default, a possible abbreviated version of deparse(x$call) is used.
+#' @param sub.caption common title-above the figures if there are more than one. If NULL, as by default, a possible abbreviated version of \code{deparse(x$call)} is used.
 #' @param ask logical; if \code{TRUE}, the user is asked before each plot.
 #' @param id.n number of points to be labelled in each plot, starting with the most extreme.
 #' @param main character; title to be placed at each plot additionally (and above) all captions.
@@ -19,28 +26,42 @@
 #' @param include.modeltype logical. Indicates whether the model type ('NB' or 'PIG') should be displayed on the captions.
 #' @param include.residualtype local. Indicates whether the name of the residual ('Pearson' or 'Score') should be displayed on the caption of plot 1 (Residuals vs. Index).
 #' @param qqline logical; if \code{TRUE} and the fit does *not* contain simulated
-#' envelopes, a qqline will be added to the normal Q-Q plot.
+#' envelopes, a qqline passing through the first and third quartiles of a standard normal distribution will be added to the normal Q-Q plot.
 #' @param ... graphical parameters to be passed.
+#' @details 
+#' The \code{plot} method is implemented following the same structure as the \link[stats]{plot.lm}, so it will be easy to be used by practitioners that
+#' are familiar with \code{glm} objects.
+#' 
+#' These plots allows one to perform residuals analsysis and influence diagnostics. There are other global influence functions, see, for instance, \code{\link{influence.mixpoissonreg}},
+#' \code{\link{hatvalues.mixpoissonreg}} and \code{\link{cooks.distance.mixpoissonreg}}.
+#' 
+#' See Barreto-Souza and Simas (2015), Cook and Weisberg (1982) and Zhu et al. (2001).
+#' 
+#' @references 
+#' DOI:10.1007/s11222-015-9601-6 (\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
+#' 
+#' Cook, D.R. and Weisberg, S. (1982) *Residuals and Influence in Regression*. (New York: Chapman and Hall, 1982)
+#' 
+#' Zhu, H.T., Lee, S.Y., Wei, B.C., Zhu, J. (2001) *Case-deletion measures formodels with incomplete data.* Biometrika, 88, 727–737. \href{https://www.jstor.org/stable/2673442?seq=1}
+#' 
 #' @seealso
-#' \code{\link{summary.mixpoissonreg}}, \code{\link{coef.mixpoissonreg}},
-#' \code{\link{vcov.mixpoissonreg}}, \code{\link{fitted.mixpoissonreg}},
-#' \code{\link{predict.mixpoissonreg}}
+#' \code{\link{autoplot.mixpoissonreg}}, \code{\link{local_influence_plot.mixpoissonreg}}, \code{\link{local_influence_autoplot.mixpoissonreg}},
+#' \code{\link{summary.mixpoissonreg}}, \code{\link{predict.mixpoissonreg}}, \code{\link{influence.mixpoissonreg}},
+#' \code{\link{hatvalues.mixpoissonreg}}, \code{\link{cooks.distance.mixpoissonreg}}
 #' @examples
 #' \donttest{
-#' n <- 100
-#' x <- cbind(rbinom(n, 1, 0.5), runif(n, -1, 1))
-#' v <- runif(n, -1, 1)
-#' z <- simdata_bes(
-#'   kap = c(1, 1, -0.5), lam = c(0.5, -0.5), x, v, repetitions = 1,
-#'   link.mean = "logit", link.precision = "log"
-#' )
-#' z <- unlist(z)
-#' fit <- bbreg(z ~ x | v, envelope = 10)
-#' plot(fit)
-#' plot(fit, which = 2)
-#' plot(fit, which = c(1, 4), ask = FALSE)
+#' data("Attendance", package = "mixpoissonreg")
+#' 
+#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, data = Attendance)
+#' plot(daysabs_fit, which = 1:6)
+#' 
+#' par(mfrow = c(2,2))
+#' plot(daysabs_fit)
+#' 
+#' par(mfrow = c(1,1))
+#' daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math + prog | gender + math + prog, data = Attendance, envelope = 100)
+#' plot(daysabs_fit_ml, which = 2)
 #' }
-#' @export
 plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
                                caption = list("Residuals vs Obs. number",
                                               "Normal Q-Q",
@@ -300,22 +321,25 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
 
 
 #############################################################################################
-#' @title fitted.mixpoissonreg
-#' @description Function providing the fitted means for the mixed Poisson regression model.
+#' @name fitted.mixpoissonreg
+#' @title Fitted Method for \code{mixpoissonreg} Objects
+#' @description Function providing the fitted means, linear predictors, precisions or variances for mixed Poisson regression models.
 #' @param object object of class "mixpoissonreg" containing results from the fitted model.
-#' @param type the type of variable to get the fitted values. The default is the "response" type, which provided the estimated values for the means. The type "link" provides the estimates for the linear predictor of the mean. The type "precision" provides estimates for the precision parameters whereas the type "variance" provides estimates for the variances.
-#' @param ... further arguments passed to or from other methods.
+#' @param type the type of variable to get the fitted values. The default is the "response" type, which provided the estimated values for the means. 
+#' The type "link" provides the estimates for the linear predictor of the mean. The type "precision" provides estimates for the precision parameters 
+#' whereas the type "variance" provides estimates for the variances.
 #' @seealso
 #' \code{\link{predict.mixpoissonreg}}, \code{\link{summary.mixpoissonreg}},
 #' \code{\link{coef.mixpoissonreg}}, \code{\link{vcov.mixpoissonreg}},
 #' \code{\link{plot.mixpoissonreg}}
 #' @examples
 #' \donttest{
-#' fit <- bbreg(agreement ~ priming + eliciting, data = WT)
-#' fitted(fit)
-#' fitted(fit, type = "precision")
+#' data("Attendance", package = "mixpoissonreg")
+#' 
+#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, data = Attendance)
+#' fitted(daysabs_fit)
+#' fitted(daysabs_fit, type = "precision")
 #' }
-#' @export
 fitted.mixpoissonreg <- function(object, type = c("response", "link", "precision", "variance"), ...) {
   fit <- object
   if (length(type) > 1) {
@@ -369,8 +393,9 @@ fitted.mixpoissonreg <- function(object, type = c("response", "link", "precision
 
 
 #############################################################################################
-#' @title predict.mixpoissonreg
-#' @description Function to obtain various predictions based on the fitted mixed Poisson regression model.
+#' @name predict.mixpoissonreg
+#' @title Predict Method for \code{mixpoissonreg} Objects
+#' @description Function to obtain various predictions based on the fitted mixed Poisson regression models.
 #' @param object object of class "mixpoissonreg" containing results from the fitted model.
 #' @param newdata optionally, a data frame in which to look for variables with which to predict. If omitted, the fitted response values will be provided.
 #' @param type the type of prediction. The default is the "response" type, which provided the estimated values for the means. The type "link" provides the estimates for the linear predictor. The type "precision" provides estimates for the precision parameters whereas the type "variance" provides estimates for the variances.
@@ -384,19 +409,24 @@ fitted.mixpoissonreg <- function(object, type = c("response", "link", "precision
 #' @param nsim_pred number of means and predictions to be generated in each step of the simulation. The default is set to 100.
 #' @param nsim_pred_y number of response variables generated for each pair of mean and precision to compute the prediction intervals. The default is set to 100.
 #' @param ... further arguments passed to or from other methods.
+#' @details 
+#' The \code{se.fit} argument only returns a non-NA vector for type = 'link', that is, on the scale of the linear predictor for the mean parameter. For the response scale,
+#' one can obtain confidence or prediction intervals. It is important to notice that confidence intervals *must not* be used for future observations as they will underestimate
+#' the uncertainty. In this case prediction intervals should be used. Currently, we do not have closed-form expressions for the prediction interval and, therefore, they
+#' are obtained by simulation and can be computationally-intensive. 
+#' 
 #' @seealso
-#' \code{\link{fitted.mixpoissonreg}}, \code{\link{summary.mixpoissonreg}},
+#' \code{\link{fitted.mixpoissonreg}}, \code{\link{summary.mixpoissonreg}}, \code{\link{plot.mixpoissonreg}}, \code{\link{autoplot.mixpoissonreg}},
 #' \code{\link{coef.mixpoissonreg}}, \code{\link{vcov.mixpoissonreg}},
 #' \code{\link{plot.mixpoissonreg}}
 #' @examples
 #' \donttest{
-#' fit <- bbreg(agreement ~ priming + eliciting, data = WT)
-#' predict(fit)
-#' new_data_example <- data.frame(priming = c(0, 0, 1), eliciting = c(0, 1, 1))
-#' predict(fit, new_data = new_data_example)
-#' predict(fit, new_data = new_data_example, type = "precision")
+#' data("Attendance", package = "mixpoissonreg")
+#' 
+#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, data = Attendance)
+#' predict(daysabs_fit, interval = "confidence")
+#' predict(daysabs_fit, type = "link", se.fit = TRUE)
 #' }
-#' @export
 predict.mixpoissonreg <- function(object, newdata = NULL, type = c("response", "link", "precision", "variance"), se.fit = FALSE,
                                   interval = c("none", "confidence", "prediction"), level = 0.95, nsim_pred = 100, nsim_pred_y = 100, ...) {
   fit <- object
@@ -730,68 +760,72 @@ predict.mixpoissonreg <- function(object, newdata = NULL, type = c("response", "
   return(predictions)
 }
 
-
 #############################################################################################
-#' @title print.mixpoissonreg
-#' @description Function providing a brief description of results related to the mixed Poisson regression model.
-#' @param x object of class "mixpoissonreg" containing results from the fitted model.
+#' @name vcov.mixpoissonreg
+#' @title Calculate Variance-Covariance Matrix for \code{mixpoissonreg} Objects
+#' @description Returns the variance-covariance matrix of the parameters for fitted mixed Poisson regression models. The \code{parameters} argument
+#' indicates for which parameters the variance-covariance matrix should be computed, namely, 'mean' for mean-relatex parameters or 'precision' for precision-related parameters.
+#' @param object an object of class "mixpoissonreg" containing results from the fitted model.
+#' @param parameters a string to determine which coefficients should be extracted: 'all' extracts all coefficients, 'mean' extracts the coefficients of the mean parameters and 'precision' extracts coefficients of the precision parameters.
 #' @param ... further arguments passed to or from other methods.
 #' @seealso
-#' \code{\link{fitted.mixpoissonreg}}, \code{\link{summary.mixpoissonreg}},
-#' \code{\link{coef.mixpoissonreg}}, \code{\link{vcov.mixpoissonreg}},
-#' \code{\link{plot.mixpoissonreg}}, \code{\link{predict.mixpoissonreg}}
+#' \code{\link{coef.mixpoissonreg}}
 #' @examples
 #' \donttest{
-#' fit <- bbreg(agreement ~ priming + eliciting, data = WT)
-#' fit
+#' data("Attendance", package = "mixpoissonreg")
+#' 
+#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, data = Attendance)
+#' vcov(daysabs_fit)
+#' vcov(daysabs_fit, parameters = "mean")
 #' }
-#' @export
-print.mixpoissonreg <- function(x, ...) {
-  nbeta <- length(x$coefficients$mean)
-  nalpha <- length(x$coefficients$precision)
-  #
-  call_name <- switch(x$estimation_method,
-                      "EM" = {"mixpoissonreg"},
-                      "ML" = {"mixpoissonregML"}
+vcov.mixpoissonreg <- function(object, parameters = c("all", "mean", "precision"), ...) {
+  if (length(parameters) > 1) {
+    parameters <- parameters[1]
+  }
+  nbeta <- length(object$coefficients$mean)
+  nalpha <- length(object$coefficients$precision)
+  theta <- c(object$coefficients$mean, object$coefficients$precision)
+  
+  coeff_beta <- object$coefficients$mean
+  coeff_alpha <- object$coefficients$precision
+  coeff_names = c(names(coeff_beta),paste(names(coeff_alpha), ".precision", sep = ""))
+  
+  vcov_mp_complete <- object$vcov
+  vcov_mp <- switch(parameters,
+                    "all" = {
+                      colnames(vcov_mp_complete) <- rownames(vcov_mp_complete) <- coeff_names
+                      vcov_mp_complete
+                    },
+                    "mean" = {
+                      vcov_mp_complete[1:nbeta, 1:nbeta]
+                    },
+                    "precision" = {
+                      vcov_mp_complete[(nbeta + 1):(nbeta + nalpha), (nbeta + 1):(nbeta + nalpha)]
+                    }
   )
-
-  coeff_beta <- x$coefficients$mean
-  coeff_alpha <- x$coefficients$precision
-  optim_algo <- switch(x$estimation_method,
-                       "EM" = {"Expectation-Maximization Algorithm"},
-                       "ML" = {"Maximum-Likelihood Estimation"}
-  )
-  cat("\n")
-  cat(paste0(x$modelname, " - ", optim_algo))
-  cat("\n\n")
-  cat("Call:", "\n")
-  call_model <- deparse(x$call)
-  cat(call_model)
-  cat("\n\n")
-  cat(paste0("Coefficients modeling the mean (with ", x$link.mean, " link):", "\n"))
-  print(coeff_beta)
-  cat(paste0("Coefficients modeling the precision (with ", x$link.precision, " link):", "\n"))
-  print(coeff_alpha)
+  
+  return(vcov_mp)
 }
 
-
 #############################################################################################
-#' @title coef.mixpoissonreg
-#' @description Function to extract the coefficients of a fitted mixed Poisson regression model.
+#' @name coef.mixpoissonreg
+#' @title Coef Method for \code{mixpoissonreg} Objects.
+#' @description Extract model coefficients of fitted mixed Poisson regression models. The parameters arguments allows one to chose if all coefficients should be extracted, 
+#' with \code{parameters = 'all'}; if the coefficients of the mean-related parameters should be extracted, with \code{parameters = 'mean'}; if the coefficients of the
+#' precision-related parameters should be extracted, with \code{parameters = 'precision'}.
 #' @param object object of class "mixpoissonreg" containing results from the fitted model.
 #' @param parameters a string to determine which coefficients should be extracted: 'all' extracts all coefficients, 'mean' extracts the coefficients of the mean parameters and 'precision' extracts coefficients of the precision parameters.
 #' @param ... further arguments passed to or from other methods.
 #' @seealso
-#' \code{\link{fitted.mixpoissonreg}}, \code{\link{summary.mixpoissonreg}},
-#' \code{\link{print.mixpoissonreg}}, \code{\link{vcov.mixpoissonreg}},
-#' \code{\link{plot.mixpoissonreg}}, \code{\link{predict.mixpoissonreg}}
+#' \code{\link{vcov.mixpoissonreg}}
 #' @examples
 #' \donttest{
-#' fit <- bbreg(agreement ~ priming + eliciting, data = WT)
-#' coef(fit)
-#' coef(fit, parameters = "precision")
+#' data("Attendance", package = "mixpoissonreg")
+#' 
+#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, data = Attendance)
+#' coef(daysabs_fit)
+#' coef(daysabs_fit, parameters = "precision")
 #' }
-#' @export
 coef.mixpoissonreg <- function(object, parameters = c("all", "mean", "precision"), ...) {
   parameters <- rlang::arg_match(parameters)
 
@@ -812,66 +846,42 @@ coef.mixpoissonreg <- function(object, parameters = c("all", "mean", "precision"
   return(coef_ext)
 }
 
+
+
 #############################################################################################
-#' @title vcov.mixpoissonreg
-#' @description Function to extract the variance-covariance matrix of the parameters of the fitted mixed Poisson regression model.
-#' @param object an object of class "mixpoissonreg" containing results from the fitted model.
-#' @param parameters a string to determine which coefficients should be extracted: 'all' extracts all coefficients, 'mean' extracts the coefficients of the mean parameters and 'precision' extracts coefficients of the precision parameters.
+#' @name terms.mixpoissonreg
+#' @title Terms Method for \code{mixpoissonreg} Objects.
+#' @description Function to extract the terms of a fitted mixpoissonreg object.
+#' @param x an object of class "mixpoissonreg" containing results from the fitted model.
+#' @param parameters characters the parameters to be chosen. The options are 'mean' and 'precision'.
 #' @param ... further arguments passed to or from other methods.
-#' @seealso
-#' \code{\link{obs_fisher_information_mixpoisson}}
-#' @examples
-#' \donttest{
-#' fit <- bbreg(agreement ~ priming + eliciting | priming, data = WT)
-#' vcov(fit)
-#' vcov(fit, parameters = "precision")
-#' }
-#' @export
-vcov.mixpoissonreg <- function(object, parameters = c("all", "mean", "precision"), ...) {
-  if (length(parameters) > 1) {
-    parameters <- parameters[1]
-  }
-  nbeta <- length(object$coefficients$mean)
-  nalpha <- length(object$coefficients$precision)
-  theta <- c(object$coefficients$mean, object$coefficients$precision)
+#' @noRd
 
-  coeff_beta <- object$coefficients$mean
-  coeff_alpha <- object$coefficients$precision
-  coeff_names = c(names(coeff_beta),paste(names(coeff_alpha), ".precision", sep = ""))
-
-  vcov_mp_complete <- object$vcov
-  vcov_mp <- switch(parameters,
-                    "all" = {
-                      colnames(vcov_mp_complete) <- rownames(vcov_mp_complete) <- coeff_names
-                      vcov_mp_complete
-                    },
-                    "mean" = {
-                      vcov_mp_complete[1:nbeta, 1:nbeta]
-                    },
-                    "precision" = {
-                      vcov_mp_complete[(nbeta + 1):(nbeta + nalpha), (nbeta + 1):(nbeta + nalpha)]
-                    }
-  )
-
-  return(vcov_mp)
+terms.mixpoissonreg <- function(x, parameters = c("mean", "precision")){
+  parameters <- rlang::arg_match(parameters)
+  x$terms[[parameters]]
 }
 
 
 #############################################################################################
-#' @title summary.mixpoissonreg
-#' @description Function providing a summary of results related to the mixed Poisson regression model.
+#' @name summary.mixpoissonreg
+#' @title Summary Method for \code{mixpoissonreg} Objects.
+#' @description Function providing a summary of results related to mixed Poisson regression models.
 #' @param object an object of class "mixpoissonreg" containing results from the fitted model.
 #' @param ... further arguments passed to or from other methods.
 #' @seealso
-#' \code{\link{fitted.mixpoissonreg}}, \code{\link{coef.mixpoissonreg}},
-#' \code{\link{print.mixpoissonreg}}, \code{\link{vcov.mixpoissonreg}},
-#' \code{\link{plot.mixpoissonreg}}, \code{\link{predict.mixpoissonreg}}
+#' \code{\link{plot.mixpoissonreg}}, \code{\link{autoplot.mixpoissonreg}},
+#' \code{\link{local_influence_plot.mixpoissonreg}}, \code{\link{local_influence_autoplot.mixpoissonreg}}
 #' @examples
 #' \donttest{
-#' fit <- bbreg(agreement ~ priming + eliciting | priming, data = WT)
-#' summary(fit)
+#' data("Attendance", package = "mixpoissonreg")
+#' 
+#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, data = Attendance)
+#' summary(daysabs_fit)
+#' 
+#' daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math + prog | gender + math + prog, data = Attendance)
+#' summary(daysabs_fit_ml)
 #' }
-#' @export
 summary.mixpoissonreg <- function(object, ...) {
   ans <- list()
   
@@ -912,21 +922,50 @@ summary.mixpoissonreg <- function(object, ...) {
   ans
 }
 
+
 #############################################################################################
-#' @title print.summary.mixpoissonreg
-#' @description Function providing a summary of results related to the mixed Poisson regression model.
-#' @param object an object of class "mixpoissonreg" containing results from the fitted model.
+#' @name print.mixpoissonreg
+#' @title Print Method for \code{mixpoissonreg} Objects
+#' @description Provides a brief description of results related to mixed Poisson regression models.
+#' @param x object of class "mixpoissonreg" containing results from the fitted model.
 #' @param ... further arguments passed to or from other methods.
-#' @seealso
-#' \code{\link{fitted.mixpoissonreg}}, \code{\link{coef.mixpoissonreg}},
-#' \code{\link{print.mixpoissonreg}}, \code{\link{vcov.mixpoissonreg}},
-#' \code{\link{plot.mixpoissonreg}}, \code{\link{predict.mixpoissonreg}}
-#' @examples
-#' \donttest{
-#' fit <- bbreg(agreement ~ priming + eliciting | priming, data = WT)
-#' summary(fit)
-#' }
-#' @export
+#' @NoRd
+
+print.mixpoissonreg <- function(x, ...) {
+  nbeta <- length(x$coefficients$mean)
+  nalpha <- length(x$coefficients$precision)
+  #
+  call_name <- switch(x$estimation_method,
+                      "EM" = {"mixpoissonreg"},
+                      "ML" = {"mixpoissonregML"}
+  )
+  
+  coeff_beta <- x$coefficients$mean
+  coeff_alpha <- x$coefficients$precision
+  optim_algo <- switch(x$estimation_method,
+                       "EM" = {"Expectation-Maximization Algorithm"},
+                       "ML" = {"Maximum-Likelihood Estimation"}
+  )
+  cat("\n")
+  cat(paste0(x$modelname, " - ", optim_algo))
+  cat("\n\n")
+  cat("Call:  ", paste(deparse(x$call), sep = "\n", collapse = "\n"), 
+      "\n\n", sep = "")
+  cat(paste0("Coefficients modeling the mean (with ", x$link.mean, " link):", "\n"))
+  print(coeff_beta)
+  cat(paste0("Coefficients modeling the precision (with ", x$link.precision, " link):", "\n"))
+  print(coeff_alpha)
+}
+
+
+
+#############################################################################################
+#' @name print.summary.mixpoissonreg
+#' @title Print Method for \code{summary.mixpoissonreg} Objects
+#' @description Provides a brief description of results related to mixed Poisson regression models.
+#' @param x object of class "summary.mixpoissonreg" containing results of summary method applied to a fitted model.
+#' @param ... further arguments passed to or from other methods.
+#' @NoRd
 print.summary.mixpoissonreg <- function(object, ...) {
   tab <- object$coefficients
   
@@ -947,10 +986,8 @@ print.summary.mixpoissonreg <- function(object, ...) {
   cat(paste0(object$modelname, " - ", optim_algo))
 
   cat("\n\n")
-  cat("Call:", "\n")
-  call_model <- deparse(object$call)
-  cat(call_model)
-  cat("\n")
+  cat("Call:  ", paste(deparse(object$call), sep = "\n", collapse = "\n"), 
+      "\n\n", sep = "")
 
 
   #
@@ -992,22 +1029,26 @@ print.summary.mixpoissonreg <- function(object, ...) {
 }
 
 #############################################################################################
-#' @title residuals.mixpoissonreg
-#' @description Function to return 'pearson' or 'score' residuals for mixed Poisson regression model.
+#' @name residuals.mixpoissonreg
+#' @title Residuals Method for \code{mixpoissonreg} Objects
+#' @description Function to return 'pearson' or 'score' residuals for mixed Poisson regression models.
 #' @param object an object of class "mixpoissonreg" containing results from the fitted model.
 #' @param type the type of residual to be returned. Currently, the options are 'pearson' or 'score'. The default is set to 'pearson'. Notice that these
 #' residuals coincide for Negative-Binomial models.
 #' @param ... further arguments passed to or from other methods.
 #' @seealso
-#' \code{\link{fitted.mixpoissonreg}}, \code{\link{coef.mixpoissonreg}},
-#' \code{\link{print.mixpoissonreg}}, \code{\link{vcov.mixpoissonreg}},
-#' \code{\link{plot.mixpoissonreg}}, \code{\link{predict.mixpoissonreg}}
+#' \code{\link{plot.mixpoissonreg}}, \code{\link{predict.mixpoissonreg}},
+#' \code{\link{autoplot.mixpoissonreg}}, \code{\link{summary.mixpoissonreg}}
 #' @examples
 #' \donttest{
-#' fit <- bbreg(agreement ~ priming + eliciting | priming, data = WT)
-#' summary(fit)
+#' data("Attendance", package = "mixpoissonreg")
+#' 
+#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, data = Attendance)
+#' residuals(daysabs_fit)
+#' 
+#' #Score residuals:
+#' residuals(daysabs_fit, type = "score")
 #' }
-#' @export
 residuals.mixpoissonreg <- function(object, type = c("pearson", "score")) {
   type <- rlang::arg_match(type)
 
@@ -1053,45 +1094,23 @@ if(is.null(object$y)){
 
 
 #############################################################################################
-#' @title logLik.mixpoissonreg
-#' @description Function to compute the log-likelihood at the estimated parameters for mixed Poisson regression model.
+#' @name logLik.mixpoissonreg
+#' @title logLik Method for \code{mixpoissonreg} Objects 
+#' @description Function to compute the log-likelihood at the estimated parameters for mixed Poisson regression models.
 #' @param object an object of class "mixpoissonreg" containing results from the fitted model.
 #' @param ... further arguments passed to or from other methods.
 #' @seealso
-#' \code{\link{fitted.mixpoissonreg}}, \code{\link{coef.mixpoissonreg}},
-#' \code{\link{print.mixpoissonreg}}, \code{\link{vcov.mixpoissonreg}},
-#' \code{\link{plot.mixpoissonreg}}, \code{\link{predict.mixpoissonreg}}
+#' \code{\link{vcov.mixpoissonreg}},
 #' @examples
 #' \donttest{
-#' fit <- bbreg(agreement ~ priming + eliciting | priming, data = WT)
-#' summary(fit)
+#' data("Attendance", package = "mixpoissonreg")
+#' 
+#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, data = Attendance)
+#' logLik(daysabs_fit)
 #' }
-#' @export
 logLik.mixpoissonreg <- function(object){
   logLik <- object$logLik
   attr(logLik,"df") = length(object$coefficients$mean) + length(object$coefficients$precision)
   class(logLik) = "logLik"
   logLik
-}
-
-#############################################################################################
-#' @title terms.mixpoissonreg
-#' @description Function to extract the terms of a fitted mixpoissonreg object.
-#' @param x an object of class "mixpoissonreg" containing results from the fitted model.
-#' @param parameters characters the parameters to be chosen. The options are 'mean' and 'precision'.
-#' @param ... further arguments passed to or from other methods.
-#' @seealso
-#' \code{\link{fitted.mixpoissonreg}}, \code{\link{coef.mixpoissonreg}},
-#' \code{\link{print.mixpoissonreg}}, \code{\link{vcov.mixpoissonreg}},
-#' \code{\link{plot.mixpoissonreg}}, \code{\link{predict.mixpoissonreg}}
-#' @examples
-#' \donttest{
-#' fit <- bbreg(agreement ~ priming + eliciting | priming, data = WT)
-#' summary(fit)
-#' }
-#' @export
-
-terms.mixpoissonreg <- function(x, parameters = c("mean", "precision")){
-  parameters <- rlang::arg_match(parameters)
-  x$terms[[parameters]]
 }

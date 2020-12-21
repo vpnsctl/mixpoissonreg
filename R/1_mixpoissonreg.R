@@ -2,12 +2,15 @@
 #' @name mixpoissonreg
 #' @title Mixed Poisson Regression for Overdispersed Count Data
 #' @aliases mixpoissonreg mixpoissonreg.fit
-#' @description Fits mixed Poisson regression models (Poisson-Inverse Gaussian or Negative-Binomial) on data sets with response variables being count data. The models can have varying precision parameter, where a linear regression structure (through a link function) is assumed to hold on the precision parameter. The Expectation-Maximization algorithm for both these models (Poisson Inverse Gaussian and Negative Binomial) is an important contribution of this package. Another important feature of this package is the functions to perform global and local influence analysis. See the reference Barreto-Souza and Simas (2015) <http://doi.org/10.1007/s11222-015-9601-6> for further details.
-#' @param formula symbolic description of the model (examples: \code{y ~ x1 + x2} and \code{y ~ x1 + x2 | w1 + w2}); see details below.
+#' @description Fits mixed Poisson regression models (Poisson-Inverse Gaussian or Negative-Binomial) on data sets with response variables being count data. 
+#' The models can have varying precision parameter, where a linear regression structure (through a link function) is assumed to hold on the precision parameter. 
+#' The Expectation-Maximization algorithm for both these models (Poisson Inverse Gaussian and Negative Binomial) is an important contribution of this package. 
+#' Another important feature of this package is the set of functions to perform global and local influence analysis.
+#' @param formula symbolic description of the model (examples: \code{y ~ x1 + ... + xnbeta} and \code{y ~ x1 + ... + xnbeta | w1 + ... + wnalpha}); see details below.
 #' @param data elements expressed in formula. This is usually a data frame composed by:
-#' (i) the observations formed by cout data \code{z}, with z_i being non-negative integers,
-#' (ii) covariates for the mean submodel (columns \code{x1} and \code{x2}) and
-#' (iii) covariates for the precision submodel (columns \code{w1} and \code{w2}).
+#' (i) the observations formed by count data \code{z}, with z_i being non-negative integers,
+#' (ii) covariates for the mean submodel (columns \code{x1, ..., xnbeta}) and
+#' (iii) covariates for the precision submodel (columns \code{w1, ..., wnalphla}).
 #' @param model character ("NB" or "PIG") indicating the type of model to be fitted, with
 #' "NB" standing for Negative-Binomial and "PIG" standing for Poisson Inverse Gaussian. The default is "NB".
 #' @param y For \code{mixpoissonreg}: logical values indicating if the response vector should be returned as component.
@@ -18,7 +21,8 @@
 #' For \code{mixpoissonreg.fit}: a matrix of covariates with respect to the mean with dimension \code{(n,nbeta)}.
 #' @param w For \code{mixpoissonreg}: logical values indicating if the model matrix \code{w} should be returned as component.
 #'
-#' For \code{mixpoissonreg.fit} a matrix of covariates with respect to the precision parameter. The default is \code{NULL}. If not \code{NULL} must be of dimension \code{(n,nalpha)}.
+#' For \code{mixpoissonreg.fit} a matrix of covariates with respect to the precision parameter. The default is \code{NULL}. 
+#' If not \code{NULL} must be of dimension \code{(n,nalpha)}.
 #' @param method estimation method to be chosen between "EM" (Expectation-Maximization) and "ML" (Maximum-Likelihood). The default method is "EM".
 #' @param residual character indicating the type of residual to be evaluated ("pearson" or "score"). The default is "pearson". Notice that they coincide for Negative-Binomial models.
 #' @param envelope number of simulations (synthetic data sets) to build envelopes for residuals (with \code{100*prob\%} confidence level).
@@ -30,9 +34,11 @@
 #' The possible link functions for the mean are "log" and "sqrt".
 #' @param link.precision optionally, a string containing the link function the precision parameter. If omitted and the only precision
 #' covariate is the intercept, the 'identity' link function will be used, if omitted and there is a precision covariate other than the
-#' intercept, the 'log' link function will be used. The possible link functions for the precision parameter are "identity" and "inverse.sqrt" (which is \phi^{-1/2} = w_i^T alpha).
-#' @param em_controls only used with the 'EM' method. A list containing two elements: \code{maxit} that contains the maximum number of iterations of the EM algorithm, the default is set to 5000;
-#' \code{em_tol} that defines the tolerance value to control the convergence criterion in the EM-algorithm, the default is set to 10^(-5); \code{em_tolgrad} that defines the tolerance value
+#' intercept, the 'log' link function will be used. The possible link functions for the precision parameter are "identity" and "inverse.sqrt" (which is \eqn{\phi^{-1/2} = w_i^T alpha}).
+#' @param em_controls only used with the 'EM' method. A list containing two elements: \code{maxit} that contains the maximum number of iterations of the EM algorithm, 
+#' the default is set to 5000;
+#' \code{em_tol} that defines the tolerance value to control the convergence criterion in the EM-algorithm, the default is set to 10^(-5); 
+#' \code{em_tolgrad} that defines the tolerance value
 #' of the maximum-norm of the the gradient of the Q-function, the default is set to 10^(-2).
 #' @param optim_method main optimization algorithm to be used. The available methods are the same as those of \code{optim} function. The default is set to "L-BFGS-B".
 #' @param optim_controls a list of control arguments to be passed to the \code{optim} function in the optimization of the model. For the control options, see
@@ -113,14 +119,28 @@
 #' (\eqn{x_{i,1}} and \eqn{v_{i,1}} may be 1 to handle intercepts).
 #'
 #' Therefore, the \code{mixpoissonreg} package handles up to two regression structures
-#' at the same time: one for the mean parameter, one for the precision parameter.
+#' at the same time: one for the mean parameter, one for the precision parameter. The regression structure for
+#' the mean is determined through a formula \code{y ~ x1 + ... + xn}, whereas the regression structure for
+#' the precision parameter is determined through the right-hand side of the formula using the separator "\code{|}". So,
+#' for example, a regression with \code{x1,...,xn} as covariates for the mean and \code{z1,...,zm} as covariates for the precision
+#' parameter corresponds to the formula \code{y ~ x1 + ... + xn | z1 + ... + zm}. If only there is only formula for
+#' the regression structure for the mean, the regression structure for the precision parameter will only have the intercept,
+#' that is, \code{y ~ x1 + ... + xn} is the same as \code{y ~ x1 + ... + xn | 1}. 
+#' 
+#' In general, in this package, the EM-algorithm estimation method obtains estimates closer to the maximum likelihood estimate than the maximum likelihood estimation method, 
+#' in the sense that the likelihood function evaluated at the EM-algorithm estimate is greater or equal (usually strictly greater) than the likelihood function evaluated
+#' at the maximum likelihood estimate. So, unless the processing time is an issue, we strongly recommend the EM-algorithm as the estimation method.
 #'
 #' In Barreto-Souza and Simas (2015) two residuals were studied: the pearson residuals
 #' and the score residuals. Both these residuals are implemented in the \code{mixpoissonreg}
-#' package.
+#' package. They coincide for NB regression models. They can be accessed via 
+#' the \link[mixpoissonreg:residuals.mixpoissonreg]{residuals} method.
 #'
 #' It is also noteworthy that all the global and local influence analysis tools developed
-#' in Barreto-Souza and Simas (2015) are implemented in \code{mixpoissonreg}.
+#' in Barreto-Souza and Simas (2015) are implemented in this package. See \link[mixpoissonreg]{influence.mixpoissonreg},
+#' \link[mixpoissonreg]{hatvalues.mixpoissonreg}, \link[mixpoissonreg]{cooks.distance.mixpoissonreg},
+#' \link[mixpoissonreg]{local_influence.mixpoissonreg}, \link[mixpoissonreg]{local_influence_plot.mixpoissonreg}
+#' and \link[mixpoissonreg]{local_influence_autoplot.mixpoissonreg}.
 #'
 #' @references
 #' DOI:10.1007/s11222-015-9601-6 (\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
@@ -132,44 +152,30 @@
 #' DOI:10.1214/09-AOAS306 (\href{http://doi.org/10.1214/09-AOAS306}{Sellers and Shmueli; 2010})
 #'
 #' @seealso
-#' \code{\link{summary.mixpoissonreg}}, \code{\link{plot.mixpoissonreg}}, \code{\link{residuals.mixpoissonreg}}, \code{\link{predict.mixpoissonreg}},
-#' \code{\link{local_influence.mixpoissonreg}}, \code{\link{global_influence.mixpoissonreg}}
+#' \code{\link{summary.mixpoissonreg}}, \code{\link{plot.mixpoissonreg}}, \code{\link{autoplot.mixpoissonreg}}, 
+#' \code{\link{residuals.mixpoissonreg}}, \code{\link{predict.mixpoissonreg}},\code{\link{influence.mixpoissonreg}},
+#' \code{\link{cooks.distance.mixpoissonreg}},
+#' \code{\link{local_influence.mixpoissonreg}}, \code{\link{local_influence_plot.mixpoissonreg}}, \code{\link{local_influence_autoplot.mixpoissonreg}} 
 #'
 #' @examples
-#' # Example with artificial data.
-#' n <- 100
-#' x <- cbind(rbinom(n, 1, 0.5), runif(n, -1, 1))
-#' v <- runif(n, -1, 1)
-#' z <- simdata_bes(
-#'   kap = c(1, -1, 0.5), lam = c(0.5, -0.5), x, v,
-#'   repetition = 1, link.mean = "logit", link.precision = "log"
-#' )
-#' z <- unlist(z)
-#' fit1 <- bbreg(z ~ x | v)
-#' summary(fit1)
-#' plot(fit1)
-#'
-#' # Examples using the Weather Task (WT) data available in bbreg.
+#' # Examples using the Attendance dataset:
 #' \donttest{
-#' fit2 <- mixpoissonreg(agreement ~ priming + eliciting, data = WT)
-#' summary(fit2)
-#' }
-#' \donttest{
-#' fit3 <- mixpoissonreg(agreement ~ priming + eliciting, envelope = 30, predict = 10, data = WT)
-#' summary(fit3)
-#' }
-#' # Example with precision covariates
-#' \donttest{
-#' fit4 <- mixpoissonreg(agreement ~ priming + eliciting | eliciting, data = WT)
-#' summary(fit4)
-#' }
-#' # Example with different link functions:
-#' \donttest{
-#' fit5 <- mixpoissonreg(agreement ~ priming + eliciting | eliciting,
-#'   data = WT,
-#'   link.mean = "cloglog", link.precision = "sqrt"
-#' )
-#' summary(fit5)
+#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, data = Attendance)
+#' summary(daysabs_fit)
+#' # Base R plot of the fit
+#' plot(daysabs_fit)
+#' # ggplot2 plot of the fit
+#' autoplot(daysabs_fit)
+#' # plot of local influence measures
+#' local_influence_plot(daysabs_fit)
+#' # ggplot2 plot of local influence measures
+#' local_influence_autoplot(daysabs_fit)
+#' # Fitting a reduced model of the sabe type as the previous one
+#' daysabs_fit_red <- mixpoissonreg(daysabs ~ gender + math + prog | prog, data = DaysAbsent, model = daysabs_fit$modeltype)
+#' # Likelihood ratio test:
+#' lrtest(daysabs_fit, daysabs_fit_red)
+#' # Wald test:
+#' waldtest(daysabs_fit, daysabs_fit_red)
 #' }
 #'
 #' @rdname mixpoissonreg
@@ -517,13 +523,13 @@ mixpoissonreg.fit <- function(y, x, w = NULL, link.mean = c("log", "sqrt"),
 #############################################################################################
 #' @name mixpoissonregML
 #' @aliases mixpoissonregML mixpoissonregML.fit
-#' @title Maximum Likelihood Mixed Poisson Regression Models
+#' @title Maximum Likelihood Mixed Poisson Regression Models for Overdispersed Count Data
 #' @description Uses maximum likelihood estimators to fit mixed Poisson regression models (Poisson-Inverse Gaussian or Negative-Binomial) on data sets with response variables being count data. The models can have varying precision parameter, where a linear regression structure (through a link function) is assumed to hold on the precision parameter.
-#' @param formula symbolic description of the model (examples: \code{y ~ x1 + x2} and \code{y ~ x1 + x2 | w1 + w2}); see details below.
+#' @param formula symbolic description of the model (examples: \code{y ~ x1 + ... + xnbeta} and \code{y ~ x1 + ... + xnbeta | w1 + ... + wnalpha}); see details below.
 #' @param data elements expressed in formula. This is usually a data frame composed by:
-#' (i) the observations formed by cout data \code{z}, with z_i being non-negative integers,
-#' (ii) covariates for the mean submodel (columns \code{x1} and \code{x2}) and
-#' (iii) covariates for the precision submodel (columns \code{w1} and \code{w2}).
+#' (i) the observations formed by count data \code{z}, with z_i being non-negative integers,
+#' (ii) covariates for the mean submodel (columns \code{x1, ..., xnbeta}) and
+#' (iii) covariates for the precision submodel (columns \code{w1, ..., wnalphla}).
 #' @param model character ("NB" or "PIG") indicating the type of model to be fitted, with
 #' "NB" standing for Negative-Binomial and "PIG" standing for Poisson Inverse Gaussian. The default is "NB".
 #' @param y For \code{mixpoissonregML}: logical values indicating if the response vector should be returned as component.
@@ -629,14 +635,28 @@ mixpoissonreg.fit <- function(y, x, w = NULL, link.mean = c("log", "sqrt"),
 #' (\eqn{x_{i,1}} and \eqn{v_{i,1}} may be 1 to handle intercepts).
 #'
 #' Therefore, the \code{mixpoissonreg} package handles up to two regression structures
-#' at the same time: one for the mean parameter, one for the precision parameter.
+#' at the same time: one for the mean parameter, one for the precision parameter. The regression structure for
+#' the mean is determined through a formula \code{y ~ x1 + ... + xn}, whereas the regression structure for
+#' the precision parameter is determined through the right-hand side of the formula using the separator "\code{|}". So,
+#' for example, a regression with \code{x1,...,xn} as covariates for the mean and \code{z1,...,zm} as covariates for the precision
+#' parameter corresponds to the formula \code{y ~ x1 + ... + xn | z1 + ... + zm}. If only there is only formula for
+#' the regression structure for the mean, the regression structure for the precision parameter will only have the intercept,
+#' that is, \code{y ~ x1 + ... + xn} is the same as \code{y ~ x1 + ... + xn | 1}. 
+#' 
+#' In general, in this package, the EM-algorithm estimation method obtains estimates closer to the maximum likelihood estimate than the maximum likelihood estimation method, 
+#' in the sense that the likelihood function evaluated at the EM-algorithm estimate is greater or equal (usually strictly greater) than the likelihood function evaluated
+#' at the maximum likelihood estimate. So, unless the processing time is an issue, we strongly recommend the EM-algorithm as the estimation method.
 #'
 #' In Barreto-Souza and Simas (2015) two residuals were studied: the pearson residuals
 #' and the score residuals. Both these residuals are implemented in the \code{mixpoissonreg}
-#' package. These residuals coincide for Negative-Binomial models.
+#' package. They coincide for NB regression models. They can be accessed via 
+#' the \link[mixpoissonreg:residuals.mixpoissonreg]{residuals} method.
 #'
 #' It is also noteworthy that all the global and local influence analysis tools developed
-#' in Barreto-Souza and Simas (2015) are implemented in \code{mixpoissonreg}.
+#' in Barreto-Souza and Simas (2015) are implemented in this package. See \link[mixpoissonreg]{influence.mixpoissonreg},
+#' \link[mixpoissonreg]{hatvalues.mixpoissonreg}, \link[mixpoissonreg]{cooks.distance.mixpoissonreg},
+#' \link[mixpoissonreg]{local_influence.mixpoissonreg}, \link[mixpoissonreg]{local_influence_plot.mixpoissonreg}
+#' and \link[mixpoissonreg]{local_influence_autoplot.mixpoissonreg}.
 #'
 #' @references
 #' DOI:10.1007/s11222-015-9601-6 (\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
@@ -648,44 +668,30 @@ mixpoissonreg.fit <- function(y, x, w = NULL, link.mean = c("log", "sqrt"),
 #' DOI:10.1214/09-AOAS306 (\href{http://doi.org/10.1214/09-AOAS306}{Sellers and Shmueli; 2010})
 #'
 #' @seealso
-#' \code{\link{summary.mixpoissonreg}}, \code{\link{plot.mixpoissonreg}}, \code{\link{residuals.mixpoissonreg}}, \code{\link{predict.mixpoissonreg}},
-#' \code{\link{local_influence.mixpoissonreg}}, \code{\link{global_influence.mixpoissonreg}}
+#' \code{\link{summary.mixpoissonreg}}, \code{\link{plot.mixpoissonreg}}, \code{\link{autoplot.mixpoissonreg}}, 
+#' \code{\link{residuals.mixpoissonreg}}, \code{\link{predict.mixpoissonreg}},\code{\link{influence.mixpoissonreg}},
+#' \code{\link{cooks.distance.mixpoissonreg}},
+#' \code{\link{local_influence.mixpoissonreg}}, \code{\link{local_influence_plot.mixpoissonreg}}, \code{\link{local_influence_autoplot.mixpoissonreg}} 
 #'
 #' @examples
-#' # Example with artificial data.
-#' n <- 100
-#' x <- cbind(rbinom(n, 1, 0.5), runif(n, -1, 1))
-#' v <- runif(n, -1, 1)
-#' z <- simdata_bes(
-#'   kap = c(1, -1, 0.5), lam = c(0.5, -0.5), x, v,
-#'   repetition = 1, link.mean = "logit", link.precision = "log"
-#' )
-#' z <- unlist(z)
-#' fit1 <- bbreg(z ~ x | v)
-#' summary(fit1)
-#' plot(fit1)
-#'
-#' # Examples using the Weather Task (WT) data available in bbreg.
+#' # Examples using the Attendance dataset:
 #' \donttest{
-#' fit2 <- mixpoissonreg(agreement ~ priming + eliciting, data = WT)
-#' summary(fit2)
-#' }
-#' \donttest{
-#' fit3 <- mixpoissonreg(agreement ~ priming + eliciting, envelope = 30, predict = 10, data = WT)
-#' summary(fit3)
-#' }
-#' # Example with precision covariates
-#' \donttest{
-#' fit4 <- mixpoissonreg(agreement ~ priming + eliciting | eliciting, data = WT)
-#' summary(fit4)
-#' }
-#' # Example with different link functions:
-#' \donttest{
-#' fit5 <- mixpoissonreg(agreement ~ priming + eliciting | eliciting,
-#'   data = WT,
-#'   link.mean = "cloglog", link.precision = "sqrt"
-#' )
-#' summary(fit5)
+#' daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math + prog | gender + math + prog, data = Attendance)
+#' summary(daysabs_fit_ml)
+#' # Base R plot of the fit
+#' plot(daysabs_fit_ml)
+#' # ggplot2 plot of the fit
+#' autoplot(daysabs_fit_ml)
+#' # plot of local influence measures
+#' local_influence_plot(daysabs_fit_ml)
+#' # ggplot2 plot of local influence measures
+#' local_influence_autoplot(daysabs_fit_ml)
+#' # Fitting a reduced model of the sabe type as the previous one
+#' daysabs_fit_ml_red <- mixpoissonregML(daysabs ~ gender + math + prog | prog, data = DaysAbsent, model = daysabs_fit$modeltype)
+#' # Likelihood ratio test:
+#' lrtest(daysabs_fit_ml, daysabs_fit_ml_red)
+#' # Wald test:
+#' waldtest(daysabs_fit_ml, daysabs_fit_ml_red)
 #' }
 #'
 #' @rdname mixpoissonregML
