@@ -281,7 +281,7 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
     graphics::mtext(getCaption(6), side = 3, cex = cex.caption)
     
     if (id.n > 0){
-      extreme_points <- as.vector(Rfast::nth(abs(res), k = id.n,
+      extreme_points <- as.vector(Rfast::nth(abs(y - mu_est), k = id.n,
                                       num.of.nths = id.n,
                                       index.return = TRUE, descending = TRUE))
       labpos <- label.pos[1 + as.numeric(mu_est[extreme_points] > mean(range(mu_est)))]

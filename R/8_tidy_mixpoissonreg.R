@@ -4,6 +4,8 @@
 #' @import magrittr
 #' @import dplyr
 #' @import ggfortify
+#' @import gridExtra
+#' @import grid
 
 #############################################################################################
 #' @title augment.mixpoissonreg
@@ -161,6 +163,8 @@ local_influence_benchmarks.mixpoissonreg <- function(x, perturbation = c("case_w
 #' @param label.label vector of labels.
 #' @param env_alpha alpha of the bands of the envelope (when the fitted model has envelopes)
 #' @param env_fill the colour of the filling in the envelopes.
+#' @param gpar_sub.caption list of gpar parameters to be used as common title in the case of multiple plots. The title will be given in sub.caption argument. See
+#' the help of \code{gpar} function from the \pkg{grid} package for all the available options.
 #' @return 
 #' @details Based on \code{autoplot.glm} from the excellent \code{ggfortify} package, \href{https://github.com/sinhrks/ggfortify}.
   
@@ -174,7 +178,8 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
                                    nrow = NULL, ncol = NULL,
                                     qqline = TRUE, ask = prod(par("mfcol")) <
                                       length(which) && dev.interactive(), include.modeltype = TRUE,
-                                    include.residualtype = FALSE, env_alpha = 0.5, env_fill = "grey70",
+                                    include.residualtype = FALSE, sub.caption = NULL,
+                                   env_alpha = 0.5, env_fill = "grey70", gpar_sub.caption = list(fontface = "bold"),
                                     colour = "#444444", size = NULL, linetype = NULL, alpha = NULL, fill = NULL, 
                                     shape = NULL, label = TRUE, label.label = NULL, label.colour = "#000000", 
                                     label.alpha = NULL, label.size = NULL, label.angle = NULL, 
@@ -182,6 +187,20 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
                                     label.hjust = NULL, label.vjust = NULL, 
                                     label.n = 3, ad.colour = "#888888", ad.linetype = "dashed", ad.size = 0.2, ...){
   p1 <- p2 <- p3 <- p4 <- p5 <- p6 <- NULL
+  if (is.null(sub.caption)) {
+    cal <- object$call
+    if (!is.na(m.f <- match("formula", names(cal)))) {
+      cal <- cal[c(1, m.f)]
+      names(cal)[2L] <- ""
+    }
+    cc <- deparse(cal, 80)
+    nc <- nchar(cc[1L], "c")
+    abbr <- length(cc) > 1 || nc > 75
+    sub.caption <- if (abbr)
+      paste(substr(cc[1L], 1L, min(75L, nc)), "...")
+    else cc[1L]
+  }
+  
   plot.data <- augment(object, type.residuals = object$residualname, type.predict = "response")
   n <- nobs(object)
   plot.data$.index <- 1:n
@@ -190,6 +209,29 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
   } else{
     plot.data$.label <- as.vector(label.label)
   }
+  
+  if(is.null(object$y)){
+    y = object$residuals + object$fitted.values
+  } else{
+    y = object$y
+  }
+  
+  if(2 %in% which){
+    ylim <- range(plot.data$.resid, na.rm = TRUE)
+    ylim[2L] <- ylim[2L] + diff(ylim) * 0.075
+    qx <- stats::qqnorm(plot.data$.resid, ylim = ylim, 
+                        plot.it = FALSE)$x
+    plot.data$.qqx <- qx
+    
+    qprobs <- c(0.25, 0.75)
+    qy <- stats::quantile(plot.data$.resid, probs = qprobs, 
+                          names = FALSE, type = 7, na.rm = TRUE)
+    qx <- stats::qnorm(qprobs)
+    slope <- diff(qy)/diff(qx)
+    int <- qy[1L] - slope * qx[1L]
+  }
+  
+  plot.data$.obs <- as.vector(y)
   
   plot_label <- function (p, data, x = NULL, y = NULL, label = TRUE, label.label = "rownames", 
             label.colour = NULL, label.alpha = NULL, label.size = NULL, 
@@ -277,22 +319,13 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
     }
   }
   
-  if(2 %in% which){
-    ylim <- range(plot.data$.resid, na.rm = TRUE)
-    ylim[2L] <- ylim[2L] + diff(ylim) * 0.075
-    qn <- stats::qqnorm(plot.data$.resid, ylim = ylim, 
-                        plot.it = FALSE)
-    plot.data$.qqx <- qn$x
-    plot.data$.qqy <- qn$y
-  }
-  
   plot.data <- flatten(plot.data)
   if(any(c(1,2) %in% which)){
     residualname <- paste0(toupper(substring(object$residualname, 1, 1)), substring(object$residualname, 2))
   }
   
   if (label.n > 0L) {
-    if (any(c(1,6) %in% which)) {
+    if (any(c(1,2,6) %in% which)) {
       r.data <- dplyr::arrange(plot.data, dplyr::desc(abs(.resid)))
       r.data <- utils::head(r.data, label.n)
     }
@@ -307,6 +340,10 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
     if(5 %in% which){
       cdgcd.data <- dplyr::arrange(plot.data, dplyr::desc((.gencooksd/sum(.gencooksd))^2 + (.cooksd/sum(.cooksd))^2))
       cdgcd.data <- utils::head(cdgcd.data, label.n)
+    }
+    if(6 %in% which){
+      respobs.data <- dplyr::arrange(plot.data, dplyr::desc(abs(.obs - .fitted)))
+      respobs.data <- utils::head(respobs.data, label.n)
     }
   }
   
@@ -344,7 +381,13 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
     p1 <- p1 + ggplot2::geom_hline(yintercept = 0L, linetype = ad.linetype, 
                           size = ad.size, colour = ad.colour)
     p1 <- .decorate.label(p1, r.data)
-    p1 <- .decorate.plot(p1, xlab = "Obs. number", ylab = ylab, 
+    
+    if(sub.caption == "" | !dev_ask){
+      xlab = "Obs. number"
+    } else {
+      xlab = paste0("Obs. number\n",sub.caption)
+    }
+    p1 <- .decorate.plot(p1, xlab = xlab, ylab = ylab, 
                          title = t1)
     if(dev_ask){
       print(p1)
@@ -357,14 +400,8 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
       title[[2]] <- paste0(title[[2]]," with simulated envelopes")
     } 
     t2 <- title[[2]]
-    qprobs <- c(0.25, 0.75)
-    qy <- stats::quantile(plot.data$.resid, probs = qprobs, 
-                          names = FALSE, type = 7, na.rm = TRUE)
-    qx <- stats::qnorm(qprobs)
-    slope <- diff(qy)/diff(qx)
-    int <- qy[1L] - slope * qx[1L]
 
-    mapping <- ggplot2::aes_string(x = ".qqx", y = ".qqy")
+    mapping <- ggplot2::aes_string(x = ".qqx", y = ".resid")
     p2 <- ggplot2::ggplot(data = plot.data, mapping = mapping)
     
     if(qqline & is.null(env)){
@@ -385,8 +422,14 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
     
     ylab <- paste0(residualname, " residuals")
     
+    if(sub.caption == "" | !dev_ask){
+      xlab = "Theoretical Quantiles"
+    } else {
+      xlab = paste0("Theoretical Quantiles\n", sub.caption)
+    }
+    
     p2 <- .decorate.label(p2, r.data)
-    p2 <- .decorate.plot(p2, xlab = "Theoretical Quantiles", 
+    p2 <- .decorate.plot(p2, xlab = xlab, 
                          ylab = ylab, title = t2)
     if(dev_ask){
       print(p2)
@@ -394,7 +437,105 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
   }
   
   if(3 %in% which){
+    t3 <- title[[3]]
+    mapping <- ggplot2::aes_string(x = ".index", y = ".cooksd", 
+                                   ymin = 0, ymax = ".cooksd")
+    p3 <- ggplot2::ggplot(data = plot.data, mapping = mapping)
+    if (!is.logical(shape) || shape) {
+      p3 <- p3 + geom_factory(geom_linerange, plot.data, 
+                              colour = colour, size = size, linetype = linetype, 
+                              alpha = alpha, fill = fill, shape = shape)
+    }
+    p3 <- .decorate.label(p3, cd.data)
     
+    if(sub.caption == "" | !dev_ask){
+      xlab = "Obs. Number"
+    } else {
+      xlab = paste0("Obs. Number\n", sub.caption)
+    }
+    
+    p3 <- .decorate.plot(p3, xlab = xlab, ylab = "Cook's distance", 
+                         title = t3)
+    if(dev_ask){
+      print(p3)
+    }
+  }
+  
+  if(4 %in% which){
+    t4 <- title[[4]]
+    mapping <- ggplot2::aes_string(x = ".index", y = ".gencooksd", 
+                                   ymin = 0, ymax = ".gencooksd")
+    p4 <- ggplot2::ggplot(data = plot.data, mapping = mapping)
+    if (!is.logical(shape) || shape) {
+      p4 <- p4 + geom_factory(geom_linerange, plot.data, 
+                              colour = colour, size = size, linetype = linetype, 
+                              alpha = alpha, fill = fill, shape = shape)
+    }
+    p4 <- .decorate.label(p4, gcd.data)
+    
+    if(sub.caption == "" | !dev_ask){
+      xlab = "Obs. Number"
+    } else {
+      xlab = paste0("Obs. Number\n", sub.caption)
+    }
+    
+    p4 <- .decorate.plot(p4, xlab = xlab, ylab = "Generalized Cook's distance", 
+                         title = t4)
+    if(dev_ask){
+      print(p4)
+    }
+  }
+  
+  if (5 %in% which) {
+    t5 <- title[[5]]
+    mapping <- ggplot2::aes_string(x = ".gencooksd", y = ".cooksd")
+    p5 <- ggplot2::ggplot(data = plot.data, mapping = mapping)
+    if (!is.logical(shape) || shape) {
+      p5 <- p5 + geom_factory(geom_point, plot.data, colour = colour, 
+                              size = size, linetype = linetype, alpha = alpha, 
+                              fill = fill, shape = shape)
+    }
+    p5 <- p5 + ggplot2::geom_hline(yintercept = 0L, linetype = ad.linetype, 
+                                   size = ad.size, colour = ad.colour)
+    p5 <- .decorate.label(p5, cdgcd.data)
+    
+    if(sub.caption == "" | !dev_ask){
+      xlab = "Generalized Cook's distance"
+    } else {
+      xlab = paste0("Generalized Cook's distance\n", sub.caption)
+    }
+    
+    p5 <- .decorate.plot(p5, xlab = xlab, ylab = "Cook's distance", 
+                         title = t5)
+    if(dev_ask){
+      print(p5)
+    }
+  }
+  
+  if (6 %in% which) {
+    t6 <- title[[6]]
+    mapping <- ggplot2::aes_string(x = ".fitted", y = ".obs")
+    p6 <- ggplot2::ggplot(data = plot.data, mapping = mapping)
+    if (!is.logical(shape) || shape) {
+      p6 <- p6 + geom_factory(geom_point, plot.data, colour = colour, 
+                              size = size, linetype = linetype, alpha = alpha, 
+                              fill = fill, shape = shape)
+    }
+    p6 <- p6 + ggplot2::geom_abline(intercept = 0L, slope = 1L, linetype = ad.linetype, 
+                                   size = ad.size, colour = ad.colour)
+    p6 <- .decorate.label(p6, respobs.data)
+    
+    if(sub.caption == "" | !dev_ask){
+      xlab = "Predicted values"
+    } else {
+      xlab = paste0("Predicted values\n", sub.caption)
+    }
+    
+    p6 <- .decorate.plot(p6, xlab = xlab, ylab = "Response values", 
+                         title = t6)
+    if(dev_ask){
+      print(p6)
+    }
   }
   
 
@@ -404,7 +545,11 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
       nrow <- 0
     if(is.null(ncol))
       ncol <- 0
-    new("ggmultiplot", plots = plot.list, nrow = nrow, ncol = ncol)
+    p <- new("ggmultiplot", plots = plot.list, nrow = nrow, ncol = ncol)
+    
+    gpar <- do.call(grid::gpar, gpar_sub.caption)
+    title_multi <- grid::textGrob(sub.caption, gp=gpar)
+    gridExtra::grid.arrange(grobs = p@plots, top = title_multi, gp=gpar(fontface="bold"))
   } else{
     invisible()
   }
