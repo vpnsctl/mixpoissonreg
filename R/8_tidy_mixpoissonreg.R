@@ -311,7 +311,6 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
   dev_ask <- is.null(nrow) & is.null(ncol)
   
   if(dev_ask){
-    one.fig <- prod(par("mfcol")) == 1
     
     if (ask) {
       oask <- grDevices::devAskNewPage(TRUE)
@@ -540,6 +539,7 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
   
 
   if(!dev_ask){
+    grDevices::devAskNewPage(ask = FALSE)
     plot.list <- list(p1, p2, p3, p4, p5, p6)[which]
     if(is.null(nrow))
       nrow <- 0
@@ -550,6 +550,7 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
     gpar <- do.call(grid::gpar, gpar_sub.caption)
     title_multi <- grid::textGrob(sub.caption, gp=gpar)
     gridExtra::grid.arrange(grobs = p@plots, top = title_multi, gp=gpar(fontface="bold"))
+    grDevices::devAskNewPage(ask = dev.interactive())
   } else{
     invisible()
   }
