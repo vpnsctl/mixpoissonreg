@@ -96,7 +96,7 @@
 #' \eqn{Y|Z=z\sim}Poisson\eqn{(\mu z)}, for
 #' some constant \eqn{\mu>0}. Therefore \eqn{Y} follows a mixed Poisson (MP) distribution with probability
 #' function given by
-#' \deqn{P(Y=y)=\int_0^\infty\dfrac{e^{-\mu z}(\mu z)^y}{y!}dG_{\tau}(z),}
+#' \deqn{P(Y=y)=\int_0^\infty\frac{e^{-\mu z}(\mu z)^y}{y!}dG_{\tau}(z),}
 #' for \eqn{y=0,1,\ldots}. With this,
 #' \eqn{Y} has an overdispersed distribution and hence it is a natural alternative to the Poisson distribution.
 #' The most common choices for \eqn{Z} are gamma and inverse-gaussian distributions,
@@ -111,11 +111,11 @@
 #' \eqn{b(\theta) = -\log(-\theta)} and \eqn{\xi_0 = -1} for the NB case, and \eqn{b(\theta) = -(-2\theta)^{1/2}} and \eqn{\xi_0 = -1/2} for
 #' the PIG case, with \eqn{b''(\cdot)} being the second derivative of the function \eqn{b(\cdot)}.
 #' The following linear relations are assumed
-#' \deqn{\Lambda_1(\mu_i) = x_i^\top \beta}
+#' \deqn{\Lambda_1(\mu_i) = x_i^T \beta}
 #'  and
-#' \deqn{\Lambda_2(\phi_i) = w_i^\top \alpha,}
+#' \deqn{\Lambda_2(\phi_i) = w_i^T \alpha,}
 #'  where \eqn{\beta = (\beta_1,...,\beta_p)} and \eqn{\alpha = (\alpha_1,...,\alpha_q)} are real valued vectors.
-#' The terms \eqn{x_i^\top} and \eqn{v_i^\top} represent, respectively, the i-th row of the matrices "x" (\eqn{n\times p})
+#' The terms \eqn{x_i^T} and \eqn{v_i^T} represent, respectively, the i-th row of the matrices "x" (\eqn{n\times p})
 #'  and "w" (\eqn{n\times q}) containing covariates in their columns
 #' (\eqn{x_{i,1}} and \eqn{v_{i,1}} may be 1 to handle intercepts).
 #'
@@ -628,11 +628,11 @@ mixpoissonreg.fit <- function(y, x, w = NULL, link.mean = c("log", "sqrt"),
 #' \eqn{b(\theta) = -\log(-\theta)} and \eqn{\xi_0 = -1} for the NB case, and \eqn{b(\theta) = -(-2\theta)^{1/2}} and \eqn{\xi_0 = -1/2} for
 #' the PIG case, with \eqn{b''(\cdot)} being the second derivative of the function \eqn{b(\cdot)}.
 #' The following linear relations are assumed
-#' \deqn{\Lambda_1(\mu_i) = x_i^\top \beta}
+#' \deqn{\Lambda_1(\mu_i) = x_i^T \beta}
 #'  and
-#' \deqn{\Lambda_2(\phi_i) = w_i^\top \alpha,}
+#' \deqn{\Lambda_2(\phi_i) = w_i^T \alpha,}
 #'  where \eqn{\beta = (\beta_1,...,\beta_p)} and \eqn{\alpha = (\alpha_1,...,\alpha_q)} are real valued vectors.
-#' The terms \eqn{x_i^\top} and \eqn{v_i^\top} represent, respectively, the i-th row of the matrices "x" (\eqn{n\times p})
+#' The terms \eqn{x_i^T} and \eqn{v_i^T} represent, respectively, the i-th row of the matrices "x" (\eqn{n\times p})
 #'  and "w" (\eqn{n\times q}) containing covariates in their columns
 #' (\eqn{x_{i,1}} and \eqn{v_{i,1}} may be 1 to handle intercepts).
 #'
