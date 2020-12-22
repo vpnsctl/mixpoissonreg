@@ -4,3 +4,4 @@ addons:
   apt:
     packages:
       - libgit2-dev
+      - libgsl-dev
