@@ -1,4 +1,4 @@
-#' @import lmtest
+#' @importFrom lmtest coeftest coefci lrtest waldtest coefci.default coeftest.default
 
 #############################################################################################
 #' @name plot.mixpoissonreg

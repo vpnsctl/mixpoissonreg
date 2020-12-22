@@ -1,4 +1,4 @@
-#' @import gamlss.dist
+#' @importFrom gamlss.dist dPIG rIG rNBI dNBI
 
 #############################################################################################
 #' @name EM_mixpoisson

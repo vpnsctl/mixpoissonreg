@@ -1,8 +1,7 @@
-#' @import generics
-#' @import ggplot2
-#' @import tibble
-#' @import magrittr
-#' @import ggfortify
+#' @importFrom generics augment tidy glance
+#' @importFrom ggplot2 ggplot geom_text geom_hline geom_abline geom_linerange geom_point aes
+#' @importFrom tibble tibble as_tibble add_column
+#' @importFrom magrittr `%>%`
 #' @importFrom dplyr arrange desc bind_rows mutate filter select left_join
 #' @importFrom gridExtra grid.arrange
 #' @importFrom ggrepel geom_text_repel

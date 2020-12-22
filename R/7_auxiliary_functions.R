@@ -1,5 +1,5 @@
-#' @import statmod
-#' @import pbapply
+#' @importFrom statmod rinvgauss
+#' @importFrom pbapply pblapply
 
 #############################################################################################
 #' @name startvalues_mpreg

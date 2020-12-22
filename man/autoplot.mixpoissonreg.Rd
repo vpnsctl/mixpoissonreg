@@ -4,7 +4,7 @@
 \alias{autoplot.mixpoissonreg}
 \title{Autoplot Method for \code{mixpoissonreg} Objects}
 \usage{
-\method{autoplot}{mixpoissonreg}(
+autoplot.mixpoissonreg(
   object,
   which = c(1, 2, 5, 6),
   title = list("Residuals vs Obs. number", "Normal Q-Q", "Cook's distance",
