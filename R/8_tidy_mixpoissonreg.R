@@ -8,6 +8,7 @@
 #' @importFrom rlang arg_match 
 #' @importFrom rlang :=
 #' @importFrom methods new
+#' @importClassesFrom ggfortify ggmultiplot
 
 #############################################################################################
 #' @name augment.mixpoissonreg
