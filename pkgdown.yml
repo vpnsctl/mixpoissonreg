@@ -1,0 +1,13 @@
+pandoc: 2.7.3
+pkgdown: 1.6.1
+pkgdown_sha: ~
+articles:
+  influence-mixpoissonreg: influence-mixpoissonreg.html
+  intervals-mixpoissonreg: intervals-mixpoissonreg.html
+  intro-mixpoissonreg: intro-mixpoissonreg.html
+  ml-mixpoissonreg: ml-mixpoissonreg.html
+  plots-mixpoissonreg: plots-mixpoissonreg.html
+  tidyverse-mixpoissonreg: tidyverse-mixpoissonreg.html
+  tutorial-mixpoissonreg: tutorial-mixpoissonreg.html
+last_built: 2020-12-22T23:12Z
+
