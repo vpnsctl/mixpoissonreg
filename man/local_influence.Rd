@@ -8,8 +8,6 @@
 local_influence(model, ...)
 
 local_influence_plot(model, ...)
-
-local_influence_plot(model, ...)
 }
 \arguments{
 \item{model}{an object for which the local influence is desired}
@@ -28,11 +26,11 @@ introduced the conformal normal curvature, which has nice properties and takes v
 introduced normal and conformal normal curvatures for EM-based models.
 }
 \references{
-Cook, R. D. (1986) \emph{Assessment of Local Influence.} Journal of the Royal Statistical Society. Series B (Methodological), Vol. 48, pp.133-169. \\href{https://rss.onlinelibrary.wiley.com/doi/10.1111/j.2517-6161.1986.tb01398.x}
+Cook, R. D. (1986) \emph{Assessment of Local Influence.} Journal of the Royal Statistical Society. Series B (Methodological), Vol. 48, pp.133-169. \href{https://rss.onlinelibrary.wiley.com/doi/10.1111/j.2517-6161.1986.tb01398.x}{https://rss.onlinelibrary.wiley.com/doi/10.1111/j.2517-6161.1986.tb01398.x}
 
-Poon, W.-Y. and Poon, Y.S. (2002) \emph{Conformal normal curvature and assessment of local influence.}  Journal of the Royal Statistical Society. Series B (Methodological), Vol. 61, pp.51-61. \\href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}
+Poon, W.-Y. and Poon, Y.S. (2002) \emph{Conformal normal curvature and assessment of local influence.}  Journal of the Royal Statistical Society. Series B (Methodological), Vol. 61, pp.51-61. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}
 
-Zhu, H.-T. and Lee, S.-Y. (2002) \emph{Local influence for incomplete data models.} Journal of the Royal Statistical Society. Series B (Methodological), Vol. 63, pp.111-126. \\href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}
+Zhu, H.-T. and Lee, S.-Y. (2002) \emph{Local influence for incomplete data models.} Journal of the Royal Statistical Society. Series B (Methodological), Vol. 63, pp.111-126. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}
 }
 \seealso{
 \code{\link{local_influence.mixpoissonreg}}, \code{\link{local_influence_plot.mixpoissonreg}},

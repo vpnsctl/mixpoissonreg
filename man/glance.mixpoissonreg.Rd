@@ -2,13 +2,36 @@
 % Please edit documentation in R/8_tidy_mixpoissonreg.R
 \name{glance.mixpoissonreg}
 \alias{glance.mixpoissonreg}
-\title{glance.mixpoissonreg}
+\title{Glance at a \code{mixpoissonreg} object}
 \usage{
 \method{glance}{mixpoissonreg}(x, ...)
 }
-\value{
+\arguments{
+\item{x}{A \code{mixpoissonreg} object.}
 
+\item{...}{Additional arguments. Currently not used.}
+}
+\value{
+A \code{\link[tibble:tibble]{tibble::tibble()}} with exactly one row and columns:
+\itemize{
+\item \code{efron.pseudo.r2} Efron's pseudo-\eqn{R^2}, that is, the squared correlation between the fitted values and the response values.
+\item \code{df.null} Degrees of freedom used by the null model.
+\item \code{logLik} The log-likelihood of the model.
+\item \code{AIC} Akaike's Information Criterion for the model.
+\item \code{BIC} Bayesian Information Criterion for the model.
+\item \code{df.residual} Residual degrees of freedom.
+\item \code{nobs} Number of observations used.
+\item \code{model.type} Type of model fitted, "NB" or "PIG".
+\item \code{est.method} The estimation method of the fitted model, "EM" or "ML".
+}
 }
 \description{
-glance.mixpoissonreg
+Glance accepts a \code{mixpoissonreg} object and returns a
+\code{\link[tibble:tibble]{tibble::tibble()}} with exactly one row of model summaries.
+The summaries are Efron's pseudo-\eqn{R^2}, degrees of freedom, AIC, BIC, log-likelihood,
+the type of model used in the fit ('NB' or 'PIG'), the total number of observations and the estimation method.
+}
+\seealso{
+\code{\link{augment.mixpoissonreg}}, \code{\link{tidy.mixpoissonreg}}, \code{\link{tidy_local_influence.mixpoissonreg}},
+\code{\link{autoplot.mixpoissonreg}}, \code{\link{local_influence_autoplot.mixpoissonreg}}
 }

@@ -1,5 +1,5 @@
 #############################################################################################
-#' @name global_influence.mixpoissonreg
+#' @name influence.mixpoissonreg
 #' @title Global Influence Diagnostics for Mixed Poisson Regression Models
 #' @aliases cooks.distance.mixpoissonreg hatvalues.mixpoissonreg influence.mixpoissonreg
 #' @description These functions provides global influence diagnostic quantities such as Cook's distance, hat values, generalized Cook's distance (through argument
@@ -37,15 +37,15 @@
 #' 
 #'
 #' @references 
-#' DOI:10.1007/s11222-015-9601-6 (\\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
+#' DOI:10.1007/s11222-015-9601-6 (\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
 #' 
 #' Cook, D.R. and Weisberg, S. (1982) *Residuals and Influence in Regression*. (New York: Chapman and Hall, 1982)
 #' 
-#' DOI:10.1214/aos/1176345513 (\\href{https://projecteuclid.org/euclid.aos/1176345513}{Pregibon; 1981})
+#' DOI:10.1214/aos/1176345513 (\href{https://projecteuclid.org/euclid.aos/1176345513}{Pregibon; 1981})
 #' 
-#' Zhu, H.T., Lee, S.Y., Wei, B.C., Zhu, J. (2001) *Case-deletion measures formodels with incomplete data.* Biometrika, 88, 727–737. \\href{https://www.jstor.org/stable/2673442?seq=1}
+#' Zhu, H.T., Lee, S.Y., Wei, B.C., Zhu, J. (2001) *Case-deletion measures formodels with incomplete data.* Biometrika, 88, 727–737. \href{https://www.jstor.org/stable/2673442?seq=1}{https://www.jstor.org/stable/2673442?seq=1}
 
-#' @rdname global_influence.mixpoissonreg
+#' @rdname influence.mixpoissonreg
 
 hatvalues.mixpoissonreg <- function(model, parameters = c("mean", "precision")){
   parameters <- rlang::arg_match(parameters)
@@ -73,7 +73,7 @@ hatvalues.mixpoissonreg <- function(model, parameters = c("mean", "precision")){
  h
 }
 
-#' @rdname global_influence.mixpoissonreg
+#' @rdname influence.mixpoissonreg
 
 cooks.distance.mixpoissonreg <- function(model, type = c("CD", "GCD", "GCDmean", "GCDprecision", "LD", "QD"), hat = c("mean", "precision")){
 type <- rlang::arg_match(type)
@@ -355,7 +355,7 @@ dist <- switch(type,
 dist
 }
 
-#' @rdname global_influence.mixpoissonreg
+#' @rdname influence.mixpoissonreg
 
 influence.mixpoissonreg <- function(model, do.coef = TRUE){
 influence_mpreg <- list()

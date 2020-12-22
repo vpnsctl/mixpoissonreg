@@ -12,6 +12,8 @@
 \item{type}{the type of variable to get the fitted values. The default is the "response" type, which provided the estimated values for the means.
 The type "link" provides the estimates for the linear predictor of the mean. The type "precision" provides estimates for the precision parameters
 whereas the type "variance" provides estimates for the variances.}
+
+\item{...}{Currently not used.}
 }
 \description{
 Function providing the fitted means, linear predictors, precisions or variances for mixed Poisson regression models.

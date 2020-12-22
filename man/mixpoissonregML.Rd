@@ -62,6 +62,10 @@ intercept, the 'log' link function will be used. The possible link functions for
 
 For \code{mixpoissonregML.fit}: a numerical vector of response variables with length \code{n}. Each coordinate must be a nonnegative-integer.}
 
+\item{x}{For \code{mixpoissonregML}: logical values indicating if the model matrix \code{x} should be returned as component.
+
+For \code{mixpoissonregML.fit}: a matrix of covariates with respect to the mean with dimension \code{(n,nbeta)}.}
+
 \item{w}{For \code{mixpoissonregML}: logical values indicating if the model matrix \code{w} should be returned as component.
 
 For \code{mixpoissonregML.fit} a matrix of covariates with respect to the precision parameter. The default is \code{NULL}. If not \code{NULL} must be of dimension \code{(n,nalpha)}.}
@@ -82,10 +86,6 @@ of the maximum-norm of the the gradient of the Q-function, the default is set to
 
 \item{optim_controls}{a list of control arguments to be passed to the \code{optim} function in the optimization of the model. For the control options, see
 the 'Details' in the help of \code{\link[stats]{optim}} for the possible arguments.}
-
-\item{For}{\code{mixpoissonregML}: logical values indicating if the model matrix \code{x} should be returned as component.
-
-For \code{mixpoissonregML.fit}: a matrix of covariates with respect to the mean with dimension \code{(n,nbeta)}.}
 }
 \value{
 \code{mixpoissonregML} returns an object of class "mixpoissonreg" whereas \code{mixpoissonregML.fit}
@@ -186,7 +186,7 @@ package. They coincide for NB regression models. They can be accessed via
 the \link[mixpoissonreg:residuals.mixpoissonreg]{residuals} method.
 
 It is also noteworthy that all the global and local influence analysis tools developed
-in Barreto-Souza and Simas (2015) are implemented in this package. See \code{\link{global_influence.mixpoissonreg}},
+in Barreto-Souza and Simas (2015) are implemented in this package. See \code{\link{influence.mixpoissonreg}},
 \code{\link{local_influence.mixpoissonreg}}, \code{\link{local_influence_plot.mixpoissonreg}}
 and \code{\link{local_influence_autoplot.mixpoissonreg}}.
 }

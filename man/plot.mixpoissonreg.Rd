@@ -75,7 +75,7 @@ Response variables vs. fitted means. By default, the first two plots and the las
 The \code{plot} method is implemented following the same structure as the \link[stats]{plot.lm}, so it will be easy to be used by practitioners that
 are familiar with \code{glm} objects.
 
-These plots allows one to perform residuals analsysis and influence diagnostics. There are other global influence functions, see \code{\link{global_influence.mixpoissonreg}}.
+These plots allows one to perform residuals analsysis and influence diagnostics. There are other global influence functions, see \code{\link{influence.mixpoissonreg}}.
 
 See Barreto-Souza and Simas (2015), Cook and Weisberg (1982) and Zhu et al. (2001).
 }
@@ -97,13 +97,13 @@ plot(daysabs_fit_ml, which = 2)
 }
 }
 \references{
-DOI:10.1007/s11222-015-9601-6 (\\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
+DOI:10.1007/s11222-015-9601-6 (\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
 
 Cook, D.R. and Weisberg, S. (1982) \emph{Residuals and Influence in Regression}. (New York: Chapman and Hall, 1982)
 
-Zhu, H.T., Lee, S.Y., Wei, B.C., Zhu, J. (2001) \emph{Case-deletion measures formodels with incomplete data.} Biometrika, 88, 727–737. \\href{https://www.jstor.org/stable/2673442?seq=1}
+Zhu, H.T., Lee, S.Y., Wei, B.C., Zhu, J. (2001) \emph{Case-deletion measures formodels with incomplete data.} Biometrika, 88, 727–737. \href{https://www.jstor.org/stable/2673442?seq=1}{https://www.jstor.org/stable/2673442?seq=1}
 }
 \seealso{
 \code{\link{autoplot.mixpoissonreg}}, \code{\link{local_influence_plot.mixpoissonreg}}, \code{\link{local_influence_autoplot.mixpoissonreg}},
-\code{\link{summary.mixpoissonreg}}, \code{\link{predict.mixpoissonreg}}, \code{\link{global_influence.mixpoissonreg}}
+\code{\link{summary.mixpoissonreg}}, \code{\link{predict.mixpoissonreg}}, \code{\link{influence.mixpoissonreg}}
 }

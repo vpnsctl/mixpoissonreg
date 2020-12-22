@@ -17,7 +17,7 @@
 #' @param y For \code{mixpoissonreg}: logical values indicating if the response vector should be returned as component.
 #'
 #' For \code{mixpoissonreg.fit}: a numerical vector of response variables with length \code{n}. Each coordinate must be a nonnegative-integer.
-#' @param For \code{mixpoissonreg}: logical values indicating if the model matrix \code{x} should be returned as component.
+#' @param x For \code{mixpoissonreg}: logical values indicating if the model matrix \code{x} should be returned as component.
 #'
 #' For \code{mixpoissonreg.fit}: a matrix of covariates with respect to the mean with dimension \code{(n,nbeta)}.
 #' @param w For \code{mixpoissonreg}: logical values indicating if the model matrix \code{w} should be returned as component.
@@ -138,18 +138,18 @@
 #' the \link[mixpoissonreg:residuals.mixpoissonreg]{residuals} method.
 #'
 #' It is also noteworthy that all the global and local influence analysis tools developed
-#' in Barreto-Souza and Simas (2015) are implemented in this package. See \code{\link{global_influence.mixpoissonreg}},
+#' in Barreto-Souza and Simas (2015) are implemented in this package. See \code{\link{influence.mixpoissonreg}},
 #' \code{\link{local_influence.mixpoissonreg}}, \code{\link{local_influence_plot.mixpoissonreg}}
 #' and \code{\link{local_influence_autoplot.mixpoissonreg}}.
 #'
 #' @references
-#' DOI:10.1007/s11222-015-9601-6 (\\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
+#' DOI:10.1007/s11222-015-9601-6 (\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
 #'
-#' URL:https://projecteuclid.org/euclid.isr/1112304811 (\\href{https://projecteuclid.org/euclid.isr/1112304811}{Karlis and Xekalaki; 2005})
+#' URL:https://projecteuclid.org/euclid.isr/1112304811 (\href{https://projecteuclid.org/euclid.isr/1112304811}{Karlis and Xekalaki; 2005})
 #'
-#' DOI:10.2307/3314912 (\\href{https://doi.org/10.2307/3314912}{Lawless; 1987})
+#' DOI:10.2307/3314912 (\href{https://doi.org/10.2307/3314912}{Lawless; 1987})
 #'
-#' DOI:10.1214/09-AOAS306 (\\href{http://doi.org/10.1214/09-AOAS306}{Sellers and Shmueli; 2010})
+#' DOI:10.1214/09-AOAS306 (\href{http://doi.org/10.1214/09-AOAS306}{Sellers and Shmueli; 2010})
 #'
 #' @seealso
 #' \code{\link{summary.mixpoissonreg}}, \code{\link{plot.mixpoissonreg}}, \code{\link{autoplot.mixpoissonreg}}, 
@@ -537,7 +537,7 @@ mixpoissonreg.fit <- function(y, x, w = NULL, link.mean = c("log", "sqrt"),
 #' @param y For \code{mixpoissonregML}: logical values indicating if the response vector should be returned as component.
 #'
 #' For \code{mixpoissonregML.fit}: a numerical vector of response variables with length \code{n}. Each coordinate must be a nonnegative-integer.
-#' @param For \code{mixpoissonregML}: logical values indicating if the model matrix \code{x} should be returned as component.
+#' @param x For \code{mixpoissonregML}: logical values indicating if the model matrix \code{x} should be returned as component.
 #'
 #' For \code{mixpoissonregML.fit}: a matrix of covariates with respect to the mean with dimension \code{(n,nbeta)}.
 #' @param w For \code{mixpoissonregML}: logical values indicating if the model matrix \code{w} should be returned as component.
@@ -655,7 +655,7 @@ mixpoissonreg.fit <- function(y, x, w = NULL, link.mean = c("log", "sqrt"),
 #' the \link[mixpoissonreg:residuals.mixpoissonreg]{residuals} method.
 #'
 #' It is also noteworthy that all the global and local influence analysis tools developed
-#' in Barreto-Souza and Simas (2015) are implemented in this package. See \code{\link{global_influence.mixpoissonreg}},
+#' in Barreto-Souza and Simas (2015) are implemented in this package. See \code{\link{influence.mixpoissonreg}},
 #' \code{\link{local_influence.mixpoissonreg}}, \code{\link{local_influence_plot.mixpoissonreg}}
 #' and \code{\link{local_influence_autoplot.mixpoissonreg}}.
 #'

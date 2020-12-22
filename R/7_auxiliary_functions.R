@@ -12,6 +12,7 @@
 #' The possible link functions for the mean are "log" and "sqrt".
 #' @param link.precision a string containing the link function the precision parameter.
 #' The possible link functions for the precision parameter are "identity", "log" or "inverse.sqrt".
+#' @param model the model, "NB" or "PIG". Currently not used.
 #' @return a list containing
 #' \itemize{
 #'   \item beta - the initial guesses for the mean-related parameters;

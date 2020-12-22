@@ -32,20 +32,20 @@
 #' The \code{plot} method is implemented following the same structure as the \link[stats]{plot.lm}, so it will be easy to be used by practitioners that
 #' are familiar with \code{glm} objects.
 #' 
-#' These plots allows one to perform residuals analsysis and influence diagnostics. There are other global influence functions, see \code{\link{global_influence.mixpoissonreg}}.
+#' These plots allows one to perform residuals analsysis and influence diagnostics. There are other global influence functions, see \code{\link{influence.mixpoissonreg}}.
 #' 
 #' See Barreto-Souza and Simas (2015), Cook and Weisberg (1982) and Zhu et al. (2001).
 #' 
 #' @references 
-#' DOI:10.1007/s11222-015-9601-6 (\\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
+#' DOI:10.1007/s11222-015-9601-6 (\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
 #' 
 #' Cook, D.R. and Weisberg, S. (1982) *Residuals and Influence in Regression*. (New York: Chapman and Hall, 1982)
 #' 
-#' Zhu, H.T., Lee, S.Y., Wei, B.C., Zhu, J. (2001) *Case-deletion measures formodels with incomplete data.* Biometrika, 88, 727–737. \\href{https://www.jstor.org/stable/2673442?seq=1}
+#' Zhu, H.T., Lee, S.Y., Wei, B.C., Zhu, J. (2001) *Case-deletion measures formodels with incomplete data.* Biometrika, 88, 727–737. \href{https://www.jstor.org/stable/2673442?seq=1}{https://www.jstor.org/stable/2673442?seq=1}
 #' 
 #' @seealso
 #' \code{\link{autoplot.mixpoissonreg}}, \code{\link{local_influence_plot.mixpoissonreg}}, \code{\link{local_influence_autoplot.mixpoissonreg}},
-#' \code{\link{summary.mixpoissonreg}}, \code{\link{predict.mixpoissonreg}}, \code{\link{global_influence.mixpoissonreg}}
+#' \code{\link{summary.mixpoissonreg}}, \code{\link{predict.mixpoissonreg}}, \code{\link{influence.mixpoissonreg}}
 #' @examples
 #' \donttest{
 #' data("Attendance", package = "mixpoissonreg")
@@ -328,6 +328,7 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
 #' @param type the type of variable to get the fitted values. The default is the "response" type, which provided the estimated values for the means. 
 #' The type "link" provides the estimates for the linear predictor of the mean. The type "precision" provides estimates for the precision parameters 
 #' whereas the type "variance" provides estimates for the variances.
+#' @param ... Currently not used.
 #' @seealso
 #' \code{\link{predict.mixpoissonreg}}, \code{\link{summary.mixpoissonreg}},
 #' \code{\link{coef.mixpoissonreg}}, \code{\link{vcov.mixpoissonreg}},
@@ -1041,7 +1042,7 @@ print.summary_mixpoissonreg <- function(x, ...) {
 #' @param object an object of class "mixpoissonreg" containing results from the fitted model.
 #' @param type the type of residual to be returned. Currently, the options are 'pearson' or 'score'. The default is set to 'pearson'. Notice that these
 #' residuals coincide for Negative-Binomial models.
-#' @param ... further arguments passed to or from other methods.
+#' @param ... Currently not used.
 #' @seealso
 #' \code{\link{plot.mixpoissonreg}}, \code{\link{predict.mixpoissonreg}},
 #' \code{\link{autoplot.mixpoissonreg}}, \code{\link{summary.mixpoissonreg}}
@@ -1056,7 +1057,7 @@ print.summary_mixpoissonreg <- function(x, ...) {
 #' #Score residuals:
 #' residuals(daysabs_fit, type = "score")
 #' }
-residuals.mixpoissonreg <- function(object, type = c("pearson", "score")) {
+residuals.mixpoissonreg <- function(object, type = c("pearson", "score"), ...) {
   type <- rlang::arg_match(type)
 
   if(!(type%in%c("pearson", "score"))){

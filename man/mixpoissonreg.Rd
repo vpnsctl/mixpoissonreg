@@ -66,6 +66,10 @@ intercept, the 'log' link function will be used. The possible link functions for
 
 For \code{mixpoissonreg.fit}: a numerical vector of response variables with length \code{n}. Each coordinate must be a nonnegative-integer.}
 
+\item{x}{For \code{mixpoissonreg}: logical values indicating if the model matrix \code{x} should be returned as component.
+
+For \code{mixpoissonreg.fit}: a matrix of covariates with respect to the mean with dimension \code{(n,nbeta)}.}
+
 \item{w}{For \code{mixpoissonreg}: logical values indicating if the model matrix \code{w} should be returned as component.
 
 For \code{mixpoissonreg.fit} a matrix of covariates with respect to the precision parameter. The default is \code{NULL}.
@@ -89,10 +93,6 @@ of the maximum-norm of the the gradient of the Q-function, the default is set to
 
 \item{optim_controls}{a list of control arguments to be passed to the \code{optim} function in the optimization of the model. For the control options, see
 the 'Details' in the help of \code{\link[stats]{optim}} for the possible arguments.}
-
-\item{For}{\code{mixpoissonreg}: logical values indicating if the model matrix \code{x} should be returned as component.
-
-For \code{mixpoissonreg.fit}: a matrix of covariates with respect to the mean with dimension \code{(n,nbeta)}.}
 }
 \value{
 \code{mixpoissonreg} returns an object of class "mixpoissonreg" whereas \code{mixpoissonreg.fit}
@@ -196,7 +196,7 @@ package. They coincide for NB regression models. They can be accessed via
 the \link[mixpoissonreg:residuals.mixpoissonreg]{residuals} method.
 
 It is also noteworthy that all the global and local influence analysis tools developed
-in Barreto-Souza and Simas (2015) are implemented in this package. See \code{\link{global_influence.mixpoissonreg}},
+in Barreto-Souza and Simas (2015) are implemented in this package. See \code{\link{influence.mixpoissonreg}},
 \code{\link{local_influence.mixpoissonreg}}, \code{\link{local_influence_plot.mixpoissonreg}}
 and \code{\link{local_influence_autoplot.mixpoissonreg}}.
 }
@@ -225,13 +225,13 @@ waldtest(daysabs_fit, daysabs_fit_red)
 
 }
 \references{
-DOI:10.1007/s11222-015-9601-6 (\\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
+DOI:10.1007/s11222-015-9601-6 (\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
 
-URL:https://projecteuclid.org/euclid.isr/1112304811 (\\href{https://projecteuclid.org/euclid.isr/1112304811}{Karlis and Xekalaki; 2005})
+URL:https://projecteuclid.org/euclid.isr/1112304811 (\href{https://projecteuclid.org/euclid.isr/1112304811}{Karlis and Xekalaki; 2005})
 
-DOI:10.2307/3314912 (\\href{https://doi.org/10.2307/3314912}{Lawless; 1987})
+DOI:10.2307/3314912 (\href{https://doi.org/10.2307/3314912}{Lawless; 1987})
 
-DOI:10.1214/09-AOAS306 (\\href{http://doi.org/10.1214/09-AOAS306}{Sellers and Shmueli; 2010})
+DOI:10.1214/09-AOAS306 (\href{http://doi.org/10.1214/09-AOAS306}{Sellers and Shmueli; 2010})
 }
 \seealso{
 \code{\link{summary.mixpoissonreg}}, \code{\link{plot.mixpoissonreg}}, \code{\link{autoplot.mixpoissonreg}},

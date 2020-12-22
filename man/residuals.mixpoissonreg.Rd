@@ -4,7 +4,7 @@
 \alias{residuals.mixpoissonreg}
 \title{Residuals Method for \code{mixpoissonreg} Objects}
 \usage{
-\method{residuals}{mixpoissonreg}(object, type = c("pearson", "score"))
+\method{residuals}{mixpoissonreg}(object, type = c("pearson", "score"), ...)
 }
 \arguments{
 \item{object}{an object of class "mixpoissonreg" containing results from the fitted model.}
@@ -12,7 +12,7 @@
 \item{type}{the type of residual to be returned. Currently, the options are 'pearson' or 'score'. The default is set to 'pearson'. Notice that these
 residuals coincide for Negative-Binomial models.}
 
-\item{...}{further arguments passed to or from other methods.}
+\item{...}{Currently not used.}
 }
 \description{
 Function to return 'pearson' or 'score' residuals for mixed Poisson regression models.

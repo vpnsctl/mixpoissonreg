@@ -2,13 +2,33 @@
 % Please edit documentation in R/8_tidy_mixpoissonreg.R
 \name{tidy_local_influence}
 \alias{tidy_local_influence}
-\title{tidy_local_influence}
+\alias{local_influence_autoplot}
+\alias{local_influence_benchmarks}
+\title{Tidy Functions for Local Influence Diagnostics}
 \usage{
-tidy_local_influence(model, ...)
-}
-\value{
+local_influence_autoplot(model, ...)
 
+tidy_local_influence(model, ...)
+
+local_influence_benchmarks(model, ...)
+}
+\arguments{
+\item{model}{A model object for which local influence diagnostics are desired.}
+
+\item{...}{additional arguments to be passed.}
 }
 \description{
-tidy_local_influence
+Functions to provide tidy outputs or ggplot2-based plots of local influence diagnostics.
+}
+\details{
+Local influence diagnostics were first introduced by Cook (1986), where several perturbation schemes were introduced and normal curvatures were obtained. Poon and Poon (2002)
+introduced the conformal normal curvature, which has nice properties and takes values on the unit interval \eqn{[0,1]}. Zhu and Lee (2002) following Cook (1986) and Poon and Poon (2002)
+introduced normal and conformal normal curvatures for EM-based models.
+}
+\references{
+Cook, R. D. (1986) \emph{Assessment of Local Influence.} Journal of the Royal Statistical Society. Series B (Methodological), Vol. 48, pp.133-169. \href{https://rss.onlinelibrary.wiley.com/doi/10.1111/j.2517-6161.1986.tb01398.x}{https://rss.onlinelibrary.wiley.com/doi/10.1111/j.2517-6161.1986.tb01398.x}
+
+Poon, W.-Y. and Poon, Y.S. (2002) \emph{Conformal normal curvature and assessment of local influence.}  Journal of the Royal Statistical Society. Series B (Methodological), Vol. 61, pp.51-61. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}
+
+Zhu, H.-T. and Lee, S.-Y. (2002) \emph{Local influence for incomplete data models.} Journal of the Royal Statistical Society. Series B (Methodological), Vol. 63, pp.111-126. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}
 }

@@ -18,9 +18,9 @@
 #' The variable \code{prog} is a three-level factor indicating the type of instructional program in which the student is enrolled.
 #' 
 #' @references
-#' Hughes, M. and Fisher, T. (2020) Introduction to Statistical Modeling. \\href{http://www.users.miamioh.edu/fishert4/sta363/} 
+#' Hughes, M. and Fisher, T. (2020)  \href{http://www.users.miamioh.edu/fishert4/sta363/}{Introduction to Statistical Modeling.}
 #'
-#' @source Data can be obtained from \\href{https://github.com/tjfisher19/introStatModeling}. See also \emph{Barreto-Souza and Simas (2020)} for further details.
+#' @source Data can be obtained from \href{https://github.com/tjfisher19/introStatModeling}{Introduction to Statistical Modeling Github Repository}. See also \emph{Barreto-Souza and Simas (2020)} for further details.
 #' @examples
 #' \donttest{
 #' data("Attendance", package = "mixpoissonreg")

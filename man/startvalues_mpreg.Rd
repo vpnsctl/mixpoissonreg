@@ -18,6 +18,8 @@ The possible link functions for the mean are "log" and "sqrt".}
 
 \item{link.precision}{a string containing the link function the precision parameter.
 The possible link functions for the precision parameter are "identity", "log" or "inverse.sqrt".}
+
+\item{model}{the model, "NB" or "PIG". Currently not used.}
 }
 \value{
 a list containing

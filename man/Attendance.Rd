@@ -14,7 +14,7 @@ Data frame containing 314 observations on 4 variables.
 }
 }
 \source{
-Data can be obtained from \\href{https://github.com/tjfisher19/introStatModeling}. See also \emph{Barreto-Souza and Simas (2020)} for further details.
+Data can be obtained from \href{https://github.com/tjfisher19/introStatModeling}{Introduction to Statistical Modeling Github Repository}. See also \emph{Barreto-Souza and Simas (2020)} for further details.
 }
 \usage{
 data("Attendance")
@@ -50,6 +50,6 @@ local_influence_autoplot(daysabs_fit_red)
 }
 }
 \references{
-Hughes, M. and Fisher, T. (2020) Introduction to Statistical Modeling. \\href{http://www.users.miamioh.edu/fishert4/sta363/}
+Hughes, M. and Fisher, T. (2020)  \href{http://www.users.miamioh.edu/fishert4/sta363/}{Introduction to Statistical Modeling.}
 }
 \keyword{datasets}

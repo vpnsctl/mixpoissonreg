@@ -2,7 +2,7 @@
 % Please edit documentation in R/8_tidy_mixpoissonreg.R
 \name{autoplot.mixpoissonreg}
 \alias{autoplot.mixpoissonreg}
-\title{autoplot.mixpoissonreg}
+\title{Autoplot Method for \code{mixpoissonreg} Objects}
 \usage{
 \method{autoplot}{mixpoissonreg}(
   object,
@@ -46,21 +46,95 @@
 )
 }
 \arguments{
-\item{env_alpha}{alpha of the bands of the envelope (when the fitted model has envelopes)}
+\item{object}{A \code{mixpoissonreg} object.}
+
+\item{which}{a list or vector indicating which plots should be displayed.     If a subset of the plots is required, specify a subset of the numbers 1:6,
+see caption below for the different kinds. In
+plot number 2, 'Normal Q-Q', if the \code{mixpoissonreg} object was fitted with envelopes, a quantile-quantile plot with simulated envelopes will be displayed.}
+
+\item{title}{titles to appear above the plots; character vector or list of valid graphics annotations. Can be set to "" to suppress all captions.}
+
+\item{label.repel}{Logical flag indicating whether to use \pkg{ggrepel} to place the labels.}
+
+\item{nrow}{Number of facet/subplot rows. If both \code{nrow} and \code{ncol} are \code{NULL}, the plots will be placed one at a time. For multiple plots, set values for \code{nrow}
+or \code{ncol}.}
+
+\item{ncol}{Number of facet/subplot columns. If both \code{nrow} and \code{ncol} are \code{NULL}, the plots will be placed one at a time. For multiple plots, set values for \code{nrow}
+or \code{ncol}.}
+
+\item{qqline}{logical; if \code{TRUE} and the fit does \emph{not} contain simulated
+envelopes, a qqline passing through the first and third quartiles of a standard normal distribution will be added to the normal Q-Q plot.}
+
+\item{ask}{logical; if \code{TRUE}, the user is asked before each plot.}
+
+\item{include.modeltype}{logical. Indicates whether the model type ('NB' or 'PIG') should be displayed on the captions.}
+
+\item{include.residualtype}{local. Indicates whether the name of the residual ('Pearson' or 'Score') should be displayed on the caption of plot 1 (Residuals vs. Index).}
+
+\item{sub.caption}{common title-above the figures if there are more than one. If NULL, as by default, a possible abbreviated version of \code{deparse(x$call)} is used.}
+
+\item{env_alpha}{alpha of the envelope region (when the fitted model has envelopes)}
 
 \item{env_fill}{the colour of the filling in the envelopes.}
 
 \item{gpar_sub.caption}{list of gpar parameters to be used as common title in the case of multiple plots. The title will be given in sub.caption argument. See
-the help of \code{gpar} function from the \pkg{grid} package for all the available options.}
+the help of \code{\link[grid]{gpar}} function from the \pkg{grid} package for all the available options.}
 
-\item{label.label}{vector of labels.}
-}
-\value{
+\item{colour}{line colour.}
 
+\item{size}{point size.}
+
+\item{linetype}{line type.}
+
+\item{alpha}{alpha of the plot.}
+
+\item{fill}{fill colour.}
+
+\item{shape}{point shape.}
+
+\item{label}{Logical value whether to display labels.}
+
+\item{label.label}{vector of labels. If \code{NULL}, rownames will be used as labels.}
+
+\item{label.colour}{Colour for text labels.}
+
+\item{label.alpha}{Alpha for text labels.}
+
+\item{label.size}{Size for text labels.}
+
+\item{label.angle}{Angle for text labels.}
+
+\item{label.family}{Font family for text labels.}
+
+\item{label.fontface}{Fontface for text labels.}
+
+\item{label.lineheight}{Lineheight for text labels.}
+
+\item{label.hjust}{Horizontal adjustment for text labels.}
+
+\item{label.vjust}{Vertical adjustment for text labels.}
+
+\item{label.n}{Number of points to be laeled in each plot, starting with the most extreme.}
+
+\item{ad.colour}{Line colour for additional lines.}
+
+\item{ad.linetype}{Line type for additional lines.}
+
+\item{ad.size}{Fill colour for additional lines.}
+
+\item{...}{other arguments passed to methods.}
 }
 \description{
-autoplot.mixpoissonreg
+This function provides \pkg{ggplot2}-based counterparts to the plots produced by \code{\link{plot.mixpoissonreg}}.
+Currently there are six plots available. They contain residual analysis and global influence diagnostics. The plots are selectable by
+the \code{which} argument. The plots are: Residuals vs. obs. numbers; Normal Q-Q plots, which may contain simulated envelopes, if the fitted object
+has simulated envelopes; Cook's distances vs. obs. numbers; Generalized Cook's distances vs. obs. numbers; Cook's distances vs. Generalized Cook's distances;
+Response variables vs. fitted means. By default, the first two plots and the last two plots are provided.
+
+If both ncol and nrow are \code{NULL}, the plots will be placed one at a time. To place multiple plots, set the values for \code{nrow} or \code{ncol}.
 }
 \details{
-Based on \code{autoplot.glm} from the excellent \code{ggfortify} package, \\href{https://github.com/sinhrks/ggfortify}.
+Based on \code{autoplot.lm} from the excellent \pkg{ggfortify} package, \href{https://github.com/sinhrks/ggfortify/}{ggfortify}.
+sub.caption—by default the function call—is shown as a subtitle (under the x-axis title) on each plot when plots are on separate pages, or as a subtitle
+in the outer margin when there are multiple plots per page.
 }
