@@ -3,7 +3,7 @@
 ### Dev badges:
 [![](https://img.shields.io/badge/devel%20version-1.0.0-blue.svg)](https://github.com/vpnsctl/mixpoissonreg/main)
 [![R build status](https://github.com/vpnsctl/mixpoissonreg/workflows/R-CMD-check/badge.svg)](https://github.com/vpnsctl/mixpoissonreg/actions)
-[![Build Status](https://travis-ci.com/vpnsctl/bbreg.svg?branch=main)](https://travis-ci.com/vpnsctl/mixpoissonreg)
+[![Build Status](https://travis-ci.com/vpnsctl/mixpoissonreg.svg?branch=main)](https://travis-ci.com/vpnsctl/mixpoissonreg)
 ---
 
 The *mixpoissonreg* package deals with regression models with response variables being count data. 
@@ -22,7 +22,7 @@ To install the *mixpoissonreg* package from this repository, just run the comman
 devtools::install_github("vpnsctl/mixpoissonreg")
 ```
 
-To install the *mixpoissonreg* package from this repository **with vignette**, run the command:
+To install the *mixpoissonreg* package from this repository **with vignettes**, run the command:
 ```{r}
 #install.packages("devtools")
 devtools::install_github("vpnsctl/mixpoissonreg", build_vignettes = TRUE)
@@ -40,6 +40,7 @@ The *mixpoissonreg* package currently has the following vignettes:
 * [Diagnostic plots with the *mixpoissonreg* package](https://rpubs.com/alexandrebsimas/plots-mixpoissonreg)
 * [Global and local influence analysis with the *mixpoissonreg* package](https://rpubs.com/alexandrebsimas/influence-mixpoissonreg)
 * [Confidence and predictions intervals with  the *mixpoissonreg* package](https://rpubs.com/alexandrebsimas/intervals-mixpoissonreg)
+* [*mixpoissonreg* in the tidyverse](https://rpubs.com/alexandrebsimas/tidyverse-mixpoissonreg)
 
 ## Basic usage
 
