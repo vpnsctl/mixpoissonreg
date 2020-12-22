@@ -157,17 +157,18 @@ on <code>cooks.distance.mixpoissonreg</code> function).</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for mixpoissonreg</span>
-<span class='fu'><a href='https://rdrr.io/r/stats/influence.measures.html'>hatvalues</a></span><span class='op'>(</span><span class='va'>model</span>, parameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"mean"</span>, <span class='st'>"precision"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/stats/influence.measures.html'>hatvalues</a></span><span class='op'>(</span><span class='va'>model</span>, parameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"mean"</span>, <span class='st'>"precision"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for mixpoissonreg</span>
 <span class='fu'><a href='https://rdrr.io/r/stats/influence.measures.html'>cooks.distance</a></span><span class='op'>(</span>
   <span class='va'>model</span>,
   type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"CD"</span>, <span class='st'>"GCD"</span>, <span class='st'>"GCDmean"</span>, <span class='st'>"GCDprecision"</span>, <span class='st'>"LD"</span>, <span class='st'>"QD"</span><span class='op'>)</span>,
-  hat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"mean"</span>, <span class='st'>"precision"</span><span class='op'>)</span>
+  hat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"mean"</span>, <span class='st'>"precision"</span><span class='op'>)</span>,
+  <span class='va'>...</span>
 <span class='op'>)</span>
 
 <span class='co'># S3 method for mixpoissonreg</span>
-<span class='fu'><a href='https://rdrr.io/r/stats/lm.influence.html'>influence</a></span><span class='op'>(</span><span class='va'>model</span>, do.coef <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
+<span class='fu'><a href='https://rdrr.io/r/stats/lm.influence.html'>influence</a></span><span class='op'>(</span><span class='va'>model</span>, do.coef <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -180,6 +181,10 @@ on <code>cooks.distance.mixpoissonreg</code> function).</p>
       <th>parameters</th>
       <td><p>the parameter to which the hat values will be computed. The options are 'mean' and 'precision'. The default is 'mean'. For hatvalues with respect to the mean
 the model must be fitted with 'x' set to TRUE, and for hatvalues with respect to the precision the model must be fitted with 'w' set to TRUE.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Currently not used.</p></td>
     </tr>
     <tr>
       <th>type</th>

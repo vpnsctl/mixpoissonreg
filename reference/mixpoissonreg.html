@@ -388,7 +388,7 @@ and <code><a href='tidy_local_influence.mixpoissonreg.html'>local_influence_auto
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Examples using the Attendance dataset:</span>
 <span class='co'># \donttest{</span>
-<span class='va'>daysabs_fit</span> <span class='op'>&lt;-</span> <span class='fu'>mixpoissonreg</span><span class='op'>(</span><span class='va'>daysabs</span> <span class='op'>~</span> <span class='va'>gender</span> <span class='op'>+</span> <span class='va'>math</span> <span class='op'>+</span> 
+<span class='va'>daysabs_fit</span> <span class='op'>&lt;-</span> <span class='fu'>mixpoissonreg</span><span class='op'>(</span><span class='va'>daysabs</span> <span class='op'>~</span> <span class='va'>gender</span> <span class='op'>+</span> <span class='va'>math</span> <span class='op'>+</span>
 <span class='va'>prog</span> <span class='op'>|</span> <span class='va'>gender</span> <span class='op'>+</span> <span class='va'>math</span> <span class='op'>+</span> <span class='va'>prog</span>, data <span class='op'>=</span> <span class='va'>Attendance</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>daysabs_fit</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; 
@@ -424,19 +424,31 @@ and <code><a href='tidy_local_influence.mixpoissonreg.html'>local_influence_auto
 #&gt; Number of iterations of the EM algorithm = 2493</div><div class='input'><span class='co'># Base R plot of the fit</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>daysabs_fit</span><span class='op'>)</span>
 </div><div class='img'><img src='mixpoissonreg-1.png' alt='' width='700' height='433' /></div><div class='img'><img src='mixpoissonreg-2.png' alt='' width='700' height='433' /></div><div class='img'><img src='mixpoissonreg-3.png' alt='' width='700' height='433' /></div><div class='img'><img src='mixpoissonreg-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># ggplot2 plot of the fit</span>
-<span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>daysabs_fit</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in autoplot(daysabs_fit): could not find function "autoplot"</span></div><div class='input'><span class='co'># plot of local influence measures</span>
+<span class='fu'><a href='autoplot.mixpoissonreg.html'>autoplot</a></span><span class='op'>(</span><span class='va'>daysabs_fit</span><span class='op'>)</span>
+</div><div class='img'><img src='mixpoissonreg-5.png' alt='' width='700' height='433' /></div><div class='img'><img src='mixpoissonreg-6.png' alt='' width='700' height='433' /></div><div class='img'><img src='mixpoissonreg-7.png' alt='' width='700' height='433' /></div><div class='img'><img src='mixpoissonreg-8.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># plot of local influence measures</span>
 <span class='fu'><a href='local_influence.html'>local_influence_plot</a></span><span class='op'>(</span><span class='va'>daysabs_fit</span><span class='op'>)</span>
-</div><div class='img'><img src='mixpoissonreg-5.png' alt='' width='700' height='433' /></div><div class='img'><img src='mixpoissonreg-6.png' alt='' width='700' height='433' /></div><div class='img'><img src='mixpoissonreg-7.png' alt='' width='700' height='433' /></div><div class='img'><img src='mixpoissonreg-8.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># ggplot2 plot of local influence measures</span>
+</div><div class='img'><img src='mixpoissonreg-9.png' alt='' width='700' height='433' /></div><div class='img'><img src='mixpoissonreg-10.png' alt='' width='700' height='433' /></div><div class='img'><img src='mixpoissonreg-11.png' alt='' width='700' height='433' /></div><div class='img'><img src='mixpoissonreg-12.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># ggplot2 plot of local influence measures</span>
 <span class='fu'><a href='tidy_local_influence.html'>local_influence_autoplot</a></span><span class='op'>(</span><span class='va'>daysabs_fit</span><span class='op'>)</span>
-</div><div class='img'><img src='mixpoissonreg-9.png' alt='' width='700' height='433' /></div><div class='img'><img src='mixpoissonreg-10.png' alt='' width='700' height='433' /></div><div class='img'><img src='mixpoissonreg-11.png' alt='' width='700' height='433' /></div><div class='img'><img src='mixpoissonreg-12.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># Fitting a reduced model of the sabe type as the previous one</span>
-<span class='va'>daysabs_fit_red</span> <span class='op'>&lt;-</span> <span class='fu'>mixpoissonreg</span><span class='op'>(</span><span class='va'>daysabs</span> <span class='op'>~</span> <span class='va'>gender</span> <span class='op'>+</span> <span class='va'>math</span> <span class='op'>+</span> 
+</div><div class='img'><img src='mixpoissonreg-13.png' alt='' width='700' height='433' /></div><div class='img'><img src='mixpoissonreg-14.png' alt='' width='700' height='433' /></div><div class='img'><img src='mixpoissonreg-15.png' alt='' width='700' height='433' /></div><div class='img'><img src='mixpoissonreg-16.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># Fitting a reduced model of the sabe type as the previous one</span>
+<span class='va'>daysabs_fit_red</span> <span class='op'>&lt;-</span> <span class='fu'>mixpoissonreg</span><span class='op'>(</span><span class='va'>daysabs</span> <span class='op'>~</span> <span class='va'>gender</span> <span class='op'>+</span> <span class='va'>math</span> <span class='op'>+</span>
 <span class='va'>prog</span> <span class='op'>|</span> <span class='va'>prog</span>, data <span class='op'>=</span> <span class='va'>Attendance</span>, model <span class='op'>=</span> <span class='va'>daysabs_fit</span><span class='op'>$</span><span class='va'>modeltype</span><span class='op'>)</span>
 <span class='co'># Likelihood ratio test:</span>
-<span class='fu'>lrtest</span><span class='op'>(</span><span class='va'>daysabs_fit</span>, <span class='va'>daysabs_fit_red</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in lrtest(daysabs_fit, daysabs_fit_red): could not find function "lrtest"</span></div><div class='input'><span class='co'># Wald test:</span>
-<span class='fu'>waldtest</span><span class='op'>(</span><span class='va'>daysabs_fit</span>, <span class='va'>daysabs_fit_red</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in waldtest(daysabs_fit, daysabs_fit_red): could not find function "waldtest"</span></div><div class='input'><span class='co'># }</span>
+<span class='fu'>lmtest</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/lmtest/man/lrtest.html'>lrtest</a></span><span class='op'>(</span><span class='va'>daysabs_fit</span>, <span class='va'>daysabs_fit_red</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Likelihood ratio test
+#&gt; 
+#&gt; Model 1: daysabs ~ gender + math + prog | gender + math + prog
+#&gt; Model 2: daysabs ~ gender + math + prog | prog
+#&gt;   #Df  LogLik Df  Chisq Pr(&gt;Chisq)
+#&gt; 1  10 -853.20                     
+#&gt; 2   8 -854.41 -2 2.4076        0.3</div><div class='input'><span class='co'># Wald test:</span>
+<span class='fu'>lmtest</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/lmtest/man/waldtest.html'>waldtest</a></span><span class='op'>(</span><span class='va'>daysabs_fit</span>, <span class='va'>daysabs_fit_red</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Wald test
+#&gt; 
+#&gt; Model 1: daysabs ~ gender + math + prog | gender + math + prog
+#&gt; Model 2: daysabs ~ gender + math + prog | prog
+#&gt;   Res.Df Df  Chisq Pr(&gt;Chisq)
+#&gt; 1    304                     
+#&gt; 2    306 -2 2.4126     0.2993</div><div class='input'><span class='co'># }</span>
 
 </div></pre>
   </div>

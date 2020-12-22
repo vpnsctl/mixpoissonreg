@@ -167,7 +167,8 @@ creates ggplot2-based highly customizable local influence plots.</p>
   direction <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"canonical"</span>, <span class='st'>"max.eigen"</span><span class='op'>)</span>,
   parameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"all"</span>, <span class='st'>"mean"</span>, <span class='st'>"precision"</span><span class='op'>)</span>,
   mean.covariates <span class='op'>=</span> <span class='cn'>NULL</span>,
-  precision.covariates <span class='op'>=</span> <span class='cn'>NULL</span>
+  precision.covariates <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>...</span>
 <span class='op'>)</span>
 
 <span class='co'># S3 method for mixpoissonreg</span>
@@ -267,6 +268,10 @@ mean-related covariates. The default is NULL.</p></td>
 and 'simultaneous-explanatory'
 perturbation schemes. If NULL, the 'precision-explanatory' and 'simultaneous-explanatory' perturbation schemes will be computed by perturbing all
 precision-related covariates. The default is NULL.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Currently not used.</p></td>
     </tr>
     <tr>
       <th>which</th>
@@ -399,10 +404,6 @@ the top 'n.influential' observations will be identified in the plot by their ind
     <tr>
       <th>ad.size</th>
       <td><p>Fill colour for additional lines.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>other arguments passed to methods.</p></td>
     </tr>
     </table>
 

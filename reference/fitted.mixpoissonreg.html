@@ -182,7 +182,7 @@ whereas the type "variance" provides estimates for the variances.</p></td>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"Attendance"</span>, package <span class='op'>=</span> <span class='st'>"mixpoissonreg"</span><span class='op'>)</span>
 
-<span class='va'>daysabs_fit</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mixpoissonreg.html'>mixpoissonreg</a></span><span class='op'>(</span><span class='va'>daysabs</span> <span class='op'>~</span> <span class='va'>gender</span> <span class='op'>+</span> <span class='va'>math</span> <span class='op'>+</span> 
+<span class='va'>daysabs_fit</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mixpoissonreg.html'>mixpoissonreg</a></span><span class='op'>(</span><span class='va'>daysabs</span> <span class='op'>~</span> <span class='va'>gender</span> <span class='op'>+</span> <span class='va'>math</span> <span class='op'>+</span>
 <span class='va'>prog</span> <span class='op'>|</span> <span class='va'>gender</span> <span class='op'>+</span> <span class='va'>math</span> <span class='op'>+</span> <span class='va'>prog</span>, data <span class='op'>=</span> <span class='va'>Attendance</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/stats/fitted.values.html'>fitted</a></span><span class='op'>(</span><span class='va'>daysabs_fit</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;         1         2         3         4         5         6         7         8 
