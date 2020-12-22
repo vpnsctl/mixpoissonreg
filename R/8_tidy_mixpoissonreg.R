@@ -1,32 +1,36 @@
-#' @import broom
+#' @import generics
 #' @import ggplot2
 #' @import tibble
 #' @import magrittr
-#' @import dplyr
 #' @import ggfortify
-#' @import gridExtra
+#' @importFrom dplyr arrange desc bind_rows mutate filter select left_join
+#' @importFrom gridExtra grid.arrange
+#' @importFrom ggrepel geom_text_repel
+#' @importFrom rlang arg_match 
+#' @importFrom rlang :=
+#' @importFrom methods new
 
 #############################################################################################
 #' @title augment.mixpoissonreg
 #' @description 
 #' @param 
 #' @return 
-
-augment.mixpoissonreg <- function(x, data = model.frame(x), newdata = NULL, type.predict = c("response", "link", "precision", "variance"), 
+augment.mixpoissonreg <- function(x, data = stats::model.frame(x), newdata = NULL, type.predict = c("response", "link", "precision", "variance"), 
                                   type.residuals = c("pearson", "score"), se_fit = FALSE, conf_int = TRUE, pred_int = FALSE, ...) {
+  .index <- .resid <- .resfit <-  NULL
   type.predict <- rlang::arg_match(type.predict)
   type.residuals <- rlang::arg_match(type.residuals)
   
   if(is.null(newdata)){
-    newdata = model.frame(x)
-    res <- residuals(x, type = type.residuals)
+    newdata = stats::model.frame(x)
+    res <- stats::residuals(x, type = type.residuals)
   } else{
     res <- NULL
   }
   
   df <- as_tibble(newdata)
   
-  pred <- predict(x, newdata = newdata, type = type.predict, se.fit = se_fit)
+  pred <- stats::predict(x, newdata = newdata, type = type.predict, se.fit = se_fit)
   
   if(se_fit){
     df$.fitted <- pred$fit %>% unname()
@@ -37,34 +41,34 @@ augment.mixpoissonreg <- function(x, data = model.frame(x), newdata = NULL, type
 
   
   if(conf_int){
-    conf_int <- predict(x, newdata = newdata, interval = "confidence", ...)
+    conf_int <- stats::predict(x, newdata = newdata, interval = "confidence", ...)
     df$.fittedlwrconf <- conf_int[, "lwr"] %>% unname()
     df$.fitteduprconf <- conf_int[, "upr"] %>% unname()
   }
   
   if(pred_int){
-    pred_int <- predict(x, newdata = newdata,  interval = "prediction", ...)
+    pred_int <- stats::predict(x, newdata = newdata,  interval = "prediction", ...)
     df$.fittedlwrpred <- pred_int[, "lwr"] %>% unname()
     df$.fitteduprpred <-pred_int[, "upr"] %>% unname()
   }
   
   if(!is.null(res)){
     df$.resid <- res 
-    df$.resfit <- residuals(x, type = x$residualname)
-    df$.hat <- hatvalues(x, parameters = "mean") %>% unname()
-    df$.cooksd <- cooks.distance(x, type = "CD", hat = "mean") %>% unname()
-    df$.gencooksd <- cooks.distance(x, type = "GCD", hat = "mean") %>% unname()
+    df$.resfit <- stats::residuals(x, type = x$residualname)
+    df$.hat <- stats::hatvalues(x, parameters = "mean") %>% unname()
+    df$.cooksd <- stats::cooks.distance(x, type = "CD", hat = "mean") %>% unname()
+    df$.gencooksd <- stats::cooks.distance(x, type = "GCD", hat = "mean") %>% unname()
     
     env <- x$envelope
     
     if (!is.null(env)) {
       df$.index <- 1:nrow(df)
       temp_tbl <- tibble(.resfit = df$.resfit, .index = df$.index)
-      temp_tbl <- temp_tbl %>% arrange(.resfit)
+      temp_tbl <- temp_tbl %>% dplyr::arrange(.resfit)
       temp_tbl$.lwrenv <- env[3,]
       temp_tbl$.mdnenv <- env[2,]
       temp_tbl$.uprenv = env[1,]
-      df <- left_join(df, temp_tbl, by = c(".index", ".resfit")) %>% select(-.index)
+      df <- dplyr::left_join(df, temp_tbl, by = c(".index", ".resfit")) %>% select(-.index)
     } 
   }
   
@@ -91,6 +95,7 @@ glance.mixpoissonreg <- function(x, ...){
 #' @return   
 
 tidy.mixpoissonreg <- function(x, conf.int = FALSE, conf.level = 0.95){
+  join_term <- NULL
   retmean <- as_tibble(summary(x)$coefficients$mean, rownames = "term")
   colnames(retmean) <- c("term", "estimate", "std.error", "statistic", 
                      "p.value")
@@ -103,10 +108,10 @@ tidy.mixpoissonreg <- function(x, conf.int = FALSE, conf.level = 0.95){
   ret <- dplyr::bind_rows(retmean,retprec)
   
   if (conf.int) {
-    ret$join_term <- names(coef(x, parameters = "all"))
-    ci <- as_tibble(confint(x, level = conf.level), rownames = "term")
+    ret$join_term <- names(stats::coef(x, parameters = "all"))
+    ci <- as_tibble(stats::confint(x, level = conf.level), rownames = "term")
     names(ci) <- c("join_term", "conf.low", "conf.high")
-    ret <- left_join(ret, ci, by = "join_term") %>% select(-join_term)
+    ret <- dplyr::left_join(ret, ci, by = "join_term") %>% select(-join_term)
   }
   ret
 }
@@ -125,7 +130,7 @@ tidy_local_influence.mixpoissonreg <- function(x, perturbation = c("case_weights
     loc_infl <- local_influence(x, perturbation = perturbation, curvature = curvature, direction = direction, 
                                 parameters = parameters, mean.covariates = mean.covariates, precision.covariates = precision.covariates)
   
-    tidy_loc_infl <- tibble(.rows = nobs(x))
+    tidy_loc_infl <- tibble(.rows = stats::nobs(x))
     
     for(pert in perturbation){
       tidy_loc_infl = tidy_loc_infl %>% add_column(!!pert := loc_infl[[pert]])
@@ -165,7 +170,7 @@ local_influence_benchmarks.mixpoissonreg <- function(x, perturbation = c("case_w
 #' @param gpar_sub.caption list of gpar parameters to be used as common title in the case of multiple plots. The title will be given in sub.caption argument. See
 #' the help of \code{gpar} function from the \pkg{grid} package for all the available options.
 #' @return 
-#' @details Based on \code{autoplot.glm} from the excellent \code{ggfortify} package, \href{https://github.com/sinhrks/ggfortify}.
+#' @details Based on \code{autoplot.glm} from the excellent \code{ggfortify} package, \\href{https://github.com/sinhrks/ggfortify}.
   
 autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Residuals vs Obs. number",
                                                                                "Normal Q-Q",
@@ -175,8 +180,8 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
                                                                                "Response vs Fitted means"),
                                    label.repel = TRUE,
                                    nrow = NULL, ncol = NULL,
-                                    qqline = TRUE, ask = prod(par("mfcol")) <
-                                      length(which) && dev.interactive(), include.modeltype = TRUE,
+                                    qqline = TRUE, ask = prod(graphics::par("mfcol")) <
+                                      length(which) && grDevices::dev.interactive(), include.modeltype = TRUE,
                                     include.residualtype = FALSE, sub.caption = NULL,
                                    env_alpha = 0.5, env_fill = "grey70", gpar_sub.caption = list(fontface = "bold"),
                                     colour = "#444444", size = NULL, linetype = NULL, alpha = NULL, fill = NULL, 
@@ -186,6 +191,8 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
                                     label.hjust = NULL, label.vjust = NULL, 
                                     label.n = 3, ad.colour = "#888888", ad.linetype = "dashed", ad.size = 0.2, ...){
   p1 <- p2 <- p3 <- p4 <- p5 <- p6 <- NULL
+  .resid <- .cooksd <- .gencooksd <- .obs <- .fitted <-.lwrenv <- .uprenv <- .mdnenv <- NULL
+  
   if (is.null(sub.caption)) {
     cal <- object$call
     if (!is.na(m.f <- match("formula", names(cal)))) {
@@ -201,7 +208,7 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
   }
   
   plot.data <- augment(object, type.residuals = object$residualname, type.predict = "response")
-  n <- nobs(object)
+  n <- stats::nobs(object)
   plot.data$.index <- 1:n
   if(is.null(label.label)){
     plot.data$.label <- rownames(plot.data)
@@ -248,7 +255,7 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
       if (is.null(label.colour)) {
         label.colour <- "#000000"
       }
-      if (label.repel && "ggrepel" %in% rownames(installed.packages())) {
+      if (label.repel) {
         textfunc <- ggrepel::geom_text_repel
       }
       else {
@@ -544,12 +551,12 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
       nrow <- 0
     if(is.null(ncol))
       ncol <- 0
-    p <- new("ggmultiplot", plots = plot.list, nrow = nrow, ncol = ncol)
+    p <- methods::new("ggmultiplot", plots = plot.list, nrow = nrow, ncol = ncol)
     
-    gpar <- do.call(grid::gpar, gpar_sub.caption)
-    title_multi <- grid::textGrob(sub.caption, gp=gpar)
-    gridExtra::grid.arrange(grobs = p@plots, top = title_multi, gp=gpar(fontface="bold"))
-    grDevices::devAskNewPage(ask = dev.interactive())
+    gpar_multi <- do.call(grid::gpar, gpar_sub.caption)
+    title_multi <- grid::textGrob(sub.caption, gp=gpar_multi)
+    gridExtra::grid.arrange(grobs = p@plots, top = title_multi)
+    grDevices::devAskNewPage(ask = grDevices::dev.interactive())
   } else{
     invisible()
   }
@@ -571,8 +578,8 @@ local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), ti
                                                    mean.covariates = NULL, precision.covariates = NULL,
                                                    label.repel = TRUE,
                                                    nrow = NULL, ncol = NULL,
-                                                   ask = prod(par("mfcol")) <
-                                                     length(which) && dev.interactive(), include.modeltype = TRUE,
+                                                   ask = prod(graphics::par("mfcol")) <
+                                                     length(which) && grDevices::dev.interactive(), include.modeltype = TRUE,
                                                   sub.caption = NULL,
                                                    gpar_sub.caption = list(fontface = "bold"), detect.influential = TRUE, n.influential = 5,
                                                   draw.benchmark = FALSE,
@@ -583,6 +590,7 @@ local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), ti
                                                    label.hjust = NULL, label.vjust = NULL, 
                                                    ad.colour = "#888888", ad.linetype = "dashed", ad.size = 0.2, ...){
   p <- list()
+  tmp <- NULL
   p[[1]] <- p[[2]] <- p[[3]] <- p[[4]] <- p[[5]] <- NULL
   if (is.null(sub.caption)) {
     cal <- model$call
@@ -609,7 +617,7 @@ local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), ti
                                                             direction = direction, parameters = parameters,
                                                             mean.covariates = mean.covariates,
                                                             precision.covariates = precision.covariates)
-  n <- nobs(model)
+  n <- stats::nobs(model)
   plot.data$.index <- 1:n
   
   if(is.null(label.label)){
@@ -634,7 +642,7 @@ local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), ti
       if (is.null(label.colour)) {
         label.colour <- "#000000"
       }
-      if (label.repel && "ggrepel" %in% rownames(installed.packages())) {
+      if (label.repel) {
         textfunc <- ggrepel::geom_text_repel
       }
       else {
@@ -725,7 +733,7 @@ local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), ti
   
   .decorate.label.influential <- function(p, data) {
     if (label & n.influential > 0) {
-      p <- plot_label(p = p, data = data, label = label, 
+      p <- plot_label_influential(p = p, data = data, label = label, 
                       label.label = ".label", label.colour = label.colour, 
                       label.alpha = label.alpha, label.size = label.size, 
                       label.angle = label.angle, label.family = label.family, 
@@ -807,12 +815,12 @@ local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), ti
       nrow <- 0
     if(is.null(ncol))
       ncol <- 0
-    p <- new("ggmultiplot", plots = plot.list, nrow = nrow, ncol = ncol)
+    p <- methods::new("ggmultiplot", plots = plot.list, nrow = nrow, ncol = ncol)
     
-    gpar <- do.call(grid::gpar, gpar_sub.caption)
-    title_multi <- grid::textGrob(sub.caption, gp=gpar)
-    gridExtra::grid.arrange(grobs = p@plots, top = title_multi, gp=gpar(fontface="bold"))
-    grDevices::devAskNewPage(ask = dev.interactive())
+    gpar_multi <- do.call(grid::gpar, gpar_sub.caption)
+    title_multi <- grid::textGrob(sub.caption, gp=gpar_multi)
+    gridExtra::grid.arrange(grobs = p@plots, top = title_multi)
+    grDevices::devAskNewPage(ask = grDevices::dev.interactive())
   } else{
     invisible()
   }

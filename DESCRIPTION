@@ -1,24 +1,25 @@
 Package: mixpoissonreg
-Title: Mixed Poisson Regression Models for Modeling Count Data
+Title: Mixed Poisson Regression for Overdispersed Count Data
 Version: 1.0.0
 Authors@R: 
     c(person(given = "Alexandre B.",
            family = "Simas",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
+           email = "alexandre.impa@gmail.com",
            comment = c(ORCID = "0000-0003-2562-2829")),
 	person(given = "Wagner",
              family = "Barreto-Souza",
-             role = "ctb",
+             role = "aut",
              email = "wagnerbs85@gmail.com",
              comment = c(ORCID = "0000-0003-0831-7881")))
-Description: Fits mixed Poisson regression models (Poisson-Inverse Gaussian or Negative-Binomial) on data sets with response variables being count data. The models can have varying precision parameter, where a linear regression structure (through a link function) is assumed to hold on the precision parameter. The Expectation-Maximization algorithm for both these models (Poisson Inverse Gaussian and Negative Binomial) is an important contribution of this package. Another important feature of this package is the functions to perform global and local influence analysis. See the reference Barreto-Souza and Simas (2015) <http://doi.org/10.1007/s11222-015-9601-6> for further details.  
-License: `use_gpl3_license()` | file LICENSE
+Maintainer: Alexandre B. Simas <alexandre.impa@gmail.com>
+Description: Fits mixed Poisson regression models (Poisson-Inverse Gaussian or Negative-Binomial) on data sets with response variables being count data. The models can have varying precision parameter, where a linear regression structure (through a link function) is assumed to hold on the precision parameter. The Expectation-Maximization algorithm for both these models (Poisson Inverse Gaussian and Negative Binomial) is an important contribution of this package. Another important feature of this package is the set of functions to perform global and local influence analysis. See Barreto-Souza and Simas (2015) <http://doi.org/10.1007/s11222-015-9601-6> for further details.  
+License: GPL-3 | file LICENSE
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/vpnsctl/mixpoissonreg/
 BugReports: https://github.com/vpnsctl/mixpoissonreg/issues
-Imports: pbapply, Formula
+Imports: pbapply, Formula, Rfast, dplyr, gamlss.dist, generics, ggfortify, ggplot2, gridExtra, lmtest, magrittr, statmod, tibble, rlang, ggrepel, methods
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 NeedsCompilation: no

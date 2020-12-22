@@ -1,5 +1,3 @@
-#' @import gamlss.dist
-
 #############################################################################################
 #' @name ML_mixpoisson
 #' @title Fitting maximum-likelihood mixed Poisson regression models

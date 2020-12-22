@@ -1,4 +1,5 @@
 #' @import statmod
+#' @import pbapply
 
 #############################################################################################
 #' @name startvalues_mpreg
@@ -184,7 +185,7 @@ generate_data_mixpoisson <- function(coefficients, x, w,
     y_temp <- switch(model,
                 "NB" = {stats::rnbinom(n = n, mu = mu, size = phi)},
                 "PIG" = {ig = rinvgauss(n = n,mean=1,dispersion=1/phi)
-                  y  = rpois(n = n, lambda = ig*mu)
+                  y  = stats::rpois(n = n, lambda = ig*mu)
                   y}
                 )
     return(y_temp) #
@@ -257,7 +258,7 @@ envelope_mixpoisson <- function(residual, estimation_method,
   residuals_envelope <- apply(residuals_envelope, 2, sort)
   id1 <- max(1, round(nsim_env * (1 - prob) / 2))
   id2 <- round(nsim_env * (1 + prob) / 2)
-  envelopes <- rbind(residuals_envelope[id2, ], apply(residuals_envelope, 2, median), residuals_envelope[id1, ])
+  envelopes <- rbind(residuals_envelope[id2, ], apply(residuals_envelope, 2, stats::median), residuals_envelope[id1, ])
   rownames(envelopes) <- c("upper", "median", "lower")
   return(envelopes)
 }
@@ -441,11 +442,11 @@ kappa_r <- function(y, mu, phi, model) {
 #' @noRd
 update.mixpoissonreg <- function (object, formula., ..., evaluate = TRUE)
 {
-  if (is.null(call <- getCall(object)))
+  if (is.null(call <- stats::getCall(object)))
     stop("need an object with call component")
   extras <- match.call(expand.dots = FALSE)$...
   if (!missing(formula.))
-    call$formula <- formula(update(Formula(formula(object)),
+    call$formula <- stats::formula(stats::update(Formula::Formula(stats::formula(object)),
                                    formula.))
   if (length(extras)) {
     existing <- !is.na(match(names(extras), names(call)))

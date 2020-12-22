@@ -18,16 +18,19 @@
 #' The variable \code{prog} is a three-level factor indicating the type of instructional program in which the student is enrolled.
 #' 
 #' @references
-#' Hughes, M. and Fisher, T. (2020) Introduction to Statistical Modeling. \href{http://www.users.miamioh.edu/fishert4/sta363/} 
+#' Hughes, M. and Fisher, T. (2020) Introduction to Statistical Modeling. \\href{http://www.users.miamioh.edu/fishert4/sta363/} 
 #'
-#' @source Data can be obtained from \href{https://github.com/tjfisher19/introStatModeling}. See also \emph{Barreto-Souza and Simas (2020)} for further details.
+#' @source Data can be obtained from \\href{https://github.com/tjfisher19/introStatModeling}. See also \emph{Barreto-Souza and Simas (2020)} for further details.
 #' @examples
-#' data("DaysAbsent", package = "mixpoissonreg")
+#' \donttest{
+#' data("Attendance", package = "mixpoissonreg")
 #' 
-#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, data = DaysAbsent, model = "PIG")
+#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + 
+#' math + prog, data = Attendance, model = "PIG")
 #' summary(daysabs_fit)
 #' 
-#' daysabs_fit_red <- mixpoissonreg(daysabs ~ gender + math + prog | prog, data = DaysAbsent, model = "PIG")
+#' daysabs_fit_red <- mixpoissonreg(daysabs ~ gender + math + prog | prog, 
+#' data = Attendance, model = "PIG")
 #' summary(daysabs_fit_red)
 #' 
 #' # Plot of the fit with all precision covariates
@@ -37,4 +40,5 @@
 #' # Plot, using ggplot2, of the reduced fit
 #' autoplot(daysabs_fit_red)
 #' local_influence_autoplot(daysabs_fit_red)
-"DaysAbsent"
+#' }
+"Attendance"

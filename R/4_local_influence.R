@@ -1,4 +1,4 @@
-#' @import Rfast
+#' @importFrom Rfast nth colVars
 
 #############################################################################################
 #' @name local_influence.mixpoissonreg
@@ -6,7 +6,7 @@
 #' @aliases local_influence.mixpoissonreg local_influence_plot.mixpoissonreg
 #' @description These functions provides local influence diagnostic quantities. Currently the conformal normal and normal curvatures are available
 #' under several perturbation schemes. The default is the conformal normal curvature since
-#' it takes values on [0,1] and other nice properties (see Zhu and Lee, 2001 and Poon and Poon, 1999 for further details).
+#' it takes values on \eqn{[0,1]} and other nice properties (see Zhu and Lee, 2001 and Poon and Poon, 1999 for further details).
 #' @param model a \code{mixpoissonreg} object.
 #' @param perturbation a list or vector of perturbation schemes to be returned. The currently available schemes are
 #' "case_weights", "hidden_variable", "mean_explanatory", "precision_explanatory", "simultaneous_explanatory". See Barreto-Souza and Simas (2015) for further details.
@@ -67,15 +67,15 @@
 #' 
 #'
 #' @references 
-#' DOI:10.1007/s11222-015-9601-6 (\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
+#' DOI:10.1007/s11222-015-9601-6 (\\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
 #' 
-#' Cook, R. D. (1986) *Assessment of Local Influence.* Journal of the Royal Statistical Society. Series B (Methodological), Vol. 48, pp.133-169. \href{https://rss.onlinelibrary.wiley.com/doi/10.1111/j.2517-6161.1986.tb01398.x}
+#' Cook, R. D. (1986) *Assessment of Local Influence.* Journal of the Royal Statistical Society. Series B (Methodological), Vol. 48, pp.133-169. \\href{https://rss.onlinelibrary.wiley.com/doi/10.1111/j.2517-6161.1986.tb01398.x}
 #' 
-#' Lesaffre, E. and Verbeke, G. (1998) *Local Influence in Linear Mixed Models*. Biometrics, 54, pp. 570-582. \href{https://www.jstor.org/stable/3109764}
+#' Lesaffre, E. and Verbeke, G. (1998) *Local Influence in Linear Mixed Models*. Biometrics, 54, pp. 570-582. \\href{https://www.jstor.org/stable/3109764}
 #' 
-#' Poon, W.-Y. and Poon, Y.S. (2002) *Conformal normal curvature and assessment of local influence.*  Journal of the Royal Statistical Society. Series B (Methodological), Vol. 61, pp.51-61. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}
+#' Poon, W.-Y. and Poon, Y.S. (2002) *Conformal normal curvature and assessment of local influence.*  Journal of the Royal Statistical Society. Series B (Methodological), Vol. 61, pp.51-61. \\href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}
 #'   
-#' Zhu, H.-T. and Lee, S.-Y. (2002) *Local influence for incomplete data models.* Journal of the Royal Statistical Society. Series B (Methodological), Vol. 63, pp.111-126. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}
+#' Zhu, H.-T. and Lee, S.-Y. (2002) *Local influence for incomplete data models.* Journal of the Royal Statistical Society. Series B (Methodological), Vol. 63, pp.111-126. \\href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}
 
 
 #' @rdname local_influence.mixpoissonreg
@@ -84,7 +84,7 @@ local_influence.mixpoissonreg <- function(model, perturbation = c("case_weights"
                                                                   "mean_explanatory", "precision_explanatory",
                                                                   "simultaneous_explanatory"), curvature = c("conformal", "normal"),
                                           direction = c("canonical", "max.eigen"), parameters = c("all", "mean", "precision"),
-                                          mean.covariates = NULL, precision.covariates = NULL){
+                                          mean.covariates = NULL, precision.covariates = NULL, ...){
 loc_infl <- list()
 
 parameters <- rlang::arg_match(parameters)
@@ -235,7 +235,7 @@ for(pert in perturbation){
   names(loc_infl[[pert]]) = 1:n
   benchmark = switch(curvature,
                      "conformal" = {
-                       ifelse(direction == "canonical", 1/n + 2*sd(loc_infl[[pert]]), NA) #Zhu and Lee (2001)
+                       ifelse(direction == "canonical", 1/n + 2*stats::sd(loc_infl[[pert]]), NA) #Zhu and Lee (2001)
                      },
                      "normal" = {
                        ifelse(direction == "canonical", 2 * mean(loc_infl[[pert]]), NA) # Verbeke and Molenberghs (2000, sect. 11.3)
@@ -287,9 +287,9 @@ local_influence_plot.mixpoissonreg <- function(model, which = c(1,2,3,4),
                                                curvature = c("conformal", "normal"),
                                                direction = c("canonical", "max.eigen"), parameters = c("all", "mean", "precision"),
                                                mean.covariates = NULL, precision.covariates = NULL, main = "",
-                                               ask = prod(par("mfcol")) <
-                                                 length(which) && dev.interactive(),
-                                               labels.id = names(residuals(model)),
+                                               ask = prod(graphics::par("mfcol")) <
+                                                 length(which) && grDevices::dev.interactive(),
+                                               labels.id = names(stats::residuals(model)),
                                                cex.id = 0.75,
                                                cex.oma.main = 1.25,
                                                cex.caption = 1,
@@ -302,9 +302,9 @@ local_influence_plot.mixpoissonreg <- function(model, which = c(1,2,3,4),
     NA_character_
   else {
     if(include.modeltype){
-      as.graphicsAnnot(paste0(caption[[k]], " - ", model$modeltype, " Regression"))
+      grDevices::as.graphicsAnnot(paste0(caption[[k]], " - ", model$modeltype, " Regression"))
     } else {
-      as.graphicsAnnot(caption[[k]])
+      grDevices::as.graphicsAnnot(caption[[k]])
     }
   }
 
@@ -336,7 +336,7 @@ local_influence_plot.mixpoissonreg <- function(model, which = c(1,2,3,4),
                       }
   )
 
-  one.fig <- prod(par("mfcol")) == 1
+  one.fig <- prod(graphics::par("mfcol")) == 1
 
 loc_infl <- local_influence(model, curvature = curvature,
                             direction = direction, parameters = parameters,
@@ -344,8 +344,8 @@ loc_infl <- local_influence(model, curvature = curvature,
                             precision.covariates = precision.covariates)
 
 if (ask) {
-  oask <- devAskNewPage(TRUE)
-  on.exit(devAskNewPage(oask))
+  oask <- grDevices::devAskNewPage(TRUE)
+  on.exit(grDevices::devAskNewPage(oask))
 }
 
 pert <- c("case_weights", "hidden_variable",
@@ -364,7 +364,7 @@ for(i in 1:length(pert)){
     graphics::mtext(getCaption(i), side = 3, cex = cex.caption)
 
     if (one.fig)
-      title(sub = sub.caption, ...)
+      graphics::title(sub = sub.caption, ...)
 
     if(detect.influential){
       bm <- attr(loc_infl[[pert[i]]], "benchmark")
@@ -376,17 +376,17 @@ for(i in 1:length(pert)){
         infl_points <- (loc_infl[[pert[i]]][infl_points] > bm)
         idx_x <- as.integer(names(which(infl_points == TRUE)))
         idx_y <- loc_infl[[pert[i]]][idx_x]
-        text(idx_x, idx_y, labels = labels.id[idx_x], cex = cex.id, xpd = TRUE, pos = 3, offset = 0.2)
+        graphics::text(idx_x, idx_y, labels = labels.id[idx_x], cex = cex.id, xpd = TRUE, pos = 3, offset = 0.2)
       } else{
         idx_x_pos <- infl_points[which(loc_infl[[pert[i]]][infl_points] >= 0)]
         idx_x_neg <- setdiff(infl_points, idx_x_pos)
         idx_y_pos <- loc_infl[[pert[i]]][idx_x_pos]
         idx_y_neg <- loc_infl[[pert[i]]][idx_x_neg]
         if(length(idx_x_pos)>0){
-          text(idx_x_pos, idx_y_pos, labels = labels.id[idx_x_pos], cex = cex.id, xpd = TRUE, pos = 3, offset = 0.2)
+          graphics::text(idx_x_pos, idx_y_pos, labels = labels.id[idx_x_pos], cex = cex.id, xpd = TRUE, pos = 3, offset = 0.2)
         }
         if(length(idx_x_neg)>0){
-          text(idx_x_neg, idx_y_neg, labels = labels.id[idx_x_neg], cex = cex.id, xpd = TRUE, pos = 1, offset = 0.2)
+          graphics::text(idx_x_neg, idx_y_neg, labels = labels.id[idx_x_neg], cex = cex.id, xpd = TRUE, pos = 1, offset = 0.2)
         }
       }
 
@@ -395,17 +395,17 @@ for(i in 1:length(pert)){
     if(draw.benchmark){
       bm <- attr(loc_infl[[pert[i]]], "benchmark")
       if(!is.na(bm)){
-        abline(a = bm, b = 0, lty = lty.benchmark)
+        graphics::abline(a = bm, b = 0, lty = lty.benchmark)
       }
     }
 
-    dev.flush()
+    grDevices::dev.flush()
   }
 }
 
 
-if (!one.fig && par("oma")[3L] >= 1)
-  mtext(sub.caption, outer = TRUE, cex = 1.25)
+if (!one.fig && graphics::par("oma")[3L] >= 1)
+  graphics::mtext(sub.caption, outer = TRUE, cex = 1.25)
 
 invisible()
 }
@@ -424,14 +424,14 @@ invisible()
 #' \code{local_influence_plot} is a generic function to provide friendly plots of such diagnostics. 
 #' 
 #' Local influence diagnostics were first introduced by Cook (1986), where several perturbation schemes were introduced and normal curvatures were obtained. Poon and Poon (2002) 
-#' introduced the conformal normal curvature, which has nice properties and takes values on the unit interval [0,1]. Zhu and Lee (2002) following Cook (1986) and Poon and Poon (2002)
+#' introduced the conformal normal curvature, which has nice properties and takes values on the unit interval \eqn{[0,1]}. Zhu and Lee (2002) following Cook (1986) and Poon and Poon (2002)
 #' introduced normal and conformal normal curvatures for EM-based models. 
 #' @references 
-#' Cook, R. D. (1986) *Assessment of Local Influence.* Journal of the Royal Statistical Society. Series B (Methodological), Vol. 48, pp.133-169. \href{https://rss.onlinelibrary.wiley.com/doi/10.1111/j.2517-6161.1986.tb01398.x}
+#' Cook, R. D. (1986) *Assessment of Local Influence.* Journal of the Royal Statistical Society. Series B (Methodological), Vol. 48, pp.133-169. \\href{https://rss.onlinelibrary.wiley.com/doi/10.1111/j.2517-6161.1986.tb01398.x}
 #' 
-#' Poon, W.-Y. and Poon, Y.S. (2002) *Conformal normal curvature and assessment of local influence.*  Journal of the Royal Statistical Society. Series B (Methodological), Vol. 61, pp.51-61. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}
+#' Poon, W.-Y. and Poon, Y.S. (2002) *Conformal normal curvature and assessment of local influence.*  Journal of the Royal Statistical Society. Series B (Methodological), Vol. 61, pp.51-61. \\href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}
 #'   
-#' Zhu, H.-T. and Lee, S.-Y. (2002) *Local influence for incomplete data models.* Journal of the Royal Statistical Society. Series B (Methodological), Vol. 63, pp.111-126. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}
+#' Zhu, H.-T. and Lee, S.-Y. (2002) *Local influence for incomplete data models.* Journal of the Royal Statistical Society. Series B (Methodological), Vol. 63, pp.111-126. \\href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}
 #' @seealso \code{\link{local_influence.mixpoissonreg}}, \code{\link{local_influence_plot.mixpoissonreg}}, 
 #' \code{\link{local_influence_autoplot.mixpoissonreg}}
 #'

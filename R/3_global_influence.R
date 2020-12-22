@@ -37,13 +37,13 @@
 #' 
 #'
 #' @references 
-#' DOI:10.1007/s11222-015-9601-6 (\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
+#' DOI:10.1007/s11222-015-9601-6 (\\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
 #' 
 #' Cook, D.R. and Weisberg, S. (1982) *Residuals and Influence in Regression*. (New York: Chapman and Hall, 1982)
 #' 
-#' DOI:10.1214/aos/1176345513 (\href{https://projecteuclid.org/euclid.aos/1176345513}{Pregibon; 1981})
+#' DOI:10.1214/aos/1176345513 (\\href{https://projecteuclid.org/euclid.aos/1176345513}{Pregibon; 1981})
 #' 
-#' Zhu, H.T., Lee, S.Y., Wei, B.C., Zhu, J. (2001) *Case-deletion measures formodels with incomplete data.* Biometrika, 88, 727–737. \href{https://www.jstor.org/stable/2673442?seq=1}
+#' Zhu, H.T., Lee, S.Y., Wei, B.C., Zhu, J. (2001) *Case-deletion measures formodels with incomplete data.* Biometrika, 88, 727–737. \\href{https://www.jstor.org/stable/2673442?seq=1}
 
 #' @rdname global_influence.mixpoissonreg
 
@@ -93,18 +93,18 @@ h = switch(hat,
              if(is.null(model$x)){
                stop("x component not found. fit the model again with argument x = TRUE")
              }
-             hatvalues(model, parameters = hat)
+             stats::hatvalues(model, parameters = hat)
              },
            "precision" = {
              if(is.null(model$w)){
                stop("w component not found. fit the model again with argument w = TRUE")
              }
-             hatvalues(model, parameters = hat)
+             stats::hatvalues(model, parameters = hat)
            })
 dist <- switch(type,
                "CD" = {
                  p <- length(model$coefficients$mean)
-                 pearson_residuals <- residuals(model, type = "pearson")
+                 pearson_residuals <- stats::residuals(model, type = "pearson")
                  h*(pearson_residuals^2)/(p*(1-h)^2)
                },
                "GCD" = {
@@ -359,8 +359,8 @@ dist
 
 influence.mixpoissonreg <- function(model, do.coef = TRUE){
 influence_mpreg <- list()
-hat_mean <- hatvalues(model, parameters = "mean")
-hat_precision <- hatvalues(model, parameters = "precision")
+hat_mean <- stats::hatvalues(model, parameters = "mean")
+hat_precision <- stats::hatvalues(model, parameters = "precision")
 influence_mpreg$hat.mean <- hat_mean
 influence_mpreg$hat.precision <- hat_precision
 
@@ -430,9 +430,9 @@ if(do.coef){
   rownames(influence_mpreg$coefficients.precision) <- 1:nrow(influence_mpreg$coefficients.precision)
 }
 
-influence_mpreg$pear.res <- residuals(model, type = "pearson")
+influence_mpreg$pear.res <- stats::residuals(model, type = "pearson")
 
-influence_mpreg$score.res <- residuals(model, type = "score")
+influence_mpreg$score.res <- stats::residuals(model, type = "score")
 
 influence_mpreg
 }

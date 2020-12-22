@@ -1,3 +1,4 @@
+#' @import Formula
 #############################################################################################
 #' @name mixpoissonreg
 #' @title Mixed Poisson Regression for Overdispersed Count Data
@@ -142,13 +143,13 @@
 #' and \code{\link{local_influence_autoplot.mixpoissonreg}}.
 #'
 #' @references
-#' DOI:10.1007/s11222-015-9601-6 (\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
+#' DOI:10.1007/s11222-015-9601-6 (\\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
 #'
-#' URL:https://projecteuclid.org/euclid.isr/1112304811 (\href{https://projecteuclid.org/euclid.isr/1112304811}{Karlis and Xekalaki; 2005})
+#' URL:https://projecteuclid.org/euclid.isr/1112304811 (\\href{https://projecteuclid.org/euclid.isr/1112304811}{Karlis and Xekalaki; 2005})
 #'
-#' DOI:10.2307/3314912 (\href{https://doi.org/10.2307/3314912}{Lawless; 1987})
+#' DOI:10.2307/3314912 (\\href{https://doi.org/10.2307/3314912}{Lawless; 1987})
 #'
-#' DOI:10.1214/09-AOAS306 (\href{http://doi.org/10.1214/09-AOAS306}{Sellers and Shmueli; 2010})
+#' DOI:10.1214/09-AOAS306 (\\href{http://doi.org/10.1214/09-AOAS306}{Sellers and Shmueli; 2010})
 #'
 #' @seealso
 #' \code{\link{summary.mixpoissonreg}}, \code{\link{plot.mixpoissonreg}}, \code{\link{autoplot.mixpoissonreg}}, 
@@ -159,7 +160,8 @@
 #' @examples
 #' # Examples using the Attendance dataset:
 #' \donttest{
-#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, data = Attendance)
+#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + 
+#' prog | gender + math + prog, data = Attendance)
 #' summary(daysabs_fit)
 #' # Base R plot of the fit
 #' plot(daysabs_fit)
@@ -170,7 +172,8 @@
 #' # ggplot2 plot of local influence measures
 #' local_influence_autoplot(daysabs_fit)
 #' # Fitting a reduced model of the sabe type as the previous one
-#' daysabs_fit_red <- mixpoissonreg(daysabs ~ gender + math + prog | prog, data = DaysAbsent, model = daysabs_fit$modeltype)
+#' daysabs_fit_red <- mixpoissonreg(daysabs ~ gender + math + 
+#' prog | prog, data = Attendance, model = daysabs_fit$modeltype)
 #' # Likelihood ratio test:
 #' lrtest(daysabs_fit, daysabs_fit_red)
 #' # Wald test:
@@ -225,7 +228,7 @@ mixpoissonreg <- function(formula, data, link.mean = c("log", "sqrt"),
   MF[[1]] <- as.name("model.frame")
   MF <- eval(MF, parent.frame())
 
-  model_matrix <- model.frame(Formula_mpreg, data)
+  model_matrix <- stats::model.frame(Formula_mpreg, data)
 
   ## Extract terms (covariate matrices and response vector)
   MTerms_x <- stats::terms(Formula_mpreg, data = data, rhs = 1)
@@ -550,7 +553,7 @@ mixpoissonreg.fit <- function(y, x, w = NULL, link.mean = c("log", "sqrt"),
 #' The possible link functions for the mean are "log" and "sqrt".
 #' @param link.precision optionally, a string containing the link function the precision parameter. If omitted and the only precision
 #' covariate is the intercept, the 'identity' link function will be used, if omitted and there is a precision covariate other than the
-#' intercept, the 'log' link function will be used. The possible link functions for the precision parameter are "identity" and "inverse.sqrt" (which is \phi^{-1/2} = w_i^T alpha).
+#' intercept, the 'log' link function will be used. The possible link functions for the precision parameter are "identity" and "inverse.sqrt" (which is \eqn{\phi^{-1/2} = w_i^T alpha}).
 #' @param em_controls only used with the 'EM' method. A list containing two elements: \code{maxit} that contains the maximum number of iterations of the EM algorithm, the default is set to 5000;
 #' \code{em_tol} that defines the tolerance value to control the convergence criterion in the EM-algorithm, the default is set to 10^(-5). \code{em_tolgrad} that defines the tolerance value
 #' of the maximum-norm of the the gradient of the Q-function, the default is set to 10^(-2).
@@ -657,13 +660,13 @@ mixpoissonreg.fit <- function(y, x, w = NULL, link.mean = c("log", "sqrt"),
 #' and \code{\link{local_influence_autoplot.mixpoissonreg}}.
 #'
 #' @references
-#' DOI:10.1007/s11222-015-9601-6 (\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
+#' DOI:10.1007/s11222-015-9601-6 (\\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
 #'
-#' URL:https://projecteuclid.org/euclid.isr/1112304811 (\href{https://projecteuclid.org/euclid.isr/1112304811}{Karlis and Xekalaki; 2005})
+#' URL:https://projecteuclid.org/euclid.isr/1112304811 (\\href{https://projecteuclid.org/euclid.isr/1112304811}{Karlis and Xekalaki; 2005})
 #'
-#' DOI:10.2307/3314912 (\href{https://doi.org/10.2307/3314912}{Lawless; 1987})
+#' DOI:10.2307/3314912 (\\href{https://doi.org/10.2307/3314912}{Lawless; 1987})
 #'
-#' DOI:10.1214/09-AOAS306 (\href{http://doi.org/10.1214/09-AOAS306}{Sellers and Shmueli; 2010})
+#' DOI:10.1214/09-AOAS306 (\\href{http://doi.org/10.1214/09-AOAS306}{Sellers and Shmueli; 2010})
 #'
 #' @seealso
 #' \code{\link{summary.mixpoissonreg}}, \code{\link{plot.mixpoissonreg}}, \code{\link{autoplot.mixpoissonreg}}, 
@@ -674,7 +677,8 @@ mixpoissonreg.fit <- function(y, x, w = NULL, link.mean = c("log", "sqrt"),
 #' @examples
 #' # Examples using the Attendance dataset:
 #' \donttest{
-#' daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math + prog | gender + math + prog, data = Attendance)
+#' daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math + 
+#' prog | gender + math + prog, data = Attendance)
 #' summary(daysabs_fit_ml)
 #' # Base R plot of the fit
 #' plot(daysabs_fit_ml)
@@ -685,7 +689,8 @@ mixpoissonreg.fit <- function(y, x, w = NULL, link.mean = c("log", "sqrt"),
 #' # ggplot2 plot of local influence measures
 #' local_influence_autoplot(daysabs_fit_ml)
 #' # Fitting a reduced model of the sabe type as the previous one
-#' daysabs_fit_ml_red <- mixpoissonregML(daysabs ~ gender + math + prog | prog, data = DaysAbsent, model = daysabs_fit$modeltype)
+#' daysabs_fit_ml_red <- mixpoissonregML(daysabs ~ gender + math + 
+#' prog | prog, data = Attendance, model = daysabs_fit$modeltype)
 #' # Likelihood ratio test:
 #' lrtest(daysabs_fit_ml, daysabs_fit_ml_red)
 #' # Wald test:
@@ -718,7 +723,7 @@ mixpoissonregML <- function(formula, data, link.mean = c("log", "sqrt"),
 }
 
 
-#' @rdname mixpoissonreg
+#' @rdname mixpoissonregML
 #' @export
 
 mixpoissonregML.fit <- function(y, x, w = NULL, link.mean = c("log", "sqrt"),

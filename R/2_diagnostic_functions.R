@@ -37,11 +37,11 @@
 #' See Barreto-Souza and Simas (2015), Cook and Weisberg (1982) and Zhu et al. (2001).
 #' 
 #' @references 
-#' DOI:10.1007/s11222-015-9601-6 (\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
+#' DOI:10.1007/s11222-015-9601-6 (\\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
 #' 
 #' Cook, D.R. and Weisberg, S. (1982) *Residuals and Influence in Regression*. (New York: Chapman and Hall, 1982)
 #' 
-#' Zhu, H.T., Lee, S.Y., Wei, B.C., Zhu, J. (2001) *Case-deletion measures formodels with incomplete data.* Biometrika, 88, 727–737. \href{https://www.jstor.org/stable/2673442?seq=1}
+#' Zhu, H.T., Lee, S.Y., Wei, B.C., Zhu, J. (2001) *Case-deletion measures formodels with incomplete data.* Biometrika, 88, 727–737. \\href{https://www.jstor.org/stable/2673442?seq=1}
 #' 
 #' @seealso
 #' \code{\link{autoplot.mixpoissonreg}}, \code{\link{local_influence_plot.mixpoissonreg}}, \code{\link{local_influence_autoplot.mixpoissonreg}},
@@ -50,14 +50,16 @@
 #' \donttest{
 #' data("Attendance", package = "mixpoissonreg")
 #' 
-#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, data = Attendance)
+#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + 
+#' prog | gender + math + prog, data = Attendance)
 #' plot(daysabs_fit, which = 1:6)
 #' 
 #' par(mfrow = c(2,2))
 #' plot(daysabs_fit)
 #' 
 #' par(mfrow = c(1,1))
-#' daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math + prog | gender + math + prog, data = Attendance, envelope = 100)
+#' daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math + 
+#' prog | gender + math + prog, data = Attendance, envelope = 100)
 #' plot(daysabs_fit_ml, which = 2)
 #' }
 plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
@@ -69,9 +71,9 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
                                               "Response vs Fitted means"
                                               ),
                                sub.caption = NULL, qqline = TRUE, main = "",
-                               ask = prod(par("mfcol")) <
-                                 length(which) && dev.interactive(),
-                               labels.id = names(residuals(x)),
+                               ask = prod(graphics::par("mfcol")) <
+                                 length(which) && grDevices::dev.interactive(),
+                               labels.id = names(stats::residuals(x)),
                                label.pos = c(4,2),
                                type.cookplot = 'h',
                                id.n = 3,
@@ -86,9 +88,9 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
     NA_character_
   else {
     if(include.modeltype){
-      as.graphicsAnnot(paste0(caption[[k]], " - ", x$modeltype, " Regression"))
+      grDevices::as.graphicsAnnot(paste0(caption[[k]], " - ", x$modeltype, " Regression"))
     } else {
-      as.graphicsAnnot(caption[[k]])
+      grDevices::as.graphicsAnnot(caption[[k]])
     }
   }
   
@@ -133,7 +135,7 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
     }
   }
   
-  one.fig <- prod(par("mfcol")) == 1
+  one.fig <- prod(graphics::par("mfcol")) == 1
   
   if (ask) {
     oask <- grDevices::devAskNewPage(TRUE)
@@ -143,10 +145,10 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
 
   if (1 %in% which) {
     # First plot (residuals vs index)
-    res <- residuals(x, type = x$residualname)
+    res <- stats::residuals(x, type = x$residualname)
     ylim <- range(res, na.rm = TRUE)
     if (id.n > 0) 
-      ylim <- extendrange(r = ylim, f = 0.08)
+      ylim <- grDevices::extendrange(r = ylim, f = 0.08)
     grDevices::dev.hold()
     residualname <- paste0(toupper(substring(x$residualname, 1, 1)), substring(x$residualname, 2))
     
@@ -159,7 +161,7 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
     graphics::abline(0, 0, lty = 3)
     
     if (one.fig)
-      title(sub = sub.caption, ...)
+      graphics::title(sub = sub.caption, ...)
     
     graphics::mtext(getCaption(1), side = 3, cex = cex.caption)
     
@@ -170,7 +172,7 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
   # Second plot (QQ-plot)
   if (2 %in% which) {
     env <- x$envelope
-    res <- residuals(x, type = x$residualname)
+    res <- stats::residuals(x, type = x$residualname)
     ylim <- range(res, env, na.rm = TRUE)
     ylim[2L] <- ylim[2L] + diff(ylim) * 0.075
     grDevices::dev.hold()
@@ -183,7 +185,7 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
     qq <- stats::qqnorm(res, xlab = "Theoretical quantiles", ylab = ylab, ylim = ylim, main = main, ...)
     
     if (one.fig)
-      title(sub = sub.caption, ...)
+      graphics::title(sub = sub.caption, ...)
     
     if (is.null(env) == FALSE) {
       aux <- sort(qq$x)
@@ -206,7 +208,7 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
   # Third plot (Cook's distance)
   
   if (3 %in% which) {
-    CD <- cooks.distance(x, type = "CD")
+    CD <- stats::cooks.distance(x, type = "CD")
     
     ylab = "Cook's distance"
     ylim <- range(CD, na.rm = TRUE)
@@ -218,7 +220,7 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
     
     graphics::plot(CD, type = type.cookplot, main = main, xlab = "Obs. number", ylab = ylab, ylim=ylim, ...)
     if (one.fig)
-      title(sub = sub.caption, ...)
+      graphics::title(sub = sub.caption, ...)
     
     graphics::mtext(getCaption(3), side = 3, cex = cex.caption)
     
@@ -230,7 +232,7 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
   # Fourth plot (Generalized Cook's distance)
   
   if (4 %in% which) {
-    GCD <- cooks.distance(x, type = "GCD")
+    GCD <- stats::cooks.distance(x, type = "GCD")
     
     ylab = "Generalized Cook's distance"
     ylim <- range(GCD, na.rm = TRUE)
@@ -243,7 +245,7 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
     graphics::plot(GCD, type = type.cookplot, main = main, ylab = ylab, 
                    xlab = "Obs. number", ylim=ylim, ...)
     if (one.fig)
-      title(sub = sub.caption, ...)
+      graphics::title(sub = sub.caption, ...)
     
     graphics::mtext(getCaption(4), side = 3, cex = cex.caption)
     
@@ -255,19 +257,19 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
   # Fifth plot (Cook's dist vs Generalized Cook's dist)
   
   if(5 %in% which) {
-    CD <- cooks.distance(x, type = "CD")
-    GCD <- cooks.distance(x, type = "GCD")
+    CD <- stats::cooks.distance(x, type = "CD")
+    GCD <- stats::cooks.distance(x, type = "GCD")
     
     ylim <- range(CD, na.rm = TRUE)
     
     if (id.n > 0) 
-      ylim <- extendrange(r = ylim, f = 0.08)
+      ylim <- grDevices::extendrange(r = ylim, f = 0.08)
     
     grDevices::dev.hold()
     
     graphics::plot(GCD, CD, main = main, ylab = "Cook's distance", xlab = "Generalized Cook's distance", ylim=ylim, ...)
     if (one.fig)
-      title(sub = sub.caption, ...)
+      graphics::title(sub = sub.caption, ...)
     
     graphics::mtext(getCaption(5), side = 3, cex = cex.caption)
     
@@ -295,7 +297,7 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
     
     graphics::plot(mu_est, y, xlab = "Predicted values", ylab = "Response values", main = main, ...)
     if (one.fig)
-      title(sub = sub.caption, ...)
+      graphics::title(sub = sub.caption, ...)
     graphics::abline(0, 1, lty = 3)
     graphics::mtext(getCaption(6), side = 3, cex = cex.caption)
     
@@ -311,8 +313,8 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
     grDevices::dev.flush()
   }
 
-  if (!one.fig && par("oma")[3L] >= 1)
-    mtext(sub.caption, outer = TRUE, cex = 1.25)
+  if (!one.fig && graphics::par("oma")[3L] >= 1)
+    graphics::mtext(sub.caption, outer = TRUE, cex = 1.25)
   
   invisible()
 }
@@ -334,7 +336,8 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
 #' \donttest{
 #' data("Attendance", package = "mixpoissonreg")
 #' 
-#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, data = Attendance)
+#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + 
+#' prog | gender + math + prog, data = Attendance)
 #' fitted(daysabs_fit)
 #' fitted(daysabs_fit, type = "precision")
 #' }
@@ -421,7 +424,8 @@ fitted.mixpoissonreg <- function(object, type = c("response", "link", "precision
 #' \donttest{
 #' data("Attendance", package = "mixpoissonreg")
 #' 
-#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, data = Attendance)
+#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + 
+#' prog | gender + math + prog, data = Attendance)
 #' predict(daysabs_fit, interval = "confidence")
 #' predict(daysabs_fit, type = "link", se.fit = TRUE)
 #' }
@@ -459,17 +463,17 @@ predict.mixpoissonreg <- function(object, newdata = NULL, type = c("response", "
       pred_matrix <- switch(interval,
                             "confidence" = {
                               x_matrix <- object$x
-                              std_error <- sqrt(diag(x_matrix%*%vcov(fit, parameters = "mean")%*%t(x_matrix)))
+                              std_error <- sqrt(diag(x_matrix%*%stats::vcov(fit, parameters = "mean")%*%t(x_matrix)))
                               pred_matrix <- switch(type,
                                                     "response" = {
                                                       link_mean <- build_links_mpreg(fit$link.mean)
-                                                      lwr_bound <- link_mean$linkinv(stats::fitted(fit, type = 'link') + qnorm( (1-level)/2 )*std_error)
-                                                      upr_bound <- link_mean$linkinv(stats::fitted(fit, type = 'link') + qnorm( (1+level)/2 )*std_error)
+                                                      lwr_bound <- link_mean$linkinv(stats::fitted(fit, type = 'link') + stats::qnorm( (1-level)/2 )*std_error)
+                                                      upr_bound <- link_mean$linkinv(stats::fitted(fit, type = 'link') + stats::qnorm( (1+level)/2 )*std_error)
                                                       cbind(stats::fitted(fit, type = "response"), lwr_bound, upr_bound)
                                                     },
                                                     "link" = {
-                                                      lwr_bound <- stats::fitted(fit, type = 'link') + qnorm( (1-level)/2 )*std_error
-                                                      upr_bound <- stats::fitted(fit, type = 'link') + qnorm( (1+level)/2 )*std_error
+                                                      lwr_bound <- stats::fitted(fit, type = 'link') + stats::qnorm( (1-level)/2 )*std_error
+                                                      upr_bound <- stats::fitted(fit, type = 'link') + stats::qnorm( (1+level)/2 )*std_error
                                                       cbind(stats::fitted(fit, type = "link"), lwr_bound, upr_bound)
                                                     },
                                                     "variance" = {
@@ -504,8 +508,8 @@ predict.mixpoissonreg <- function(object, newdata = NULL, type = c("response", "
 
                                                       mean_link_scale <- stats::fitted(fit, type = 'link')
                                                       precision_link_scale <- fit$w %*% alpha_est
-                                                      std_error_mean <- sqrt(diag(x_matrix%*%vcov(object, parameters = "mean")%*%t(x_matrix)))
-                                                      std_error_precision <- sqrt(diag(w_matrix%*%vcov(object, parameters = "precision")%*%t(w_matrix)))
+                                                      std_error_mean <- sqrt(diag(x_matrix%*%stats::vcov(object, parameters = "mean")%*%t(x_matrix)))
+                                                      std_error_precision <- sqrt(diag(w_matrix%*%stats::vcov(object, parameters = "precision")%*%t(w_matrix)))
 
                                                       pred_matrix <- switch(fit$modeltype,
                                                                             "NB" = {
@@ -526,7 +530,7 @@ predict.mixpoissonreg <- function(object, newdata = NULL, type = c("response", "
                                                                                 phi_pred <- link_precision$linkinv(stats::rnorm(nsim_pred, mean = precision_link_scale[i], sd = std_error_precision[i]))
                                                                                 phi_pred[phi_pred <= 0] = 10^(-5)
                                                                                 y_sim  = sapply(1:nsim_pred, function(j){ ig <- rIG(nsim_pred_y,mu=1,sigma=1/sqrt(phi_pred[j]))
-                                                                                                  rpois(nsim_pred_y,ig*mu_pred[j])
+                                                                                stats::rpois(nsim_pred_y,ig*mu_pred[j])
                                                                                 })
                                                                                 y_sim <- sort(y_sim)
                                                                                 idx_lwr <- max(1, round(nsim_pred * nsim_pred_y * (1 - level) / 2))
@@ -575,7 +579,7 @@ predict.mixpoissonreg <- function(object, newdata = NULL, type = c("response", "
         names(std_error) = 1:length(object$y)
       } else{
         x_matrix <- object$x
-        std_error <- sqrt(diag(x_matrix%*%vcov(object, parameters = "mean")%*%t(x_matrix)))
+        std_error <- sqrt(diag(x_matrix%*%stats::vcov(object, parameters = "mean")%*%t(x_matrix)))
       }
       predictions_temp$se.fit <- std_error
       predictions <- predictions_temp
@@ -634,17 +638,17 @@ predict.mixpoissonreg <- function(object, newdata = NULL, type = c("response", "
       }
       pred_matrix <- switch(interval,
                             "confidence" = {
-                              std_error <- sqrt(diag(matrix_temp_x%*%vcov(object, parameters = "mean")%*%t(matrix_temp_x)))
+                              std_error <- sqrt(diag(matrix_temp_x%*%stats::vcov(object, parameters = "mean")%*%t(matrix_temp_x)))
                               pred_matrix <- switch(type,
                                                     "response" = {
                                                       link_mean <- build_links_mpreg(fit$link.mean)
-                                                      lwr_bound <- link_mean$linkinv(matrix_temp_x %*% beta_est + qnorm( (1-level)/2 )*std_error)
-                                                      upr_bound <- link_mean$linkinv(matrix_temp_x %*% beta_est + qnorm( (1+level)/2 )*std_error)
+                                                      lwr_bound <- link_mean$linkinv(matrix_temp_x %*% beta_est + stats::qnorm( (1-level)/2 )*std_error)
+                                                      upr_bound <- link_mean$linkinv(matrix_temp_x %*% beta_est + stats::qnorm( (1+level)/2 )*std_error)
                                                       cbind(predictions, lwr_bound, upr_bound)
                                                     },
                                                     "link" = {
-                                                      lwr_bound <- predictions + qnorm( (1-level)/2 )*std_error
-                                                      upr_bound <- predictions + qnorm( (1+level)/2 )*std_error
+                                                      lwr_bound <- predictions + stats::qnorm( (1-level)/2 )*std_error
+                                                      upr_bound <- predictions + stats::qnorm( (1+level)/2 )*std_error
                                                       cbind(predictions, lwr_bound, upr_bound)
                                                     },
                                                     "variance" = {
@@ -678,8 +682,8 @@ predict.mixpoissonreg <- function(object, newdata = NULL, type = c("response", "
 
                                                       mean_link_scale <- matrix_temp_x %*% beta_est
                                                       precision_link_scale <- matrix_temp_w %*% alpha_est
-                                                      std_error_mean <- sqrt(diag(matrix_temp_x%*%vcov(object, parameters = "mean")%*%t(matrix_temp_x)))
-                                                      std_error_precision <- sqrt(diag(matrix_temp_w%*%vcov(object, parameters = "precision")%*%t(matrix_temp_w)))
+                                                      std_error_mean <- sqrt(diag(matrix_temp_x%*%stats::vcov(object, parameters = "mean")%*%t(matrix_temp_x)))
+                                                      std_error_precision <- sqrt(diag(matrix_temp_w%*%stats::vcov(object, parameters = "precision")%*%t(matrix_temp_w)))
 
                                                       pred_matrix <- switch(fit$modeltype,
                                                                             "NB" = {
@@ -700,7 +704,7 @@ predict.mixpoissonreg <- function(object, newdata = NULL, type = c("response", "
                                                                                 phi_pred <- link_precision$linkinv(stats::rnorm(nsim_pred, mean = precision_link_scale[i], sd = std_error_precision[i]))
                                                                                 phi_pred[phi_pred <= 0] = 10^(-5)
                                                                                 y_sim  = sapply(1:nsim_pred, function(j){ ig <- rIG(nsim_pred_y,mu=1,sigma=1/sqrt(phi_pred[j]))
-                                                                                rpois(nsim_pred_y,ig*mu_pred[j])
+                                                                                stats::rpois(nsim_pred_y,ig*mu_pred[j])
                                                                                 })
                                                                                 y_sim <- sort(y_sim)
                                                                                 idx_lwr <- max(1, round(nsim_pred * nsim_pred_y * (1 - level) / 2))
@@ -748,7 +752,7 @@ predict.mixpoissonreg <- function(object, newdata = NULL, type = c("response", "
         std_error <- rep(NA, nrow(newdata))
         names(std_error) = 1:nrow(newdata)
       } else{
-        std_error <- sqrt(diag(matrix_temp_x%*%vcov(object, parameters = "mean")%*%t(matrix_temp_x)))
+        std_error <- sqrt(diag(matrix_temp_x%*%stats::vcov(object, parameters = "mean")%*%t(matrix_temp_x)))
       }
       predictions_temp$se.fit <- std_error
       predictions <- predictions_temp
@@ -772,7 +776,8 @@ predict.mixpoissonreg <- function(object, newdata = NULL, type = c("response", "
 #' \donttest{
 #' data("Attendance", package = "mixpoissonreg")
 #' 
-#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, data = Attendance)
+#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + 
+#' prog | gender + math + prog, data = Attendance)
 #' vcov(daysabs_fit)
 #' vcov(daysabs_fit, parameters = "mean")
 #' }
@@ -820,7 +825,8 @@ vcov.mixpoissonreg <- function(object, parameters = c("all", "mean", "precision"
 #' \donttest{
 #' data("Attendance", package = "mixpoissonreg")
 #' 
-#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, data = Attendance)
+#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + 
+#' prog | gender + math + prog, data = Attendance)
 #' coef(daysabs_fit)
 #' coef(daysabs_fit, parameters = "precision")
 #' }
@@ -874,10 +880,12 @@ terms.mixpoissonreg <- function(x, parameters = c("mean", "precision")){
 #' \donttest{
 #' data("Attendance", package = "mixpoissonreg")
 #' 
-#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, data = Attendance)
+#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + 
+#' prog | gender + math + prog, data = Attendance)
 #' summary(daysabs_fit)
 #' 
-#' daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math + prog | gender + math + prog, data = Attendance)
+#' daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math + 
+#' prog | gender + math + prog, data = Attendance)
 #' summary(daysabs_fit_ml)
 #' }
 summary.mixpoissonreg <- function(object, ...) {
@@ -904,9 +912,9 @@ summary.mixpoissonreg <- function(object, ...) {
   
   ans$residualname <- paste0(toupper(substring(object$residualname, 1, 1)), substring(object$residualname, 2))
   
-  ans$RSS <- sum(residuals(object, type = object$residualname)^2)
+  ans$RSS <- sum(stats::residuals(object, type = object$residualname)^2)
   
-  ans$res_quantiles <- stats::quantile(residuals(object, type = object$residualname))
+  ans$res_quantiles <- stats::quantile(stats::residuals(object, type = object$residualname))
   
   ans$efron.pseudo.r2 <- object$efron.pseudo.r2
   
@@ -916,7 +924,7 @@ summary.mixpoissonreg <- function(object, ...) {
   
   ans$niter <- object$niter
   
-  class(ans) <- "summary.mixpoissonreg"
+  class(ans) <- "summary_mixpoissonreg"
   ans
 }
 
@@ -927,7 +935,7 @@ summary.mixpoissonreg <- function(object, ...) {
 #' @description Provides a brief description of results related to mixed Poisson regression models.
 #' @param x object of class "mixpoissonreg" containing results from the fitted model.
 #' @param ... further arguments passed to or from other methods.
-#' @NoRd
+#' @noRd
 
 print.mixpoissonreg <- function(x, ...) {
   nbeta <- length(x$coefficients$mean)
@@ -958,52 +966,52 @@ print.mixpoissonreg <- function(x, ...) {
 
 
 #############################################################################################
-#' @name print.summary.mixpoissonreg
-#' @title Print Method for \code{summary.mixpoissonreg} Objects
+#' @name print.summary_mixpoissonreg
+#' @title Print Method for \code{summary_mixpoissonreg} Objects
 #' @description Provides a brief description of results related to mixed Poisson regression models.
-#' @param x object of class "summary.mixpoissonreg" containing results of summary method applied to a fitted model.
+#' @param x object of class "summary_mixpoissonreg" containing results of summary method applied to a fitted model.
 #' @param ... further arguments passed to or from other methods.
-#' @NoRd
-print.summary.mixpoissonreg <- function(object, ...) {
-  tab <- object$coefficients
+#' @noRd
+print.summary_mixpoissonreg <- function(x, ...) {
+  tab <- x$coefficients
   
   #
   digits <- max(3, getOption("digits") - 3)
   #
 
-  call_name <- switch(object$estimation_method,
+  call_name <- switch(x$estimation_method,
                       "EM" = {"mixpoissonreg"},
                       "ML" = {"mixpoissonregML"}
   )
 
-  optim_algo <- switch(object$estimation_method,
+  optim_algo <- switch(x$estimation_method,
                        "EM" = {"Expectation-Maximization Algorithm"},
                        "ML" = {"Maximum-Likelihood Estimation"}
   )
   cat("\n")
-  cat(paste0(object$modelname, " - ", optim_algo))
+  cat(paste0(x$modelname, " - ", optim_algo))
 
   cat("\n\n")
-  cat("Call:  ", paste(deparse(object$call), sep = "\n", collapse = "\n"), 
+  cat("Call:  ", paste(deparse(x$call), sep = "\n", collapse = "\n"), 
       "\n\n", sep = "")
 
 
   #
-  RSS <- object$RSS
-  residualname <- object$residualname
+  RSS <- x$RSS
+  residualname <- x$residualname
     
   cat(sprintf("\n%s:\n", paste0(residualname, " residuals")))
-  print(structure(round(c(RSS, as.vector(object$res_quantiles)), digits = digits), .Names = c("RSS", "Min", "1Q", "Median", "3Q", "Max")))
+  print(structure(round(c(RSS, as.vector(x$res_quantiles)), digits = digits), .Names = c("RSS", "Min", "1Q", "Median", "3Q", "Max")))
   #
   if (NROW(tab$mean)) {
-    cat(paste0("\nCoefficients modeling the mean (with ", object$link.mean, " link):\n"))
+    cat(paste0("\nCoefficients modeling the mean (with ", x$link.mean, " link):\n"))
     stats::printCoefmat(tab$mean, digits = digits, signif.legend = FALSE)
   } else {
     message("\nNo coefficients modeling the mean. \n")
   }
   #
   if (NROW(tab$precision)) {
-    cat(paste0("\nCoefficients modeling the precision (with ", object$link.precision, " link):\n"))
+    cat(paste0("\nCoefficients modeling the precision (with ", x$link.precision, " link):\n"))
     stats::printCoefmat(tab$precision, digits = digits, signif.legend = FALSE)
   } else {
     message("\nNo coefficients modeling the precision. \n")
@@ -1014,15 +1022,15 @@ print.summary.mixpoissonreg <- function(object, ...) {
   }
   #
 
-  cat("Efron's pseudo R-squared: ", object$efron.pseudo.r2,"\n")
+  cat("Efron's pseudo R-squared: ", x$efron.pseudo.r2,"\n")
 
-  if (is.null(object$envelope) == FALSE) {
-    cat(sprintf("%s\n", paste0("Percentage of residuals within the envelope = ", round(object$envelope_prop, digits = digits))))
+  if (is.null(x$envelope) == FALSE) {
+    cat(sprintf("%s\n", paste0("Percentage of residuals within the envelope = ", round(x$envelope_prop, digits = digits))))
   }
-  if(object$estimation_method == "EM"){
-    cat(paste0("Number of iterations of the EM algorithm = ", object$niter,"\n"))
+  if(x$estimation_method == "EM"){
+    cat(paste0("Number of iterations of the EM algorithm = ", x$niter,"\n"))
   } else{
-    cat(paste0("Number of function calls by 'optim' = ", object$niter[1],"\n"))
+    cat(paste0("Number of function calls by 'optim' = ", x$niter[1],"\n"))
   }
 }
 
@@ -1041,7 +1049,8 @@ print.summary.mixpoissonreg <- function(object, ...) {
 #' \donttest{
 #' data("Attendance", package = "mixpoissonreg")
 #' 
-#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, data = Attendance)
+#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + 
+#' prog | gender + math + prog, data = Attendance)
 #' residuals(daysabs_fit)
 #' 
 #' #Score residuals:
@@ -1103,10 +1112,11 @@ if(is.null(object$y)){
 #' \donttest{
 #' data("Attendance", package = "mixpoissonreg")
 #' 
-#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, data = Attendance)
+#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + 
+#' prog | gender + math + prog, data = Attendance)
 #' logLik(daysabs_fit)
 #' }
-logLik.mixpoissonreg <- function(object){
+logLik.mixpoissonreg <- function(object, ...){
   logLik <- object$logLik
   attr(logLik,"df") = length(object$coefficients$mean) + length(object$coefficients$precision)
   class(logLik) = "logLik"
