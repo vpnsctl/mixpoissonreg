@@ -30,6 +30,20 @@ devtools::install_github("vpnsctl/mixpoissonreg", build_vignettes = TRUE)
 
 This repository will always contain the most recent version of the *mixpoissonreg* package.
 
+## Dependencies
+
+The *mixpoissonreg* package depends on the *Rfast* package. The *Rfast* package needs the *GSL* library to be installed. If you are using linux, you most likely will need to install the *GSL* library. 
+
+On Ubuntu (version 18.04 or newer), run:
+```{bash}
+sudo apt install libgsl-dev
+```
+
+On RedHat or Fedora, run:
+```{bash}
+yum install gsl gsl-devel
+```
+
 ## Vignettes
 
 The *mixpoissonreg* package currently has the following vignettes:
