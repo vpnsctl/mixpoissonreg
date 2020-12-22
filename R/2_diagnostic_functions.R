@@ -62,6 +62,7 @@
 #' prog | gender + math + prog, data = Attendance, envelope = 100)
 #' plot(daysabs_fit_ml, which = 2)
 #' }
+#' @export
 plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
                                caption = list("Residuals vs Obs. number",
                                               "Normal Q-Q",
@@ -342,6 +343,7 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
 #' fitted(daysabs_fit)
 #' fitted(daysabs_fit, type = "precision")
 #' }
+#' @export
 fitted.mixpoissonreg <- function(object, type = c("response", "link", "precision", "variance"), ...) {
   fit <- object
   if (length(type) > 1) {
@@ -430,6 +432,7 @@ fitted.mixpoissonreg <- function(object, type = c("response", "link", "precision
 #' predict(daysabs_fit, interval = "confidence")
 #' predict(daysabs_fit, type = "link", se.fit = TRUE)
 #' }
+#' @export
 predict.mixpoissonreg <- function(object, newdata = NULL, type = c("response", "link", "precision", "variance"), se.fit = FALSE,
                                   interval = c("none", "confidence", "prediction"), level = 0.95, nsim_pred = 100, nsim_pred_y = 100, ...) {
   fit <- object
@@ -782,6 +785,7 @@ predict.mixpoissonreg <- function(object, newdata = NULL, type = c("response", "
 #' vcov(daysabs_fit)
 #' vcov(daysabs_fit, parameters = "mean")
 #' }
+#' @export
 vcov.mixpoissonreg <- function(object, parameters = c("all", "mean", "precision"), ...) {
   if (length(parameters) > 1) {
     parameters <- parameters[1]
@@ -831,6 +835,7 @@ vcov.mixpoissonreg <- function(object, parameters = c("all", "mean", "precision"
 #' coef(daysabs_fit)
 #' coef(daysabs_fit, parameters = "precision")
 #' }
+#' @export
 coef.mixpoissonreg <- function(object, parameters = c("all", "mean", "precision"), ...) {
   parameters <- rlang::arg_match(parameters)
 
@@ -861,6 +866,7 @@ coef.mixpoissonreg <- function(object, parameters = c("all", "mean", "precision"
 #' @param parameters characters the parameters to be chosen. The options are 'mean' and 'precision'.
 #' @param ... further arguments passed to or from other methods.
 #' @noRd
+#' @export
 
 terms.mixpoissonreg <- function(x, parameters = c("mean", "precision")){
   parameters <- rlang::arg_match(parameters)
@@ -889,6 +895,7 @@ terms.mixpoissonreg <- function(x, parameters = c("mean", "precision")){
 #' prog | gender + math + prog, data = Attendance)
 #' summary(daysabs_fit_ml)
 #' }
+#' @export
 summary.mixpoissonreg <- function(object, ...) {
   ans <- list()
   
@@ -937,6 +944,7 @@ summary.mixpoissonreg <- function(object, ...) {
 #' @param x object of class "mixpoissonreg" containing results from the fitted model.
 #' @param ... further arguments passed to or from other methods.
 #' @noRd
+#' @export
 
 print.mixpoissonreg <- function(x, ...) {
   nbeta <- length(x$coefficients$mean)
@@ -973,6 +981,7 @@ print.mixpoissonreg <- function(x, ...) {
 #' @param x object of class "summary_mixpoissonreg" containing results of summary method applied to a fitted model.
 #' @param ... further arguments passed to or from other methods.
 #' @noRd
+#' @export
 print.summary_mixpoissonreg <- function(x, ...) {
   tab <- x$coefficients
   
@@ -1057,6 +1066,7 @@ print.summary_mixpoissonreg <- function(x, ...) {
 #' #Score residuals:
 #' residuals(daysabs_fit, type = "score")
 #' }
+#' @export
 residuals.mixpoissonreg <- function(object, type = c("pearson", "score"), ...) {
   type <- rlang::arg_match(type)
 
@@ -1117,6 +1127,7 @@ if(is.null(object$y)){
 #' prog | gender + math + prog, data = Attendance)
 #' logLik(daysabs_fit)
 #' }
+#' @export
 logLik.mixpoissonreg <- function(object, ...){
   logLik <- object$logLik
   attr(logLik,"df") = length(object$coefficients$mean) + length(object$coefficients$precision)
@@ -1136,11 +1147,13 @@ logLik.mixpoissonreg <- function(object, ...){
 #' @param parm a specification of which parameters are to be given confidence intervals, either a vector of numbers or a vector of names. If missing, all parameters are considered.
 #' @param ... further arguments passed to or from other methods.
 #' @noRd
+#' @export
 coeftest.mixpoissonreg <- function(x, vcov. = NULL, df = Inf, ...){
   coeftest.default(x = x, vcov. = vcov., df = df, ...)
 }
 
 #' @noRd
+#' @export
 
 coefci.mixpoissonreg <- function(x, parm = NULL, level = 0.95, vcov. = NULL, df = Inf, ...){
   coefci.default(x = x, parm = parm, level = level, vcov. = vcov., df = df, ...)

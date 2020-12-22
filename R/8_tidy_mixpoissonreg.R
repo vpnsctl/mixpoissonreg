@@ -49,7 +49,7 @@
 #'   
 #' @seealso \code{\link{glance.mixpoissonreg}}, \code{\link{tidy.mixpoissonreg}}, \code{\link{tidy_local_influence.mixpoissonreg}},
 #' \code{\link{autoplot.mixpoissonreg}}, \code{\link{local_influence_autoplot.mixpoissonreg}}
-#'   
+#' @export
 augment.mixpoissonreg <- function(x, data = stats::model.frame(x), newdata = NULL, type.predict = c("response", "link", "precision", "variance"), 
                                   type.residuals = c("pearson", "score"), se_fit = FALSE, conf_int = TRUE, pred_int = FALSE, ...) {
   .index <- .resid <- .resfit <-  NULL
@@ -133,6 +133,7 @@ augment.mixpoissonreg <- function(x, data = stats::model.frame(x), newdata = NUL
 #'   }
 #' @seealso \code{\link{augment.mixpoissonreg}}, \code{\link{tidy.mixpoissonreg}}, \code{\link{tidy_local_influence.mixpoissonreg}},
 #' \code{\link{autoplot.mixpoissonreg}}, \code{\link{local_influence_autoplot.mixpoissonreg}}
+#' @export
 
 glance.mixpoissonreg <- function(x, ...){
   tibble(efron.pseudo.r2 = as.numeric(x$efron.pseudo.r2), df.null = x$df.null, 
@@ -154,6 +155,7 @@ glance.mixpoissonreg <- function(x, ...){
 #' Must be strictly greater than 0 and less than 1. Defaults to 0.95, which corresponds to a 95 percent confidence interval.
 #' @seealso \code{\link{glance.mixpoissonreg}}, \code{\link{augment.mixpoissonreg}}, \code{\link{tidy_local_influence.mixpoissonreg}},
 #' \code{\link{autoplot.mixpoissonreg}}, \code{\link{local_influence_autoplot.mixpoissonreg}}
+#' @export
 
 tidy.mixpoissonreg <- function(x, conf.int = FALSE, conf.level = 0.95){
   join_term <- NULL
@@ -233,6 +235,7 @@ tidy.mixpoissonreg <- function(x, conf.int = FALSE, conf.level = 0.95){
 #' @details Based on \code{autoplot.lm} from the excellent \pkg{ggfortify} package, \href{https://github.com/sinhrks/ggfortify/}{ggfortify}.
 #' sub.caption—by default the function call—is shown as a subtitle (under the x-axis title) on each plot when plots are on separate pages, or as a subtitle 
 #' in the outer margin when there are multiple plots per page.
+#' @export
 
 
 
@@ -693,6 +696,7 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
 #' @seealso \code{\link{glance.mixpoissonreg}}, \code{\link{augment.mixpoissonreg}}, \code{\link{tidy.mixpoissonreg}}, \code{\link{autoplot.mixpoissonreg}}
 
 #' @rdname tidy_local_influence.mixpoissonreg  
+#' @export
 tidy_local_influence.mixpoissonreg <- function(model, perturbation = c("case_weights", "hidden_variable",
                                                      "mean_explanatory", "precision_explanatory",
                                                      "simultaneous_explanatory"), curvature = c("conformal", "normal"),
@@ -728,6 +732,7 @@ local_influence_benchmarks.mixpoissonreg <- function(model, perturbation = c("ca
 }
 
 #' @rdname tidy_local_influence.mixpoissonreg
+#' @export
 local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), title = list("Case Weights Perturbation",
                                                                                            "Hidden Variable Perturbation",
                                                                                            "Mean Explanatory Perturbation",

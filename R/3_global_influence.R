@@ -1,3 +1,5 @@
+#' @importFrom stats cooks.distance hatvalues influence terms
+
 #############################################################################################
 #' @name influence.mixpoissonreg
 #' @title Global Influence Diagnostics for Mixed Poisson Regression Models
@@ -46,6 +48,7 @@
 #' Zhu, H.T., Lee, S.Y., Wei, B.C., Zhu, J. (2001) *Case-deletion measures formodels with incomplete data.* Biometrika, 88, 727–737. \href{https://www.jstor.org/stable/2673442?seq=1}{https://www.jstor.org/stable/2673442?seq=1}
 
 #' @rdname influence.mixpoissonreg
+#' @export
 
 hatvalues.mixpoissonreg <- function(model, parameters = c("mean", "precision")){
   parameters <- rlang::arg_match(parameters)
@@ -74,6 +77,7 @@ hatvalues.mixpoissonreg <- function(model, parameters = c("mean", "precision")){
 }
 
 #' @rdname influence.mixpoissonreg
+#' @export
 
 cooks.distance.mixpoissonreg <- function(model, type = c("CD", "GCD", "GCDmean", "GCDprecision", "LD", "QD"), hat = c("mean", "precision")){
 type <- rlang::arg_match(type)
@@ -356,6 +360,7 @@ dist
 }
 
 #' @rdname influence.mixpoissonreg
+#' @export
 
 influence.mixpoissonreg <- function(model, do.coef = TRUE){
 influence_mpreg <- list()

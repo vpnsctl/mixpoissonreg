@@ -613,7 +613,7 @@ mixpoissonreg.fit <- function(y, x, w = NULL, link.mean = c("log", "sqrt"),
 #' \eqn{Y|Z=z\sim}Poisson\eqn{(\mu z)}, for
 #' some constant \eqn{\mu>0}. Therefore \eqn{Y} follows a mixed Poisson (MP) distribution with probability
 #' function given by
-#' \deqn{P(Y=y)=\int_0^\infty\dfrac{e^{-\mu z}(\mu z)^y}{y!}dG_{\tau}(z),}
+#' \deqn{P(Y=y)=\int_0^\infty\frac{e^{-\mu z}(\mu z)^y}{y!}dG_{\tau}(z),}
 #' for \eqn{y=0,1,\ldots}. With this,
 #' \eqn{Y} has an overdispersed distribution and hence it is a natural alternative to the Poisson distribution.
 #' The most common choices for \eqn{Z} are gamma and inverse-gaussian distributions,
