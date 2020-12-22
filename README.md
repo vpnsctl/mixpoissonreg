@@ -35,7 +35,7 @@ This repository will always contain the most recent version of the *mixpoissonre
 The *mixpoissonreg* package currently has the following vignettes:
 
 * [Introduction to the *mixpoissonreg* package](https://rpubs.com/alexandrebsimas/intro-mixpoissonreg)
-* [Fitting overdispersed count data using the *mixpoissonreg* package](https://rpubs.com/alexandrebsimas/tutorial-mixpoissonreg)
+* [Analyzing overdispersed count data with the *mixpoissonreg* package](https://rpubs.com/alexandrebsimas/tutorial-mixpoissonreg)
 * [Maximum-likelihood estimation with the *mixpoissonreg* package](https://rpubs.com/alexandrebsimas/ml-mixpoissonreg)
 * [Diagnostic plots with the *mixpoissonreg* package](https://rpubs.com/alexandrebsimas/plots-mixpoissonreg)
 * [Global and local influence analysis with the *mixpoissonreg* package](https://rpubs.com/alexandrebsimas/influence-mixpoissonreg)
