@@ -1,5 +1,5 @@
 #' @importFrom generics augment tidy glance
-#' @importFrom ggplot2 ggplot geom_text geom_hline geom_abline geom_linerange geom_point aes
+#' @importFrom ggplot2 ggplot geom_text geom_hline geom_abline geom_linerange geom_point aes autoplot
 #' @importFrom tibble tibble as_tibble add_column
 #' @importFrom magrittr `%>%`
 #' @importFrom dplyr arrange desc bind_rows mutate filter select left_join
