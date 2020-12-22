@@ -3,7 +3,6 @@
 ### Dev badges:
 [![](https://img.shields.io/badge/devel%20version-1.0.0-blue.svg)](https://github.com/vpnsctl/mixpoissonreg/main)
 [![R build status](https://github.com/vpnsctl/mixpoissonreg/workflows/R-CMD-check/badge.svg)](https://github.com/vpnsctl/mixpoissonreg/actions)
-[![Build Status](https://travis-ci.com/vpnsctl/mixpoissonreg.svg?branch=main)](https://travis-ci.com/vpnsctl/mixpoissonreg)
 ---
 
 The *mixpoissonreg* package deals with regression models with response variables being count data. 
