@@ -52,7 +52,7 @@ are obtained by simulation and can be computationally-intensive.
 \donttest{
 data("Attendance", package = "mixpoissonreg")
 
-daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + 
+daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
 prog | gender + math + prog, data = Attendance)
 predict(daysabs_fit, interval = "confidence")
 predict(daysabs_fit, type = "link", se.fit = TRUE)

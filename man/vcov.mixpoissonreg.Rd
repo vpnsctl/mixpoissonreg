@@ -21,7 +21,7 @@ indicates for which parameters the variance-covariance matrix should be computed
 \donttest{
 data("Attendance", package = "mixpoissonreg")
 
-daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + 
+daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
 prog | gender + math + prog, data = Attendance)
 vcov(daysabs_fit)
 vcov(daysabs_fit, parameters = "mean")

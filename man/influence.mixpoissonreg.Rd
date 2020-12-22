@@ -6,21 +6,24 @@
 \alias{cooks.distance.mixpoissonreg}
 \title{Global Influence Diagnostics for Mixed Poisson Regression Models}
 \usage{
-\method{hatvalues}{mixpoissonreg}(model, parameters = c("mean", "precision"))
+\method{hatvalues}{mixpoissonreg}(model, parameters = c("mean", "precision"), ...)
 
 \method{cooks.distance}{mixpoissonreg}(
   model,
   type = c("CD", "GCD", "GCDmean", "GCDprecision", "LD", "QD"),
-  hat = c("mean", "precision")
+  hat = c("mean", "precision"),
+  ...
 )
 
-\method{influence}{mixpoissonreg}(model, do.coef = TRUE)
+\method{influence}{mixpoissonreg}(model, do.coef = TRUE, ...)
 }
 \arguments{
 \item{model}{a \code{mixpoissonreg} object.}
 
 \item{parameters}{the parameter to which the hat values will be computed. The options are 'mean' and 'precision'. The default is 'mean'. For hatvalues with respect to the mean
 the model must be fitted with 'x' set to TRUE, and for hatvalues with respect to the precision the model must be fitted with 'w' set to TRUE.}
+
+\item{...}{Currently not used.}
 
 \item{type}{the type of Cook's distance to be used. The options are 'CD', the standard Cook's distance;
 'GCD', the generalized Cook's distance with respect to all parameters, Zhu et al. (2001);

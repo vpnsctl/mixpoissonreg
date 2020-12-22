@@ -21,7 +21,7 @@ Function to return 'pearson' or 'score' residuals for mixed Poisson regression m
 \donttest{
 data("Attendance", package = "mixpoissonreg")
 
-daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + 
+daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
 prog | gender + math + prog, data = Attendance)
 residuals(daysabs_fit)
 

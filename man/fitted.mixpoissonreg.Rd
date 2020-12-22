@@ -22,7 +22,7 @@ Function providing the fitted means, linear predictors, precisions or variances 
 \donttest{
 data("Attendance", package = "mixpoissonreg")
 
-daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + 
+daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
 prog | gender + math + prog, data = Attendance)
 fitted(daysabs_fit)
 fitted(daysabs_fit, type = "precision")

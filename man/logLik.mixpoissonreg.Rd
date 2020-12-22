@@ -18,7 +18,7 @@ Function to compute the log-likelihood at the estimated parameters for mixed Poi
 \donttest{
 data("Attendance", package = "mixpoissonreg")
 
-daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + 
+daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
 prog | gender + math + prog, data = Attendance)
 logLik(daysabs_fit)
 }

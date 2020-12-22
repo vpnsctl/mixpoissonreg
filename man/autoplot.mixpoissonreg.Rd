@@ -2,6 +2,7 @@
 % Please edit documentation in R/8_tidy_mixpoissonreg.R
 \name{autoplot.mixpoissonreg}
 \alias{autoplot.mixpoissonreg}
+\alias{autoplot}
 \title{Autoplot Method for \code{mixpoissonreg} Objects}
 \usage{
 \method{autoplot}{mixpoissonreg}(

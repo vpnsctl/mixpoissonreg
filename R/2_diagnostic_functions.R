@@ -3,13 +3,13 @@
 #############################################################################################
 #' @name plot.mixpoissonreg
 #' @title Plot Diagnostics for \code{mixpoissonreg} Objects
-#' @description Currently there are six plots available. They contain residual analysis and global influence diagnostics. The plots are selectable by 
+#' @description Currently there are six plots available. They contain residual analysis and global influence diagnostics. The plots are selectable by
 #' the \code{which} argument. The plots are: Residuals vs. obs. numbers; Normal Q-Q plots, which may contain simulated envelopes, if the fitted object
 #' has simulated envelopes; Cook's distances vs. obs. numbers; Generalized Cook's distances vs. obs. numbers; Cook's distances vs. Generalized Cook's distances;
-#' Response variables vs. fitted means. By default, the first two plots and the last two plots are provided. 
+#' Response variables vs. fitted means. By default, the first two plots and the last two plots are provided.
 #' @param x object of class "mixpoissonreg" containing results from the fitted model.
 #' If the model was fitted with envelope = 0, the Q-Q plot will be produced without envelopes.
-#' @param which a list or vector indicating which plots should be displayed. 	If a subset of the plots is required, specify a subset of the numbers 1:6, 
+#' @param which a list or vector indicating which plots should be displayed. 	If a subset of the plots is required, specify a subset of the numbers 1:6,
 #' see caption below for the different kinds. In
 #' plot number 2, 'Normal Q-Q', if the \code{mixpoissonreg} object was fitted with envelopes, a quantile-quantile plot with simulated envelopes will be displayed.
 #' @param caption captions to appear above the plots; character vector or list of valid graphics annotations. Can be set to "" or NA to suppress all captions.
@@ -28,37 +28,37 @@
 #' @param qqline logical; if \code{TRUE} and the fit does *not* contain simulated
 #' envelopes, a qqline passing through the first and third quartiles of a standard normal distribution will be added to the normal Q-Q plot.
 #' @param ... graphical parameters to be passed.
-#' @details 
+#' @details
 #' The \code{plot} method is implemented following the same structure as the \link[stats]{plot.lm}, so it will be easy to be used by practitioners that
 #' are familiar with \code{glm} objects.
-#' 
+#'
 #' These plots allows one to perform residuals analsysis and influence diagnostics. There are other global influence functions, see \code{\link{influence.mixpoissonreg}}.
-#' 
+#'
 #' See Barreto-Souza and Simas (2015), Cook and Weisberg (1982) and Zhu et al. (2001).
-#' 
-#' @references 
+#'
+#' @references
 #' DOI:10.1007/s11222-015-9601-6 (\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
-#' 
+#'
 #' Cook, D.R. and Weisberg, S. (1982) *Residuals and Influence in Regression*. (New York: Chapman and Hall, 1982)
-#' 
+#'
 #' Zhu, H.T., Lee, S.Y., Wei, B.C., Zhu, J. (2001) *Case-deletion measures formodels with incomplete data.* Biometrika, 88, 727–737. \href{https://www.jstor.org/stable/2673442?seq=1}{https://www.jstor.org/stable/2673442?seq=1}
-#' 
+#'
 #' @seealso
 #' \code{\link{autoplot.mixpoissonreg}}, \code{\link{local_influence_plot.mixpoissonreg}}, \code{\link{local_influence_autoplot.mixpoissonreg}},
 #' \code{\link{summary.mixpoissonreg}}, \code{\link{predict.mixpoissonreg}}, \code{\link{influence.mixpoissonreg}}
 #' @examples
 #' \donttest{
 #' data("Attendance", package = "mixpoissonreg")
-#' 
-#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + 
+#'
+#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
 #' prog | gender + math + prog, data = Attendance)
 #' plot(daysabs_fit, which = 1:6)
-#' 
+#'
 #' par(mfrow = c(2,2))
 #' plot(daysabs_fit)
-#' 
+#'
 #' par(mfrow = c(1,1))
-#' daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math + 
+#' daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
 #' prog | gender + math + prog, data = Attendance, envelope = 100)
 #' plot(daysabs_fit_ml, which = 2)
 #' }
@@ -84,7 +84,7 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
                                include.modeltype = TRUE,
                                include.residualtype = FALSE,
                                ...) {
-  
+
   getCaption <- function(k) if (length(caption) < k)
     NA_character_
   else {
@@ -94,7 +94,7 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
       grDevices::as.graphicsAnnot(caption[[k]])
     }
   }
-  
+
   if (is.null(sub.caption)) {
     cal <- x$call
     if (!is.na(m.f <- match("formula", names(cal)))) {
@@ -108,7 +108,7 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
       paste(substr(cc[1L], 1L, min(75L, nc)), "...")
     else cc[1L]
   }
-  
+
   place_ids <- function(x_coord, y_coord, offset, dif_pos_neg){
     extreme_points <- as.vector(Rfast::nth(abs(y_coord), k = id.n,
                                     num.of.nths = id.n,
@@ -135,9 +135,9 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
       graphics::text(idx_x_id, idx_y, labels = labels.id[idx_x], cex = cex.id, pos = labpos, xpd = TRUE, offset = offset)
     }
   }
-  
+
   one.fig <- prod(graphics::par("mfcol")) == 1
-  
+
   if (ask) {
     oask <- grDevices::devAskNewPage(TRUE)
     on.exit(grDevices::devAskNewPage(oask))
@@ -148,24 +148,24 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
     # First plot (residuals vs index)
     res <- stats::residuals(x, type = x$residualname)
     ylim <- range(res, na.rm = TRUE)
-    if (id.n > 0) 
+    if (id.n > 0)
       ylim <- grDevices::extendrange(r = ylim, f = 0.08)
     grDevices::dev.hold()
     residualname <- paste0(toupper(substring(x$residualname, 1, 1)), substring(x$residualname, 2))
-    
+
     if(include.residualtype){
       caption[[1]] = paste(residualname, caption[[1]])
     }
-    
+
     ylab <- paste0(residualname, " residuals")
     graphics::plot(res, ylab = ylab, xlab = "Obs. number", main = main, ylim = ylim, ...)
     graphics::abline(0, 0, lty = 3)
-    
+
     if (one.fig)
       graphics::title(sub = sub.caption, ...)
-    
+
     graphics::mtext(getCaption(1), side = 3, cex = cex.caption)
-    
+
     place_ids(1:length(res), res, 0.5, TRUE)
     grDevices::dev.flush()
   }
@@ -182,12 +182,12 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
     ylab <- paste0(residualname, " residuals")
     if (!is.null(env)) {
       caption[[2]] <- paste0(caption[[2]]," with simulated envelopes")
-    } 
+    }
     qq <- stats::qqnorm(res, xlab = "Theoretical quantiles", ylab = ylab, ylim = ylim, main = main, ...)
-    
+
     if (one.fig)
       graphics::title(sub = sub.caption, ...)
-    
+
     if (is.null(env) == FALSE) {
       aux <- sort(qq$x)
       graphics::lines(aux, env[1, ], col = grDevices::rgb(0.7, 0.7, 0.7))
@@ -200,89 +200,89 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
       }
     }
     graphics::points(qq$x, qq$y, ...)
-    if (id.n > 0) 
+    if (id.n > 0)
       place_ids(qq$x, qq$y, 0.5, FALSE)
     graphics::mtext(getCaption(2), side = 3, cex = cex.caption)
     grDevices::dev.flush()
   }
-  
+
   # Third plot (Cook's distance)
-  
+
   if (3 %in% which) {
     CD <- stats::cooks.distance(x, type = "CD")
-    
+
     ylab = "Cook's distance"
     ylim <- range(CD, na.rm = TRUE)
-    
+
     grDevices::dev.hold()
-    
+
     if(id.n >0)
       ylim <- grDevices::extendrange(r = ylim, f = 0.08)
-    
+
     graphics::plot(CD, type = type.cookplot, main = main, xlab = "Obs. number", ylab = ylab, ylim=ylim, ...)
     if (one.fig)
       graphics::title(sub = sub.caption, ...)
-    
+
     graphics::mtext(getCaption(3), side = 3, cex = cex.caption)
-    
-    if (id.n > 0) 
+
+    if (id.n > 0)
       place_ids(1:length(CD), CD, 0.2, TRUE)
     grDevices::dev.flush()
   }
-  
+
   # Fourth plot (Generalized Cook's distance)
-  
+
   if (4 %in% which) {
     GCD <- stats::cooks.distance(x, type = "GCD")
-    
+
     ylab = "Generalized Cook's distance"
     ylim <- range(GCD, na.rm = TRUE)
-    
+
     grDevices::dev.hold()
-    
+
     if(id.n >0)
       ylim <- grDevices::extendrange(r = ylim, f = 0.08)
-    
-    graphics::plot(GCD, type = type.cookplot, main = main, ylab = ylab, 
+
+    graphics::plot(GCD, type = type.cookplot, main = main, ylab = ylab,
                    xlab = "Obs. number", ylim=ylim, ...)
     if (one.fig)
       graphics::title(sub = sub.caption, ...)
-    
+
     graphics::mtext(getCaption(4), side = 3, cex = cex.caption)
-    
-    if (id.n > 0) 
+
+    if (id.n > 0)
       place_ids(1:length(GCD), GCD, 0.2, TRUE)
     grDevices::dev.flush()
   }
-  
+
   # Fifth plot (Cook's dist vs Generalized Cook's dist)
-  
+
   if(5 %in% which) {
     CD <- stats::cooks.distance(x, type = "CD")
     GCD <- stats::cooks.distance(x, type = "GCD")
-    
+
     ylim <- range(CD, na.rm = TRUE)
-    
-    if (id.n > 0) 
+
+    if (id.n > 0)
       ylim <- grDevices::extendrange(r = ylim, f = 0.08)
-    
+
     grDevices::dev.hold()
-    
+
     graphics::plot(GCD, CD, main = main, ylab = "Cook's distance", xlab = "Generalized Cook's distance", ylim=ylim, ...)
     if (one.fig)
       graphics::title(sub = sub.caption, ...)
-    
+
     graphics::mtext(getCaption(5), side = 3, cex = cex.caption)
-    
+
     if (id.n > 0){
       extreme_points <- as.vector(Rfast::nth((CD/sum(CD))^2 + (GCD/sum(GCD))^2, k = id.n,
                                       num.of.nths = id.n,
                                       index.return = TRUE, descending = TRUE))
       labpos <- label.pos[1 + as.numeric(GCD[extreme_points] > mean(range(GCD)))]
-      graphics::text(GCD[extreme_points], CD[extreme_points], labels = labels.id[extreme_points], cex = cex.id, pos = labpos, 
+      graphics::text(GCD[extreme_points], CD[extreme_points], labels = labels.id[extreme_points], cex = cex.id, pos = labpos,
                      xpd = TRUE, offset = 0.5)
     }
-    
+
     grDevices::dev.flush()
   }
 
@@ -295,28 +295,28 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
     } else{
       y = x$y
     }
-    
+
     graphics::plot(mu_est, y, xlab = "Predicted values", ylab = "Response values", main = main, ...)
     if (one.fig)
       graphics::title(sub = sub.caption, ...)
     graphics::abline(0, 1, lty = 3)
     graphics::mtext(getCaption(6), side = 3, cex = cex.caption)
-    
+
     if (id.n > 0){
       extreme_points <- as.vector(Rfast::nth(abs(y - mu_est), k = id.n,
                                       num.of.nths = id.n,
                                       index.return = TRUE, descending = TRUE))
       labpos <- label.pos[1 + as.numeric(mu_est[extreme_points] > mean(range(mu_est)))]
-      graphics::text(mu_est[extreme_points], y[extreme_points], labels = labels.id[extreme_points], cex = cex.id, pos = labpos, 
+      graphics::text(mu_est[extreme_points], y[extreme_points], labels = labels.id[extreme_points], cex = cex.id, pos = labpos,
                      xpd = TRUE, offset = 0.5)
     }
-    
+
     grDevices::dev.flush()
   }
 
   if (!one.fig && graphics::par("oma")[3L] >= 1)
     graphics::mtext(sub.caption, outer = TRUE, cex = 1.25)
-  
+
   invisible()
 }
 
@@ -326,8 +326,8 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
 #' @title Fitted Method for \code{mixpoissonreg} Objects
 #' @description Function providing the fitted means, linear predictors, precisions or variances for mixed Poisson regression models.
 #' @param object object of class "mixpoissonreg" containing results from the fitted model.
-#' @param type the type of variable to get the fitted values. The default is the "response" type, which provided the estimated values for the means. 
-#' The type "link" provides the estimates for the linear predictor of the mean. The type "precision" provides estimates for the precision parameters 
+#' @param type the type of variable to get the fitted values. The default is the "response" type, which provided the estimated values for the means.
+#' The type "link" provides the estimates for the linear predictor of the mean. The type "precision" provides estimates for the precision parameters
 #' whereas the type "variance" provides estimates for the variances.
 #' @param ... Currently not used.
 #' @seealso
@@ -337,8 +337,8 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
 #' @examples
 #' \donttest{
 #' data("Attendance", package = "mixpoissonreg")
-#' 
-#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + 
+#'
+#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
 #' prog | gender + math + prog, data = Attendance)
 #' fitted(daysabs_fit)
 #' fitted(daysabs_fit, type = "precision")
@@ -413,12 +413,12 @@ fitted.mixpoissonreg <- function(object, type = c("response", "link", "precision
 #' @param nsim_pred number of means and predictions to be generated in each step of the simulation. The default is set to 100.
 #' @param nsim_pred_y number of response variables generated for each pair of mean and precision to compute the prediction intervals. The default is set to 100.
 #' @param ... further arguments passed to or from other methods.
-#' @details 
+#' @details
 #' The \code{se.fit} argument only returns a non-NA vector for type = 'link', that is, on the scale of the linear predictor for the mean parameter. For the response scale,
 #' one can obtain confidence or prediction intervals. It is important to notice that confidence intervals *must not* be used for future observations as they will underestimate
 #' the uncertainty. In this case prediction intervals should be used. Currently, we do not have closed-form expressions for the prediction interval and, therefore, they
-#' are obtained by simulation and can be computationally-intensive. 
-#' 
+#' are obtained by simulation and can be computationally-intensive.
+#'
 #' @seealso
 #' \code{\link{fitted.mixpoissonreg}}, \code{\link{summary.mixpoissonreg}}, \code{\link{plot.mixpoissonreg}}, \code{\link{autoplot.mixpoissonreg}},
 #' \code{\link{coef.mixpoissonreg}}, \code{\link{vcov.mixpoissonreg}},
@@ -426,8 +426,8 @@ fitted.mixpoissonreg <- function(object, type = c("response", "link", "precision
 #' @examples
 #' \donttest{
 #' data("Attendance", package = "mixpoissonreg")
-#' 
-#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + 
+#'
+#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
 #' prog | gender + math + prog, data = Attendance)
 #' predict(daysabs_fit, interval = "confidence")
 #' predict(daysabs_fit, type = "link", se.fit = TRUE)
@@ -779,8 +779,8 @@ predict.mixpoissonreg <- function(object, newdata = NULL, type = c("response", "
 #' @examples
 #' \donttest{
 #' data("Attendance", package = "mixpoissonreg")
-#' 
-#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + 
+#'
+#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
 #' prog | gender + math + prog, data = Attendance)
 #' vcov(daysabs_fit)
 #' vcov(daysabs_fit, parameters = "mean")
@@ -793,11 +793,11 @@ vcov.mixpoissonreg <- function(object, parameters = c("all", "mean", "precision"
   nbeta <- length(object$coefficients$mean)
   nalpha <- length(object$coefficients$precision)
   theta <- c(object$coefficients$mean, object$coefficients$precision)
-  
+
   coeff_beta <- object$coefficients$mean
   coeff_alpha <- object$coefficients$precision
   coeff_names = c(names(coeff_beta),paste(names(coeff_alpha), ".precision", sep = ""))
-  
+
   vcov_mp_complete <- object$vcov
   vcov_mp <- switch(parameters,
                     "all" = {
@@ -811,14 +811,14 @@ vcov.mixpoissonreg <- function(object, parameters = c("all", "mean", "precision"
                       vcov_mp_complete[(nbeta + 1):(nbeta + nalpha), (nbeta + 1):(nbeta + nalpha)]
                     }
   )
-  
+
   return(vcov_mp)
 }
 
 #############################################################################################
 #' @name coef.mixpoissonreg
 #' @title Coef Method for \code{mixpoissonreg} Objects.
-#' @description Extract model coefficients of fitted mixed Poisson regression models. The parameters arguments allows one to chose if all coefficients should be extracted, 
+#' @description Extract model coefficients of fitted mixed Poisson regression models. The parameters arguments allows one to chose if all coefficients should be extracted,
 #' with \code{parameters = 'all'}; if the coefficients of the mean-related parameters should be extracted, with \code{parameters = 'mean'}; if the coefficients of the
 #' precision-related parameters should be extracted, with \code{parameters = 'precision'}.
 #' @param object object of class "mixpoissonreg" containing results from the fitted model.
@@ -829,8 +829,8 @@ vcov.mixpoissonreg <- function(object, parameters = c("all", "mean", "precision"
 #' @examples
 #' \donttest{
 #' data("Attendance", package = "mixpoissonreg")
-#' 
-#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + 
+#'
+#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
 #' prog | gender + math + prog, data = Attendance)
 #' coef(daysabs_fit)
 #' coef(daysabs_fit, parameters = "precision")
@@ -864,11 +864,11 @@ coef.mixpoissonreg <- function(object, parameters = c("all", "mean", "precision"
 #' @description Function to extract the terms of a fitted mixpoissonreg object.
 #' @param x an object of class "mixpoissonreg" containing results from the fitted model.
 #' @param parameters characters the parameters to be chosen. The options are 'mean' and 'precision'.
-#' @param ... further arguments passed to or from other methods.
+#' @param ... Currently not used.
 #' @noRd
 #' @export
 
-terms.mixpoissonreg <- function(x, parameters = c("mean", "precision")){
+terms.mixpoissonreg <- function(x, parameters = c("mean", "precision"), ...){
   parameters <- rlang::arg_match(parameters)
   x$terms[[parameters]]
 }
@@ -886,19 +886,19 @@ terms.mixpoissonreg <- function(x, parameters = c("mean", "precision")){
 #' @examples
 #' \donttest{
 #' data("Attendance", package = "mixpoissonreg")
-#' 
-#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + 
+#'
+#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
 #' prog | gender + math + prog, data = Attendance)
 #' summary(daysabs_fit)
-#' 
-#' daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math + 
+#'
+#' daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
 #' prog | gender + math + prog, data = Attendance)
 #' summary(daysabs_fit_ml)
 #' }
 #' @export
 summary.mixpoissonreg <- function(object, ...) {
   ans <- list()
-  
+
   nbeta <- length(object$coefficients$mean)
   nalpha <- length(object$coefficients$precision)
   #
@@ -909,29 +909,29 @@ summary.mixpoissonreg <- function(object, ...) {
   colnames(tab) <- c("Estimate", "Std.error", "z-value", "Pr(>|z|)")
   rownames(tab) <- names(coeff)
   tab <- list(mean = tab[seq.int(length.out = nbeta), , drop = FALSE], precision = tab[seq.int(length.out = nalpha) + nbeta, , drop = FALSE])
-  
+
   ans$coefficients <- tab
 
   ans$estimation_method <- object$estimation_method
-  
+
   ans$modelname <- object$modelname
-  
+
   ans$call <- object$call
-  
+
   ans$residualname <- paste0(toupper(substring(object$residualname, 1, 1)), substring(object$residualname, 2))
-  
+
   ans$RSS <- sum(stats::residuals(object, type = object$residualname)^2)
-  
+
   ans$res_quantiles <- stats::quantile(stats::residuals(object, type = object$residualname))
-  
+
   ans$efron.pseudo.r2 <- object$efron.pseudo.r2
-  
+
   ans$envelope_prop <- object$envelope_prop
-  
+
   ans$envelope <- object$envelope
-  
+
   ans$niter <- object$niter
-  
+
   class(ans) <- "summary_mixpoissonreg"
   ans
 }
@@ -954,7 +954,7 @@ print.mixpoissonreg <- function(x, ...) {
                       "EM" = {"mixpoissonreg"},
                       "ML" = {"mixpoissonregML"}
   )
-  
+
   coeff_beta <- x$coefficients$mean
   coeff_alpha <- x$coefficients$precision
   optim_algo <- switch(x$estimation_method,
@@ -964,7 +964,7 @@ print.mixpoissonreg <- function(x, ...) {
   cat("\n")
   cat(paste0(x$modelname, " - ", optim_algo))
   cat("\n\n")
-  cat("Call:  ", paste(deparse(x$call), sep = "\n", collapse = "\n"), 
+  cat("Call:  ", paste(deparse(x$call), sep = "\n", collapse = "\n"),
       "\n\n", sep = "")
   cat(paste0("Coefficients modeling the mean (with ", x$link.mean, " link):", "\n"))
   print(coeff_beta)
@@ -984,7 +984,7 @@ print.mixpoissonreg <- function(x, ...) {
 #' @export
 print.summary_mixpoissonreg <- function(x, ...) {
   tab <- x$coefficients
-  
+
   #
   digits <- max(3, getOption("digits") - 3)
   #
@@ -1002,14 +1002,14 @@ print.summary_mixpoissonreg <- function(x, ...) {
   cat(paste0(x$modelname, " - ", optim_algo))
 
   cat("\n\n")
-  cat("Call:  ", paste(deparse(x$call), sep = "\n", collapse = "\n"), 
+  cat("Call:  ", paste(deparse(x$call), sep = "\n", collapse = "\n"),
       "\n\n", sep = "")
 
 
   #
   RSS <- x$RSS
   residualname <- x$residualname
-    
+
   cat(sprintf("\n%s:\n", paste0(residualname, " residuals")))
   print(structure(round(c(RSS, as.vector(x$res_quantiles)), digits = digits), .Names = c("RSS", "Min", "1Q", "Median", "3Q", "Max")))
   #
@@ -1058,11 +1058,11 @@ print.summary_mixpoissonreg <- function(x, ...) {
 #' @examples
 #' \donttest{
 #' data("Attendance", package = "mixpoissonreg")
-#' 
-#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + 
+#'
+#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
 #' prog | gender + math + prog, data = Attendance)
 #' residuals(daysabs_fit)
-#' 
+#'
 #' #Score residuals:
 #' residuals(daysabs_fit, type = "score")
 #' }
@@ -1113,7 +1113,7 @@ if(is.null(object$y)){
 
 #############################################################################################
 #' @name logLik.mixpoissonreg
-#' @title logLik Method for \code{mixpoissonreg} Objects 
+#' @title logLik Method for \code{mixpoissonreg} Objects
 #' @description Function to compute the log-likelihood at the estimated parameters for mixed Poisson regression models.
 #' @param object an object of class "mixpoissonreg" containing results from the fitted model.
 #' @param ... further arguments passed to or from other methods.
@@ -1122,8 +1122,8 @@ if(is.null(object$y)){
 #' @examples
 #' \donttest{
 #' data("Attendance", package = "mixpoissonreg")
-#' 
-#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + 
+#'
+#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
 #' prog | gender + math + prog, data = Attendance)
 #' logLik(daysabs_fit)
 #' }

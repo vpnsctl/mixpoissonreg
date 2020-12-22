@@ -14,7 +14,8 @@
   direction = c("canonical", "max.eigen"),
   parameters = c("all", "mean", "precision"),
   mean.covariates = NULL,
-  precision.covariates = NULL
+  precision.covariates = NULL,
+  ...
 )
 
 \method{local_influence_benchmarks}{mixpoissonreg}(
@@ -97,6 +98,8 @@ and 'simultaneous-explanatory'
 perturbation schemes. If NULL, the 'precision-explanatory' and 'simultaneous-explanatory' perturbation schemes will be computed by perturbing all
 precision-related covariates. The default is NULL.}
 
+\item{...}{Currently not used.}
+
 \item{which}{a list or vector indicating which plots should be displayed.     If a subset of the plots is required, specify a subset of the numbers 1:5, see caption below (and the 'Details') for the different kinds.}
 
 \item{title}{titles to appear above the plots; character vector or list of valid graphics annotations. Can be set to "" to suppress all titles.}
@@ -164,8 +167,6 @@ the top 'n.influential' observations will be identified in the plot by their ind
 \item{ad.linetype}{Line type for additional lines.}
 
 \item{ad.size}{Fill colour for additional lines.}
-
-\item{...}{other arguments passed to methods.}
 }
 \description{
 Functions to provide tidy outputs or ggplot2-based plots of local influence diagnostics. \code{local_influence_benchmarks.mixpoissonreg}

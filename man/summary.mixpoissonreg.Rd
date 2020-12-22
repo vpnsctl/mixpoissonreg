@@ -18,11 +18,11 @@ Function providing a summary of results related to mixed Poisson regression mode
 \donttest{
 data("Attendance", package = "mixpoissonreg")
 
-daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + 
+daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
 prog | gender + math + prog, data = Attendance)
 summary(daysabs_fit)
 
-daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math + 
+daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
 prog | gender + math + prog, data = Attendance)
 summary(daysabs_fit_ml)
 }

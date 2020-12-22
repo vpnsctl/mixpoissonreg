@@ -193,7 +193,7 @@ and \code{\link{local_influence_autoplot.mixpoissonreg}}.
 \examples{
 # Examples using the Attendance dataset:
 \donttest{
-daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math + 
+daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
 prog | gender + math + prog, data = Attendance)
 summary(daysabs_fit_ml)
 # Base R plot of the fit
@@ -205,12 +205,12 @@ local_influence_plot(daysabs_fit_ml)
 # ggplot2 plot of local influence measures
 local_influence_autoplot(daysabs_fit_ml)
 # Fitting a reduced model of the sabe type as the previous one
-daysabs_fit_ml_red <- mixpoissonregML(daysabs ~ gender + math + 
-prog | prog, data = Attendance, model = daysabs_fit$modeltype)
+daysabs_fit_ml_red <- mixpoissonregML(daysabs ~ gender + math +
+prog | prog, data = Attendance, model = daysabs_fit_ml$modeltype)
 # Likelihood ratio test:
-lrtest(daysabs_fit_ml, daysabs_fit_ml_red)
+lmtest::lrtest(daysabs_fit_ml, daysabs_fit_ml_red)
 # Wald test:
-waldtest(daysabs_fit_ml, daysabs_fit_ml_red)
+lmtest::waldtest(daysabs_fit_ml, daysabs_fit_ml_red)
 }
 
 }

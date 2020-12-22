@@ -5,20 +5,21 @@
 #' @importFrom dplyr arrange desc bind_rows mutate filter select left_join
 #' @importFrom gridExtra grid.arrange
 #' @importFrom ggrepel geom_text_repel
-#' @importFrom rlang arg_match 
+#' @importFrom rlang arg_match
 #' @importFrom rlang :=
 #' @importFrom methods new
 #' @importClassesFrom ggfortify ggmultiplot
+#' @export autoplot
 
 #############################################################################################
 #' @name augment.mixpoissonreg
 #' @title Augment data with information from a \code{mixpoissonreg} object
-#' @description Augment accepts a model object and a dataset and adds information about each observation in the dataset. It includes 
+#' @description Augment accepts a model object and a dataset and adds information about each observation in the dataset. It includes
 #' predicted values in the \code{.fitted} column, residuals in the \code{.resid} column, and standard errors for the fitted values in a \code{.se.fit} column, if
 #' the type of prediction is 'link'. New columns always begin with a . prefix to avoid overwriting columns in the original dataset.
 #' @param x A \code{mixpoissonreg} object.
-#' @param data A \code{\link[base:data.frame]{base::data.frame}} or \code{\link[tibble:tibble]{tibble::tibble()}} containing the original data that was used to produce the object x. 
-#' @param newdata A \code{\link[base:data.frame]{base::data.frame}} or \code{\link[tibble:tibble]{tibble::tibble()}} containing all the original predictors used to create x. 
+#' @param data A \code{\link[base:data.frame]{base::data.frame}} or \code{\link[tibble:tibble]{tibble::tibble()}} containing the original data that was used to produce the object x.
+#' @param newdata A \code{\link[base:data.frame]{base::data.frame}} or \code{\link[tibble:tibble]{tibble::tibble()}} containing all the original predictors used to create x.
 #' Defaults to \code{NULL}, indicating that nothing has been passed to \code{newdata}. If \code{newdata} is specified, the data argument will be ignored.
 #' @param type.predict Type of prediction. The options are 'response', 'link', 'precision' and 'variance'. The default is "response".
 #' @param type.residuals Type of residuals. The options are 'pearson' and 'score'. The default is 'pearson'.
@@ -28,13 +29,13 @@
 #' @param pred_int Logical indicating whether or not prediction intervals for future observations should be built. It only works with type.predict = 'response'. The arguments
 #' \code{level}, \code{nsim_pred}, \code{nsim_pred_y} are passed through additional arguments '...'. Notice that this can be computationally intensive.
 #' @param ... Additional arguments. Possible additional arguments are \code{level}, \code{nsim_pred}, \code{nsim_pred_y}, that are passed to \code{predict.mixpoissonreg} function.
-#' 
+#'
 #' @return A \code{\link[tibble:tibble]{tibble::tibble()}} with columns:
 #' \itemize{
 #'   \item \code{.cooksd} Cook's distance.
 #'   \item \code{.fitted} Fitted or predicted value.
 #'   \item \code{.fittedlwrconf} Lower bound of the confidence interval, if conf_int = TRUE
-#'   \item \code{.fitteduprconf} Upper bound of the confidence interval, if conf_int = TRUE  
+#'   \item \code{.fitteduprconf} Upper bound of the confidence interval, if conf_int = TRUE
 #'   \item \code{.fittedlwrpred} Lower bound of the prediction interval, if pred_int = TRUE
 #'   \item \code{.fitteduprpred} Upper bound of the prediction interval, if pred_int = TRUE
 #'   \item \code{.hat} Diagonal of the hat matrix.
@@ -46,27 +47,27 @@
 #'   \item \code{.mdnenv} Median of the simulated envelope, if the fitted \code{mixpoissonreg} object, was fitted with envelopes > 0.
 #'   \item \code{.uprenv} Upper bound of the simulated envelope, if the fitted \code{mixpoissonreg} object, was fitted with envelopes > 0.
 #'   }
-#'   
+#'
 #' @seealso \code{\link{glance.mixpoissonreg}}, \code{\link{tidy.mixpoissonreg}}, \code{\link{tidy_local_influence.mixpoissonreg}},
 #' \code{\link{autoplot.mixpoissonreg}}, \code{\link{local_influence_autoplot.mixpoissonreg}}
 #' @export
-augment.mixpoissonreg <- function(x, data = stats::model.frame(x), newdata = NULL, type.predict = c("response", "link", "precision", "variance"), 
+augment.mixpoissonreg <- function(x, data = stats::model.frame(x), newdata = NULL, type.predict = c("response", "link", "precision", "variance"),
                                   type.residuals = c("pearson", "score"), se_fit = FALSE, conf_int = TRUE, pred_int = FALSE, ...) {
   .index <- .resid <- .resfit <-  NULL
   type.predict <- rlang::arg_match(type.predict)
   type.residuals <- rlang::arg_match(type.residuals)
-  
+
   if(is.null(newdata)){
     newdata = stats::model.frame(x)
     res <- stats::residuals(x, type = type.residuals)
   } else{
     res <- NULL
   }
-  
+
   df <- as_tibble(newdata)
-  
+
   pred <- stats::predict(x, newdata = newdata, type = type.predict, se.fit = se_fit)
-  
+
   if(se_fit){
     df$.fitted <- pred$fit %>% unname()
     df$.se.fit <- pred$se.fit %>% unname()
@@ -74,28 +75,28 @@ augment.mixpoissonreg <- function(x, data = stats::model.frame(x), newdata = NUL
     df$.fitted <- pred %>% unname()
   }
 
-  
+
   if(conf_int){
     conf_int <- stats::predict(x, newdata = newdata, type = type.predict, interval = "confidence")
     df$.fittedlwrconf <- conf_int[, "lwr"] %>% unname()
     df$.fitteduprconf <- conf_int[, "upr"] %>% unname()
   }
-  
+
   if(pred_int){
     pred_int <- stats::predict(x, newdata = newdata, type = "response", interval = "prediction", ...)
     df$.fittedlwrpred <- pred_int[, "lwr"] %>% unname()
     df$.fitteduprpred <-pred_int[, "upr"] %>% unname()
   }
-  
+
   if(!is.null(res)){
-    df$.resid <- res 
+    df$.resid <- res
     df$.resfit <- stats::residuals(x, type = x$residualname)
     df$.hat <- stats::hatvalues(x, parameters = "mean") %>% unname()
     df$.cooksd <- stats::cooks.distance(x, type = "CD", hat = "mean") %>% unname()
     df$.gencooksd <- stats::cooks.distance(x, type = "GCD", hat = "mean") %>% unname()
-    
+
     env <- x$envelope
-    
+
     if (!is.null(env)) {
       df$.index <- 1:nrow(df)
       temp_tbl <- tibble(.resfit = df$.resfit, .index = df$.index)
@@ -104,17 +105,17 @@ augment.mixpoissonreg <- function(x, data = stats::model.frame(x), newdata = NUL
       temp_tbl$.mdnenv <- env[2,]
       temp_tbl$.uprenv = env[1,]
       df <- dplyr::left_join(df, temp_tbl, by = c(".index", ".resfit")) %>% select(-.index)
-    } 
+    }
   }
-  
+
   df
 }
-  
+
 #############################################################################################
 #' @name glance.mixpoissonreg
 #' @title Glance at a \code{mixpoissonreg} object
-#' @description Glance accepts a \code{mixpoissonreg} object and returns a 
-#' \code{\link[tibble:tibble]{tibble::tibble()}} with exactly one row of model summaries. 
+#' @description Glance accepts a \code{mixpoissonreg} object and returns a
+#' \code{\link[tibble:tibble]{tibble::tibble()}} with exactly one row of model summaries.
 #' The summaries are Efron's pseudo-\eqn{R^2}, degrees of freedom, AIC, BIC, log-likelihood,
 #' the type of model used in the fit ('NB' or 'PIG'), the total number of observations and the estimation method.
 #' @param x A \code{mixpoissonreg} object.
@@ -136,22 +137,22 @@ augment.mixpoissonreg <- function(x, data = stats::model.frame(x), newdata = NUL
 #' @export
 
 glance.mixpoissonreg <- function(x, ...){
-  tibble(efron.pseudo.r2 = as.numeric(x$efron.pseudo.r2), df.null = x$df.null, 
-                   logLik = as.numeric(stats::logLik(x)), AIC = stats::AIC(x), 
-                   BIC = stats::BIC(x), df.residual = stats::df.residual(x), 
+  tibble(efron.pseudo.r2 = as.numeric(x$efron.pseudo.r2), df.null = x$df.null,
+                   logLik = as.numeric(stats::logLik(x)), AIC = stats::AIC(x),
+                   BIC = stats::BIC(x), df.residual = stats::df.residual(x),
                    nobs = stats::nobs(x), model.type = x$modeltype, est.method = x$estimation_method)
 }
 
 #############################################################################################
 #' @name tidy.mixpoissonreg
 #' @title Tidy a \code{mixpoissonreg} object
-#' @description Tidy returns a \code{\link[tibble:tibble]{tibble::tibble()}} containing 
+#' @description Tidy returns a \code{\link[tibble:tibble]{tibble::tibble()}} containing
 #' informations on the coefficients of the model, such as the estimated parameters,
 #' standard errors, z-statistics and p-values. Additionally, it may return confidence
 #' intervals for the model parameters.
 #' @param x A \code{mixpoissonreg} object.
 #' @param conf.int Logical indicating whether or not to include a confidence interval in the tidied output. Defaults to FALSE.
-#' @param conf.level The confidence level to use for the confidence interval if conf.int = TRUE. 
+#' @param conf.level The confidence level to use for the confidence interval if conf.int = TRUE.
 #' Must be strictly greater than 0 and less than 1. Defaults to 0.95, which corresponds to a 95 percent confidence interval.
 #' @seealso \code{\link{glance.mixpoissonreg}}, \code{\link{augment.mixpoissonreg}}, \code{\link{tidy_local_influence.mixpoissonreg}},
 #' \code{\link{autoplot.mixpoissonreg}}, \code{\link{local_influence_autoplot.mixpoissonreg}}
@@ -160,16 +161,16 @@ glance.mixpoissonreg <- function(x, ...){
 tidy.mixpoissonreg <- function(x, conf.int = FALSE, conf.level = 0.95){
   join_term <- NULL
   retmean <- as_tibble(summary(x)$coefficients$mean, rownames = "term")
-  colnames(retmean) <- c("term", "estimate", "std.error", "statistic", 
+  colnames(retmean) <- c("term", "estimate", "std.error", "statistic",
                      "p.value")
   retmean <- retmean %>% add_column(component = "mean", .before = "term")
   retprec <- as_tibble(summary(x)$coefficients$precision, rownames = "term")
-  colnames(retprec) <- c("term", "estimate", "std.error", "statistic", 
+  colnames(retprec) <- c("term", "estimate", "std.error", "statistic",
                      "p.value")
   retprec <- retprec %>% add_column(component = "precision", .before = "term")
-  
+
   ret <- dplyr::bind_rows(retmean,retprec)
-  
+
   if (conf.int) {
     ret$join_term <- names(stats::coef(x, parameters = "all"))
     ci <- as_tibble(stats::confint(x, level = conf.level), rownames = "term")
@@ -183,15 +184,16 @@ tidy.mixpoissonreg <- function(x, conf.int = FALSE, conf.level = 0.95){
 #############################################################################################
 #' @name autoplot.mixpoissonreg
 #' @title Autoplot Method for \code{mixpoissonreg} Objects
-#' @description This function provides \pkg{ggplot2}-based counterparts to the plots produced by \code{\link{plot.mixpoissonreg}}. 
-#' Currently there are six plots available. They contain residual analysis and global influence diagnostics. The plots are selectable by 
+#' @aliases autoplot autoplot.mixpoissonreg
+#' @description This function provides \pkg{ggplot2}-based counterparts to the plots produced by \code{\link{plot.mixpoissonreg}}.
+#' Currently there are six plots available. They contain residual analysis and global influence diagnostics. The plots are selectable by
 #' the \code{which} argument. The plots are: Residuals vs. obs. numbers; Normal Q-Q plots, which may contain simulated envelopes, if the fitted object
 #' has simulated envelopes; Cook's distances vs. obs. numbers; Generalized Cook's distances vs. obs. numbers; Cook's distances vs. Generalized Cook's distances;
-#' Response variables vs. fitted means. By default, the first two plots and the last two plots are provided. 
-#' 
+#' Response variables vs. fitted means. By default, the first two plots and the last two plots are provided.
+#'
 #' If both ncol and nrow are \code{NULL}, the plots will be placed one at a time. To place multiple plots, set the values for \code{nrow} or \code{ncol}.
 #' @param object A \code{mixpoissonreg} object.
-#' @param which a list or vector indicating which plots should be displayed. 	If a subset of the plots is required, specify a subset of the numbers 1:6, 
+#' @param which a list or vector indicating which plots should be displayed. 	If a subset of the plots is required, specify a subset of the numbers 1:6,
 #' see caption below for the different kinds. In
 #' plot number 2, 'Normal Q-Q', if the \code{mixpoissonreg} object was fitted with envelopes, a quantile-quantile plot with simulated envelopes will be displayed.
 #' @param title titles to appear above the plots; character vector or list of valid graphics annotations. Can be set to "" to suppress all captions.
@@ -233,7 +235,7 @@ tidy.mixpoissonreg <- function(x, conf.int = FALSE, conf.level = 0.95){
 #' @param ad.size	Fill colour for additional lines.
 #' @param ... other arguments passed to methods.
 #' @details Based on \code{autoplot.lm} from the excellent \pkg{ggfortify} package, \href{https://github.com/sinhrks/ggfortify/}{ggfortify}.
-#' sub.caption—by default the function call—is shown as a subtitle (under the x-axis title) on each plot when plots are on separate pages, or as a subtitle 
+#' sub.caption—by default the function call—is shown as a subtitle (under the x-axis title) on each plot when plots are on separate pages, or as a subtitle
 #' in the outer margin when there are multiple plots per page.
 #' @export
 
@@ -251,15 +253,15 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
                                      length(which) && grDevices::dev.interactive(), include.modeltype = TRUE,
                                    include.residualtype = FALSE, sub.caption = NULL,
                                    env_alpha = 0.5, env_fill = "grey70", gpar_sub.caption = list(fontface = "bold"),
-                                   colour = "#444444", size = NULL, linetype = NULL, alpha = NULL, fill = NULL, 
-                                   shape = NULL, label = TRUE, label.label = NULL, label.colour = "#000000", 
-                                   label.alpha = NULL, label.size = NULL, label.angle = NULL, 
-                                   label.family = NULL, label.fontface = NULL, label.lineheight = NULL, 
-                                   label.hjust = NULL, label.vjust = NULL, 
+                                   colour = "#444444", size = NULL, linetype = NULL, alpha = NULL, fill = NULL,
+                                   shape = NULL, label = TRUE, label.label = NULL, label.colour = "#000000",
+                                   label.alpha = NULL, label.size = NULL, label.angle = NULL,
+                                   label.family = NULL, label.fontface = NULL, label.lineheight = NULL,
+                                   label.hjust = NULL, label.vjust = NULL,
                                    label.n = 3, ad.colour = "#888888", ad.linetype = "dashed", ad.size = 0.2, ...){
   p1 <- p2 <- p3 <- p4 <- p5 <- p6 <- NULL
   .resid <- .cooksd <- .gencooksd <- .obs <- .fitted <-.lwrenv <- .uprenv <- .mdnenv <- NULL
-  
+
   if (is.null(sub.caption)) {
     cal <- object$call
     if (!is.na(m.f <- match("formula", names(cal)))) {
@@ -273,7 +275,7 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
       paste(substr(cc[1L], 1L, min(75L, nc)), "...")
     else cc[1L]
   }
-  
+
   plot.data <- augment(object, type.residuals = object$residualname, type.predict = "response")
   n <- stats::nobs(object)
   plot.data$.index <- 1:n
@@ -282,35 +284,35 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
   } else{
     plot.data$.label <- as.vector(label.label)
   }
-  
+
   if(is.null(object$y)){
     y = object$residuals + object$fitted.values
   } else{
     y = object$y
   }
-  
+
   if(2 %in% which){
     ylim <- range(plot.data$.resid, na.rm = TRUE)
     ylim[2L] <- ylim[2L] + diff(ylim) * 0.075
-    qx <- stats::qqnorm(plot.data$.resid, ylim = ylim, 
+    qx <- stats::qqnorm(plot.data$.resid, ylim = ylim,
                         plot.it = FALSE)$x
     plot.data$.qqx <- qx
-    
+
     qprobs <- c(0.25, 0.75)
-    qy <- stats::quantile(plot.data$.resid, probs = qprobs, 
+    qy <- stats::quantile(plot.data$.resid, probs = qprobs,
                           names = FALSE, type = 7, na.rm = TRUE)
     qx <- stats::qnorm(qprobs)
     slope <- diff(qy)/diff(qx)
     int <- qy[1L] - slope * qx[1L]
   }
-  
+
   plot.data$.obs <- as.vector(y)
-  
-  plot_label <- function (p, data, x = NULL, y = NULL, label = TRUE, label.label = "rownames", 
-                          label.colour = NULL, label.alpha = NULL, label.size = NULL, 
-                          label.angle = NULL, label.family = NULL, label.fontface = NULL, 
-                          label.lineheight = NULL, label.hjust = NULL, label.vjust = NULL, 
-                          label.repel = FALSE, label.show.legend = NA) 
+
+  plot_label <- function (p, data, x = NULL, y = NULL, label = TRUE, label.label = "rownames",
+                          label.colour = NULL, label.alpha = NULL, label.size = NULL,
+                          label.angle = NULL, label.family = NULL, label.fontface = NULL,
+                          label.lineheight = NULL, label.hjust = NULL, label.vjust = NULL,
+                          label.repel = FALSE, label.show.legend = NA)
   {
     if (!is.data.frame(data)) {
       stop(paste0("Unsupported class: ", class(data)))
@@ -328,28 +330,28 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
       else {
         textfunc <- ggplot2::geom_text
       }
-      p <- p + geom_factory(textfunc, data, x = x, y = y, label = ".label", 
-                            colour = label.colour, alpha = label.alpha, size = label.size, 
-                            angle = label.angle, family = label.family, fontface = label.fontface, 
-                            lineheight = label.lineheight, hjust = label.hjust, 
+      p <- p + geom_factory(textfunc, data, x = x, y = y, label = ".label",
+                            colour = label.colour, alpha = label.alpha, size = label.size,
+                            angle = label.angle, family = label.family, fontface = label.fontface,
+                            lineheight = label.lineheight, hjust = label.hjust,
                             vjust = label.vjust, show.legend = label.show.legend)
     }
     p
   }
-  
-  flatten <- function (df) 
+
+  flatten <- function (df)
   {
     ismatrix <- vapply(df, is.matrix, logical(1))
     if (any(ismatrix)) {
-      return(data.frame(c(df[!ismatrix], do.call(data.frame, 
+      return(data.frame(c(df[!ismatrix], do.call(data.frame,
                                                  df[ismatrix])), stringsAsFactors = FALSE))
     }
     else {
       return(df)
     }
   }
-  
-  geom_factory <- function (geomfunc, data = NULL, ...) 
+
+  geom_factory <- function (geomfunc, data = NULL, ...)
   {
     mapping <- list()
     option <- list()
@@ -371,7 +373,7 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
     option[["mapping"]] <- do.call(ggplot2::aes_string, mapping)
     return(do.call(geomfunc, option))
   }
-  
+
   if (is.logical(shape) && !shape) {
     if (missing(label)) {
       label <- TRUE
@@ -380,22 +382,22 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
       label.n <- nrow(plot.data)
     }
   }
-  
+
   dev_ask <- is.null(nrow) & is.null(ncol)
-  
+
   if(dev_ask){
-    
+
     if (ask) {
       oask <- grDevices::devAskNewPage(TRUE)
       on.exit(grDevices::devAskNewPage(oask))
     }
   }
-  
+
   plot.data <- flatten(plot.data)
   if(any(c(1,2) %in% which)){
     residualname <- paste0(toupper(substring(object$residualname, 1, 1)), substring(object$residualname, 2))
   }
-  
+
   if (label.n > 0L) {
     if (any(c(1,2,6) %in% which)) {
       r.data <- dplyr::arrange(plot.data, dplyr::desc(abs(.resid)))
@@ -418,199 +420,199 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
       respobs.data <- utils::head(respobs.data, label.n)
     }
   }
-  
+
   .decorate.label <- function(p, data) {
     if (label & label.n > 0) {
-      p <- plot_label(p = p, data = data, label = label, 
-                      label.label = ".label", label.colour = label.colour, 
-                      label.alpha = label.alpha, label.size = label.size, 
-                      label.angle = label.angle, label.family = label.family, 
-                      label.fontface = label.fontface, label.lineheight = label.lineheight, 
-                      label.hjust = label.hjust, label.vjust = label.vjust, 
+      p <- plot_label(p = p, data = data, label = label,
+                      label.label = ".label", label.colour = label.colour,
+                      label.alpha = label.alpha, label.size = label.size,
+                      label.angle = label.angle, label.family = label.family,
+                      label.fontface = label.fontface, label.lineheight = label.lineheight,
+                      label.hjust = label.hjust, label.vjust = label.vjust,
                       label.repel = label.repel)
     }
     p
   }
-  
+
   .decorate.plot <- function(p, xlab = NULL, ylab = NULL, title = NULL) {
     p + ggplot2::xlab(xlab) + ggplot2::ylab(ylab) + ggplot2::ggtitle(title)
   }
-  
+
   if (1 %in% which) {
     if(include.residualtype){
       title[[1]] = paste(residualname, title[[1]])
     }
-    
+
     ylab <- paste0(residualname, " residuals")
     t1 <- title[[1]]
     mapping <- ggplot2::aes_string(x = ".index", y = ".resid")
     p1 <- ggplot2::ggplot(data = plot.data, mapping = mapping)
     if (!is.logical(shape) || shape) {
-      p1 <- p1 + geom_factory(geom_point, plot.data, colour = colour, 
-                              size = size, linetype = linetype, alpha = alpha, 
+      p1 <- p1 + geom_factory(geom_point, plot.data, colour = colour,
+                              size = size, linetype = linetype, alpha = alpha,
                               fill = fill, shape = shape)
     }
-    p1 <- p1 + ggplot2::geom_hline(yintercept = 0L, linetype = ad.linetype, 
+    p1 <- p1 + ggplot2::geom_hline(yintercept = 0L, linetype = ad.linetype,
                                    size = ad.size, colour = ad.colour)
     p1 <- .decorate.label(p1, r.data)
-    
+
     if(sub.caption == "" | !dev_ask){
       xlab = "Obs. number"
     } else {
       xlab = paste0("Obs. number\n",sub.caption)
     }
-    p1 <- .decorate.plot(p1, xlab = xlab, ylab = ylab, 
+    p1 <- .decorate.plot(p1, xlab = xlab, ylab = ylab,
                          title = t1)
     if(dev_ask){
       print(p1)
     }
   }
-  
+
   if(2 %in% which){
     env <- object$envelope
     if (!is.null(env)) {
       title[[2]] <- paste0(title[[2]]," with simulated envelopes")
-    } 
+    }
     t2 <- title[[2]]
-    
+
     mapping <- ggplot2::aes_string(x = ".qqx", y = ".resid")
     p2 <- ggplot2::ggplot(data = plot.data, mapping = mapping)
-    
+
     if(qqline & is.null(env)){
-      p2 <- p2 + ggplot2::geom_abline(intercept = int, slope = slope, 
+      p2 <- p2 + ggplot2::geom_abline(intercept = int, slope = slope,
                                       linetype = ad.linetype, size = ad.size, colour = ad.colour)
     }
-    
+
     if(!is.null(env)){
       p2 <- p2 + ggplot2::geom_ribbon(aes(ymin=.lwrenv, ymax=.uprenv), alpha=env_alpha, fill = env_fill)
       p2 <- p2 + ggplot2::geom_line(aes(y = .mdnenv), linetype = ad.linetype, size = ad.size, colour = ad.colour)
     }
-    
+
     if (!is.logical(shape) || shape) {
-      p2 <- p2 + geom_factory(geom_point, plot.data, colour = colour, 
-                              size = size, linetype = linetype, alpha = alpha, 
+      p2 <- p2 + geom_factory(geom_point, plot.data, colour = colour,
+                              size = size, linetype = linetype, alpha = alpha,
                               fill = fill, shape = shape)
     }
-    
+
     ylab <- paste0(residualname, " residuals")
-    
+
     if(sub.caption == "" | !dev_ask){
       xlab = "Theoretical Quantiles"
     } else {
       xlab = paste0("Theoretical Quantiles\n", sub.caption)
     }
-    
+
     p2 <- .decorate.label(p2, r.data)
-    p2 <- .decorate.plot(p2, xlab = xlab, 
+    p2 <- .decorate.plot(p2, xlab = xlab,
                          ylab = ylab, title = t2)
     if(dev_ask){
       print(p2)
     }
   }
-  
+
   if(3 %in% which){
     t3 <- title[[3]]
-    mapping <- ggplot2::aes_string(x = ".index", y = ".cooksd", 
+    mapping <- ggplot2::aes_string(x = ".index", y = ".cooksd",
                                    ymin = 0, ymax = ".cooksd")
     p3 <- ggplot2::ggplot(data = plot.data, mapping = mapping)
     if (!is.logical(shape) || shape) {
-      p3 <- p3 + geom_factory(geom_linerange, plot.data, 
-                              colour = colour, size = size, linetype = linetype, 
+      p3 <- p3 + geom_factory(geom_linerange, plot.data,
+                              colour = colour, size = size, linetype = linetype,
                               alpha = alpha, fill = fill, shape = shape)
     }
     p3 <- .decorate.label(p3, cd.data)
-    
+
     if(sub.caption == "" | !dev_ask){
       xlab = "Obs. Number"
     } else {
       xlab = paste0("Obs. Number\n", sub.caption)
     }
-    
-    p3 <- .decorate.plot(p3, xlab = xlab, ylab = "Cook's distance", 
+
+    p3 <- .decorate.plot(p3, xlab = xlab, ylab = "Cook's distance",
                          title = t3)
     if(dev_ask){
       print(p3)
     }
   }
-  
+
   if(4 %in% which){
     t4 <- title[[4]]
-    mapping <- ggplot2::aes_string(x = ".index", y = ".gencooksd", 
+    mapping <- ggplot2::aes_string(x = ".index", y = ".gencooksd",
                                    ymin = 0, ymax = ".gencooksd")
     p4 <- ggplot2::ggplot(data = plot.data, mapping = mapping)
     if (!is.logical(shape) || shape) {
-      p4 <- p4 + geom_factory(geom_linerange, plot.data, 
-                              colour = colour, size = size, linetype = linetype, 
+      p4 <- p4 + geom_factory(geom_linerange, plot.data,
+                              colour = colour, size = size, linetype = linetype,
                               alpha = alpha, fill = fill, shape = shape)
     }
     p4 <- .decorate.label(p4, gcd.data)
-    
+
     if(sub.caption == "" | !dev_ask){
       xlab = "Obs. Number"
     } else {
       xlab = paste0("Obs. Number\n", sub.caption)
     }
-    
-    p4 <- .decorate.plot(p4, xlab = xlab, ylab = "Generalized Cook's distance", 
+
+    p4 <- .decorate.plot(p4, xlab = xlab, ylab = "Generalized Cook's distance",
                          title = t4)
     if(dev_ask){
       print(p4)
     }
   }
-  
+
   if (5 %in% which) {
     t5 <- title[[5]]
     mapping <- ggplot2::aes_string(x = ".gencooksd", y = ".cooksd")
     p5 <- ggplot2::ggplot(data = plot.data, mapping = mapping)
     if (!is.logical(shape) || shape) {
-      p5 <- p5 + geom_factory(geom_point, plot.data, colour = colour, 
-                              size = size, linetype = linetype, alpha = alpha, 
+      p5 <- p5 + geom_factory(geom_point, plot.data, colour = colour,
+                              size = size, linetype = linetype, alpha = alpha,
                               fill = fill, shape = shape)
     }
-    p5 <- p5 + ggplot2::geom_hline(yintercept = 0L, linetype = ad.linetype, 
+    p5 <- p5 + ggplot2::geom_hline(yintercept = 0L, linetype = ad.linetype,
                                    size = ad.size, colour = ad.colour)
     p5 <- .decorate.label(p5, cdgcd.data)
-    
+
     if(sub.caption == "" | !dev_ask){
       xlab = "Generalized Cook's distance"
     } else {
       xlab = paste0("Generalized Cook's distance\n", sub.caption)
     }
-    
-    p5 <- .decorate.plot(p5, xlab = xlab, ylab = "Cook's distance", 
+
+    p5 <- .decorate.plot(p5, xlab = xlab, ylab = "Cook's distance",
                          title = t5)
     if(dev_ask){
       print(p5)
     }
   }
-  
+
   if (6 %in% which) {
     t6 <- title[[6]]
     mapping <- ggplot2::aes_string(x = ".fitted", y = ".obs")
     p6 <- ggplot2::ggplot(data = plot.data, mapping = mapping)
     if (!is.logical(shape) || shape) {
-      p6 <- p6 + geom_factory(geom_point, plot.data, colour = colour, 
-                              size = size, linetype = linetype, alpha = alpha, 
+      p6 <- p6 + geom_factory(geom_point, plot.data, colour = colour,
+                              size = size, linetype = linetype, alpha = alpha,
                               fill = fill, shape = shape)
     }
-    p6 <- p6 + ggplot2::geom_abline(intercept = 0L, slope = 1L, linetype = ad.linetype, 
+    p6 <- p6 + ggplot2::geom_abline(intercept = 0L, slope = 1L, linetype = ad.linetype,
                                     size = ad.size, colour = ad.colour)
     p6 <- .decorate.label(p6, respobs.data)
-    
+
     if(sub.caption == "" | !dev_ask){
       xlab = "Predicted values"
     } else {
       xlab = paste0("Predicted values\n", sub.caption)
     }
-    
-    p6 <- .decorate.plot(p6, xlab = xlab, ylab = "Response values", 
+
+    p6 <- .decorate.plot(p6, xlab = xlab, ylab = "Response values",
                          title = t6)
     if(dev_ask){
       print(p6)
     }
   }
-  
-  
+
+
   if(!dev_ask){
     grDevices::devAskNewPage(ask = FALSE)
     plot.list <- list(p1, p2, p3, p4, p5, p6)[which]
@@ -619,7 +621,7 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
     if(is.null(ncol))
       ncol <- 0
     p <- methods::new("ggmultiplot", plots = plot.list, nrow = nrow, ncol = ncol)
-    
+
     gpar_multi <- do.call(grid::gpar, gpar_sub.caption)
     title_multi <- grid::textGrob(sub.caption, gp=gpar_multi)
     gridExtra::grid.arrange(grobs = p@plots, top = title_multi)
@@ -635,10 +637,10 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
 #' @title Tidy Functions for Local Influence Diagnostics for \code{mixpoissonreg} Objects
 #' @aliases local_influence_benchmarks.mixpoissonreg tidy_local_influence.mixpoissonreg local_influence_autoplot.mixpoissonreg
 #' @description Functions to provide tidy outputs or ggplot2-based plots of local influence diagnostics. \code{local_influence_benchmarks.mixpoissonreg}
-#' provides a \code{\link[tibble:tibble]{tibble::tibble()}} containing the local influence diagnostics under the chosen perturbation schemes. 
+#' provides a \code{\link[tibble:tibble]{tibble::tibble()}} containing the local influence diagnostics under the chosen perturbation schemes.
 #' \code{local_influence_benchmarks.mixpoissonreg} provides a \code{\link[tibble:tibble]{tibble::tibble()}} with a single row and one column
 #' for each selected perturbation scheme containing influential benchmarks for each perturbation scheme. \code{local_influence_autoplot.mixpoissonreg}
-#' creates ggplot2-based highly customizable local influence plots. 
+#' creates ggplot2-based highly customizable local influence plots.
 #' @param model A \code{mixpoissonreg} model.
 #' @param perturbation a list or vector of perturbation schemes to be returned. The currently available schemes are
 #' "case_weights", "hidden_variable", "mean_explanatory", "precision_explanatory", "simultaneous_explanatory". See Barreto-Souza and Simas (2015) for further details.
@@ -692,21 +694,21 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
 #' @param ad.colour	Line colour for additional lines.
 #' @param ad.linetype	Line type for additional lines.
 #' @param ad.size	Fill colour for additional lines.
-#' @param ... other arguments passed to methods.
+#' @param ... Currently not used.
 #' @seealso \code{\link{glance.mixpoissonreg}}, \code{\link{augment.mixpoissonreg}}, \code{\link{tidy.mixpoissonreg}}, \code{\link{autoplot.mixpoissonreg}}
 
-#' @rdname tidy_local_influence.mixpoissonreg  
+#' @rdname tidy_local_influence.mixpoissonreg
 #' @export
 tidy_local_influence.mixpoissonreg <- function(model, perturbation = c("case_weights", "hidden_variable",
                                                      "mean_explanatory", "precision_explanatory",
                                                      "simultaneous_explanatory"), curvature = c("conformal", "normal"),
                                  direction = c("canonical", "max.eigen"), parameters = c("all", "mean", "precision"),
-                                 mean.covariates = NULL, precision.covariates = NULL){
-    loc_infl <- local_influence(model, perturbation = perturbation, curvature = curvature, direction = direction, 
+                                 mean.covariates = NULL, precision.covariates = NULL, ...){
+    loc_infl <- local_influence(model, perturbation = perturbation, curvature = curvature, direction = direction,
                                 parameters = parameters, mean.covariates = mean.covariates, precision.covariates = precision.covariates)
-  
+
     tidy_loc_infl <- tibble(.rows = stats::nobs(model))
-    
+
     for(pert in perturbation){
       tidy_loc_infl = tidy_loc_infl %>% add_column(!!pert := loc_infl[[pert]])
     }
@@ -719,7 +721,7 @@ local_influence_benchmarks.mixpoissonreg <- function(model, perturbation = c("ca
                                                            "simultaneous_explanatory"), curvature = c("conformal", "normal"),
                                        direction = c("canonical", "max.eigen"), parameters = c("all", "mean", "precision"),
                                        mean.covariates = NULL, precision.covariates = NULL){
-  loc_infl <- local_influence(model, perturbation = perturbation, curvature = curvature, direction = direction, 
+  loc_infl <- local_influence(model, perturbation = perturbation, curvature = curvature, direction = direction,
                               parameters = parameters, mean.covariates = mean.covariates, precision.covariates = precision.covariates)
   benchmarks <- c()
   for(pert in perturbation){
@@ -748,11 +750,11 @@ local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), ti
                                                    sub.caption = NULL,
                                                    gpar_sub.caption = list(fontface = "bold"), detect.influential = TRUE, n.influential = 5,
                                                    draw.benchmark = FALSE,
-                                                   colour = "#444444", size = NULL, linetype = NULL, alpha = NULL, fill = NULL, 
-                                                   shape = NULL, label = TRUE, label.label = NULL, label.colour = "#000000", 
-                                                   label.alpha = NULL, label.size = NULL, label.angle = NULL, 
-                                                   label.family = NULL, label.fontface = NULL, label.lineheight = NULL, 
-                                                   label.hjust = NULL, label.vjust = NULL, 
+                                                   colour = "#444444", size = NULL, linetype = NULL, alpha = NULL, fill = NULL,
+                                                   shape = NULL, label = TRUE, label.label = NULL, label.colour = "#000000",
+                                                   label.alpha = NULL, label.size = NULL, label.angle = NULL,
+                                                   label.family = NULL, label.fontface = NULL, label.lineheight = NULL,
+                                                   label.hjust = NULL, label.vjust = NULL,
                                                    ad.colour = "#888888", ad.linetype = "dashed", ad.size = 0.2, ...){
   p <- list()
   tmp <- NULL
@@ -770,32 +772,32 @@ local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), ti
       paste(substr(cc[1L], 1L, min(75L, nc)), "...")
     else cc[1L]
   }
-  
+
   direction <- rlang::arg_match(direction)
   curvature <- rlang::arg_match(curvature)
-  
+
   pert <- c("case_weights", "hidden_variable",
             "mean_explanatory", "precision_explanatory",
             "simultaneous_explanatory")
-  
+
   plot.data <- tidy_local_influence(model, perturbation = pert[which], curvature = curvature,
                                     direction = direction, parameters = parameters,
                                     mean.covariates = mean.covariates,
                                     precision.covariates = precision.covariates)
   n <- stats::nobs(model)
   plot.data$.index <- 1:n
-  
+
   if(is.null(label.label)){
     plot.data$.label <- rownames(plot.data)
   } else{
     plot.data$.label <- as.vector(label.label)
   }
-  
-  plot_label_influential <- function (p, data, x = NULL, y = NULL, label = TRUE, label.label = "rownames", 
-                                      label.colour = NULL, label.alpha = NULL, label.size = NULL, 
-                                      label.angle = NULL, label.family = NULL, label.fontface = NULL, 
-                                      label.lineheight = NULL, label.hjust = NULL, label.vjust = NULL, 
-                                      label.repel = FALSE, label.show.legend = NA) 
+
+  plot_label_influential <- function (p, data, x = NULL, y = NULL, label = TRUE, label.label = "rownames",
+                                      label.colour = NULL, label.alpha = NULL, label.size = NULL,
+                                      label.angle = NULL, label.family = NULL, label.fontface = NULL,
+                                      label.lineheight = NULL, label.hjust = NULL, label.vjust = NULL,
+                                      label.repel = FALSE, label.show.legend = NA)
   {
     if (!is.data.frame(data)) {
       stop(paste0("Unsupported class: ", class(data)))
@@ -813,28 +815,28 @@ local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), ti
       else {
         textfunc <- ggplot2::geom_text
       }
-      p <- p + geom_factory_influential(textfunc, data, x = x, y = y, label = ".label", 
-                                        colour = label.colour, alpha = label.alpha, size = label.size, 
-                                        angle = label.angle, family = label.family, fontface = label.fontface, 
-                                        lineheight = label.lineheight, hjust = label.hjust, 
+      p <- p + geom_factory_influential(textfunc, data, x = x, y = y, label = ".label",
+                                        colour = label.colour, alpha = label.alpha, size = label.size,
+                                        angle = label.angle, family = label.family, fontface = label.fontface,
+                                        lineheight = label.lineheight, hjust = label.hjust,
                                         vjust = label.vjust, show.legend = label.show.legend)
     }
     p
   }
-  
-  flatten <- function (df) 
+
+  flatten <- function (df)
   {
     ismatrix <- vapply(df, is.matrix, logical(1))
     if (any(ismatrix)) {
-      return(data.frame(c(df[!ismatrix], do.call(data.frame, 
+      return(data.frame(c(df[!ismatrix], do.call(data.frame,
                                                  df[ismatrix])), stringsAsFactors = FALSE))
     }
     else {
       return(df)
     }
   }
-  
-  geom_factory_influential <- function (geomfunc, data = NULL, ...) 
+
+  geom_factory_influential <- function (geomfunc, data = NULL, ...)
   {
     mapping <- list()
     option <- list()
@@ -856,7 +858,7 @@ local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), ti
     option[["mapping"]] <- do.call(ggplot2::aes_string, mapping)
     return(do.call(geomfunc, option))
   }
-  
+
   if (is.logical(shape) && !shape) {
     if (missing(label)) {
       label <- TRUE
@@ -865,29 +867,29 @@ local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), ti
       n.influential <- nrow(plot.data)
     }
   }
-  
+
   dev_ask <- is.null(nrow) & is.null(ncol)
-  
+
   if(dev_ask){
     if (ask) {
       oask <- grDevices::devAskNewPage(TRUE)
       on.exit(grDevices::devAskNewPage(oask))
     }
   }
-  
+
   plot.data <- flatten(plot.data)
-  
+
   if (detect.influential) {
     bm <- local_influence_benchmarks(model, perturbation = pert[which], curvature = curvature,
                                      direction = direction, parameters = parameters,
                                      mean.covariates = mean.covariates,
                                      precision.covariates = precision.covariates)
-    
+
     p.data <- list()
-    
+
     for(i in 1:length(pert)){
       if(i %in% which){
-        p.data[[i]] <- plot.data %>% dplyr::mutate(tmp = !!as.name(pert[[i]]), tmp = abs(tmp)) %>% dplyr::arrange(dplyr::desc(tmp)) 
+        p.data[[i]] <- plot.data %>% dplyr::mutate(tmp = !!as.name(pert[[i]]), tmp = abs(tmp)) %>% dplyr::arrange(dplyr::desc(tmp))
         if(!is.na(bm[[pert[[i]]]])){
           p.data[[i]] <- p.data[[i]] %>% dplyr::filter(tmp > bm[[pert[[i]]]])
         }
@@ -895,24 +897,24 @@ local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), ti
       }
     }
   }
-  
+
   .decorate.label.influential <- function(p, data) {
     if (label & n.influential > 0) {
-      p <- plot_label_influential(p = p, data = data, label = label, 
-                                  label.label = ".label", label.colour = label.colour, 
-                                  label.alpha = label.alpha, label.size = label.size, 
-                                  label.angle = label.angle, label.family = label.family, 
-                                  label.fontface = label.fontface, label.lineheight = label.lineheight, 
-                                  label.hjust = label.hjust, label.vjust = label.vjust, 
+      p <- plot_label_influential(p = p, data = data, label = label,
+                                  label.label = ".label", label.colour = label.colour,
+                                  label.alpha = label.alpha, label.size = label.size,
+                                  label.angle = label.angle, label.family = label.family,
+                                  label.fontface = label.fontface, label.lineheight = label.lineheight,
+                                  label.hjust = label.hjust, label.vjust = label.vjust,
                                   label.repel = label.repel)
     }
     p
   }
-  
+
   .decorate.plot <- function(p, xlab = NULL, ylab = NULL, title = NULL) {
     p + ggplot2::xlab(xlab) + ggplot2::ylab(ylab) + ggplot2::ggtitle(title)
   }
-  
+
   ylab_infl <- switch(curvature,
                       "conformal" = {
                         yl <- switch(direction,
@@ -926,53 +928,53 @@ local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), ti
                                      "max.eigen" = "Largest Curvature Direction (Normal)")
                       }
   )
-  
+
   for(i in 1:length(pert)){
     if(i %in% which){
-      
+
       if(include.modeltype){
         title[[i]] <- paste0(title[[i]], " - ", model$modeltype, " Regression")
-      } 
-      
+      }
+
       t <- title[[i]]
-      mapping <- ggplot2::aes_string(x = ".index", y = pert[[i]], 
+      mapping <- ggplot2::aes_string(x = ".index", y = pert[[i]],
                                      ymin = 0, ymax = pert[[i]])
       p[[i]] <- ggplot2::ggplot(data = plot.data, mapping = mapping)
       if (!is.logical(shape) || shape) {
-        p[[i]] <- p[[i]] + geom_factory_influential(geom_linerange, plot.data, 
-                                                    colour = colour, size = size, linetype = linetype, 
+        p[[i]] <- p[[i]] + geom_factory_influential(geom_linerange, plot.data,
+                                                    colour = colour, size = size, linetype = linetype,
                                                     alpha = alpha, fill = fill, shape = shape)
       }
       if(detect.influential){
-        p[[i]] <- .decorate.label.influential(p[[i]], p.data[[i]]) 
+        p[[i]] <- .decorate.label.influential(p[[i]], p.data[[i]])
       }
-      
+
       if(sub.caption == "" | !dev_ask){
         xlab = "Obs. Number"
       } else {
         xlab = paste0("Obs. Number\n", sub.caption)
       }
-      
-      p[[i]] <- .decorate.plot(p[[i]], xlab = xlab, ylab = ylab_infl, 
+
+      p[[i]] <- .decorate.plot(p[[i]], xlab = xlab, ylab = ylab_infl,
                                title = t)
-      
+
       bm_i <- bm[[pert[[i]]]]
-      
+
       if(draw.benchmark){
         if(!is.na(bm_i)){
-          p[[i]] <- p[[i]] + ggplot2::geom_abline(intercept = bm_i, slope = 0, 
+          p[[i]] <- p[[i]] + ggplot2::geom_abline(intercept = bm_i, slope = 0,
                                                   linetype = ad.linetype, size = ad.size, colour = ad.colour)
         }
       }
-      
+
       if(dev_ask){
         print(p[[i]])
       }
-      
+
     }
   }
-  
-  
+
+
   if(!dev_ask){
     grDevices::devAskNewPage(ask = FALSE)
     plot.list <- lapply(which, function(i){p[[i]]})
@@ -981,7 +983,7 @@ local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), ti
     if(is.null(ncol))
       ncol <- 0
     p <- methods::new("ggmultiplot", plots = plot.list, nrow = nrow, ncol = ncol)
-    
+
     gpar_multi <- do.call(grid::gpar, gpar_sub.caption)
     title_multi <- grid::textGrob(sub.caption, gp=gpar_multi)
     gridExtra::grid.arrange(grobs = p@plots, top = title_multi)
@@ -999,15 +1001,15 @@ local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), ti
 #' @description Functions to provide tidy outputs or ggplot2-based plots of local influence diagnostics.
 #' @param model A model object for which local influence diagnostics are desired.
 #' @param ... additional arguments to be passed.
-#' @details 
-#' Local influence diagnostics were first introduced by Cook (1986), where several perturbation schemes were introduced and normal curvatures were obtained. Poon and Poon (2002) 
+#' @details
+#' Local influence diagnostics were first introduced by Cook (1986), where several perturbation schemes were introduced and normal curvatures were obtained. Poon and Poon (2002)
 #' introduced the conformal normal curvature, which has nice properties and takes values on the unit interval \eqn{[0,1]}. Zhu and Lee (2002) following Cook (1986) and Poon and Poon (2002)
-#' introduced normal and conformal normal curvatures for EM-based models. 
-#' @references 
+#' introduced normal and conformal normal curvatures for EM-based models.
+#' @references
 #' Cook, R. D. (1986) *Assessment of Local Influence.* Journal of the Royal Statistical Society. Series B (Methodological), Vol. 48, pp.133-169. \href{https://rss.onlinelibrary.wiley.com/doi/10.1111/j.2517-6161.1986.tb01398.x}{https://rss.onlinelibrary.wiley.com/doi/10.1111/j.2517-6161.1986.tb01398.x}
-#' 
+#'
 #' Poon, W.-Y. and Poon, Y.S. (2002) *Conformal normal curvature and assessment of local influence.*  Journal of the Royal Statistical Society. Series B (Methodological), Vol. 61, pp.51-61. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}
-#'   
+#'
 #' Zhu, H.-T. and Lee, S.-Y. (2002) *Local influence for incomplete data models.* Journal of the Royal Statistical Society. Series B (Methodological), Vol. 63, pp.111-126. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}
 
 #' @rdname tidy_local_influence

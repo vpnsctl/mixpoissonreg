@@ -22,7 +22,7 @@ precision-related parameters should be extracted, with \code{parameters = 'preci
 \donttest{
 data("Attendance", package = "mixpoissonreg")
 
-daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + 
+daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
 prog | gender + math + prog, data = Attendance)
 coef(daysabs_fit)
 coef(daysabs_fit, parameters = "precision")

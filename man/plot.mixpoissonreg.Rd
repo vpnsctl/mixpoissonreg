@@ -83,7 +83,7 @@ See Barreto-Souza and Simas (2015), Cook and Weisberg (1982) and Zhu et al. (200
 \donttest{
 data("Attendance", package = "mixpoissonreg")
 
-daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + 
+daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
 prog | gender + math + prog, data = Attendance)
 plot(daysabs_fit, which = 1:6)
 
@@ -91,7 +91,7 @@ par(mfrow = c(2,2))
 plot(daysabs_fit)
 
 par(mfrow = c(1,1))
-daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math + 
+daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
 prog | gender + math + prog, data = Attendance, envelope = 100)
 plot(daysabs_fit_ml, which = 2)
 }
