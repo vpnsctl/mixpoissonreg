@@ -1108,7 +1108,7 @@ if(is.null(object$y)){
 #' @param object an object of class "mixpoissonreg" containing results from the fitted model.
 #' @param ... further arguments passed to or from other methods.
 #' @seealso
-#' \code{\link{vcov.mixpoissonreg}},
+#' \code{\link{vcov.mixpoissonreg}}
 #' @examples
 #' \donttest{
 #' data("Attendance", package = "mixpoissonreg")
@@ -1122,4 +1122,26 @@ logLik.mixpoissonreg <- function(object, ...){
   attr(logLik,"df") = length(object$coefficients$mean) + length(object$coefficients$precision)
   class(logLik) = "logLik"
   logLik
+}
+
+#############################################################################################
+#' @name coeftest.mixpoissonreg
+#' @title coeftest and coefci methods for \model{mixpoissonreg} models
+#' @aliases coeftest.mixpoissonreg coefci.mixpoissonreg
+#' @description Functions to perform z Wald tests of estimated coefficients and to compute the corresponding Wald confidence intervals.
+#' @param x an object of class "mixpoissonreg" containing results from the fitted model.
+#' @param vcov. \code{NULL}. The vcov matrix from the \code{mixpoissonreg} object.
+#' @param df \code{Inf}, which means that \eqn{z} tests are performed.
+#' @param level the confidence level required.
+#' @param parm a specification of which parameters are to be given confidence intervals, either a vector of numbers or a vector of names. If missing, all parameters are considered.
+#' @param ... further arguments passed to or from other methods.
+#' @noRd
+coeftest.mixpoissonreg <- function(x, vcov. = NULL, df = Inf, ...){
+  coeftest.default(x = x, vcov. = vcov., df = df, ...)
+}
+
+#' @noRd
+
+coefci.mixpoissonreg <- function(x, parm = NULL, level = 0.95, vcov. = NULL, df = Inf, ...){
+  coefci.default(x = x, parm = parm, level = level, vcov. = vcov., df = df, ...)
 }

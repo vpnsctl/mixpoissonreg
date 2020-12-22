@@ -24,5 +24,5 @@ logLik(daysabs_fit)
 }
 }
 \seealso{
-\code{\link{vcov.mixpoissonreg}},
+\code{\link{vcov.mixpoissonreg}}
 }
