@@ -12,8 +12,8 @@
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/superhero/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
@@ -84,6 +84,9 @@
   </a>
 </li>
 <li>
+  <a href="../articles/mixpoissonreg.html">Get started</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -98,9 +101,6 @@
     </li>
     <li>
       <a href="../articles/intervals-mixpoissonreg.html">intervals-mixpoissonreg</a>
-    </li>
-    <li>
-      <a href="../articles/intro-mixpoissonreg.html">intro-mixpoissonreg</a>
     </li>
     <li>
       <a href="../articles/ml-mixpoissonreg.html">ml-mixpoissonreg</a>
@@ -154,7 +154,224 @@
     <tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
+          <h2 id="section-fitting-models" class="hasAnchor"><a href="#section-fitting-models" class="anchor"></a>Fitting models</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="mixpoissonreg.html">mixpoissonreg()</a></code> <code><a href="mixpoissonreg.html">mixpoissonreg.fit()</a></code> </p>
+        </td>
+        <td><p>Mixed Poisson Regression for Overdispersed Count Data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="mixpoissonregML.html">mixpoissonregML()</a></code> <code><a href="mixpoissonregML.html">mixpoissonregML.fit()</a></code> </p>
+        </td>
+        <td><p>Maximum Likelihood Mixed Poisson Regression Models for Overdispersed Count Data</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-extract-information" class="hasAnchor"><a href="#section-extract-information" class="anchor"></a>Extract information</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="summary.mixpoissonreg.html">summary(<i>&lt;mixpoissonreg&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Summary Method for <code>mixpoissonreg</code> Objects.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="fitted.mixpoissonreg.html">fitted(<i>&lt;mixpoissonreg&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Fitted Method for <code>mixpoissonreg</code> Objects</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="coef.mixpoissonreg.html">coef(<i>&lt;mixpoissonreg&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Coef Method for <code>mixpoissonreg</code> Objects.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="vcov.mixpoissonreg.html">vcov(<i>&lt;mixpoissonreg&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Calculate Variance-Covariance Matrix for <code>mixpoissonreg</code> Objects</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="residuals.mixpoissonreg.html">residuals(<i>&lt;mixpoissonreg&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Residuals Method for <code>mixpoissonreg</code> Objects</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="logLik.mixpoissonreg.html">logLik(<i>&lt;mixpoissonreg&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>logLik Method for <code>mixpoissonreg</code> Objects</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="predict.mixpoissonreg.html">predict(<i>&lt;mixpoissonreg&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Predict Method for <code>mixpoissonreg</code> Objects</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-visualization" class="hasAnchor"><a href="#section-visualization" class="anchor"></a>Visualization</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="autoplot.mixpoissonreg.html">autoplot(<i>&lt;mixpoissonreg&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Autoplot Method for <code>mixpoissonreg</code> Objects</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plot.mixpoissonreg.html">plot(<i>&lt;mixpoissonreg&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Plot Diagnostics for <code>mixpoissonreg</code> Objects</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="local_influence.mixpoissonreg.html">local_influence(<i>&lt;mixpoissonreg&gt;</i>)</a></code> <code><a href="local_influence.mixpoissonreg.html">local_influence_plot(<i>&lt;mixpoissonreg&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Local Influence Diagnostics for Mixed Poisson Regression Models</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="tidy_local_influence.mixpoissonreg.html">tidy_local_influence(<i>&lt;mixpoissonreg&gt;</i>)</a></code> <code><a href="tidy_local_influence.mixpoissonreg.html">local_influence_benchmarks(<i>&lt;mixpoissonreg&gt;</i>)</a></code> <code><a href="tidy_local_influence.mixpoissonreg.html">local_influence_autoplot(<i>&lt;mixpoissonreg&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Tidy Functions for Local Influence Diagnostics for <code>mixpoissonreg</code> Objects</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-global-influence" class="hasAnchor"><a href="#section-global-influence" class="anchor"></a>Global influence</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="influence.mixpoissonreg.html">hatvalues(<i>&lt;mixpoissonreg&gt;</i>)</a></code> <code><a href="influence.mixpoissonreg.html">cooks.distance(<i>&lt;mixpoissonreg&gt;</i>)</a></code> <code><a href="influence.mixpoissonreg.html">influence(<i>&lt;mixpoissonreg&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Global Influence Diagnostics for Mixed Poisson Regression Models</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-local-influence" class="hasAnchor"><a href="#section-local-influence" class="anchor"></a>Local influence</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="local_influence.mixpoissonreg.html">local_influence(<i>&lt;mixpoissonreg&gt;</i>)</a></code> <code><a href="local_influence.mixpoissonreg.html">local_influence_plot(<i>&lt;mixpoissonreg&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Local Influence Diagnostics for Mixed Poisson Regression Models</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-tidyverse-compatibility" class="hasAnchor"><a href="#section-tidyverse-compatibility" class="anchor"></a>Tidyverse compatibility</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="augment.mixpoissonreg.html">augment(<i>&lt;mixpoissonreg&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Augment data with information from a <code>mixpoissonreg</code> object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="glance.mixpoissonreg.html">glance(<i>&lt;mixpoissonreg&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Glance at a <code>mixpoissonreg</code> object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="tidy.mixpoissonreg.html">tidy(<i>&lt;mixpoissonreg&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Tidy a <code>mixpoissonreg</code> object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="tidy_local_influence.mixpoissonreg.html">tidy_local_influence(<i>&lt;mixpoissonreg&gt;</i>)</a></code> <code><a href="tidy_local_influence.mixpoissonreg.html">local_influence_benchmarks(<i>&lt;mixpoissonreg&gt;</i>)</a></code> <code><a href="tidy_local_influence.mixpoissonreg.html">local_influence_autoplot(<i>&lt;mixpoissonreg&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Tidy Functions for Local Influence Diagnostics for <code>mixpoissonreg</code> Objects</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-generics" class="hasAnchor"><a href="#section-generics" class="anchor"></a>Generics</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="local_influence.html">local_influence()</a></code> <code><a href="local_influence.html">local_influence_plot()</a></code> </p>
+        </td>
+        <td><p>Local Influence Diagnostics</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="tidy_local_influence.html">local_influence_autoplot()</a></code> <code><a href="tidy_local_influence.html">tidy_local_influence()</a></code> <code><a href="tidy_local_influence.html">local_influence_benchmarks()</a></code> </p>
+        </td>
+        <td><p>Tidy Functions for Local Influence Diagnostics</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-data-sets" class="hasAnchor"><a href="#section-data-sets" class="anchor"></a>Data sets</h2>
           <p class="section-desc"></p>
         </th>
       </tr>
@@ -169,126 +386,6 @@
           <p><code><a href="Attendance.html">Attendance</a></code> </p>
         </td>
         <td><p>Attendance Records data set</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="augment.mixpoissonreg.html">augment(<i>&lt;mixpoissonreg&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Augment data with information from a <code>mixpoissonreg</code> object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="autoplot.mixpoissonreg.html">autoplot(<i>&lt;mixpoissonreg&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Autoplot Method for <code>mixpoissonreg</code> Objects</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="coef.mixpoissonreg.html">coef(<i>&lt;mixpoissonreg&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Coef Method for <code>mixpoissonreg</code> Objects.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="fitted.mixpoissonreg.html">fitted(<i>&lt;mixpoissonreg&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Fitted Method for <code>mixpoissonreg</code> Objects</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="glance.mixpoissonreg.html">glance(<i>&lt;mixpoissonreg&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Glance at a <code>mixpoissonreg</code> object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="influence.mixpoissonreg.html">hatvalues(<i>&lt;mixpoissonreg&gt;</i>)</a></code> <code><a href="influence.mixpoissonreg.html">cooks.distance(<i>&lt;mixpoissonreg&gt;</i>)</a></code> <code><a href="influence.mixpoissonreg.html">influence(<i>&lt;mixpoissonreg&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Global Influence Diagnostics for Mixed Poisson Regression Models</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="local_influence.html">local_influence()</a></code> <code><a href="local_influence.html">local_influence_plot()</a></code> </p>
-        </td>
-        <td><p>Local Influence Diagnostics</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="local_influence.mixpoissonreg.html">local_influence(<i>&lt;mixpoissonreg&gt;</i>)</a></code> <code><a href="local_influence.mixpoissonreg.html">local_influence_plot(<i>&lt;mixpoissonreg&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Local Influence Diagnostics for Mixed Poisson Regression Models</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="logLik.mixpoissonreg.html">logLik(<i>&lt;mixpoissonreg&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>logLik Method for <code>mixpoissonreg</code> Objects</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="mixpoissonreg.html">mixpoissonreg()</a></code> <code><a href="mixpoissonreg.html">mixpoissonreg.fit()</a></code> </p>
-        </td>
-        <td><p>Mixed Poisson Regression for Overdispersed Count Data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="mixpoissonregML.html">mixpoissonregML()</a></code> <code><a href="mixpoissonregML.html">mixpoissonregML.fit()</a></code> </p>
-        </td>
-        <td><p>Maximum Likelihood Mixed Poisson Regression Models for Overdispersed Count Data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="plot.mixpoissonreg.html">plot(<i>&lt;mixpoissonreg&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Plot Diagnostics for <code>mixpoissonreg</code> Objects</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="predict.mixpoissonreg.html">predict(<i>&lt;mixpoissonreg&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Predict Method for <code>mixpoissonreg</code> Objects</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="residuals.mixpoissonreg.html">residuals(<i>&lt;mixpoissonreg&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Residuals Method for <code>mixpoissonreg</code> Objects</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="startvalues_mpreg.html">startvalues_mpreg()</a></code> </p>
-        </td>
-        <td><p>Initial guesses for mixed Poisson regression models</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="summary.mixpoissonreg.html">summary(<i>&lt;mixpoissonreg&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Summary Method for <code>mixpoissonreg</code> Objects.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tidy.mixpoissonreg.html">tidy(<i>&lt;mixpoissonreg&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Tidy a <code>mixpoissonreg</code> object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tidy_local_influence.html">local_influence_autoplot()</a></code> <code><a href="tidy_local_influence.html">tidy_local_influence()</a></code> <code><a href="tidy_local_influence.html">local_influence_benchmarks()</a></code> </p>
-        </td>
-        <td><p>Tidy Functions for Local Influence Diagnostics</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tidy_local_influence.mixpoissonreg.html">tidy_local_influence(<i>&lt;mixpoissonreg&gt;</i>)</a></code> <code><a href="tidy_local_influence.mixpoissonreg.html">local_influence_benchmarks(<i>&lt;mixpoissonreg&gt;</i>)</a></code> <code><a href="tidy_local_influence.mixpoissonreg.html">local_influence_autoplot(<i>&lt;mixpoissonreg&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Tidy Functions for Local Influence Diagnostics for <code>mixpoissonreg</code> Objects</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="vcov.mixpoissonreg.html">vcov(<i>&lt;mixpoissonreg&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Calculate Variance-Covariance Matrix for <code>mixpoissonreg</code> Objects</p></td>
       </tr>
     </tbody>
     </table>
