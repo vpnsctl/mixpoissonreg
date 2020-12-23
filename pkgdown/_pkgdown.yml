@@ -8,7 +8,7 @@ template:
     bootswatch: sandstone
 
 reference:
-  - title: Fitting models
+  - title: Fit models
     contents:
     - mixpoissonreg
     - mixpoissonreg.fit
