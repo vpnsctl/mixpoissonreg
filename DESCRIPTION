@@ -28,5 +28,6 @@ Suggests:
     knitr,
     devtools,
     bbreg,
-    testthat
+    testthat,
+    covr
 VignetteBuilder: knitr
