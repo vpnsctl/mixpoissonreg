@@ -964,7 +964,7 @@ print.mixpoissonreg <- function(x, ...) {
   cat("\n")
   cat(paste0(x$modelname, " - ", optim_algo))
   cat("\n\n")
-  cat("Call:  ", paste(deparse(x$call), sep = "\n", collapse = "\n"),
+  cat("Call:\n", paste(deparse(x$call), sep = "\n", collapse = "\n"),
       "\n\n", sep = "")
   cat(paste0("Coefficients modeling the mean (with ", x$link.mean, " link):", "\n"))
   print(coeff_beta)
@@ -1002,7 +1002,7 @@ print.summary_mixpoissonreg <- function(x, ...) {
   cat(paste0(x$modelname, " - ", optim_algo))
 
   cat("\n\n")
-  cat("Call:  ", paste(deparse(x$call), sep = "\n", collapse = "\n"),
+  cat("Call:\n", paste(deparse(x$call), sep = "\n", collapse = "\n"),
       "\n\n", sep = "")
 
 

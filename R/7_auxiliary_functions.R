@@ -18,7 +18,7 @@
 #'   \item beta - the initial guesses for the mean-related parameters;
 #'   \item alpha - the initial guesses for the precision-relared parameters.
 #'   }
-#'   @noRd
+#' @noRd
 startvalues_mpreg <- function(y, x, w, link.mean, link.precision, model) {
   nbeta <- ncol(x)
   nalpha <- ncol(w)

@@ -95,7 +95,7 @@ summary(fit)
 ```
 
 There are also several methods implemented:
-- Data visualization: `plot` (base-R visualization) ; `autoplot` (*ggplot2* visualization) ; `local_influence_plot` (base-R visualization) ; `local_influence_autoplot`  (*ggplot2* visualization)
+- Visualization: `plot` (base-R visualization) ; `autoplot` (*ggplot2* visualization) ; `local_influence_plot` (base-R visualization) ; `local_influence_autoplot`  (*ggplot2* visualization)
 - Inference: `coeftest` ; `coefci` ; `lmtest::lrtest` (works with the default method) ; `lmtest::waldtest` (works with the default method) ; `predict` 
 - Residual analysis: `residuals`
 - Global influence analysis: `influence` ; `cooks.distance` ; `hatvalues`

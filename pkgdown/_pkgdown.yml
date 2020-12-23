@@ -1,0 +1,63 @@
+url: https://vpnsctl.github.io/mixpoissonreg/
+
+development:
+  mode: auto
+
+template:
+  params:
+    bootswatch: superhero
+
+reference:
+  - title: Fitting models
+    contents:
+    - mixpoissonreg
+    - mixpoissonreg.fit
+    - mixpoissonregML
+    - mixpoissonregML.fit
+
+  - title: Extract information
+    contents:
+    - summary.mixpoissonreg
+    - fitted.mixpoissonreg
+    - coef.mixpoissonreg
+    - vcov.mixpoissonreg
+    - residuals.mixpoissonreg
+    - logLik.mixpoissonreg
+    - predict.mixpoissonreg
+
+  - title: Visualization
+    contents:
+    - autoplot.mixpoissonreg
+    - plot.mixpoissonreg
+    - local_influence_plot.mixpoissonreg
+    - local_influence_autoplot.mixpoissonreg
+
+  - title: Global influence
+    contents:
+    - cooks.distance.mixpoissonreg
+    - influence.mixpoissonreg
+    - hatvalues.mixpoissonreg
+
+  - title: Local influence
+    contents:
+    - local_influence.mixpoissonreg
+
+  - title: Tidyverse compatibility
+    contents:
+    - augment.mixpoissonreg
+    - glance.mixpoissonreg
+    - tidy.mixpoissonreg
+    - tidy_local_influence.mixpoissonreg
+    - local_influence_benchmarks.mixpoissonreg
+
+  - title: Generics
+    contents:
+    - local_influence
+    - local_influence_plot
+    - local_influence_autoplot
+    - tidy_local_influence
+    - local_influence_benchmarks
+
+  - title: Data sets
+    contents:
+    - Attendance

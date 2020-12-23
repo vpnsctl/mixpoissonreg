@@ -17,7 +17,7 @@ Description: Fits mixed Poisson regression models (Poisson-Inverse Gaussian or N
 License: GPL-2 | file LICENSE
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/vpnsctl/mixpoissonreg/
+URL: https://github.com/vpnsctl/mixpoissonreg/, https://vpnsctl.github.io/mixpoissonreg/
 BugReports: https://github.com/vpnsctl/mixpoissonreg/issues
 Imports: pbapply, Formula, Rfast, dplyr, gamlss.dist, generics, ggplot2, gridExtra, lmtest, magrittr, statmod, tibble, rlang, ggrepel, methods, ggfortify
 Roxygen: list(markdown = TRUE)
