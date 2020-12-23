@@ -78,7 +78,8 @@ summary(fit)
 #> 
 #> Negative Binomial Regression - Expectation-Maximization Algorithm
 #> 
-#> Call:  mixpoissonreg(formula = daysabs ~ prog + math + gender | prog, 
+#> Call:  
+#> mixpoissonreg(formula = daysabs ~ prog + math + gender | prog, 
 #>     data = Attendance)
 #> 
 #> 
