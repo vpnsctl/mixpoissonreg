@@ -3,7 +3,6 @@
 \name{tidy_local_influence.mixpoissonreg}
 \alias{tidy_local_influence.mixpoissonreg}
 \alias{local_influence_benchmarks.mixpoissonreg}
-\alias{local_influence_autoplot.mixpoissonreg}
 \title{Tidy Functions for Local Influence Diagnostics for \code{mixpoissonreg} Objects}
 \usage{
 \method{tidy_local_influence}{mixpoissonreg}(
@@ -27,50 +26,6 @@
   parameters = c("all", "mean", "precision"),
   mean.covariates = NULL,
   precision.covariates = NULL
-)
-
-\method{local_influence_autoplot}{mixpoissonreg}(
-  model,
-  which = c(1, 2, 3, 4),
-  title = list("Case Weights Perturbation", "Hidden Variable Perturbation",
-    "Mean Explanatory Perturbation", "Precision Explanatory Perturbation",
-    "Simultaneous Explanatory Perturbation"),
-  curvature = c("conformal", "normal"),
-  direction = c("canonical", "max.eigen"),
-  parameters = c("all", "mean", "precision"),
-  mean.covariates = NULL,
-  precision.covariates = NULL,
-  label.repel = TRUE,
-  nrow = NULL,
-  ncol = NULL,
-  ask = prod(graphics::par("mfcol")) < length(which) && grDevices::dev.interactive(),
-  include.modeltype = TRUE,
-  sub.caption = NULL,
-  gpar_sub.caption = list(fontface = "bold"),
-  detect.influential = TRUE,
-  n.influential = 5,
-  draw.benchmark = FALSE,
-  colour = "#444444",
-  size = NULL,
-  linetype = NULL,
-  alpha = NULL,
-  fill = NULL,
-  shape = NULL,
-  label = TRUE,
-  label.label = NULL,
-  label.colour = "#000000",
-  label.alpha = NULL,
-  label.size = NULL,
-  label.angle = NULL,
-  label.family = NULL,
-  label.fontface = NULL,
-  label.lineheight = NULL,
-  label.hjust = NULL,
-  label.vjust = NULL,
-  ad.colour = "#888888",
-  ad.linetype = "dashed",
-  ad.size = 0.2,
-  ...
 )
 }
 \arguments{
@@ -99,81 +54,25 @@ perturbation schemes. If NULL, the 'precision-explanatory' and 'simultaneous-exp
 precision-related covariates. The default is NULL.}
 
 \item{...}{Currently not used.}
-
-\item{which}{a list or vector indicating which plots should be displayed.     If a subset of the plots is required, specify a subset of the numbers 1:5, see caption below (and the 'Details') for the different kinds.}
-
-\item{title}{titles to appear above the plots; character vector or list of valid graphics annotations. Can be set to "" to suppress all titles.}
-
-\item{label.repel}{Logical flag indicating whether to use \pkg{ggrepel} to place the labels.}
-
-\item{nrow}{Number of facet/subplot rows. If both \code{nrow} and \code{ncol} are \code{NULL}, the plots will be placed one at a time. For multiple plots, set values for \code{nrow}
-or \code{ncol}.}
-
-\item{ncol}{Number of facet/subplot columns. If both \code{nrow} and \code{ncol} are \code{NULL}, the plots will be placed one at a time. For multiple plots, set values for \code{nrow}
-or \code{ncol}.}
-
-\item{ask}{logical; if \code{TRUE}, the user is asked before each plot.}
-
-\item{include.modeltype}{logical. Indicates whether the model type ('NB' or 'PIG') should be displayed on the captions.}
-
-\item{sub.caption}{common title-above the figures if there are more than one. If NULL, as by default, a possible abbreviated version of deparse(x$call) is used.}
-
-\item{gpar_sub.caption}{list of gpar parameters to be used as common title in the case of multiple plots. The title will be given in sub.caption argument. See
-the help of \code{\link[grid]{gpar}} function from the \pkg{grid} package for all the available options.}
-
-\item{detect.influential}{logical. Indicates whether the benchmark should be used to detect influential observations and identify them on the plot. If there is no benchmark available,
-the top 'n.influential' observations will be identified in the plot by their indexes.}
-
-\item{n.influential}{interger. The maximum number of influential observations to be identified on the plot.}
-
-\item{draw.benchmark}{logical. Indicates whether a horizontal line identifying the benchmark should be drawn.}
-
-\item{colour}{line colour.}
-
-\item{size}{point size.}
-
-\item{linetype}{line type.}
-
-\item{alpha}{alpha of the plot.}
-
-\item{fill}{fill colour.}
-
-\item{shape}{point shape.}
-
-\item{label}{Logical value whether to display labels.}
-
-\item{label.label}{vector of labels. If \code{NULL}, rownames will be used as labels.}
-
-\item{label.colour}{Colour for text labels.}
-
-\item{label.alpha}{Alpha for text labels.}
-
-\item{label.size}{Size for text labels.}
-
-\item{label.angle}{Angle for text labels.}
-
-\item{label.family}{Font family for text labels.}
-
-\item{label.fontface}{Fontface for text labels.}
-
-\item{label.lineheight}{Lineheight for text labels.}
-
-\item{label.hjust}{Horizontal adjustment for text labels.}
-
-\item{label.vjust}{Vertical adjustment for text labels.}
-
-\item{ad.colour}{Line colour for additional lines.}
-
-\item{ad.linetype}{Line type for additional lines.}
-
-\item{ad.size}{Fill colour for additional lines.}
 }
 \description{
-Functions to provide tidy outputs or ggplot2-based plots of local influence diagnostics. \code{local_influence_benchmarks.mixpoissonreg}
+Functions to provide tidy outputs of local influence diagnostics. \code{tidy_local_influence.mixpoissonreg}
 provides a \code{\link[tibble:tibble]{tibble::tibble()}} containing the local influence diagnostics under the chosen perturbation schemes.
 \code{local_influence_benchmarks.mixpoissonreg} provides a \code{\link[tibble:tibble]{tibble::tibble()}} with a single row and one column
-for each selected perturbation scheme containing influential benchmarks for each perturbation scheme. \code{local_influence_autoplot.mixpoissonreg}
-creates ggplot2-based highly customizable local influence plots.
+for each selected perturbation scheme containing influential benchmarks for each perturbation scheme.
+}
+\examples{
+\donttest{
+data("Attendance", package = "mixpoissonreg")
+
+daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
+prog | gender + math + prog, data = Attendance)
+tidy_local_influence(daysabs_fit)
+
+daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
+prog | gender + math + prog, data = Attendance, envelope = 100)
+tidy_local_influence(daysabs_fit_ml, perturbation = "case_weights")
+}
 }
 \seealso{
 \code{\link{glance.mixpoissonreg}}, \code{\link{augment.mixpoissonreg}}, \code{\link{tidy.mixpoissonreg}}, \code{\link{autoplot.mixpoissonreg}}

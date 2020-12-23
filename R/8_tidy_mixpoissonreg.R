@@ -651,12 +651,11 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
 #############################################################################################
 #' @name tidy_local_influence.mixpoissonreg
 #' @title Tidy Functions for Local Influence Diagnostics for \code{mixpoissonreg} Objects
-#' @aliases local_influence_benchmarks.mixpoissonreg tidy_local_influence.mixpoissonreg local_influence_autoplot.mixpoissonreg
-#' @description Functions to provide tidy outputs or ggplot2-based plots of local influence diagnostics. \code{local_influence_benchmarks.mixpoissonreg}
+#' @aliases local_influence_benchmarks.mixpoissonreg tidy_local_influence.mixpoissonreg
+#' @description Functions to provide tidy outputs of local influence diagnostics. \code{tidy_local_influence.mixpoissonreg}
 #' provides a \code{\link[tibble:tibble]{tibble::tibble()}} containing the local influence diagnostics under the chosen perturbation schemes.
 #' \code{local_influence_benchmarks.mixpoissonreg} provides a \code{\link[tibble:tibble]{tibble::tibble()}} with a single row and one column
-#' for each selected perturbation scheme containing influential benchmarks for each perturbation scheme. \code{local_influence_autoplot.mixpoissonreg}
-#' creates ggplot2-based highly customizable local influence plots.
+#' for each selected perturbation scheme containing influential benchmarks for each perturbation scheme.
 #' @param model A \code{mixpoissonreg} model.
 #' @param perturbation a list or vector of perturbation schemes to be returned. The currently available schemes are
 #' "case_weights", "hidden_variable", "mean_explanatory", "precision_explanatory", "simultaneous_explanatory". See Barreto-Souza and Simas (2015) for further details.
@@ -674,9 +673,78 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
 #' and 'simultaneous-explanatory'
 #' perturbation schemes. If NULL, the 'precision-explanatory' and 'simultaneous-explanatory' perturbation schemes will be computed by perturbing all
 #' precision-related covariates. The default is NULL.
+#' @param ... Currently not used.
+#' @seealso \code{\link{glance.mixpoissonreg}}, \code{\link{augment.mixpoissonreg}}, \code{\link{tidy.mixpoissonreg}}, \code{\link{autoplot.mixpoissonreg}}
+#' @examples
+#' \donttest{
+#' data("Attendance", package = "mixpoissonreg")
+#'
+#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
+#' prog | gender + math + prog, data = Attendance)
+#' tidy_local_influence(daysabs_fit)
+#'
+#' daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
+#' prog | gender + math + prog, data = Attendance, envelope = 100)
+#' tidy_local_influence(daysabs_fit_ml, perturbation = "case_weights")
+#' }
+#' @rdname tidy_local_influence.mixpoissonreg
+#' @export
+tidy_local_influence.mixpoissonreg <- function(model, perturbation = c("case_weights", "hidden_variable",
+                                                     "mean_explanatory", "precision_explanatory",
+                                                     "simultaneous_explanatory"), curvature = c("conformal", "normal"),
+                                 direction = c("canonical", "max.eigen"), parameters = c("all", "mean", "precision"),
+                                 mean.covariates = NULL, precision.covariates = NULL, ...){
+    loc_infl <- suppressWarnings(local_influence(model, perturbation = perturbation, curvature = curvature, direction = direction,
+                                parameters = parameters, mean.covariates = mean.covariates, precision.covariates = precision.covariates))
+
+    tidy_loc_infl <- tibble(.rows = stats::nobs(model))
+
+    for(pert in perturbation){
+      tidy_loc_infl = tidy_loc_infl %>% add_column(!!pert := loc_infl[[pert]])
+    }
+    tidy_loc_infl
+}
+
+#' @rdname tidy_local_influence.mixpoissonreg
+local_influence_benchmarks.mixpoissonreg <- function(model, perturbation = c("case_weights", "hidden_variable",
+                                                           "mean_explanatory", "precision_explanatory",
+                                                           "simultaneous_explanatory"), curvature = c("conformal", "normal"),
+                                       direction = c("canonical", "max.eigen"), parameters = c("all", "mean", "precision"),
+                                       mean.covariates = NULL, precision.covariates = NULL){
+  loc_infl <- local_influence(model, perturbation = perturbation, curvature = curvature, direction = direction,
+                              parameters = parameters, mean.covariates = mean.covariates, precision.covariates = precision.covariates)
+  benchmarks <- c()
+  for(pert in perturbation){
+    benchmarks <- c(benchmarks, attr(loc_infl[[pert]], "benchmark"))
+  }
+  benchmarks <- matrix(benchmarks, nrow = 1)
+  colnames(benchmarks) <- perturbation
+  benchmarks_tbl <- as_tibble(benchmarks)
+  benchmarks_tbl
+}
+
+#############################################################################################
+#' @name local_influence_autoplot.mixpoissonreg
+#' @title Local Influence Autoplots for \code{mixpoissonreg} Objects
+#' @description Function to provide customizable ggplot2-based plots of local influence diagnostics.
+#' @param model A \code{mixpoissonreg} model.
 #' @param which a list or vector indicating which plots should be displayed. 	If a subset of the plots is required, specify a subset of the numbers 1:5, see caption below (and the 'Details') for the different kinds.
 #' @param title titles to appear above the plots; character vector or list of valid graphics annotations. Can be set to "" to suppress all titles.
 #' @param sub.caption	common title-above the figures if there are more than one. If NULL, as by default, a possible abbreviated version of deparse(x$call) is used.
+#' @param curvature the curvature to be returned, 'conformal' for the conformal normal curvature (see Zhu and Lee, 2001 and Poon and Poon, 1999) or
+#' 'normal' (see Zhu and Lee, 2001 and Cook, 1986).
+#' @param direction the 'max.eigen' returns the eigenvector associated to the largest eigenvalue of the perturbation matrix. The 'canonical' considers
+#' the curvatures under the canonical directions, which is known as "total local curvature" (see Lesaffre and Verbeke, 1998). For conformal
+#' normal curvatures both of them coincide. The default is 'canonical'.
+#' @param parameters the parameter to which the local influence will be computed. The options are 'all', 'mean' and 'precision'.
+#' This argument affects the 'case_weights' and 'hidden_variable' perturbation schemes. The default is 'all'.
+#' @param mean.covariates a list or vector of characters containing the mean-explanatory variables to be used in the 'mean-explanatory' and 'simultaneous-explanatory'
+#' perturbation schemes. If NULL, the 'mean-explanatory' and 'simultaneous-explanatory' perturbation schemes will be computed by perturbing all
+#' mean-related covariates. The default is NULL.
+#' @param precision.covariates a list or vector of characters containing the precision-explanatory variables to be used in the 'precision-explanatory'
+#' and 'simultaneous-explanatory'
+#' perturbation schemes. If NULL, the 'precision-explanatory' and 'simultaneous-explanatory' perturbation schemes will be computed by perturbing all
+#' precision-related covariates. The default is NULL.
 #' @param detect.influential logical. Indicates whether the benchmark should be used to detect influential observations and identify them on the plot. If there is no benchmark available,
 #' the top 'n.influential' observations will be identified in the plot by their indexes.
 #' @param n.influential interger. The maximum number of influential observations to be identified on the plot.
@@ -726,43 +794,6 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
 #' prog | gender + math + prog, data = Attendance, envelope = 100)
 #' local_influence_autoplot(daysabs_fit_ml, which = 2)
 #' }
-#' @rdname tidy_local_influence.mixpoissonreg
-#' @export
-tidy_local_influence.mixpoissonreg <- function(model, perturbation = c("case_weights", "hidden_variable",
-                                                     "mean_explanatory", "precision_explanatory",
-                                                     "simultaneous_explanatory"), curvature = c("conformal", "normal"),
-                                 direction = c("canonical", "max.eigen"), parameters = c("all", "mean", "precision"),
-                                 mean.covariates = NULL, precision.covariates = NULL, ...){
-    loc_infl <- suppressWarnings(local_influence(model, perturbation = perturbation, curvature = curvature, direction = direction,
-                                parameters = parameters, mean.covariates = mean.covariates, precision.covariates = precision.covariates))
-
-    tidy_loc_infl <- tibble(.rows = stats::nobs(model))
-
-    for(pert in perturbation){
-      tidy_loc_infl = tidy_loc_infl %>% add_column(!!pert := loc_infl[[pert]])
-    }
-    tidy_loc_infl
-}
-
-#' @rdname tidy_local_influence.mixpoissonreg
-local_influence_benchmarks.mixpoissonreg <- function(model, perturbation = c("case_weights", "hidden_variable",
-                                                           "mean_explanatory", "precision_explanatory",
-                                                           "simultaneous_explanatory"), curvature = c("conformal", "normal"),
-                                       direction = c("canonical", "max.eigen"), parameters = c("all", "mean", "precision"),
-                                       mean.covariates = NULL, precision.covariates = NULL){
-  loc_infl <- local_influence(model, perturbation = perturbation, curvature = curvature, direction = direction,
-                              parameters = parameters, mean.covariates = mean.covariates, precision.covariates = precision.covariates)
-  benchmarks <- c()
-  for(pert in perturbation){
-    benchmarks <- c(benchmarks, attr(loc_infl[[pert]], "benchmark"))
-  }
-  benchmarks <- matrix(benchmarks, nrow = 1)
-  colnames(benchmarks) <- perturbation
-  benchmarks_tbl <- as_tibble(benchmarks)
-  benchmarks_tbl
-}
-
-#' @rdname tidy_local_influence.mixpoissonreg
 #' @export
 local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), title = list("Case Weights Perturbation",
                                                                                            "Hidden Variable Perturbation",

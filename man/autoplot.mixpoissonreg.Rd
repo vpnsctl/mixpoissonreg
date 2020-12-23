@@ -136,6 +136,22 @@ If both ncol and nrow are \code{NULL}, the plots will be placed one at a time. T
 }
 \details{
 Based on \code{autoplot.lm} from the excellent \pkg{ggfortify} package, \href{https://github.com/sinhrks/ggfortify/}{ggfortify}.
-sub.caption—by default the function call—is shown as a subtitle (under the x-axis title) on each plot when plots are on separate pages, or as a subtitle
+
+sub.caption - by default the function call - is shown as a subtitle (under the x-axis title) on each plot when plots are on separate pages, or as a subtitle
 in the outer margin when there are multiple plots per page.
+}
+\examples{
+\donttest{
+data("Attendance", package = "mixpoissonreg")
+
+daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
+prog | gender + math + prog, data = Attendance)
+autoplot(daysabs_fit, which = 1:6)
+
+autoplot(daysabs_fit, nrow = 2)
+
+daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
+prog | gender + math + prog, data = Attendance, envelope = 100)
+autoplot(daysabs_fit_ml, which = 2)
+}
 }

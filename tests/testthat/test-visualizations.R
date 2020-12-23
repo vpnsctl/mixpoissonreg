@@ -19,3 +19,9 @@ expect_warning(local_influence_autoplot(fit_ml1))
 expect_warning(local_influence_autoplot(fit_ml1, which = 2))
 
 expect_warning(local_influence_autoplot(fit_ml1, nrow = 2))
+
+fit_ml1env <- mixpoissonregML(daysabs ~ math, data = Attendance, envelope = 5)
+
+plot(fit_ml1env)
+
+plot(fit_ml1env, which = 2)
