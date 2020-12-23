@@ -99,25 +99,21 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="the-mixpoissonreg-package" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#the-mixpoissonreg-package" class="anchor"></a>The <em>mixpoissonreg</em> package</h1></div>
-<div id="dev-badges" class="section level3">
-<h3 class="hasAnchor">
-<a href="#dev-badges" class="anchor"></a>Dev badges:</h3>
-<p><a href="https://github.com/vpnsctl/mixpoissonreg/main"><img src="https://img.shields.io/badge/devel%20version-1.0.0-blue.svg"></a> <a href="https://github.com/vpnsctl/mixpoissonreg/actions"><img src="https://github.com/vpnsctl/mixpoissonreg/workflows/R-CMD-check/badge.svg" alt="R build status"></a> —</p>
-<p>The <em>mixpoissonreg</em> package deals with regression models with response variables being count data. It currently provides implementation of two regression models: Poisson Inverse Gaussian regression Negative Binomial. For both of these models, the estimation is primarily done with the EM-algorithm. The definition of both these regression models along with the EM-algorithm approach for them can be found in <a href="http://doi.org/10.1007/s11222-015-9601-6" class="uri">http://doi.org/10.1007/s11222-015-9601-6</a>. We also provide maximum-likelihood estimation for both of these models, which is only recommended when the EM-algorithm takes too long to converge.</p>
-</div>
-<div id="installing-the-mixpoissonreg-package-from-this-repository" class="section level2">
+
+<div id="mixpoissonreg" class="section level2">
 <h2 class="hasAnchor">
-<a href="#installing-the-mixpoissonreg-package-from-this-repository" class="anchor"></a>Installing the <em>mixpoissonreg</em> package from this repository:</h2>
-<p>To install the <em>mixpoissonreg</em> package from this repository, just run the command:</p>
+<a href="#mixpoissonreg" class="anchor"></a><strong>mixpoissonreg</strong>
+</h2>
+<!-- badges: start -->
+
+<p>The <em>mixpoissonreg</em> package deals with regression models with response variables being count data. It is aimed towards overdispersed data. It currently provides implementation of two regression models: Poisson Inverse Gaussian regression Negative Binomial. For both of these models, there are two estimation procedures implemented, the EM-algorithm and direct maximization of the log-likelihood function. The definition of both these regression models along with the EM-algorithm approach for them can be found at <a href="http://doi.org/10.1007/s11222-015-9601-6" class="uri">http://doi.org/10.1007/s11222-015-9601-6</a>. The direct maximization of the log-likelihood is only recommended when the EM-algorithm takes too long to converge. Several global and local influence measures are implemented and easy to interpret through plot visualization. There are plot implementations using base-R and <em>ggplot2</em>. For further details, and also more tutorials, we refer the reader to the <strong>vignettes</strong> whose links can be found on the <strong>Articles</strong> menu above or by using <code>vignette(mixpoissonreg)</code>.</p>
+</div>
+<div id="installing-the-mixpoissonreg-package" class="section level2">
+<h2 class="hasAnchor">
+<a href="#installing-the-mixpoissonreg-package" class="anchor"></a>Installing the <em>mixpoissonreg</em> package</h2>
+<p>The latest development version can be installed from github:</p>
 <pre class="{r}"><code><a href="https://devtools.r-lib.org//reference/remote-reexports.html">#install.packages("devtools")
 devtools::install_github("vpnsctl/mixpoissonreg")</a></code></pre>
-<p>To install the <em>mixpoissonreg</em> package from this repository <strong>with vignettes</strong>, run the command:</p>
-<pre class="{r}"><code><a href="https://devtools.r-lib.org//reference/remote-reexports.html">#install.packages("devtools")
-devtools::install_github("vpnsctl/mixpoissonreg", build_vignettes = TRUE)</a></code></pre>
-<p>This repository will always contain the most recent version of the <em>mixpoissonreg</em> package.</p>
 </div>
 <div id="dependencies" class="section level2">
 <h2 class="hasAnchor">
@@ -128,27 +124,73 @@ devtools::install_github("vpnsctl/mixpoissonreg", build_vignettes = TRUE)</a></c
 <p>On RedHat or Fedora, run:</p>
 <pre class="{bash}"><code>yum install gsl gsl-devel</code></pre>
 </div>
-<div id="vignettes" class="section level2">
-<h2 class="hasAnchor">
-<a href="#vignettes" class="anchor"></a>Vignettes</h2>
-<p>The <em>mixpoissonreg</em> package currently has the following vignettes:</p>
-<ul>
-<li><a href="https://rpubs.com/alexandrebsimas/intro-mixpoissonreg">Introduction to the <em>mixpoissonreg</em> package</a></li>
-<li><a href="https://rpubs.com/alexandrebsimas/tutorial-mixpoissonreg">Analyzing overdispersed count data with the <em>mixpoissonreg</em> package</a></li>
-<li><a href="https://rpubs.com/alexandrebsimas/ml-mixpoissonreg">Maximum-likelihood estimation with the <em>mixpoissonreg</em> package</a></li>
-<li><a href="https://rpubs.com/alexandrebsimas/plots-mixpoissonreg">Diagnostic plots with the <em>mixpoissonreg</em> package</a></li>
-<li><a href="https://rpubs.com/alexandrebsimas/influence-mixpoissonreg">Global and local influence analysis with the <em>mixpoissonreg</em> package</a></li>
-<li><a href="https://rpubs.com/alexandrebsimas/intervals-mixpoissonreg">Confidence and predictions intervals with the <em>mixpoissonreg</em> package</a></li>
-<li><a href="https://rpubs.com/alexandrebsimas/tidyverse-mixpoissonreg"><em>mixpoissonreg</em> in the tidyverse</a></li>
-</ul>
-</div>
 <div id="basic-usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#basic-usage" class="anchor"></a>Basic usage</h2>
 <p>The usage of the <em>mixpoissonreg</em> package is analogous to the usage of standard regression functions and packages in <em>R</em>:</p>
-<p>For further details we refer the reader to the <strong>vignettes</strong> whose link can be found above.</p>
+<pre class="{r}"><code><a href="https://github.com/vpnsctl/mixpoissonreg/">library(mixpoissonreg)
+fit &lt;- mixpoissonreg(daysabs ~ prog + math + gender | prog, data = Attendance)
+fit
+#&gt; 
+#&gt; Negative Binomial Regression - Expectation-Maximization Algorithm
+#&gt; 
+#&gt; Call:
+#&gt; mixpoissonreg(formula = daysabs ~ prog + math + gender | prog, 
+#&gt;     data = Attendance)
+#&gt; 
+#&gt; Coefficients modeling the mean (with log link):
+#&gt;    (Intercept)   progAcademic progVocational           math     gendermale 
+#&gt;    2.752418105   -0.424045918   -1.238680841   -0.006791582   -0.257120287 
+#&gt; Coefficients modeling the precision (with log link):
+#&gt;    (Intercept)   progAcademic progVocational 
+#&gt;       1.109533      -1.083443      -1.517825
+
+summary(fit)
+#&gt; 
+#&gt; Negative Binomial Regression - Expectation-Maximization Algorithm
+#&gt; 
+#&gt; Call:  mixpoissonreg(formula = daysabs ~ prog + math + gender | prog, 
+#&gt;     data = Attendance)
+#&gt; 
+#&gt; 
+#&gt; Pearson residuals:
+#&gt;      RSS      Min       1Q   Median       3Q      Max 
+#&gt; 323.6397  -1.0648  -0.7204  -0.3654   0.3064   4.8776 
+#&gt; 
+#&gt; Coefficients modeling the mean (with  link):
+#&gt;                 Estimate Std.error z-value Pr(&gt;|z|)    
+#&gt; (Intercept)     2.752418  0.152613  18.035  &lt; 2e-16 ***
+#&gt; progAcademic   -0.424046  0.132369  -3.204  0.00136 ** 
+#&gt; progVocational -1.238681  0.173155  -7.154 8.45e-13 ***
+#&gt; math           -0.006792  0.002274  -2.986  0.00283 ** 
+#&gt; gendermale     -0.257120  0.116934  -2.199  0.02789 *  
+#&gt; 
+#&gt; Coefficients modeling the precision (with  link):
+#&gt;                Estimate Std.error z-value Pr(&gt;|z|)    
+#&gt; (Intercept)      1.1095    0.2783   3.987 6.68e-05 ***
+#&gt; progAcademic    -1.0834    0.3074  -3.524 0.000424 ***
+#&gt; progVocational  -1.5178    0.3395  -4.471 7.79e-06 ***
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+#&gt; 
+#&gt; Efron's pseudo R-squared:  0.1861217 
+#&gt; Number of iterations of the EM algorithm = 1930</a></code></pre>
+<p>There are also several methods implemented:</p>
+<ul>
+<li>Data visualization: <code>plot</code> (base-R visualization) ; <code>autoplot</code> (<em>ggplot2</em> visualization) ; <code>local_influence_plot</code> (base-R visualization) ; <code>local_influence_autoplot</code> (<em>ggplot2</em> visualization)</li>
+<li>Inference: <code>coeftest</code> ; <code>coefci</code> ; <code><a href="https://rdrr.io/pkg/lmtest/man/lrtest.html">lmtest::lrtest</a></code> (works with the default method) ; <code><a href="https://rdrr.io/pkg/lmtest/man/waldtest.html">lmtest::waldtest</a></code> (works with the default method) ; <code>predict</code>
+</li>
+<li>Residual analysis: <code>residuals</code>
+</li>
+<li>Global influence analysis: <code>influence</code> ; <code>cooks.distance</code> ; <code>hatvalues</code>
+</li>
+<li>Local influence analysis: <code>local_influence</code>
+</li>
+<li>Tidyverse compatibility: <code>augment</code> ; <code>glance</code> ; <code>tidy</code> ; <code>tidy_local_influence</code> ; <code>local_influence_benchmarks</code>
+</li>
+</ul>
 </div>
-</div>
+
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -177,7 +219,14 @@ devtools::install_github("vpnsctl/mixpoissonreg", build_vignettes = TRUE)</a></c
 </ul>
 </div>
 
-  </div>
+  <div class="dev-status">
+<h2>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/vpnsctl/mixpoissonreg/main"><img src="https://img.shields.io/badge/devel%20version-1.0.0-blue.svg"></a></li>
+<li><a href="https://github.com/vpnsctl/mixpoissonreg/actions"><img src="https://github.com/vpnsctl/mixpoissonreg/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
+</ul>
+</div>
+</div>
 </div>
 
 
