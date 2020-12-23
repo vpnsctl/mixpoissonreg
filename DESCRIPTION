@@ -27,5 +27,6 @@ Suggests:
     rmarkdown,
     knitr,
     devtools,
-    bbreg
+    bbreg,
+    testthat
 VignetteBuilder: knitr

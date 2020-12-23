@@ -235,8 +235,24 @@ tidy.mixpoissonreg <- function(x, conf.int = FALSE, conf.level = 0.95){
 #' @param ad.size	Fill colour for additional lines.
 #' @param ... other arguments passed to methods.
 #' @details Based on \code{autoplot.lm} from the excellent \pkg{ggfortify} package, \href{https://github.com/sinhrks/ggfortify/}{ggfortify}.
-#' sub.caption—by default the function call—is shown as a subtitle (under the x-axis title) on each plot when plots are on separate pages, or as a subtitle
+#'
+#' sub.caption - by default the function call - is shown as a subtitle (under the x-axis title) on each plot when plots are on separate pages, or as a subtitle
 #' in the outer margin when there are multiple plots per page.
+#'
+#' @examples
+#' \donttest{
+#' data("Attendance", package = "mixpoissonreg")
+#'
+#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
+#' prog | gender + math + prog, data = Attendance)
+#' autoplot(daysabs_fit, which = 1:6)
+#'
+#' autoplot(daysabs_fit, nrow = 2)
+#'
+#' daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
+#' prog | gender + math + prog, data = Attendance, envelope = 100)
+#' autoplot(daysabs_fit_ml, which = 2)
+#' }
 #' @export
 
 
@@ -696,7 +712,20 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
 #' @param ad.size	Fill colour for additional lines.
 #' @param ... Currently not used.
 #' @seealso \code{\link{glance.mixpoissonreg}}, \code{\link{augment.mixpoissonreg}}, \code{\link{tidy.mixpoissonreg}}, \code{\link{autoplot.mixpoissonreg}}
-
+#' @examples
+#' \donttest{
+#' data("Attendance", package = "mixpoissonreg")
+#'
+#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
+#' prog | gender + math + prog, data = Attendance)
+#' local_influence_autoplot(daysabs_fit)
+#'
+#' local_influence_autoplot(daysabs_fit, nrow = 2)
+#'
+#' daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
+#' prog | gender + math + prog, data = Attendance, envelope = 100)
+#' local_influence_autoplot(daysabs_fit_ml, which = 2)
+#' }
 #' @rdname tidy_local_influence.mixpoissonreg
 #' @export
 tidy_local_influence.mixpoissonreg <- function(model, perturbation = c("case_weights", "hidden_variable",
@@ -704,8 +733,8 @@ tidy_local_influence.mixpoissonreg <- function(model, perturbation = c("case_wei
                                                      "simultaneous_explanatory"), curvature = c("conformal", "normal"),
                                  direction = c("canonical", "max.eigen"), parameters = c("all", "mean", "precision"),
                                  mean.covariates = NULL, precision.covariates = NULL, ...){
-    loc_infl <- local_influence(model, perturbation = perturbation, curvature = curvature, direction = direction,
-                                parameters = parameters, mean.covariates = mean.covariates, precision.covariates = precision.covariates)
+    loc_infl <- suppressWarnings(local_influence(model, perturbation = perturbation, curvature = curvature, direction = direction,
+                                parameters = parameters, mean.covariates = mean.covariates, precision.covariates = precision.covariates))
 
     tidy_loc_infl <- tibble(.rows = stats::nobs(model))
 
@@ -759,6 +788,22 @@ local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), ti
   p <- list()
   tmp <- NULL
   p[[1]] <- p[[2]] <- p[[3]] <- p[[4]] <- p[[5]] <- NULL
+
+  n_beta = length(model$coefficients$mean)
+  n_alpha = length(model$coefficients$precision)
+
+  if(model$intercept[1] & n_beta == 1 & any(c(3,5)%in% which)){
+    warning("Removing mean explanatory and simultaneous explanatory perturbations since
+          there is only the intercept for the mean.")
+    which <- setdiff(which, c(3,5))
+  }
+
+  if(model$intercept[2] & n_alpha == 1 & any(c(4,5)%in% which)){
+    warning("Removing precision explanatory and simultaneous explanatory perturbations since
+          there is only the intercept for the precision parameter.")
+    which <- setdiff(which, c(4,5))
+  }
+
   if (is.null(sub.caption)) {
     cal <- model$call
     if (!is.na(m.f <- match("formula", names(cal)))) {

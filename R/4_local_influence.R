@@ -47,34 +47,34 @@
 #'
 #' The 'mean_explanatory', 'precision_explanatory' and 'simultaneous_explanatory' elements of the list contain an attribute 'covariates' indicating
 #' which covariates were used in the perturbation schemes.
-#' @details 
+#' @details
 #' \code{local_influence.mixpoissonreg} provides local influence diagnostics for mixed Poisson regression models for all perturbation schemes considered in
 #' Barreto-Souza and Simas (2015), for normal and conformal normal curvatures. Further, it is also provides results for the canonical directions, which is called
 #' the total local influence (see Lesaffre and Verbeke, 1998), as well as for the direction of largest curvature, which is the direction of the eigenvector of the
-#' perturbation matrix associated to the largest eigenvalue. 
-#' 
+#' perturbation matrix associated to the largest eigenvalue.
+#'
 #' \code{local_influence_plot.mixpoissonreg} provides a plot of the local influence diagnostics. Each plot corresponds to a perturbation scheme. The first plot considers
 #' the 'case-weights' perturbation; the second plot considers the 'hidden-variable' perturbation (which was introduced in Barreto-Souza and Simas, 2015); the third plot
 #' considers the mean-explanatory perturbation; the fourth plot considers the precision-explanatory perturbation; the fifth plot considers the simultanous-explanatory perturbation.
-#' 
-#' For both \code{local_influence.mixpoissonreg} and \code{local_influence_plot.mixpoissonreg}, one can select which covariates will be perturbed in the 'mean-explanatory', 
+#'
+#' For both \code{local_influence.mixpoissonreg} and \code{local_influence_plot.mixpoissonreg}, one can select which covariates will be perturbed in the 'mean-explanatory',
 #' 'precision-explanatory' and 'simultaneous-explanatory' perturbation schemes. These are chosen in the 'mean.covariates' and 'precision.covariates' arguments.
-#' 
+#'
 #' If one considers the total local influence, then Zhu and Lee (2002) provides benchmark for influential observations for all perturbation schemes. These are returned as
 #' attributes in the returned list from \code{local_influence.mixpoissonreg}. When using the \code{local_influence_plot.mixpoissonreg}, only points above the benchmark
 #' will be displayed. One can also set the option 'draw_benchmark' to TRUE to plot the benchmark line.
-#' 
-#' 
 #'
-#' @references 
+#'
+#'
+#' @references
 #' DOI:10.1007/s11222-015-9601-6 (\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
-#' 
+#'
 #' Cook, R. D. (1986) *Assessment of Local Influence.* Journal of the Royal Statistical Society. Series B (Methodological), Vol. 48, pp.133-169. \href{https://rss.onlinelibrary.wiley.com/doi/10.1111/j.2517-6161.1986.tb01398.x}{https://rss.onlinelibrary.wiley.com/doi/10.1111/j.2517-6161.1986.tb01398.x}
-#' 
+#'
 #' Lesaffre, E. and Verbeke, G. (1998) *Local Influence in Linear Mixed Models*. Biometrics, 54, pp. 570-582. \href{https://www.jstor.org/stable/3109764}{https://www.jstor.org/stable/3109764}
-#' 
+#'
 #' Poon, W.-Y. and Poon, Y.S. (2002) *Conformal normal curvature and assessment of local influence.*  Journal of the Royal Statistical Society. Series B (Methodological), Vol. 61, pp.51-61. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}
-#'   
+#'
 #' Zhu, H.-T. and Lee, S.-Y. (2002) *Local influence for incomplete data models.* Journal of the Royal Statistical Society. Series B (Methodological), Vol. 63, pp.111-126. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}
 
 
@@ -104,11 +104,22 @@ n = model$nobs
 x = model$x
 w = model$w
 
+
 beta = model$coefficients$mean
 alpha = model$coefficients$precision
 
 n_beta = length(model$coefficients$mean)
 n_alpha = length(model$coefficients$precision)
+
+if(model$intercept[1] & n_beta == 1){
+  warning("Mean explanatory and simultaneous explanatory should not be considered since
+          there is only the intercept for the mean.")
+}
+
+if(model$intercept[2] & n_alpha == 1){
+  warning("Precision explanatory and simultaneous explanatory should not be considered since
+          there is only the intercept for the precision parameter.")
+}
 
 mu = model$fitted.values
 phi = model$fitted.precisions
@@ -173,7 +184,10 @@ for(pert in perturbation){
              expl_mean <- names(model$coefficients$mean) %in% mean.covariates
              S_x = S_x * expl_mean
            }
-           S_x = diag(S_x)
+
+           if(length(S_x) > 1){
+             S_x = diag(S_x)
+           }
 
            ones_nbeta = rep(1,n_beta)
            ones_n = rep(1,n)
@@ -188,7 +202,9 @@ for(pert in perturbation){
              S_w = S_w * expl_precision
            }
 
-           S_w = diag(S_w)
+           if(length(S_w) > 1){
+             S_w = diag(S_w)
+           }
 
            ones_nalpha = rep(1,n_alpha)
            ones_n = rep(1,n)
@@ -210,8 +226,13 @@ for(pert in perturbation){
              S_w = S_w * expl_precision
            }
 
-           S_x = diag(S_x)
-           S_w = diag(S_w)
+           if(length(S_x) > 1){
+             S_x = diag(S_x)
+           }
+
+           if(length(S_w) > 1){
+             S_w = diag(S_w)
+           }
 
            ones_nbeta = rep(1,n_beta)
            ones_nalpha = rep(1,n_alpha)
@@ -298,6 +319,21 @@ local_influence_plot.mixpoissonreg <- function(model, which = c(1,2,3,4),
   direction <- rlang::arg_match(direction)
   curvature <- rlang::arg_match(curvature)
 
+  n_beta = length(model$coefficients$mean)
+  n_alpha = length(model$coefficients$precision)
+
+  if(model$intercept[1] & n_beta == 1 & any(c(3,5)%in% which)){
+    warning("Removing mean explanatory and simultaneous explanatory perturbations since
+          there is only the intercept for the mean.")
+    which <- setdiff(which, c(3,5))
+  }
+
+  if(model$intercept[2] & n_alpha == 1 & any(c(4,5)%in% which)){
+    warning("Removing precision explanatory and simultaneous explanatory perturbations since
+          there is only the intercept for the precision parameter.")
+    which <- setdiff(which, c(4,5))
+  }
+
   getCaption <- function(k) if (length(caption) < k)
     NA_character_
   else {
@@ -338,10 +374,10 @@ local_influence_plot.mixpoissonreg <- function(model, which = c(1,2,3,4),
 
   one.fig <- prod(graphics::par("mfcol")) == 1
 
-loc_infl <- local_influence(model, curvature = curvature,
+loc_infl <- suppressWarnings(local_influence(model, curvature = curvature,
                             direction = direction, parameters = parameters,
                             mean.covariates = mean.covariates,
-                            precision.covariates = precision.covariates)
+                            precision.covariates = precision.covariates))
 
 if (ask) {
   oask <- grDevices::devAskNewPage(TRUE)
@@ -417,20 +453,20 @@ invisible()
 #' @title Local Influence Diagnostics
 #' @param model an object for which the local influence is desired
 #' @param ... further arguments passed to or from other methods.
-#' @details 
+#' @details
 #' \code{local_influence} is a generic function to return local influence diagnostics under different perturbation schemes and different directions.
-#' \code{local_influence_plot} is a generic function to provide friendly plots of such diagnostics. 
-#' 
-#' Local influence diagnostics were first introduced by Cook (1986), where several perturbation schemes were introduced and normal curvatures were obtained. Poon and Poon (2002) 
+#' \code{local_influence_plot} is a generic function to provide friendly plots of such diagnostics.
+#'
+#' Local influence diagnostics were first introduced by Cook (1986), where several perturbation schemes were introduced and normal curvatures were obtained. Poon and Poon (2002)
 #' introduced the conformal normal curvature, which has nice properties and takes values on the unit interval \eqn{[0,1]}. Zhu and Lee (2002) following Cook (1986) and Poon and Poon (2002)
-#' introduced normal and conformal normal curvatures for EM-based models. 
-#' @references 
+#' introduced normal and conformal normal curvatures for EM-based models.
+#' @references
 #' Cook, R. D. (1986) *Assessment of Local Influence.* Journal of the Royal Statistical Society. Series B (Methodological), Vol. 48, pp.133-169. \href{https://rss.onlinelibrary.wiley.com/doi/10.1111/j.2517-6161.1986.tb01398.x}{https://rss.onlinelibrary.wiley.com/doi/10.1111/j.2517-6161.1986.tb01398.x}
-#' 
+#'
 #' Poon, W.-Y. and Poon, Y.S. (2002) *Conformal normal curvature and assessment of local influence.*  Journal of the Royal Statistical Society. Series B (Methodological), Vol. 61, pp.51-61. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}
-#'   
+#'
 #' Zhu, H.-T. and Lee, S.-Y. (2002) *Local influence for incomplete data models.* Journal of the Royal Statistical Society. Series B (Methodological), Vol. 63, pp.111-126. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}
-#' @seealso \code{\link{local_influence.mixpoissonreg}}, \code{\link{local_influence_plot.mixpoissonreg}}, 
+#' @seealso \code{\link{local_influence.mixpoissonreg}}, \code{\link{local_influence_plot.mixpoissonreg}},
 #' \code{\link{local_influence_autoplot.mixpoissonreg}}
 #'
 #' @rdname local_influence
