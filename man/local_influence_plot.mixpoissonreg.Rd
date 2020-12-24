@@ -101,12 +101,12 @@ it takes values on \eqn{[0,1]} and other nice properties (see Zhu and Lee, 2001 
 }
 \details{
 \code{local_influence.mixpoissonreg} provides local influence diagnostics for mixed Poisson regression models for all perturbation schemes considered in
-Barreto-Souza and Simas (2015), for normal and conformal normal curvatures. Further, it is also provides results for the canonical directions, which is called
+Barreto-Souza and Simas (2016), for normal and conformal normal curvatures. Further, it is also provides results for the canonical directions, which is called
 the total local influence (see Lesaffre and Verbeke, 1998), as well as for the direction of largest curvature, which is the direction of the eigenvector of the
 perturbation matrix associated to the largest eigenvalue.
 
 \code{local_influence_plot.mixpoissonreg} provides a plot of the local influence diagnostics. Each plot corresponds to a perturbation scheme. The first plot considers
-the 'case-weights' perturbation; the second plot considers the 'hidden-variable' perturbation (which was introduced in Barreto-Souza and Simas, 2015); the third plot
+the 'case-weights' perturbation; the second plot considers the 'hidden-variable' perturbation (which was introduced in Barreto-Souza and Simas, 2016); the third plot
 considers the mean-explanatory perturbation; the fourth plot considers the precision-explanatory perturbation; the fifth plot considers the simultanous-explanatory perturbation.
 
 For both \code{local_influence.mixpoissonreg} and \code{local_influence_plot.mixpoissonreg}, one can select which covariates will be perturbed in the 'mean-explanatory',
@@ -130,7 +130,7 @@ local_influence_plot(daysabs_fit_ml, which = 2)
 }
 }
 \references{
-DOI:10.1007/s11222-015-9601-6 (\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
+DOI:10.1007/s11222-015-9601-6 (\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2016})
 
 Cook, R. D. (1986) \emph{Assessment of Local Influence.} Journal of the Royal Statistical Society. Series B (Methodological), Vol. 48, pp.133-169. \href{https://rss.onlinelibrary.wiley.com/doi/10.1111/j.2517-6161.1986.tb01398.x}{https://rss.onlinelibrary.wiley.com/doi/10.1111/j.2517-6161.1986.tb01398.x}
 

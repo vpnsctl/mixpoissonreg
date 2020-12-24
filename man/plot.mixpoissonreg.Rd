@@ -77,7 +77,7 @@ are familiar with \code{glm} objects.
 
 These plots allows one to perform residuals analsysis and influence diagnostics. There are other global influence functions, see \code{\link{influence.mixpoissonreg}}.
 
-See Barreto-Souza and Simas (2015), Cook and Weisberg (1982) and Zhu et al. (2001).
+See Barreto-Souza and Simas (2016), Cook and Weisberg (1982) and Zhu et al. (2001).
 }
 \examples{
 \donttest{
@@ -97,7 +97,7 @@ plot(daysabs_fit_ml, which = 2)
 }
 }
 \references{
-DOI:10.1007/s11222-015-9601-6 (\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
+DOI:10.1007/s11222-015-9601-6 (\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2016})
 
 Cook, D.R. and Weisberg, S. (1982) \emph{Residuals and Influence in Regression}. (New York: Chapman and Hall, 1982)
 

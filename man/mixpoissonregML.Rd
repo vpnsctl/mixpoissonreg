@@ -152,7 +152,7 @@ which yields \eqn{Y} following, respectively, NB and PIG distributions.
 General properties of the MP distributions can be found in Karlis and Xekalaki (2005) and in the references therein.
 
 In \code{mixpoissonreg} two regression models are implemented, namely, the NB and PIG regression models.
-We follow the definitions and notations given in Barreto-Souza and Simas (2015). The mixed Poisson regression model
+We follow the definitions and notations given in Barreto-Souza and Simas (2016). The mixed Poisson regression model
 is defined by assuming \eqn{Y_1,\ldots,Y_n} is a random sample where
 \eqn{Y_i\sim NB(\mu_i,\phi_i)} or \eqn{Y_i\sim PIG(\mu_i,\phi_i)} for \eqn{i = 1,\ldots,n}.
 Under this parameterization we have \eqn{E(Y_i) = \mu_i} and \eqn{Var(Y_i) = \mu_i(1+\mu_i\phi_i^{-1}b''(\xi_0))}, where
@@ -180,13 +180,13 @@ In general, in this package, the EM-algorithm estimation method obtains estimate
 in the sense that the likelihood function evaluated at the EM-algorithm estimate is greater or equal (usually strictly greater) than the likelihood function evaluated
 at the maximum likelihood estimate. So, unless the processing time is an issue, we strongly recommend the EM-algorithm as the estimation method.
 
-In Barreto-Souza and Simas (2015) two residuals were studied: the pearson residuals
+In Barreto-Souza and Simas (2016) two residuals were studied: the pearson residuals
 and the score residuals. Both these residuals are implemented in the \code{mixpoissonreg}
 package. They coincide for NB regression models. They can be accessed via
 the \link[mixpoissonreg:residuals.mixpoissonreg]{residuals} method.
 
 It is also noteworthy that all the global and local influence analysis tools developed
-in Barreto-Souza and Simas (2015) are implemented in this package. See \code{\link{influence.mixpoissonreg}},
+in Barreto-Souza and Simas (2016) are implemented in this package. See \code{\link{influence.mixpoissonreg}},
 \code{\link{local_influence.mixpoissonreg}}, \code{\link{local_influence_plot.mixpoissonreg}}
 and \code{\link{local_influence_autoplot.mixpoissonreg}}.
 }
@@ -215,7 +215,7 @@ lmtest::waldtest(daysabs_fit_ml, daysabs_fit_ml_red)
 
 }
 \references{
-DOI:10.1007/s11222-015-9601-6 (\\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2015})
+DOI:10.1007/s11222-015-9601-6 (\\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2016})
 
 URL:https://projecteuclid.org/euclid.isr/1112304811 (\\href{https://projecteuclid.org/euclid.isr/1112304811}{Karlis and Xekalaki; 2005})
 
