@@ -82,7 +82,7 @@ precision-related parameters should be extracted, with parameters = 'precision'.
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -126,7 +126,7 @@ precision-related parameters should be extracted, with parameters = 'precision'.
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/vpnsctl/mixpoissonreg/">
-    <span class="fab fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -186,15 +186,15 @@ precision-related parameters should be extracted, with <code>parameters = 'preci
 <span class='va'>prog</span> <span class='op'>|</span> <span class='va'>gender</span> <span class='op'>+</span> <span class='va'>math</span> <span class='op'>+</span> <span class='va'>prog</span>, data <span class='op'>=</span> <span class='va'>Attendance</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/stats/coef.html'>coef</a></span><span class='op'>(</span><span class='va'>daysabs_fit</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;              (Intercept)               gendermale                     math 
-#&gt;              2.746064494             -0.245025922             -0.006617001 
+#&gt;              2.746080593             -0.245041967             -0.006617158 
 #&gt;             progAcademic           progVocational    (Intercept).precision 
-#&gt;             -0.426015869             -1.269636367              1.412198675 
+#&gt;             -0.425978400             -1.269702557              1.412447549 
 #&gt;     gendermale.precision           math.precision   progAcademic.precision 
-#&gt;             -0.208607862             -0.005115189             -1.082474750 
+#&gt;             -0.208599713             -0.005116342             -1.082668194 
 #&gt; progVocational.precision 
-#&gt;             -1.420196712 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/coef.html'>coef</a></span><span class='op'>(</span><span class='va'>daysabs_fit</span>, parameters <span class='op'>=</span> <span class='st'>"precision"</span><span class='op'>)</span>
+#&gt;             -1.420445607 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/coef.html'>coef</a></span><span class='op'>(</span><span class='va'>daysabs_fit</span>, parameters <span class='op'>=</span> <span class='st'>"precision"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;    (Intercept)     gendermale           math   progAcademic progVocational 
-#&gt;    1.412198675   -0.208607862   -0.005115189   -1.082474750   -1.420196712 </div><div class='input'><span class='co'># }</span>
+#&gt;    1.412447549   -0.208599713   -0.005116342   -1.082668194   -1.420445607 </div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

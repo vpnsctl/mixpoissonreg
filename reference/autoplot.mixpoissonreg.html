@@ -85,7 +85,7 @@ If both ncol and nrow are NULL, the plots will be placed one at a time. To place
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -129,7 +129,7 @@ If both ncol and nrow are NULL, the plots will be placed one at a time. To place
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/vpnsctl/mixpoissonreg/">
-    <span class="fab fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -359,10 +359,25 @@ the help of <code><a href='https://rdrr.io/r/grid/gpar.html'>gpar</a></code> fun
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Based on <code>autoplot.lm</code> from the excellent <span class="pkg">ggfortify</span> package, <a href='https://github.com/sinhrks/ggfortify/'>ggfortify</a>.
-sub.caption—by default the function call—is shown as a subtitle (under the x-axis title) on each plot when plots are on separate pages, or as a subtitle
+    <p>Based on <code>autoplot.lm</code> from the excellent <span class="pkg">ggfortify</span> package, <a href='https://github.com/sinhrks/ggfortify/'>ggfortify</a>.</p>
+<p>sub.caption - by default the function call - is shown as a subtitle (under the x-axis title) on each plot when plots are on separate pages, or as a subtitle
 in the outer margin when there are multiple plots per page.</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"Attendance"</span>, package <span class='op'>=</span> <span class='st'>"mixpoissonreg"</span><span class='op'>)</span>
+
+<span class='va'>daysabs_fit</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mixpoissonreg.html'>mixpoissonreg</a></span><span class='op'>(</span><span class='va'>daysabs</span> <span class='op'>~</span> <span class='va'>gender</span> <span class='op'>+</span> <span class='va'>math</span> <span class='op'>+</span>
+<span class='va'>prog</span> <span class='op'>|</span> <span class='va'>gender</span> <span class='op'>+</span> <span class='va'>math</span> <span class='op'>+</span> <span class='va'>prog</span>, data <span class='op'>=</span> <span class='va'>Attendance</span><span class='op'>)</span>
+<span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>daysabs_fit</span>, which <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>6</span><span class='op'>)</span>
+</div><div class='img'><img src='autoplot.mixpoissonreg-1.png' alt='' width='700' height='433' /></div><div class='img'><img src='autoplot.mixpoissonreg-2.png' alt='' width='700' height='433' /></div><div class='img'><img src='autoplot.mixpoissonreg-3.png' alt='' width='700' height='433' /></div><div class='img'><img src='autoplot.mixpoissonreg-4.png' alt='' width='700' height='433' /></div><div class='img'><img src='autoplot.mixpoissonreg-5.png' alt='' width='700' height='433' /></div><div class='img'><img src='autoplot.mixpoissonreg-6.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>daysabs_fit</span>, nrow <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+</div><div class='img'><img src='autoplot.mixpoissonreg-7.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='va'>daysabs_fit_ml</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mixpoissonregML.html'>mixpoissonregML</a></span><span class='op'>(</span><span class='va'>daysabs</span> <span class='op'>~</span> <span class='va'>gender</span> <span class='op'>+</span> <span class='va'>math</span> <span class='op'>+</span>
+<span class='va'>prog</span> <span class='op'>|</span> <span class='va'>gender</span> <span class='op'>+</span> <span class='va'>math</span> <span class='op'>+</span> <span class='va'>prog</span>, data <span class='op'>=</span> <span class='va'>Attendance</span>, envelope <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span>
+<span class='fu'>autoplot</span><span class='op'>(</span><span class='va'>daysabs_fit_ml</span>, which <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+</div><div class='img'><img src='autoplot.mixpoissonreg-8.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

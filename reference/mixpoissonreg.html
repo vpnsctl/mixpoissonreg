@@ -83,7 +83,7 @@ Another important feature of this package is the set of functions to perform glo
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -127,7 +127,7 @@ Another important feature of this package is the set of functions to perform glo
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/vpnsctl/mixpoissonreg/">
-    <span class="fab fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -339,7 +339,7 @@ The most common choices for \(Z\) are gamma and inverse-gaussian distributions,
 which yields \(Y\) following, respectively, NB and PIG distributions.
 General properties of the MP distributions can be found in Karlis and Xekalaki (2005) and in the references therein.</p>
 <p>In <code>mixpoissonreg</code> two regression models are implemented, namely, the NB and PIG regression models.
-We follow the definitions and notations given in Barreto-Souza and Simas (2015). The mixed Poisson regression model
+We follow the definitions and notations given in Barreto-Souza and Simas (2016). The mixed Poisson regression model
 is defined by assuming \(Y_1,\ldots,Y_n\) is a random sample where
 \(Y_i\sim NB(\mu_i,\phi_i)\) or \(Y_i\sim PIG(\mu_i,\phi_i)\) for \(i = 1,\ldots,n\).
 Under this parameterization we have \(E(Y_i) = \mu_i\) and \(Var(Y_i) = \mu_i(1+\mu_i\phi_i^{-1}b''(\xi_0))\), where
@@ -364,17 +364,17 @@ that is, <code>y ~ x1 + ... + xn</code> is the same as <code>y ~ x1 + ... + xn |
 <p>In general, in this package, the EM-algorithm estimation method obtains estimates closer to the maximum likelihood estimate than the maximum likelihood estimation method,
 in the sense that the likelihood function evaluated at the EM-algorithm estimate is greater or equal (usually strictly greater) than the likelihood function evaluated
 at the maximum likelihood estimate. So, unless the processing time is an issue, we strongly recommend the EM-algorithm as the estimation method.</p>
-<p>In Barreto-Souza and Simas (2015) two residuals were studied: the pearson residuals
+<p>In Barreto-Souza and Simas (2016) two residuals were studied: the pearson residuals
 and the score residuals. Both these residuals are implemented in the <code>mixpoissonreg</code>
 package. They coincide for NB regression models. They can be accessed via
 the <a href='residuals.mixpoissonreg.html'>residuals</a> method.</p>
 <p>It is also noteworthy that all the global and local influence analysis tools developed
-in Barreto-Souza and Simas (2015) are implemented in this package. See <code><a href='influence.mixpoissonreg.html'>influence.mixpoissonreg</a></code>,
-<code><a href='local_influence.mixpoissonreg.html'>local_influence.mixpoissonreg</a></code>, <code><a href='local_influence.mixpoissonreg.html'>local_influence_plot.mixpoissonreg</a></code>
-and <code><a href='tidy_local_influence.mixpoissonreg.html'>local_influence_autoplot.mixpoissonreg</a></code>.</p>
+in Barreto-Souza and Simas (2016) are implemented in this package. See <code><a href='influence.mixpoissonreg.html'>influence.mixpoissonreg</a></code>,
+<code><a href='local_influence.mixpoissonreg.html'>local_influence.mixpoissonreg</a></code>, <code><a href='local_influence_plot.mixpoissonreg.html'>local_influence_plot.mixpoissonreg</a></code>
+and <code><a href='local_influence_autoplot.mixpoissonreg.html'>local_influence_autoplot.mixpoissonreg</a></code>.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>DOI:10.1007/s11222-015-9601-6 (<a href='https://doi.org/10.1007/s11222-015-9601-6'>Barreto-Souza and Simas; 2015</a>)</p>
+    <p>DOI:10.1007/s11222-015-9601-6 (<a href='https://doi.org/10.1007/s11222-015-9601-6'>Barreto-Souza and Simas; 2016</a>)</p>
 <p>URL:https://projecteuclid.org/euclid.isr/1112304811 (<a href='https://projecteuclid.org/euclid.isr/1112304811'>Karlis and Xekalaki; 2005</a>)</p>
 <p>DOI:10.2307/3314912 (<a href='https://doi.org/10.2307/3314912'>Lawless; 1987</a>)</p>
 <p>DOI:10.1214/09-AOAS306 (<a href='http://doi.org/10.1214/09-AOAS306'>Sellers and Shmueli; 2010</a>)</p>
@@ -383,7 +383,7 @@ and <code><a href='tidy_local_influence.mixpoissonreg.html'>local_influence_auto
     <div class='dont-index'><p><code><a href='summary.mixpoissonreg.html'>summary.mixpoissonreg</a></code>, <code><a href='plot.mixpoissonreg.html'>plot.mixpoissonreg</a></code>, <code><a href='autoplot.mixpoissonreg.html'>autoplot.mixpoissonreg</a></code>,
 <code><a href='residuals.mixpoissonreg.html'>residuals.mixpoissonreg</a></code>, <code><a href='predict.mixpoissonreg.html'>predict.mixpoissonreg</a></code>,<code><a href='influence.mixpoissonreg.html'>influence.mixpoissonreg</a></code>,
 <code><a href='influence.mixpoissonreg.html'>cooks.distance.mixpoissonreg</a></code>,
-<code><a href='local_influence.mixpoissonreg.html'>local_influence.mixpoissonreg</a></code>, <code><a href='local_influence.mixpoissonreg.html'>local_influence_plot.mixpoissonreg</a></code>, <code><a href='tidy_local_influence.mixpoissonreg.html'>local_influence_autoplot.mixpoissonreg</a></code></p></div>
+<code><a href='local_influence.mixpoissonreg.html'>local_influence.mixpoissonreg</a></code>, <code><a href='local_influence_plot.mixpoissonreg.html'>local_influence_plot.mixpoissonreg</a></code>, <code><a href='local_influence_autoplot.mixpoissonreg.html'>local_influence_autoplot.mixpoissonreg</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Examples using the Attendance dataset:</span>
@@ -401,29 +401,29 @@ and <code><a href='tidy_local_influence.mixpoissonreg.html'>local_influence_auto
 #&gt; 
 #&gt; Pearson residuals:
 #&gt;      RSS      Min       1Q   Median       3Q      Max 
-#&gt; 321.9684  -1.1741  -0.6993  -0.3600   0.3013   4.7170 
+#&gt; 321.9747  -1.1743  -0.6993  -0.3600   0.3014   4.7173 
 #&gt; 
 #&gt; Coefficients modeling the mean (with  link):
 #&gt;                 Estimate Std.error z-value Pr(&gt;|z|)    
-#&gt; (Intercept)     2.746064  0.147482  18.620  &lt; 2e-16 ***
-#&gt; gendermale     -0.245026  0.117989  -2.077  0.03783 *  
+#&gt; (Intercept)     2.746081  0.147474  18.621  &lt; 2e-16 ***
+#&gt; gendermale     -0.245042  0.117987  -2.077  0.03781 *  
 #&gt; math           -0.006617  0.002318  -2.855  0.00430 ** 
-#&gt; progAcademic   -0.426016  0.132196  -3.223  0.00127 ** 
-#&gt; progVocational -1.269636  0.174484  -7.277 3.43e-13 ***
+#&gt; progAcademic   -0.425978  0.132190  -3.222  0.00127 ** 
+#&gt; progVocational -1.269703  0.174479  -7.277 3.41e-13 ***
 #&gt; 
 #&gt; Coefficients modeling the precision (with  link):
 #&gt;                 Estimate Std.error z-value Pr(&gt;|z|)    
-#&gt; (Intercept)     1.412199  0.343251   4.114 3.89e-05 ***
-#&gt; gendermale     -0.208608  0.203692  -1.024 0.305771    
-#&gt; math           -0.005115  0.004181  -1.223 0.221156    
-#&gt; progAcademic   -1.082475  0.305482  -3.544 0.000395 ***
-#&gt; progVocational -1.420197  0.343814  -4.131 3.62e-05 ***
+#&gt; (Intercept)     1.412448  0.343250   4.115 3.87e-05 ***
+#&gt; gendermale     -0.208600  0.203691  -1.024 0.305789    
+#&gt; math           -0.005116  0.004181  -1.224 0.221053    
+#&gt; progAcademic   -1.082668  0.305481  -3.544 0.000394 ***
+#&gt; progVocational -1.420446  0.343813  -4.131 3.60e-05 ***
 #&gt; ---
 #&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 #&gt; 
-#&gt; Efron's pseudo R-squared:  0.1860879 
-#&gt; Number of iterations of the EM algorithm = 2493</div><div class='input'><span class='co'># Base R plot of the fit</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>daysabs_fit</span><span class='op'>)</span>
+#&gt; Efron's pseudo R-squared:  0.1860883 
+#&gt; Number of iterations of the EM algorithm = 2804</div><div class='input'><span class='co'># Base R plot of the fit</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>daysabs_fit</span><span class='op'>)</span>
 </div><div class='img'><img src='mixpoissonreg-1.png' alt='' width='700' height='433' /></div><div class='img'><img src='mixpoissonreg-2.png' alt='' width='700' height='433' /></div><div class='img'><img src='mixpoissonreg-3.png' alt='' width='700' height='433' /></div><div class='img'><img src='mixpoissonreg-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># ggplot2 plot of the fit</span>
 <span class='fu'><a href='autoplot.mixpoissonreg.html'>autoplot</a></span><span class='op'>(</span><span class='va'>daysabs_fit</span><span class='op'>)</span>
 </div><div class='img'><img src='mixpoissonreg-5.png' alt='' width='700' height='433' /></div><div class='img'><img src='mixpoissonreg-6.png' alt='' width='700' height='433' /></div><div class='img'><img src='mixpoissonreg-7.png' alt='' width='700' height='433' /></div><div class='img'><img src='mixpoissonreg-8.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># plot of local influence measures</span>
@@ -441,7 +441,7 @@ and <code><a href='tidy_local_influence.mixpoissonreg.html'>local_influence_auto
 #&gt; Model 2: daysabs ~ gender + math + prog | prog
 #&gt;   #Df  LogLik Df  Chisq Pr(&gt;Chisq)
 #&gt; 1  10 -853.20                     
-#&gt; 2   8 -854.41 -2 2.4076        0.3</div><div class='input'><span class='co'># Wald test:</span>
+#&gt; 2   8 -854.41 -2 2.4077        0.3</div><div class='input'><span class='co'># Wald test:</span>
 <span class='fu'>lmtest</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/lmtest/man/waldtest.html'>waldtest</a></span><span class='op'>(</span><span class='va'>daysabs_fit</span>, <span class='va'>daysabs_fit_red</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Wald test
 #&gt; 
@@ -449,7 +449,7 @@ and <code><a href='tidy_local_influence.mixpoissonreg.html'>local_influence_auto
 #&gt; Model 2: daysabs ~ gender + math + prog | prog
 #&gt;   Res.Df Df  Chisq Pr(&gt;Chisq)
 #&gt; 1    304                     
-#&gt; 2    306 -2 2.4126     0.2993</div><div class='input'><span class='co'># }</span>
+#&gt; 2    306 -2 2.4132     0.2992</div><div class='input'><span class='co'># }</span>
 
 </div></pre>
   </div>

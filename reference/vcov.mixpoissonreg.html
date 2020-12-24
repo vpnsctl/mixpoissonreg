@@ -81,7 +81,7 @@ indicates for which parameters the variance-covariance matrix should be computed
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -125,7 +125,7 @@ indicates for which parameters the variance-covariance matrix should be computed
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/vpnsctl/mixpoissonreg/">
-    <span class="fab fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -184,61 +184,61 @@ indicates for which parameters the variance-covariance matrix should be computed
 <span class='va'>prog</span> <span class='op'>|</span> <span class='va'>gender</span> <span class='op'>+</span> <span class='va'>math</span> <span class='op'>+</span> <span class='va'>prog</span>, data <span class='op'>=</span> <span class='va'>Attendance</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/stats/vcov.html'>vcov</a></span><span class='op'>(</span><span class='va'>daysabs_fit</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;                            (Intercept)    gendermale          math
-#&gt; (Intercept)               2.175100e-02 -5.920312e-03 -2.219790e-04
-#&gt; gendermale               -5.920312e-03  1.392140e-02  1.824871e-05
-#&gt; math                     -2.219790e-04  1.824871e-05  5.371484e-06
-#&gt; progAcademic             -1.052974e-02 -1.026077e-03  6.649003e-06
-#&gt; progVocational           -5.924779e-03 -1.866297e-03 -1.019339e-04
-#&gt; (Intercept).precision     4.017866e-04 -4.690771e-04  8.364511e-06
-#&gt; gendermale.precision      7.361679e-04 -5.312459e-04 -3.678623e-05
-#&gt; math.precision            1.329877e-05 -3.547506e-05 -1.112732e-07
-#&gt; progAcademic.precision   -7.591043e-04  2.037302e-03  8.705615e-07
-#&gt; progVocational.precision -3.243207e-03  4.181911e-03  4.627472e-05
+#&gt; (Intercept)               2.174860e-02 -5.920137e-03 -2.219657e-04
+#&gt; gendermale               -5.920137e-03  1.392084e-02  1.824834e-05
+#&gt; math                     -2.219657e-04  1.824834e-05  5.371242e-06
+#&gt; progAcademic             -1.052804e-02 -1.026054e-03  6.648669e-06
+#&gt; progVocational           -5.923324e-03 -1.866190e-03 -1.019301e-04
+#&gt; (Intercept).precision     4.007601e-04 -4.687500e-04  8.377288e-06
+#&gt; gendermale.precision      7.364174e-04 -5.315196e-04 -3.678578e-05
+#&gt; math.precision            1.330957e-05 -3.547569e-05 -1.114745e-07
+#&gt; progAcademic.precision   -7.587315e-04  2.037250e-03  8.669582e-07
+#&gt; progVocational.precision -3.242819e-03  4.181723e-03  4.627117e-05
 #&gt;                           progAcademic progVocational (Intercept).precision
-#&gt; (Intercept)              -1.052974e-02  -5.924779e-03          4.017866e-04
-#&gt; gendermale               -1.026077e-03  -1.866297e-03         -4.690771e-04
-#&gt; math                      6.649003e-06  -1.019339e-04          8.364511e-06
-#&gt; progAcademic              1.747581e-02   1.064389e-02          2.182256e-04
-#&gt; progVocational            1.064389e-02   3.044459e-02         -3.348174e-03
-#&gt; (Intercept).precision     2.182256e-04  -3.348174e-03          1.178215e-01
-#&gt; gendermale.precision      7.820992e-04   3.612575e-03         -1.737774e-02
-#&gt; math.precision           -8.304002e-06   5.423006e-05         -7.946126e-04
-#&gt; progAcademic.precision   -2.317447e-04  -2.549209e-04         -7.751515e-02
-#&gt; progVocational.precision -2.073211e-04  -2.352711e-03         -6.341080e-02
+#&gt; (Intercept)              -1.052804e-02  -0.0059233237          4.007601e-04
+#&gt; gendermale               -1.026054e-03  -0.0018661896         -4.687500e-04
+#&gt; math                      6.648669e-06  -0.0001019301          8.377288e-06
+#&gt; progAcademic              1.747424e-02   0.0106422099          2.183908e-04
+#&gt; progVocational            1.064221e-02   0.0304429701         -3.347919e-03
+#&gt; (Intercept).precision     2.183908e-04  -0.0033479190          1.178203e-01
+#&gt; gendermale.precision      7.820835e-04   0.0036123965         -1.737765e-02
+#&gt; math.precision           -8.304516e-06   0.0000542317         -7.946065e-04
+#&gt; progAcademic.precision   -2.324657e-04  -0.0002551968         -7.751436e-02
+#&gt; progVocational.precision -2.074356e-04  -0.0023510123         -6.340979e-02
 #&gt;                          gendermale.precision math.precision
-#&gt; (Intercept)                      7.361679e-04   1.329877e-05
-#&gt; gendermale                      -5.312459e-04  -3.547506e-05
-#&gt; math                            -3.678623e-05  -1.112732e-07
-#&gt; progAcademic                     7.820992e-04  -8.304002e-06
-#&gt; progVocational                   3.612575e-03   5.423006e-05
-#&gt; (Intercept).precision           -1.737774e-02  -7.946126e-04
-#&gt; gendermale.precision             4.149024e-02   4.781496e-05
-#&gt; math.precision                   4.781496e-05   1.748012e-05
-#&gt; progAcademic.precision          -3.020401e-03   5.736129e-05
-#&gt; progVocational.precision        -6.909885e-03  -2.345022e-04
+#&gt; (Intercept)                      7.364174e-04   1.330957e-05
+#&gt; gendermale                      -5.315196e-04  -3.547569e-05
+#&gt; math                            -3.678578e-05  -1.114745e-07
+#&gt; progAcademic                     7.820835e-04  -8.304516e-06
+#&gt; progVocational                   3.612397e-03   5.423170e-05
+#&gt; (Intercept).precision           -1.737765e-02  -7.946065e-04
+#&gt; gendermale.precision             4.149013e-02   4.781664e-05
+#&gt; math.precision                   4.781664e-05   1.748015e-05
+#&gt; progAcademic.precision          -3.020504e-03   5.735547e-05
+#&gt; progVocational.precision        -6.909912e-03  -2.345116e-04
 #&gt;                          progAcademic.precision progVocational.precision
-#&gt; (Intercept)                       -7.591043e-04            -3.243207e-03
-#&gt; gendermale                         2.037302e-03             4.181911e-03
-#&gt; math                               8.705615e-07             4.627472e-05
-#&gt; progAcademic                      -2.317447e-04            -2.073211e-04
-#&gt; progVocational                    -2.549209e-04            -2.352711e-03
-#&gt; (Intercept).precision             -7.751515e-02            -6.341080e-02
-#&gt; gendermale.precision              -3.020401e-03            -6.909885e-03
-#&gt; math.precision                     5.736129e-05            -2.345022e-04
-#&gt; progAcademic.precision             9.331898e-02             7.598057e-02
-#&gt; progVocational.precision           7.598057e-02             1.182081e-01</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/vcov.html'>vcov</a></span><span class='op'>(</span><span class='va'>daysabs_fit</span>, parameters <span class='op'>=</span> <span class='st'>"mean"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;                 (Intercept)    gendermale          math  progAcademic
-#&gt; (Intercept)     0.021751004 -5.920312e-03 -2.219790e-04 -1.052974e-02
-#&gt; gendermale     -0.005920312  1.392140e-02  1.824871e-05 -1.026077e-03
-#&gt; math           -0.000221979  1.824871e-05  5.371484e-06  6.649003e-06
-#&gt; progAcademic   -0.010529735 -1.026077e-03  6.649003e-06  1.747581e-02
-#&gt; progVocational -0.005924779 -1.866297e-03 -1.019339e-04  1.064389e-02
+#&gt; (Intercept)                       -7.587315e-04            -3.242819e-03
+#&gt; gendermale                         2.037250e-03             4.181723e-03
+#&gt; math                               8.669582e-07             4.627117e-05
+#&gt; progAcademic                      -2.324657e-04            -2.074356e-04
+#&gt; progVocational                    -2.551968e-04            -2.351012e-03
+#&gt; (Intercept).precision             -7.751436e-02            -6.340979e-02
+#&gt; gendermale.precision              -3.020504e-03            -6.909912e-03
+#&gt; math.precision                     5.735547e-05            -2.345116e-04
+#&gt; progAcademic.precision             9.331847e-02             7.597998e-02
+#&gt; progVocational.precision           7.597998e-02             1.182071e-01</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/vcov.html'>vcov</a></span><span class='op'>(</span><span class='va'>daysabs_fit</span>, parameters <span class='op'>=</span> <span class='st'>"mean"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;                  (Intercept)    gendermale          math  progAcademic
+#&gt; (Intercept)     0.0217485994 -5.920137e-03 -2.219657e-04 -1.052804e-02
+#&gt; gendermale     -0.0059201372  1.392084e-02  1.824834e-05 -1.026054e-03
+#&gt; math           -0.0002219657  1.824834e-05  5.371242e-06  6.648669e-06
+#&gt; progAcademic   -0.0105280381 -1.026054e-03  6.648669e-06  1.747424e-02
+#&gt; progVocational -0.0059233237 -1.866190e-03 -1.019301e-04  1.064221e-02
 #&gt;                progVocational
-#&gt; (Intercept)     -0.0059247786
-#&gt; gendermale      -0.0018662967
-#&gt; math            -0.0001019339
-#&gt; progAcademic     0.0106438946
-#&gt; progVocational   0.0304445909</div><div class='input'><span class='co'># }</span>
+#&gt; (Intercept)     -0.0059233237
+#&gt; gendermale      -0.0018661896
+#&gt; math            -0.0001019301
+#&gt; progAcademic     0.0106422099
+#&gt; progVocational   0.0304429701</div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

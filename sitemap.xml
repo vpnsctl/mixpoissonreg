@@ -31,6 +31,12 @@
     <loc>https://vpnsctl.github.io/mixpoissonreg//reference/local_influence.mixpoissonreg.html</loc>
   </url>
   <url>
+    <loc>https://vpnsctl.github.io/mixpoissonreg//reference/local_influence_autoplot.mixpoissonreg.html</loc>
+  </url>
+  <url>
+    <loc>https://vpnsctl.github.io/mixpoissonreg//reference/local_influence_plot.mixpoissonreg.html</loc>
+  </url>
+  <url>
     <loc>https://vpnsctl.github.io/mixpoissonreg//reference/logLik.mixpoissonreg.html</loc>
   </url>
   <url>
@@ -47,9 +53,6 @@
   </url>
   <url>
     <loc>https://vpnsctl.github.io/mixpoissonreg//reference/residuals.mixpoissonreg.html</loc>
-  </url>
-  <url>
-    <loc>https://vpnsctl.github.io/mixpoissonreg//reference/startvalues_mpreg.html</loc>
   </url>
   <url>
     <loc>https://vpnsctl.github.io/mixpoissonreg//reference/summary.mixpoissonreg.html</loc>

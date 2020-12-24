@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -124,7 +124,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/vpnsctl/mixpoissonreg/">
-    <span class="fab fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -169,7 +169,7 @@
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='plot.mixpoissonreg.html'>plot.mixpoissonreg</a></code>, <code><a href='autoplot.mixpoissonreg.html'>autoplot.mixpoissonreg</a></code>,
-<code><a href='local_influence.mixpoissonreg.html'>local_influence_plot.mixpoissonreg</a></code>, <code><a href='tidy_local_influence.mixpoissonreg.html'>local_influence_autoplot.mixpoissonreg</a></code></p></div>
+<code><a href='local_influence_plot.mixpoissonreg.html'>local_influence_plot.mixpoissonreg</a></code>, <code><a href='local_influence_autoplot.mixpoissonreg.html'>local_influence_autoplot.mixpoissonreg</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
@@ -188,28 +188,28 @@
 #&gt; 
 #&gt; Pearson residuals:
 #&gt;      RSS      Min       1Q   Median       3Q      Max 
-#&gt; 321.9684  -1.1741  -0.6993  -0.3600   0.3013   4.7170 
+#&gt; 321.9747  -1.1743  -0.6993  -0.3600   0.3014   4.7173 
 #&gt; 
 #&gt; Coefficients modeling the mean (with  link):
 #&gt;                 Estimate Std.error z-value Pr(&gt;|z|)    
-#&gt; (Intercept)     2.746064  0.147482  18.620  &lt; 2e-16 ***
-#&gt; gendermale     -0.245026  0.117989  -2.077  0.03783 *  
+#&gt; (Intercept)     2.746081  0.147474  18.621  &lt; 2e-16 ***
+#&gt; gendermale     -0.245042  0.117987  -2.077  0.03781 *  
 #&gt; math           -0.006617  0.002318  -2.855  0.00430 ** 
-#&gt; progAcademic   -0.426016  0.132196  -3.223  0.00127 ** 
-#&gt; progVocational -1.269636  0.174484  -7.277 3.43e-13 ***
+#&gt; progAcademic   -0.425978  0.132190  -3.222  0.00127 ** 
+#&gt; progVocational -1.269703  0.174479  -7.277 3.41e-13 ***
 #&gt; 
 #&gt; Coefficients modeling the precision (with  link):
 #&gt;                 Estimate Std.error z-value Pr(&gt;|z|)    
-#&gt; (Intercept)     1.412199  0.343251   4.114 3.89e-05 ***
-#&gt; gendermale     -0.208608  0.203692  -1.024 0.305771    
-#&gt; math           -0.005115  0.004181  -1.223 0.221156    
-#&gt; progAcademic   -1.082475  0.305482  -3.544 0.000395 ***
-#&gt; progVocational -1.420197  0.343814  -4.131 3.62e-05 ***
+#&gt; (Intercept)     1.412448  0.343250   4.115 3.87e-05 ***
+#&gt; gendermale     -0.208600  0.203691  -1.024 0.305789    
+#&gt; math           -0.005116  0.004181  -1.224 0.221053    
+#&gt; progAcademic   -1.082668  0.305481  -3.544 0.000394 ***
+#&gt; progVocational -1.420446  0.343813  -4.131 3.60e-05 ***
 #&gt; ---
 #&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 #&gt; 
-#&gt; Efron's pseudo R-squared:  0.1860879 
-#&gt; Number of iterations of the EM algorithm = 2493</div><div class='input'>
+#&gt; Efron's pseudo R-squared:  0.1860883 
+#&gt; Number of iterations of the EM algorithm = 2804</div><div class='input'>
 <span class='va'>daysabs_fit_ml</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mixpoissonregML.html'>mixpoissonregML</a></span><span class='op'>(</span><span class='va'>daysabs</span> <span class='op'>~</span> <span class='va'>gender</span> <span class='op'>+</span> <span class='va'>math</span> <span class='op'>+</span>
 <span class='va'>prog</span> <span class='op'>|</span> <span class='va'>gender</span> <span class='op'>+</span> <span class='va'>math</span> <span class='op'>+</span> <span class='va'>prog</span>, data <span class='op'>=</span> <span class='va'>Attendance</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>daysabs_fit_ml</span><span class='op'>)</span>
@@ -223,28 +223,28 @@
 #&gt; 
 #&gt; Pearson residuals:
 #&gt;      RSS      Min       1Q   Median       3Q      Max 
-#&gt; 321.1562  -1.0249  -0.7227  -0.3271   0.3218   4.9442 
+#&gt; 336.1763  -1.1235  -0.7084  -0.3547   0.2754   5.0520 
 #&gt; 
 #&gt; Coefficients modeling the mean (with  link):
 #&gt;                 Estimate Std.error z-value Pr(&gt;|z|)    
-#&gt; (Intercept)     2.695689  0.196640  13.709   &lt;2e-16 ***
-#&gt; gendermale     -0.226915  0.125887  -1.803   0.0715 .  
-#&gt; math           -0.005791  0.002533  -2.286   0.0222 *  
-#&gt; progAcademic   -0.441544  0.177170  -2.492   0.0127 *  
-#&gt; progVocational -1.258392  0.205981  -6.109    1e-09 ***
+#&gt; (Intercept)     2.654832  0.158634  16.736  &lt; 2e-16 ***
+#&gt; gendermale     -0.145599  0.121123  -1.202  0.22933    
+#&gt; math           -0.005336  0.002444  -2.183  0.02904 *  
+#&gt; progAcademic   -0.396871  0.149543  -2.654  0.00796 ** 
+#&gt; progVocational -1.330843  0.174892  -7.610 2.75e-14 ***
 #&gt; 
 #&gt; Coefficients modeling the precision (with  link):
-#&gt;                Estimate Std.error z-value Pr(&gt;|z|)  
-#&gt; (Intercept)     0.27667   0.15682   1.764   0.0777 .
-#&gt; gendermale     -0.20083   0.20645  -0.973   0.3306  
-#&gt; math           -0.00198   0.00416  -0.476   0.6341  
-#&gt; progAcademic   -0.05290   0.12591  -0.420   0.6744  
-#&gt; progVocational -0.27458   0.14648  -1.875   0.0609 .
+#&gt;                 Estimate Std.error z-value Pr(&gt;|z|)    
+#&gt; (Intercept)     1.192096  0.344157   3.464 0.000533 ***
+#&gt; gendermale     -0.595064  0.163329  -3.643 0.000269 ***
+#&gt; math           -0.007710  0.004185  -1.842 0.065457 .  
+#&gt; progAcademic   -0.637579  0.274490  -2.323 0.020191 *  
+#&gt; progVocational -0.485018  0.172702  -2.808 0.004979 ** 
 #&gt; ---
 #&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 #&gt; 
-#&gt; Efron's pseudo R-squared:  0.1850197 
-#&gt; Number of function calls by 'optim' = 117</div><div class='input'><span class='co'># }</span>
+#&gt; Efron's pseudo R-squared:  0.1815479 
+#&gt; Number of function calls by 'optim' = 122</div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
