@@ -241,9 +241,8 @@ for(pert in perturbation){
                     "conformal" = {Bmatrix/sum(diag(Bmatrix))},
                     "normal" = Bmatrix)
 
-
   loc_infl[[pert]] = switch(direction,
-                                 "max.eigen" = {eigen(Bmatrix, symmetric = TRUE)$vec[,1]},
+                                 "max.eigen" = {tryCatch(eigen(Bmatrix, symmetric = TRUE)$vec[,1], error = function(e){rep(NA, n)})},
                                  "canonical" = {diag(Bmatrix)})
   names(loc_infl[[pert]]) = 1:n
   benchmark = switch(curvature,

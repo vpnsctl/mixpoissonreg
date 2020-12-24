@@ -461,6 +461,11 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
 
     ylab <- paste0(residualname, " residuals")
     t1 <- title[[1]]
+    
+    if(include.modeltype){
+      title[[1]] <- paste0(title[[1]], " - ", object$modeltype, " Regression")
+    }
+    
     mapping <- ggplot2::aes_string(x = ".index", y = ".resid")
     p1 <- ggplot2::ggplot(data = plot.data, mapping = mapping)
     if (!is.logical(shape) || shape) {
@@ -490,6 +495,10 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
       title[[2]] <- paste0(title[[2]]," with simulated envelopes")
     }
     t2 <- title[[2]]
+    
+    if(include.modeltype){
+      title[[2]] <- paste0(title[[2]], " - ", object$modeltype, " Regression")
+    }
 
     mapping <- ggplot2::aes_string(x = ".qqx", y = ".resid")
     p2 <- ggplot2::ggplot(data = plot.data, mapping = mapping)
@@ -528,6 +537,11 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
 
   if(3 %in% which){
     t3 <- title[[3]]
+    
+    if(include.modeltype){
+      title[[3]] <- paste0(title[[3]], " - ", object$modeltype, " Regression")
+    }
+    
     mapping <- ggplot2::aes_string(x = ".index", y = ".cooksd",
                                    ymin = 0, ymax = ".cooksd")
     p3 <- ggplot2::ggplot(data = plot.data, mapping = mapping)
@@ -553,6 +567,11 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
 
   if(4 %in% which){
     t4 <- title[[4]]
+    
+    if(include.modeltype){
+      title[[4]] <- paste0(title[[4]], " - ", object$modeltype, " Regression")
+    }
+    
     mapping <- ggplot2::aes_string(x = ".index", y = ".gencooksd",
                                    ymin = 0, ymax = ".gencooksd")
     p4 <- ggplot2::ggplot(data = plot.data, mapping = mapping)
@@ -578,6 +597,11 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
 
   if (5 %in% which) {
     t5 <- title[[5]]
+    
+    if(include.modeltype){
+      title[[5]] <- paste0(title[[5]], " - ", object$modeltype, " Regression")
+    }
+    
     mapping <- ggplot2::aes_string(x = ".gencooksd", y = ".cooksd")
     p5 <- ggplot2::ggplot(data = plot.data, mapping = mapping)
     if (!is.logical(shape) || shape) {
@@ -604,6 +628,11 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
 
   if (6 %in% which) {
     t6 <- title[[6]]
+    
+    if(include.modeltype){
+      title[[6]] <- paste0(title[[6]], " - ", object$modeltype, " Regression")
+    }
+    
     mapping <- ggplot2::aes_string(x = ".fitted", y = ".obs")
     p6 <- ggplot2::ggplot(data = plot.data, mapping = mapping)
     if (!is.logical(shape) || shape) {
