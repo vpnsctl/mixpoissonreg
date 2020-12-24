@@ -60,7 +60,14 @@ vcov(fit1, parameters = "mean")
 vcov(fit1, parameters = "precision")
 predict(fit1)
 predict(fit1, interval = "confidence")
+predict(fit1, interval = "confidence", type = "link")
+expect_warning(predict(fit1, interval = "confidence", type = "precision"))
+expect_warning(predict(fit1, interval = "confidence", type = "variance"))
+
 expect_warning(predict(fit1, interval = "prediction", nsim_pred = 2, nsim_pred_y = 2))
+expect_warning(predict(fit1, interval = "prediction", type = "link", nsim_pred = 2, nsim_pred_y = 2))
+expect_warning(predict(fit1, interval = "prediction", type = "precision", nsim_pred = 2, nsim_pred_y = 2))
+expect_warning(predict(fit1, interval = "prediction", type = "variance", nsim_pred = 2, nsim_pred_y = 2))
 predict(fit1, type = "link", se.fit = TRUE)
 predict(fit1, type = "precision")
 predict(fit1, type = "variance")
@@ -76,7 +83,17 @@ coeftest.mixpoissonreg(fit1)
 coefci(fit1)
 
 predict(fit1, newdata = data.frame(math = 1, prog = factor(c("Academic", "Vocational"), levels = c("General", "Academic", "Vocational"))))
-expect_warning(predict(fit1, interval = "prediction", nsim_pred = 2, nsim_pred_y = 2), newdata = data.frame(math = 1, prog = factor(c("Academic", "Vocational"), levels = c("General", "Academic", "Vocational"))))
+expect_warning(predict(fit1, interval = "prediction", nsim_pred = 2, nsim_pred_y = 2, newdata = data.frame(math = 1, prog = factor(c("Academic", "Vocational"), levels = c("General", "Academic", "Vocational")))))
+expect_warning(predict(fit1, interval = "prediction", nsim_pred = 2, nsim_pred_y = 2, type = "link", newdata = data.frame(math = 1, prog = factor(c("Academic", "Vocational"), levels = c("General", "Academic", "Vocational")))))
+expect_warning(predict(fit1, interval = "prediction", nsim_pred = 2, nsim_pred_y = 2, type = "precision", newdata = data.frame(math = 1, prog = factor(c("Academic", "Vocational"), levels = c("General", "Academic", "Vocational")))))
+expect_warning(predict(fit1, interval = "prediction", nsim_pred = 2, nsim_pred_y = 2, type = "variance", newdata = data.frame(math = 1, prog = factor(c("Academic", "Vocational"), levels = c("General", "Academic", "Vocational")))))
+
+predict(fit1, interval = "confidence", newdata = data.frame(math = 1, prog = factor(c("Academic", "Vocational"), levels = c("General", "Academic", "Vocational"))))
+predict(fit1, interval = "confidence", type = "link", newdata = data.frame(math = 1, prog = factor(c("Academic", "Vocational"), levels = c("General", "Academic", "Vocational"))))
+expect_warning(predict(fit1, interval = "confidence", type = "precision", newdata = data.frame(math = 1, prog = factor(c("Academic", "Vocational"), levels = c("General", "Academic", "Vocational")))))
+expect_warning(predict(fit1, interval = "confidence",  type = "variance", newdata = data.frame(math = 1, prog = factor(c("Academic", "Vocational"), levels = c("General", "Academic", "Vocational")))))
+
+
 predict(fit1, type = "link", se.fit = TRUE, newdata = data.frame(math = 1, prog = factor(c("Academic", "Vocational"), levels = c("General", "Academic", "Vocational"))))
 predict(fit1, type = "precision", newdata = data.frame(math = 1, prog = factor(c("Academic", "Vocational"), levels = c("General", "Academic", "Vocational"))))
 predict(fit1, type = "variance", newdata = data.frame(math = 1, prog = factor(c("Academic", "Vocational"), levels = c("General", "Academic", "Vocational"))))
@@ -102,16 +119,9 @@ lmtest::lrtest(fit2, fit1)
 
 lmtest::waldtest(fit2, fit1)
 
-build_links_mpreg("inverse.sqrt")
+expect_warning(update(fit1, . ~ . - 1))
 
-d2mudeta2("log", 1)
-
-d2mudeta2("sqrt", 1)
-
-d2phideta2("inverse.sqrt", 1)
-
-update(fit1, . ~ . - 1)
-
+set.seed(3333)
 
 x <- rexp(30)
 
@@ -123,4 +133,59 @@ expect_error(mixpoissonreg( x ~ -1))
 
 expect_error(mixpoissonreg( x ~ x | - 1))
 
+expect_error(mixpoissonreg( ~ 1))
 
+expect_error(mixpoissonreg(daysabs ~ prog + math, data = Attendance, prob = -1))
+
+expect_error(mixpoissonreg(I(daysabs-300) ~ prog + math, data = Attendance))
+
+expect_error(mixpoissonreg(I(daysabs+0.5) ~ prog + math, data = Attendance))
+
+expect_error(mixpoissonreg(daysabs ~ prog + math, data = Attendance, residual = 1))
+
+expect_error(mixpoissonreg(daysabs ~ prog + math, data = Attendance, envelope = "bla"))
+
+expect_error(mixpoissonreg(daysabs ~ prog + math, data = Attendance, envelope = -1))
+
+expect_error(mixpoissonreg(daysabs ~ prog + math, data = Attendance, prob = "bla"))
+
+expect_warning(mixpoissonreg(daysabs ~ math, data = Attendance, prob = 0.9))
+
+
+expect_error(mixpoissonregML( x ~ -1))
+
+expect_error(mixpoissonregML( x ~ x | - 1))
+
+expect_error(mixpoissonregML( ~ 1))
+
+expect_error(mixpoissonregML(daysabs ~ prog + math, data = Attendance, prob = -1))
+
+expect_error(mixpoissonregML(I(daysabs-300) ~ prog + math, data = Attendance))
+
+expect_error(mixpoissonregML(I(daysabs+0.5) ~ prog + math, data = Attendance))
+
+expect_error(mixpoissonregML(daysabs ~ prog + math, data = Attendance, residual = 1))
+
+expect_error(mixpoissonregML(daysabs ~ prog + math, data = Attendance, envelope = "bla"))
+
+expect_error(mixpoissonregML(daysabs ~ prog + math, data = Attendance, envelope = -1))
+
+expect_error(mixpoissonregML(daysabs ~ prog + math, data = Attendance, prob = "bla"))
+
+expect_warning(mixpoissonregML(daysabs ~ math, data = Attendance, prob = 0.9))
+
+x1 <- rexp(30)
+
+x2 <- rnorm(30)
+
+y <- rpois(30, exp(2+2*x1 - 2*x2))
+
+expect_warning(mixpoissonreg(y ~ x1, envelope = 10, model = "PIG", em_controls = list(maxit = 20)))
+
+expect_warning(mixpoissonreg(y ~ x1, envelope = 10, model = "NB", em_controls = list(maxit = 20)))
+
+set.seed(1212)
+
+expect_warning(mixpoissonregML(y ~ x1 + x2, envelope = 10, model = "PIG"))
+
+expect_warning(mixpoissonregML(y ~ x1+x2-1, envelope = 10, model = "NB"))

@@ -4,18 +4,43 @@ fit_ml1 <- mixpoissonregML(daysabs ~ prog + math, data = Attendance)
 
 local_influence(fit_ml1)
 
+local_influence(fit_ml1, mean.covariates = "prog")
+
 local_influence(fit_ml1, curvature = "normal")
+
+local_influence(fit_ml1, curvature = "normal", mean.covariates = "prog")
 
 local_influence(fit_ml1, direction = "max.eigen")
 
+local_influence(fit_ml1, direction = "max.eigen", mean.covariates = "prog")
+
 local_influence(fit_ml1, direction = "max.eigen", curvature = "normal")
+
+local_influence(fit_ml1, direction = "max.eigen", curvature = "normal", mean.covariates = "prog")
 
 fit_ml2 <- mixpoissonregML(daysabs ~ prog + math | prog, data = Attendance)
 
 local_influence(fit_ml2)
 
+local_influence(fit_ml2, precision.covariates = "prog")
+
+local_influence(fit_ml2, precision.covariates = "prog", mean.covariates = "prog")
+
 local_influence(fit_ml2, curvature = "normal")
+
+local_influence(fit_ml2, curvature = "normal", precision.covariates = "prog")
 
 local_influence(fit_ml2, direction = "max.eigen")
 
+local_influence(fit_ml2, direction = "max.eigen", precision.covariates = "prog")
+
+local_influence(fit_ml2, direction = "max.eigen", precision.covariates = "prog", mean.covariates = "prog")
+
 local_influence(fit_ml2, direction = "max.eigen", curvature = "normal")
+
+local_influence(fit_ml2, direction = "max.eigen", curvature = "normal", precision.covariates = "prog")
+
+local_influence(fit_ml2, direction = "max.eigen", curvature = "normal", precision.covariates = "prog", mean.covariates = "prog")
+
+local_influence(fit_ml2, curvature = "normal", precision.covariates = "prog", mean.covariates = "prog")
+

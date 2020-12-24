@@ -441,6 +441,7 @@ kappa_r <- function(y, mu, phi, model) {
 #' @param evaluate If true evaluate the new call else return the call.
 #' @return If evaluate = TRUE the fitted object, otherwise the updated call.
 #' @noRd
+#' @export
 update.mixpoissonreg <- function (object, formula., ..., evaluate = TRUE)
 {
   if (is.null(call <- stats::getCall(object)))
