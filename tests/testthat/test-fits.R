@@ -189,3 +189,48 @@ set.seed(1212)
 expect_warning(mixpoissonregML(y ~ x1 + x2, envelope = 10, model = "PIG"))
 
 expect_warning(mixpoissonregML(y ~ x1+x2-1, envelope = 10, model = "NB"))
+
+
+
+## Testing fitting algorithms
+
+set.seed(12345)
+
+beta <- c(1,-2,1)
+alpha <- c(1,-2,1)
+
+c_mean_em <- c()
+c_mean_ml <- c()
+for(i in 1:50){
+  x1 <- runif(1000)
+  x2 <- rnorm(1000)
+  
+  y <- stats::rnbinom(1000, mu = exp(beta[1] + beta[2] * x1 + beta[3] * x2), size = exp(alpha[1] + alpha[2] * x1 + alpha[3] * x2))
+  
+  fit_test <- mixpoissonreg(y ~ x1+x2 | x1 + x2)
+  c_mean_em <- rbind(c_mean_em, coef(fit_test))
+  
+  fit_test <- mixpoissonregML(y ~ x1+x2 | x1 + x2)
+  c_mean_ml <- rbind(c_mean_ml, coef(fit_test))
+}
+
+expect_true(abs(max(colMeans(c_mean_em) - c(beta,alpha))) < 0.05) 
+expect_true(abs(max(colMeans(c_mean_ml) - c(beta,alpha))) < 0.05) 
+
+c_mean_em <- c()
+c_mean_ml <- c()
+for(i in 1:50){
+  x1 <- runif(1000)
+  x2 <- rnorm(1000)
+  
+  y <- gamlss.dist::rPIG(1000, mu = exp(beta[1] + beta[2] * x1 + beta[3] * x2), sigma = exp(-alpha[1] - alpha[2] * x1 - alpha[3] * x2))
+  
+  fit_test <- mixpoissonreg(y ~ x1+x2 | x1 + x2, model = "PIG")
+  c_mean_em <- rbind(c_mean_em, coef(fit_test))
+  
+  fit_test <- mixpoissonregML(y ~ x1+x2 | x1 + x2, model = "PIG")
+  c_mean_ml <- rbind(c_mean_ml, coef(fit_test))
+}
+
+expect_true(abs(max(colMeans(c_mean_em) - c(beta,alpha))) < 0.05) 
+expect_true(abs(max(colMeans(c_mean_ml) - c(beta,alpha))) < 0.05) 
