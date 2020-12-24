@@ -321,7 +321,7 @@ pearson_residual_mixpoisson <- function(coefficients, y, x, w,
 #' @param model the mixed Poisson model, "NB" or "PIG".
 #' @return Vector containing the score residuals. Notice that the score residuals for the PIG regression
 #' models are not variance-normalized, whereas the score residuals for the NB regression models are
-#' variance-normalized. See Barreto-Souza and Simas (2015) for further details.
+#' variance-normalized. See Barreto-Souza and Simas (2016) for further details.
 #' @noRd
 
 
@@ -388,7 +388,7 @@ std_error_mixpoisson <- function(coefficients, y, x, w,
 #' @name lambda_r
 #' @title Auxiliary function for the E-step
 #' @description Auxiliary function given by the conditional expected value E(Z_i|Y; theta), where
-#' Z is the latent variable (for further details see Barreto-Souza and Simas, 2015).
+#' Z is the latent variable (for further details see Barreto-Souza and Simas, 2016).
 #' @param y nonnegative integers response vector.
 #' @param mu mean parameter (vector having the same size of z).
 #' @param phi precision parameter (vector having the same size of z).
@@ -411,7 +411,7 @@ lambda_r <- function(y, mu, phi, model) {
 #' @title Auxiliary function for the E-step
 #' @description Auxiliary function given by the conditional expected value E(g(Z_i)|Y; theta), where
 #' Z is the latent variable and the function g() is obtained in the decomposition of the function
-#' c( , ) of the expression of the density of Z in the exponential family (for further details see Barreto-Souza and Simas, 2015).
+#' c( , ) of the expression of the density of Z in the exponential family (for further details see Barreto-Souza and Simas, 2016).
 #' @param y nonnegative integers response vector.
 #' @param mu mean parameter (vector having the same size of z).
 #' @param phi precision parameter (vector having the same size of z).
