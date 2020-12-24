@@ -1,5 +1,7 @@
 #' @importFrom statmod rinvgauss
 #' @importFrom pbapply pblapply
+#' @importFrom gamlss gamlss
+#' @importFrom gamlss.dist NBI PIG make.link.gamlss
 
 #############################################################################################
 #' @name startvalues_mpreg
@@ -20,28 +22,41 @@
 #'   }
 #' @noRd
 startvalues_mpreg <- function(y, x, w, link.mean, link.precision, model) {
-  nbeta <- ncol(x)
-  nalpha <- ncol(w)
-  n <- length(y)
-  link_mean <- build_links_mpreg(link.mean)
-  link_precision <- build_links_mpreg(link.precision)
-
-  fit_aux <- stats::glm.fit(x = x, y = y, family = stats::quasipoisson(link = link.mean))
-  beta_start <- fit_aux$coefficients
-
-  mu_est <- link_mean$linkinv(x %*% beta_start)
-
-  disp_temp <- sum( ((y - mu_est)^2 / mu_est ) )/(n - nbeta)
-
-
-
-  phi_est <- 1 / (disp_temp - 1)
-
-  if(phi_est <= 0){
-    phi_est <- 1
+  # Quiet - by Hadley Wickham
+  quiet <- function(x) { 
+    sink(tempfile()) 
+    on.exit(sink()) 
+    invisible(force(x)) 
+  } 
+  
+  
+  formula.mean <- formula("y ~ x - 1")
+  formula.sigma <- formula("~ w - 1")
+  
+  if(link.precision == "identity"){
+    link.precision <- "inverse"
+  } else if(link.precision == "inverse.sqrt"){
+    link.precision <- "sqrt"
   }
-
-  alpha_start <- c(link_precision$linkfun(phi_est), rep(0, nalpha - 1))
+  
+  link_mean_gamlss_start <<- gamlss.dist::make.link.gamlss(link.mean)
+  link_precision_gamlss_start <<- gamlss.dist::make.link.gamlss(link.precision)
+  
+  family_start <- switch(model,
+                         "PIG" = {gamlss.dist::PIG(mu.link = link_mean_gamlss_start, sigma.link = link_precision_gamlss_start)},
+                         "NB" = {gamlss.dist::NBI(mu.link = link_mean_gamlss_start, sigma.link = link_precision_gamlss_start)})
+  
+  rm(link_mean_gamlss_start, envir = .GlobalEnv )
+  rm(link_precision_gamlss_start, envir = .GlobalEnv)
+  
+    fit_temp <- suppressWarnings(quiet(gamlss::gamlss(formula = formula.mean, sigma.formula = formula.sigma, family = family_start)))
+    
+    beta_start <- fit_temp$mu.coefficients
+    if(link.precision == "log"){
+      alpha_start <- - fit_temp$sigma.coefficients
+    } else{
+      alpha_start <- fit_temp$sigma.coefficients
+    }
 
   out <- list(beta = beta_start, alpha = alpha_start)
 

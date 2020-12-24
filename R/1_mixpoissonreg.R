@@ -389,7 +389,7 @@ mixpoissonreg.fit <- function(y, x, w = NULL, link.mean = c("log", "sqrt"),
 
   if (is.character(model) == TRUE) {
     aux_model <- match.arg(model, c("NB", "PIG"))
-      start <- startvalues_mpreg(y, x, w, link.mean, link.precision)
+      start <- startvalues_mpreg(y, x, w, link.mean, link.precision, aux_model)
       beta <- start$beta
       alpha <- start$alpha
       start <- c(beta, alpha)
