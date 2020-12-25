@@ -1,7 +1,7 @@
 #' @importFrom statmod rinvgauss
 #' @importFrom pbapply pblapply
 #' @importFrom gamlss gamlss
-#' @importFrom gamlss.dist NBI PIG make.link.gamlss
+#' @importFrom gamlss.dist NBI PIG
 
 #############################################################################################
 #' @name startvalues_mpreg
@@ -30,24 +30,35 @@ startvalues_mpreg <- function(y, x, w, link.mean, link.precision, model) {
   } 
   
   
-  formula.mean <- formula("y ~ x - 1")
-  formula.sigma <- formula("~ w - 1")
-  
-  if(link.precision == "identity"){
-    link.precision <- "inverse"
-  } else if(link.precision == "inverse.sqrt"){
-    link.precision <- "sqrt"
-  }
-  
-  link_mean_gamlss_start <<- gamlss.dist::make.link.gamlss(link.mean)
-  link_precision_gamlss_start <<- gamlss.dist::make.link.gamlss(link.precision)
+  formula.mean <- stats::formula("y ~ x - 1")
+  formula.sigma <- stats::formula("~ w - 1")
   
   family_start <- switch(model,
-                         "PIG" = {gamlss.dist::PIG(mu.link = link_mean_gamlss_start, sigma.link = link_precision_gamlss_start)},
-                         "NB" = {gamlss.dist::NBI(mu.link = link_mean_gamlss_start, sigma.link = link_precision_gamlss_start)})
-  
-  rm(link_mean_gamlss_start, envir = .GlobalEnv )
-  rm(link_precision_gamlss_start, envir = .GlobalEnv)
+                         "PIG" = {
+                           switch(link.mean,
+                                  "log" = { switch(link.precision,
+                                                   "log" = {gamlss.dist::PIG(mu.link = "log", sigma.link = "log")},
+                                                   "inverse.sqrt" = {gamlss.dist::PIG(mu.link = "log", sigma.link = "sqrt")},
+                                                   "identity" = {gamlss.dist::PIG(mu.link = "log", sigma.link = "inverse")})},
+                                  "sqrt" = { switch(link.precision,
+                                                    "log" = {gamlss.dist::PIG(mu.link = "sqrt", sigma.link = "log")},
+                                                    "inverse.sqrt" = {gamlss.dist::PIG(mu.link = "sqrt", sigma.link = "sqrt")},
+                                                    "identity" = {gamlss.dist::PIG(mu.link = "sqrt", sigma.link = "inverse")})
+                                    
+                                  })},
+                         "NB" = {
+                           switch(link.mean,
+                                  "log" = { switch(link.precision,
+                                                   "log" = {gamlss.dist::NBI(mu.link = "log", sigma.link = "log")},
+                                                   "inverse.sqrt" = {gamlss.dist::NBI(mu.link = "log", sigma.link = "sqrt")},
+                                                   "identity" = {gamlss.dist::NBI(mu.link = "log", sigma.link = "inverse")})},
+                                  "sqrt" = { switch(link.precision,
+                                                    "log" = {gamlss.dist::NBI(mu.link = "sqrt", sigma.link = "log")},
+                                                    "inverse.sqrt" = {gamlss.dist::NBI(mu.link = "sqrt", sigma.link = "sqrt")},
+                                                    "identity" = {gamlss.dist::NBI(mu.link = "sqrt", sigma.link = "inverse")})
+                                    
+                                  })}
+                           )
   
     fit_temp <- suppressWarnings(quiet(gamlss::gamlss(formula = formula.mean, sigma.formula = formula.sigma, family = family_start)))
     
