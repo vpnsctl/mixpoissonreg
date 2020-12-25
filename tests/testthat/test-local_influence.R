@@ -2,21 +2,21 @@ set.seed(33333)
 
 fit_ml1 <- mixpoissonregML(daysabs ~ prog + math, data = Attendance)
 
-local_influence(fit_ml1)
+expect_warning(local_influence(fit_ml1))
 
-local_influence(fit_ml1, mean.covariates = "prog")
+expect_warning(local_influence(fit_ml1, mean.covariates = "prog"))
 
-local_influence(fit_ml1, curvature = "normal")
+expect_warning(local_influence(fit_ml1, curvature = "normal"))
 
-local_influence(fit_ml1, curvature = "normal", mean.covariates = "prog")
+expect_warning(local_influence(fit_ml1, curvature = "normal", mean.covariates = "prog"))
 
-local_influence(fit_ml1, direction = "max.eigen")
+expect_warning(local_influence(fit_ml1, direction = "max.eigen"))
 
-local_influence(fit_ml1, direction = "max.eigen", mean.covariates = "prog")
+expect_warning(local_influence(fit_ml1, direction = "max.eigen", mean.covariates = "prog"))
 
-local_influence(fit_ml1, direction = "max.eigen", curvature = "normal")
+expect_warning(local_influence(fit_ml1, direction = "max.eigen", curvature = "normal"))
 
-local_influence(fit_ml1, direction = "max.eigen", curvature = "normal", mean.covariates = "prog")
+expect_warning(local_influence(fit_ml1, direction = "max.eigen", curvature = "normal", mean.covariates = "prog"))
 
 fit_ml2 <- mixpoissonregML(daysabs ~ prog + math | prog, data = Attendance)
 

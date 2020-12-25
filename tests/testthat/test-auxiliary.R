@@ -43,8 +43,8 @@ envelope_mixpoisson("score", "EM", list(mean = c(1), precision = 1),  as.matrix(
 envelope_mixpoisson("pearson", "ML", list(mean = c(1), precision = 1),  as.matrix(rexp(30)), as.matrix(rep(1,30)), 2, 0.95, 30, "log", "log", "PIG", em_controls = list(maxit = 5000, em_tol = 10^(-5), em_tolgrad = 10^(-2)),
                     optim_method = "L-BFGS-B", optim_controls = list())
 
-expect_warning(envelope_mixpoisson("score", "ML", list(mean = c(1), precision = 1),  as.matrix(rexp(30)), as.matrix(rep(1,30)), 2, 0.95, 30, "log", "log", "PIG", em_controls = list(maxit = 5000, em_tol = 10^(-5), em_tolgrad = 10^(-2)),
-                    optim_method = "L-BFGS-B", optim_controls = list()))
+envelope_mixpoisson("score", "ML", list(mean = c(1), precision = 1),  as.matrix(rexp(30)), as.matrix(rep(1,30)), 2, 0.95, 30, "log", "log", "PIG", em_controls = list(maxit = 5000, em_tol = 10^(-5), em_tolgrad = 10^(-2)),
+                    optim_method = "L-BFGS-B", optim_controls = list())
 
 pearson_residual_mixpoisson(list(mean = 1, precision = 1), rexp(30), as.matrix(rep(1,30)), as.matrix(rep(1,30)), "log", "log", "NB")
 

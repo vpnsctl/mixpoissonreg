@@ -1,9 +1,9 @@
 set.seed(33333)
 
-fit1 <- expect_warning(mixpoissonreg(daysabs ~ prog + math, data = Attendance,
-                                     em_controls = list(maxit = 5)))
-fit2 <- expect_warning(mixpoissonreg(daysabs ~ prog + math | math, data = Attendance,
-                                     em_controls = list(maxit = 5)))
+fit1 <- mixpoissonreg(daysabs ~ prog + math, data = Attendance,
+                                     em_controls = list(maxit = 5))
+fit2 <- mixpoissonreg(daysabs ~ prog + math | math, data = Attendance,
+                                     em_controls = list(maxit = 5))
 
 hatvalues(fit1)
 

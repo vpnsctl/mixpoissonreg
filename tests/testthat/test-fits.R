@@ -1,9 +1,9 @@
 set.seed(33333)
 
-fit1 <- expect_warning(mixpoissonreg(daysabs ~ prog + math, data = Attendance,
-                      em_controls = list(maxit = 5)))
-fit2 <- expect_warning(mixpoissonreg(daysabs ~ prog + math | math, data = Attendance,
-                      em_controls = list(maxit = 5)))
+fit1 <- mixpoissonreg(daysabs ~ prog + math, data = Attendance,
+                      em_controls = list(maxit = 5))
+fit2 <- mixpoissonreg(daysabs ~ prog + math | math, data = Attendance,
+                      em_controls = list(maxit = 5))
 
 fit1env <- expect_warning(mixpoissonreg(daysabs ~ prog + math, data = Attendance, envelope = 10,
                          em_controls = list(maxit = 5)))
@@ -24,7 +24,7 @@ fit_ml1 <- mixpoissonregML(daysabs ~ prog + math, data = Attendance)
 
 fit_ml2 <- mixpoissonregML(daysabs ~ prog + math | math, data = Attendance)
 
-fit_ml1env <- expect_warning(mixpoissonregML(daysabs ~ prog + math, data = Attendance, envelope = 10))
+fit_ml1env <- mixpoissonregML(daysabs ~ prog + math, data = Attendance, envelope = 10)
 fit_ml2env <- mixpoissonregML(daysabs ~ prog + math | math, data = Attendance, envelope = 10)
 
 fit_ml1pig <- expect_warning(mixpoissonregML(daysabs ~ prog + math, data = Attendance, model = "PIG"))
@@ -119,7 +119,7 @@ lmtest::lrtest(fit2, fit1)
 
 lmtest::waldtest(fit2, fit1)
 
-expect_warning(update(fit1, . ~ . - 1))
+update(fit1, . ~ . - 1)
 
 set.seed(3333)
 
@@ -131,7 +131,7 @@ mixpoissonregML(y ~ x)
 
 expect_error(mixpoissonreg( x ~ -1))
 
-expect_error(mixpoissonreg( x ~ x | - 1))
+expect_error(mixpoissonreg( y ~ x | - 1))
 
 expect_error(mixpoissonreg( ~ 1))
 
@@ -154,7 +154,7 @@ expect_warning(mixpoissonreg(daysabs ~ math, data = Attendance, prob = 0.9))
 
 expect_error(mixpoissonregML( x ~ -1))
 
-expect_error(mixpoissonregML( x ~ x | - 1))
+expect_error(mixpoissonregML( y ~ x | - 1))
 
 expect_error(mixpoissonregML( ~ 1))
 
@@ -184,17 +184,25 @@ expect_warning(mixpoissonreg(y ~ x1, envelope = 10, model = "PIG", em_controls =
 
 expect_warning(mixpoissonreg(y ~ x1, envelope = 10, model = "NB", em_controls = list(maxit = 20)))
 
-set.seed(1212)
+set.seed(1216)
 
-expect_warning(mixpoissonregML(y ~ x1 + x2, envelope = 10, model = "PIG"))
+x1 <- rexp(30)
 
-expect_warning(mixpoissonregML(y ~ x1+x2-1, envelope = 10, model = "NB"))
+x2 <- rnorm(30)
+
+y <- rpois(30, exp(2+2*x1 - 2*x2))
+
+expect_warning(mixpoissonregML(y ~ x1+x2 | x2 + x1 -1, envelope = 100, model = "NB"))
+
+expect_warning(mixpoissonregML(y ~ x1 + x2 | x1 + x2, envelope = 10, model = "PIG"))
+
+
 
 
 
 ## Testing fitting algorithms
 
-set.seed(12345)
+set.seed(123)
 
 beta <- c(1,-2,1)
 alpha <- c(1,-2,1)
@@ -217,6 +225,8 @@ for(i in 1:50){
 expect_true(abs(max(colMeans(c_mean_em) - c(beta,alpha))) < 0.05) 
 expect_true(abs(max(colMeans(c_mean_ml) - c(beta,alpha))) < 0.05) 
 
+set.seed(123)
+
 c_mean_em <- c()
 c_mean_ml <- c()
 for(i in 1:50){
@@ -228,7 +238,12 @@ for(i in 1:50){
   fit_test <- mixpoissonreg(y ~ x1+x2 | x1 + x2, model = "PIG")
   c_mean_em <- rbind(c_mean_em, coef(fit_test))
   
-  fit_test <- mixpoissonregML(y ~ x1+x2 | x1 + x2, model = "PIG")
+  if(i == 7){
+    fit_test <- expect_warning(mixpoissonregML(y ~ x1+x2 | x1 + x2, model = "PIG"))
+  } else{
+    fit_test <- mixpoissonregML(y ~ x1+x2 | x1 + x2, model = "PIG")
+  }
+  
   c_mean_ml <- rbind(c_mean_ml, coef(fit_test))
 }
 
