@@ -401,28 +401,28 @@ and <code><a href='local_influence_autoplot.mixpoissonreg.html'>local_influence_
 #&gt; 
 #&gt; Pearson residuals:
 #&gt;      RSS      Min       1Q   Median       3Q      Max 
-#&gt; 321.9747  -1.1743  -0.6993  -0.3600   0.3014   4.7173 
+#&gt; 322.0142  -1.1751  -0.6992  -0.3600   0.3014   4.7178 
 #&gt; 
 #&gt; Coefficients modeling the mean (with  link):
 #&gt;                 Estimate Std.error z-value Pr(&gt;|z|)    
-#&gt; (Intercept)     2.746081  0.147474  18.621  &lt; 2e-16 ***
-#&gt; gendermale     -0.245042  0.117987  -2.077  0.03781 *  
-#&gt; math           -0.006617  0.002318  -2.855  0.00430 ** 
-#&gt; progAcademic   -0.425978  0.132190  -3.222  0.00127 ** 
-#&gt; progVocational -1.269703  0.174479  -7.277 3.41e-13 ***
+#&gt; (Intercept)     2.746123  0.147412  18.629  &lt; 2e-16 ***
+#&gt; gendermale     -0.245113  0.117967  -2.078  0.03773 *  
+#&gt; math           -0.006617  0.002317  -2.856  0.00429 ** 
+#&gt; progAcademic   -0.425983  0.132144  -3.224  0.00127 ** 
+#&gt; progVocational -1.269755  0.174444  -7.279 3.37e-13 ***
 #&gt; 
 #&gt; Coefficients modeling the precision (with  link):
 #&gt;                 Estimate Std.error z-value Pr(&gt;|z|)    
-#&gt; (Intercept)     1.412448  0.343250   4.115 3.87e-05 ***
-#&gt; gendermale     -0.208600  0.203691  -1.024 0.305789    
-#&gt; math           -0.005116  0.004181  -1.224 0.221053    
-#&gt; progAcademic   -1.082668  0.305481  -3.544 0.000394 ***
-#&gt; progVocational -1.420446  0.343813  -4.131 3.60e-05 ***
+#&gt; (Intercept)     1.414227  0.343243   4.120 3.79e-05 ***
+#&gt; gendermale     -0.208397  0.203692  -1.023 0.306262    
+#&gt; math           -0.005123  0.004181  -1.225 0.220458    
+#&gt; progAcademic   -1.084418  0.305479  -3.550 0.000385 ***
+#&gt; progVocational -1.422051  0.343812  -4.136 3.53e-05 ***
 #&gt; ---
 #&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 #&gt; 
-#&gt; Efron's pseudo R-squared:  0.1860883 
-#&gt; Number of iterations of the EM algorithm = 2804</div><div class='input'><span class='co'># Base R plot of the fit</span>
+#&gt; Efron's pseudo R-squared:  0.1860886 
+#&gt; Number of iterations of the EM algorithm = 11</div><div class='input'><span class='co'># Base R plot of the fit</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>daysabs_fit</span><span class='op'>)</span>
 </div><div class='img'><img src='mixpoissonreg-1.png' alt='' width='700' height='433' /></div><div class='img'><img src='mixpoissonreg-2.png' alt='' width='700' height='433' /></div><div class='img'><img src='mixpoissonreg-3.png' alt='' width='700' height='433' /></div><div class='img'><img src='mixpoissonreg-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># ggplot2 plot of the fit</span>
 <span class='fu'><a href='autoplot.mixpoissonreg.html'>autoplot</a></span><span class='op'>(</span><span class='va'>daysabs_fit</span><span class='op'>)</span>
@@ -449,7 +449,7 @@ and <code><a href='local_influence_autoplot.mixpoissonreg.html'>local_influence_
 #&gt; Model 2: daysabs ~ gender + math + prog | prog
 #&gt;   Res.Df Df  Chisq Pr(&gt;Chisq)
 #&gt; 1    304                     
-#&gt; 2    306 -2 2.4132     0.2992</div><div class='input'><span class='co'># }</span>
+#&gt; 2    306 -2 2.4149      0.299</div><div class='input'><span class='co'># }</span>
 
 </div></pre>
   </div>
