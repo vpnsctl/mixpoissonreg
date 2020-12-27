@@ -40,6 +40,25 @@ On RedHat or Fedora, run:
 yum install gsl gsl-devel
 ```
 
+The *mixpoissonreg* package also depends on the following packages:
+`pbapply`, `Formula`,  `gamlss`, `gamlss.dist`, `rlang`, `statmod`, `lmtest`, `methods`, `generics`, `magrittr`, `tibble`, `dplyr`, `ggplot2`, `ggfortify`, `ggrepel`, `gridExtra`
+
+## Useful Resources
+
+* [*mixpoissonreg* Documentation](https://vpnsctl.github.io/mixpoissonreg/reference/index.html)
+
+* Currently, the *mixpoissonreg* package has the following vignettes:
+
+    * [Getting started: Introduction to the *mixpoissonreg* package](https://vpnsctl.github.io/mixpoissonreg/articles/mixpoissonreg.html)
+    * [Analyzing overdispersed count data with the *mixpoissonreg* package](https://vpnsctl.github.io/mixpoissonreg/articles/tutorial-mixpoissonreg.html)
+    * [Maximum-likelihood estimation with the *mixpoissonreg* package](https://vpnsctl.github.io/mixpoissonreg/articles/ml-mixpoissonreg.html)
+    * [Diagnostic plots with the *mixpoissonreg* package](https://vpnsctl.github.io/mixpoissonreg/articles/plots-mixpoissonreg.html)
+    * [Global and local influence analysis with the *mixpoissonreg* package](https://vpnsctl.github.io/mixpoissonreg/articles/influence-mixpoissonreg.html)
+    * [Confidence and predictions intervals with  the *mixpoissonreg* package](https://vpnsctl.github.io/mixpoissonreg/articles/intervals-mixpoissonreg.html)
+    * [*mixpoissonreg* in the *tidyverse*](https://vpnsctl.github.io/mixpoissonreg/articles/tidyverse-mixpoissonreg.html)
+
+* Theoretical details can be obtained in [Barreto-Souza and Simas (2016)](https://doi.org/10.1007/s11222-015-9601-6) and also in its [Supplementary Material](https://link.springer.com/article/10.1007%2Fs11222-015-9601-6#Sec23)
+
 ## Basic usage
 
 The usage of the *mixpoissonreg* package is analogous to the usage of standard regression functions and packages in *R*:

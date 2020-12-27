@@ -28,8 +28,8 @@ devtools::install_github("vpnsctl/mixpoissonreg")
 
 ## Dependencies
 
-The *mixpoissonreg* package depends on the *Rfast* package. The *Rfast* package needs the *GSL* library to be installed. If you are using linux, 
-you most likely will need to install the *GSL* library. 
+The *mixpoissonreg* package depends on the `Rfast` package. The `Rfast` package needs the `GSL` library to be installed. If you are using linux, 
+you most likely will need to install the `GSL` library. 
 
 On Ubuntu (version 18.04 or newer), run:
 ```{bash}
@@ -41,18 +41,26 @@ On RedHat or Fedora, run:
 yum install gsl gsl-devel
 ```
 
-## Vignettes
+The *mixpoissonreg* package also depends on the following packages:
+`pbapply`, `Formula`,  `gamlss`, `gamlss.dist`, `rlang`, `statmod`, `lmtest`, `methods`, `generics`, `magrittr`, `tibble`, `dplyr`, `ggplot2`, `ggfortify`, `ggrepel`, `gridExtra`
 
-The *mixpoissonreg* package currently has the following vignettes:
+## Useful Resources
 
-* [Introduction to the *mixpoissonreg* package](https://rpubs.com/alexandrebsimas/intro-mixpoissonreg)
-* [Analyzing overdispersed count data with the *mixpoissonreg* package](https://rpubs.com/alexandrebsimas/tutorial-mixpoissonreg)
-* [Maximum-likelihood estimation with the *mixpoissonreg* package](https://rpubs.com/alexandrebsimas/ml-mixpoissonreg)
-* [Diagnostic plots with the *mixpoissonreg* package](https://rpubs.com/alexandrebsimas/plots-mixpoissonreg)
-* [Global and local influence analysis with the *mixpoissonreg* package](https://rpubs.com/alexandrebsimas/influence-mixpoissonreg)
-* [Confidence and predictions intervals with  the *mixpoissonreg* package](https://rpubs.com/alexandrebsimas/intervals-mixpoissonreg)
-* [*mixpoissonreg* in the tidyverse](https://rpubs.com/alexandrebsimas/tidyverse-mixpoissonreg)
+* The [*mixpoissonreg* home page](https://vpnsctl.github.io/mixpoissonreg/) contains the documentation (with examples), vignettes, etc.
 
+* The *mixpoissonreg* Documentation can be accessed directly through [this link](https://vpnsctl.github.io/mixpoissonreg/reference/index.html)
+
+* Currently, the *mixpoissonreg* package has the following vignettes:
+
+    * [Getting started: Introduction to the *mixpoissonreg* package](https://rpubs.com/alexandrebsimas/intro-mixpoissonreg)
+    * [Analyzing overdispersed count data with the *mixpoissonreg* package](https://rpubs.com/alexandrebsimas/tutorial-mixpoissonreg)
+    * [Maximum-likelihood estimation with the *mixpoissonreg* package](https://rpubs.com/alexandrebsimas/ml-mixpoissonreg)
+    * [Diagnostic plots with the *mixpoissonreg* package](https://rpubs.com/alexandrebsimas/plots-mixpoissonreg)
+    * [Global and local influence analysis with the *mixpoissonreg* package](https://rpubs.com/alexandrebsimas/influence-mixpoissonreg)
+    * [Confidence and predictions intervals with  the *mixpoissonreg* package](https://rpubs.com/alexandrebsimas/intervals-mixpoissonreg)
+    * [*mixpoissonreg* in the *tidyverse*](https://rpubs.com/alexandrebsimas/tidyverse-mixpoissonreg)
+
+* Theoretical details can be obtained in [Barreto-Souza and Simas (2016)](https://doi.org/10.1007/s11222-015-9601-6) and also in its [Supplementary Material](https://link.springer.com/article/10.1007%2Fs11222-015-9601-6#Sec23)
 
 ## Basic usage
 

@@ -323,6 +323,8 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
   }
 
   plot.data$.obs <- as.vector(y)
+  
+  # Internal function from ggfortify package (https://github.com/sinhrks/ggfortify)
 
   plot_label <- function (p, data, x = NULL, y = NULL, label = TRUE, label.label = "rownames",
                           label.colour = NULL, label.alpha = NULL, label.size = NULL,
@@ -355,6 +357,8 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
     p
   }
 
+  # Internal function from ggfortify package (https://github.com/sinhrks/ggfortify)
+  
   flatten <- function (df)
   {
     ismatrix <- vapply(df, is.matrix, logical(1))
@@ -367,6 +371,8 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
     }
   }
 
+  # Internal function from ggfortify package (https://github.com/sinhrks/ggfortify)
+  
   geom_factory <- function (geomfunc, data = NULL, ...)
   {
     mapping <- list()
@@ -436,6 +442,8 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
       respobs.data <- utils::head(respobs.data, label.n)
     }
   }
+  
+  # Internal function from ggfortify package (https://github.com/sinhrks/ggfortify)
 
   .decorate.label <- function(p, data) {
     if (label & label.n > 0) {
@@ -449,10 +457,14 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
     }
     p
   }
+  
+  # Internal function from ggfortify package (https://github.com/sinhrks/ggfortify)
 
   .decorate.plot <- function(p, xlab = NULL, ylab = NULL, title = NULL) {
     p + ggplot2::xlab(xlab) + ggplot2::ylab(ylab) + ggplot2::ggtitle(title)
   }
+  
+  # Plots
 
   if (1 %in% which) {
     if(include.residualtype){
@@ -918,6 +930,8 @@ local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), ti
     plot.data$.label <- as.vector(label.label)
   }
 
+  # Based on internal function from ggfortify package (https://github.com/sinhrks/ggfortify)
+  
   plot_label_influential <- function (p, data, x = NULL, y = NULL, label = TRUE, label.label = "rownames",
                                       label.colour = NULL, label.alpha = NULL, label.size = NULL,
                                       label.angle = NULL, label.family = NULL, label.fontface = NULL,
@@ -948,6 +962,8 @@ local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), ti
     }
     p
   }
+  
+  # Internal function from ggfortify package (https://github.com/sinhrks/ggfortify)
 
   flatten <- function (df)
   {
@@ -960,6 +976,8 @@ local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), ti
       return(df)
     }
   }
+  
+  # Based on internal function from ggfortify package (https://github.com/sinhrks/ggfortify)
 
   geom_factory_influential <- function (geomfunc, data = NULL, ...)
   {
@@ -1022,6 +1040,8 @@ local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), ti
       }
     }
   }
+  
+  # Based on internal function from ggfortify package (https://github.com/sinhrks/ggfortify)
 
   .decorate.label.influential <- function(p, data) {
     if (label & n.influential > 0) {
@@ -1035,6 +1055,8 @@ local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), ti
     }
     p
   }
+  
+  # Based on internal function from ggfortify package (https://github.com/sinhrks/ggfortify)
 
   .decorate.plot <- function(p, xlab = NULL, ylab = NULL, title = NULL) {
     p + ggplot2::xlab(xlab) + ggplot2::ylab(ylab) + ggplot2::ggtitle(title)
@@ -1054,6 +1076,8 @@ local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), ti
                       }
   )
 
+  # Plots
+  
   for(i in 1:length(pert)){
     if(i %in% which){
 
