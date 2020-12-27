@@ -9,7 +9,7 @@
 ---
 
 The *mixpoissonreg* package deals with regression models with response variables being count data. 
-It is aimed towards overdispersed data. It currently provides implementation of two regression models: Negative Binomial and Poisson Inverse Gaussian regression models. For both of these models, there are two estimation procedures implemented, the EM-algorithm and direct maximization of the 
+It is aimed towards overdispersed data. It currently provides implementation of two regression models: Negative Binomial and Poisson Inverse Gaussian regression models. For both of these models, there are two estimation procedures implemented: the EM-algorithm and direct maximization of the 
 log-likelihood function.  The definition of both these regression models along with the EM-algorithm approach
 for them can be found at <http://doi.org/10.1007/s11222-015-9601-6>. The direct maximization
 of the log-likelihood is only recommended when the EM-algorithm takes too long to converge.
