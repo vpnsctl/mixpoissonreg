@@ -193,28 +193,28 @@ The variable <code>prog</code> is a three-level factor indicating the type of in
 #&gt; 
 #&gt; Pearson residuals:
 #&gt;      RSS      Min       1Q   Median       3Q      Max 
-#&gt; 239.1991  -1.0837  -0.6058  -0.3062   0.2519   4.1196 
+#&gt; 239.2014  -1.0839  -0.6058  -0.3062   0.2518   4.1193 
 #&gt; 
 #&gt; Coefficients modeling the mean (with  link):
 #&gt;                 Estimate Std.error z-value Pr(&gt;|z|)    
-#&gt; (Intercept)     2.750771  0.165401  16.631  &lt; 2e-16 ***
-#&gt; gendermale     -0.251264  0.136867  -1.836  0.06638 .  
-#&gt; math           -0.006729  0.002679  -2.512  0.01202 *  
-#&gt; progAcademic   -0.423339  0.148467  -2.851  0.00435 ** 
-#&gt; progVocational -1.260812  0.203434  -6.198 5.73e-10 ***
+#&gt; (Intercept)     2.750837  0.165380  16.633  &lt; 2e-16 ***
+#&gt; gendermale     -0.251231  0.136861  -1.836  0.06641 .  
+#&gt; math           -0.006730  0.002679  -2.512  0.01200 *  
+#&gt; progAcademic   -0.423408  0.148452  -2.852  0.00434 ** 
+#&gt; progVocational -1.260833  0.203427  -6.198 5.72e-10 ***
 #&gt; 
 #&gt; Coefficients modeling the precision (with  link):
 #&gt;                 Estimate Std.error z-value Pr(&gt;|z|)    
-#&gt; (Intercept)     1.211452  0.438412   2.763 0.005723 ** 
-#&gt; gendermale     -0.114223  0.304675  -0.375 0.707734    
-#&gt; math           -0.005686  0.006098  -0.932 0.351147    
-#&gt; progAcademic   -1.284316  0.386321  -3.324 0.000886 ***
-#&gt; progVocational -1.610480  0.475590  -3.386 0.000708 ***
+#&gt; (Intercept)     1.212043  0.438400   2.765 0.005698 ** 
+#&gt; gendermale     -0.114176  0.304676  -0.375 0.707849    
+#&gt; math           -0.005688  0.006098  -0.933 0.350983    
+#&gt; progAcademic   -1.284915  0.386309  -3.326 0.000881 ***
+#&gt; progVocational -1.611068  0.475586  -3.388 0.000705 ***
 #&gt; ---
 #&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 #&gt; 
 #&gt; Efron's pseudo R-squared:  0.1861611 
-#&gt; Number of iterations of the EM algorithm = 2974</div><div class='input'>
+#&gt; Number of iterations of the EM algorithm = 2067</div><div class='input'>
 <span class='va'>daysabs_fit_red</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mixpoissonreg.html'>mixpoissonreg</a></span><span class='op'>(</span><span class='va'>daysabs</span> <span class='op'>~</span> <span class='va'>gender</span> <span class='op'>+</span> <span class='va'>math</span> <span class='op'>+</span> <span class='va'>prog</span> <span class='op'>|</span> <span class='va'>prog</span>, 
 data <span class='op'>=</span> <span class='va'>Attendance</span>, model <span class='op'>=</span> <span class='st'>"PIG"</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>daysabs_fit_red</span><span class='op'>)</span>
@@ -228,26 +228,26 @@ data <span class='op'>=</span> <span class='va'>Attendance</span>, model <span c
 #&gt; 
 #&gt; Pearson residuals:
 #&gt;      RSS      Min       1Q   Median       3Q      Max 
-#&gt; 239.3218  -1.0033  -0.6103  -0.3108   0.2736   4.2837 
+#&gt; 239.2879  -1.0042  -0.6101  -0.3107   0.2734   4.2814 
 #&gt; 
 #&gt; Coefficients modeling the mean (with  link):
 #&gt;                 Estimate Std.error z-value Pr(&gt;|z|)    
-#&gt; (Intercept)     2.805424  0.162307  17.285  &lt; 2e-16 ***
-#&gt; gendermale     -0.282146  0.122795  -2.298  0.02158 *  
-#&gt; math           -0.007771  0.002399  -3.239  0.00120 ** 
-#&gt; progAcademic   -0.423277  0.148108  -2.858  0.00426 ** 
-#&gt; progVocational -1.216411  0.197269  -6.166 6.99e-10 ***
+#&gt; (Intercept)     2.805150  0.162182  17.296  &lt; 2e-16 ***
+#&gt; gendermale     -0.282333  0.122772  -2.300  0.02147 *  
+#&gt; math           -0.007770  0.002398  -3.240  0.00120 ** 
+#&gt; progAcademic   -0.422885  0.148013  -2.857  0.00428 ** 
+#&gt; progVocational -1.215877  0.197264  -6.164 7.11e-10 ***
 #&gt; 
 #&gt; Coefficients modeling the precision (with  link):
 #&gt;                Estimate Std.error z-value Pr(&gt;|z|)    
-#&gt; (Intercept)      0.9251    0.3310   2.795 0.005187 ** 
-#&gt; progAcademic    -1.2770    0.3854  -3.313 0.000922 ***
-#&gt; progVocational  -1.7405    0.4507  -3.862 0.000112 ***
+#&gt; (Intercept)      0.9277    0.3308   2.805 0.005039 ** 
+#&gt; progAcademic    -1.2799    0.3853  -3.322 0.000894 ***
+#&gt; progVocational  -1.7440    0.4506  -3.870 0.000109 ***
 #&gt; ---
 #&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 #&gt; 
-#&gt; Efron's pseudo R-squared:  0.1858069 
-#&gt; Number of iterations of the EM algorithm = 2820</div><div class='input'>
+#&gt; Efron's pseudo R-squared:  0.1858037 
+#&gt; Number of iterations of the EM algorithm = 19</div><div class='input'>
 <span class='co'># Plot of the fit with all precision covariates</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>daysabs_fit</span><span class='op'>)</span>
 </div><div class='img'><img src='Attendance-1.png' alt='' width='700' height='433' /></div><div class='img'><img src='Attendance-2.png' alt='' width='700' height='433' /></div><div class='img'><img src='Attendance-3.png' alt='' width='700' height='433' /></div><div class='img'><img src='Attendance-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='local_influence.html'>local_influence_plot</a></span><span class='op'>(</span><span class='va'>daysabs_fit</span><span class='op'>)</span>
