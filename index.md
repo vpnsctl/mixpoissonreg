@@ -27,7 +27,7 @@ devtools::install_github("vpnsctl/mixpoissonreg")
 
 ## Dependencies
 
-The *mixpoissonreg* package depends on the *Rfast* package. The *Rfast* package needs the *GSL* library to be installed. If you are using linux, 
+The *mixpoissonreg* package imports the *Rfast* package. The *Rfast* package needs the *GSL* library to be installed. If you are using linux, 
 you most likely will need to install the *GSL* library. 
 
 On Ubuntu (version 18.04 or newer), run:
@@ -40,7 +40,7 @@ On RedHat or Fedora, run:
 yum install gsl gsl-devel
 ```
 
-The *mixpoissonreg* package also depends on the following packages:
+The *mixpoissonreg* package also imports the following packages:
 `pbapply`, `Formula`,  `gamlss`, `gamlss.dist`, `rlang`, `statmod`, `lmtest`, `methods`, `generics`, `magrittr`, `tibble`, `dplyr`, `ggplot2`, `ggfortify`, `ggrepel`, `gridExtra`
 
 ## Useful Resources
@@ -54,7 +54,7 @@ The *mixpoissonreg* package also depends on the following packages:
     * [Maximum-likelihood estimation with the *mixpoissonreg* package](https://vpnsctl.github.io/mixpoissonreg/articles/ml-mixpoissonreg.html)
     * [Diagnostic plots with the *mixpoissonreg* package](https://vpnsctl.github.io/mixpoissonreg/articles/plots-mixpoissonreg.html)
     * [Global and local influence analysis with the *mixpoissonreg* package](https://vpnsctl.github.io/mixpoissonreg/articles/influence-mixpoissonreg.html)
-    * [Confidence and predictions intervals with  the *mixpoissonreg* package](https://vpnsctl.github.io/mixpoissonreg/articles/intervals-mixpoissonreg.html)
+    * [Confidence and prediction intervals with  the *mixpoissonreg* package](https://vpnsctl.github.io/mixpoissonreg/articles/intervals-mixpoissonreg.html)
     * [*mixpoissonreg* in the *tidyverse*](https://vpnsctl.github.io/mixpoissonreg/articles/tidyverse-mixpoissonreg.html)
 
 * Theoretical details can be obtained in [Barreto-Souza and Simas (2016)](https://doi.org/10.1007/s11222-015-9601-6) and also in its [Supplementary Material](https://link.springer.com/article/10.1007%2Fs11222-015-9601-6#Sec23)
