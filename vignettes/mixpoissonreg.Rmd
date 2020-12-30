@@ -1,8 +1,10 @@
 ---
-title: "intro-mixpoissonreg"
+title: "Introduction to mixpoissonreg"
+author: "Alexandre B. Simas"
+date: '`r format(Sys.time(), "%Y-%m-%d")`'
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{intro-mixpoissonreg}
+  %\VignetteIndexEntry{mixpoissonreg}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
