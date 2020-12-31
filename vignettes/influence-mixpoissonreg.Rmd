@@ -1,5 +1,7 @@
 ---
-title: "influence-mixpoissonreg"
+title: "Global and local influence analysis with the *mixpoissonreg* package"
+author: "Alexandre B. Simas"
+date: '`r format(Sys.time(), "%Y-%m-%d")`'
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{influence-mixpoissonreg}
@@ -14,6 +16,251 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+# Global Influence
+
+In the *mixpoissonreg* package the following global influence methods are implemented: `hatvalues`, `cooks.distance` and `influence`. Below, we discuss the implementations of these methods in detail.
+
+## `hatvalues` method
+To define "hat values" for mixed Poisson regression models, we follow [Zhu et al. (2001)](https://www.jstor.org/stable/2673442) to consider the negative of the 
+hessian of the Q-function as weight matrix, and follow
+[Pregibon (1981)](https://projecteuclid.org/euclid.aos/1176345513) to define the "hat" matrix with respect to this weight matrix. 
+We can consider the hessian of the Q-function with respect to mean-related parameters,
+which is the default. We can also consider the hessian of the Q-function with respect to the precision-related parameters to 
+give rise to hat values related to the precision parameters.
+
+To obtain the mean-related hat values one simply calls the `hatvalues` method:
+
+```{r}
 library(mixpoissonreg)
+
+fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, 
+                        data = Attendance)
+
+head(hatvalues(fit))
 ```
+
+The hat values are used to obtain Cook's distance. One can also use the hat values to define leverage-adjusted residuals by dividing the residuals by `sqrt(hatvalues(fitted_object))`.
+
+To obtain precision-related hat values one must set `parameters` to "precision":
+
+```{r}
+head(hatvalues(fit, parameters = "precision"))
+```
+
+## `cooks.distance` method
+
+The implementation of the `cooks.distance` method for `mixpoissonreg` models contains several "Cook's distance"-like measures. More precisely, it contains the
+standard Cook's distance, the generalized Cook's distance, the likelihood displacement and the Q-displacement.
+
+### Cook's distance
+
+The implementation of the standard Cook's distance uses the usual formula for Cook's distance in terms of the "hat" matrix, where the "hat" matrix is the one given above.
+The standard Cook's distance returned by default in the `cooks.distance` method. So, to obtain Cook's distance, we simply call the `cooks.distance` method:
+
+```{r}
+head(cooks.distance(fit))
+```
+
+Since there is also a "hat" matrix with respect to the precision parameters, we may compute Cook's distance using the hat values with respect to the precision parameters. To 
+compute Cook's distance with the "hat" matrix with respect to the precision parameters we simply set the `hat` argument to "precision":
+
+```{r}
+head(cooks.distance(fit, hat = "precision"))
+```
+
+### generalized Cook's distance and Q-displacement
+
+The Generalized Cook's distance and Q-displacement (also called Q-distance) for EM-based models were defined in [Zhu et al. (2001)](https://www.jstor.org/stable/2673442) and computed for mixed Poisson regression models
+in [Barreto-Souza and Simas (2016)](https://doi.org/10.1007/s11222-015-9601-6). We implemented first-order approximation to these quantities to make it computationally feasible. These first-order approximations
+are available in [Barreto-Souza and Simas (2016)](https://doi.org/10.1007/s11222-015-9601-6). We also provide versions of generalized Cook's distance for mean-related or precision-related parameters, whose details can be found in [Barreto-Souza and Simas (2016)](https://doi.org/10.1007/s11222-015-9601-6).
+
+To compute the generalized Cook's distance with respect to the mean and precision parameters jointly, simply set the `type` argument to "GCD":
+
+```{r}
+head(cooks.distance(fit, type = "GCD"))
+```
+
+To compute the generalized Cook's distance with respect to the mean-related parameters, set the `type` argument to "GCDmean":
+
+```{r}
+head(cooks.distance(fit, type = "GCDmean"))
+```
+
+and to compute the generalized Cook's distance with respect to the precision-related parameters, set the `type` argument to "GCDprecision":
+
+```{r}
+head(cooks.distance(fit, type = "GCDprecision"))
+```
+
+To compute the Q-displacement one sets the `type` argument to "QD":
+
+```{r}
+head(cooks.distance(fit, type = "QD"))
+```
+
+### Likelihood displacement
+
+The likelihood displacement (also called likelihood distance) was defined in Cook and Weisberg (1982). To compute this measure, one simply set the `type` argument to "LD":
+
+```{r}
+head(cooks.distance(fit, type = "LD"))
+```
+
+## `influence` method
+
+The `influence` method returns a `list` with several quantities: 
+
+* **hat.mean** hat values with respect to the mean;
+* **hat.precision** hat with respect to the precision parameters;
+* **pear.res** Pearson residuals;
+* **score.res** Score residuals
+
+and if the argument `do.coef` is `TRUE` the returned `list` also contains:
+
+* **coefficients.mean** first-order approximation to the impact on the estimate of each mean-related parameter if each observation is removed;
+* **coefficients.precision** first-order approximation to the impact on the estimate of each precision-related parameter if each observation is removed.
+
+For the two elements above, the *i*th row corresponds to the parameter estimates with the *i*th observation removed.
+
+The `influence` method has only one argument, `do.coef`, which, by default, is set to `TRUE` since its computation is not computationally intensive. 
+
+Let us call this method on the `fit` object:
+
+```{r}
+influence_fit <- influence(fit)
+
+head(influence_fit$coefficients.mean)
+```
+
+## Global influence plots
+
+The main global influence plots are implemented in the `plot` and `autoplot` methods. They are the plots number 3, 4 and 5, which are, respectively, the Cook's distance plot,
+the generalized Cook's distance plot and Cook's distance vs generalized Cook's distance. The `plot` and `autoplot` methods provide the same plots, the difference between them
+being that the former uses R's base graphics whereas the latter uses the `ggplot2` package. 
+
+Let us build these plots:
+
+```{r}
+plot(fit, which = c(3,4,5))
+```
+
+and
+
+```{r}
+autoplot(fit, which = c(3,4,5))
+```
+
+These plots identify the most extreme points. By the default they identify 3 points, but the number of identified points can be changed by setting the `id.n` argument to the desired value for the `plot` method and by setting the `label.n` argument to the desired value for the `autoplot` method:
+
+```{r}
+plot(fit, which = c(3,4,5), id.n = 5)
+```
+
+and
+
+```{r}
+autoplot(fit, which = c(3,4,5), label.n = 5)
+```
+
+For further details customizing plots of `mixpoissonreg` objects, we refer the reader to the [Diagnostic plots with the *mixpoissonreg* package](plots-mixpoissonreg.html) vignette.
+
+We now turn to the problem of plotting Q-displacements and likelihood displacements. Both of these plots can easily be built "by hand". 
+
+R's base graphics:
+
+```{r}
+qd_fit <- cooks.distance(fit, type = "QD")
+
+# Get the extreme points:
+extreme_points <- as.vector(Rfast::nth(abs(qd_fit), k = 5,
+                                    num.of.nths = 5,
+                                    index.return = TRUE, descending = TRUE))
+idx_y <- qd_fit[extreme_points]
+
+ylim <- range(qd_fit, na.rm = TRUE)
+
+ylim <- extendrange(r = ylim, f = 0.15)
+
+plot(qd_fit, xlab = "Obs. number", ylab = "Q-displacement", ylim = ylim, type = "h")
+text(extreme_points, idx_y, labels = extreme_points, pos = 3, offset = 0.2)
+```
+
+and
+
+```{r}
+ld_fit <- cooks.distance(fit, type = "LD")
+
+# Get 5 most extreme points:
+extreme_points <- as.vector(Rfast::nth(abs(ld_fit), k = 5,
+                                    num.of.nths = 5,
+                                    index.return = TRUE, descending = TRUE))
+idx_y <- ld_fit[extreme_points]
+
+ylim <- range(ld_fit, na.rm = TRUE)
+
+ylim <- extendrange(r = ylim, f = 0.15)
+
+plot(ld_fit, xlab = "Obs. number", ylab = "Likelihood displacement", ylim = ylim, type = "h")
+text(extreme_points, idx_y, labels = extreme_points, pos = 3, offset = 0.2)
+```
+
+Now the `ggplot2` version:
+
+```{r message=FALSE}
+library(dplyr)
+library(ggplot2)
+library(ggrepel)
+
+qd_fit <- cooks.distance(fit, type = "QD")
+
+qd_tbl <- tibble("Q-displacement" = qd_fit, "Obs. number" = 1:length(qd_fit))
+
+# Get 5 most extreme points
+qd.extreme <- arrange(qd_tbl, desc(`Q-displacement`))
+qd.extreme <- head(qd.extreme, 5)
+
+ggplot(qd_tbl, aes(x = `Obs. number`, y = `Q-displacement`)) + 
+  geom_linerange(aes(ymin = 0, ymax = `Q-displacement`)) +
+  geom_text_repel(data = qd.extreme, aes(label = `Obs. number`))
+
+```
+
+and
+
+```{r message=FALSE}
+ld_fit <- cooks.distance(fit, type = "LD")
+
+ld_tbl <- tibble("Likelihood displacement" = ld_fit, "Obs. number" = 1:length(ld_fit))
+
+# Get 5 most extreme points
+ld.extreme <- arrange(ld_tbl, desc(`Likelihood displacement`))
+ld.extreme <- head(ld.extreme, 5)
+
+ggplot(ld_tbl, aes(x = `Obs. number`, y = `Likelihood displacement`)) + 
+  geom_linerange(aes(ymin = 0, ymax = `Likelihood displacement`)) +
+  geom_text_repel(data = ld.extreme, aes(label = `Obs. number`))
+
+```
+
+
+# Local Influence
+
+## Conformal normal curvature
+
+### Total local influence
+
+### Direction of largest curvature
+
+## Normal curvature
+
+### Total local influence
+
+### Direction of largest curvature
+
+## Perturbation schemes with respect to a subset of the covariates
+
+## Local influence plots
+
+# References
+
+* Cook, R. D. and Weisberg, S. (1982) *Residuals and Influence in Regression.* New York and London: Chapman and Hall.

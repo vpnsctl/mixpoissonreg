@@ -46,13 +46,13 @@ on \code{cooks.distance.mixpoissonreg} function) and Q-displacement (through arg
 on \code{cooks.distance.mixpoissonreg} function).
 }
 \details{
-For hatvalues of mixed Poisson regression models, we follow Zhu et al. (2001) to consider the negative of the hessian of the Q-function as weight matrix, and follow
+For hat values of mixed Poisson regression models, we follow Zhu et al. (2001) to consider the negative of the hessian of the Q-function as weight matrix, and follow
 Pregibon (1981) to define the 'hat' matrix with respect to this weight matrix. We can consider the hessian of the Q-function with respect to mean-related parameters,
-which usually considered. We can also consider the hessian of the Q-function with respect to the precision-related parameters to give rise to hatvalues related to the precision
+which is the default. We can also consider the hessian of the Q-function with respect to the precision-related parameters to give rise to hat values related to the precision
 parameters.
 
 The Generalized Cook's distance and Q-displacement for EM-based models were defined in Zhu et al. (2001) and computed for mixed Poisson regression models
-in Barreto-Souza and Simas (2016). We implemented first-order approximation to these quantities to be computationally feasible. These first-order approximations
+in Barreto-Souza and Simas (2016). We implemented first-order approximation to these quantities to make it computationally feasible. These first-order approximations
 are available in Barreto-Souza and Simas (2016). We also provide versions of generalized Cook's distance for mean-related or precision-related parameters, whose
 details can be found in Barreto-Souza and Simas (2016).
 
@@ -66,5 +66,5 @@ Cook, D.R. and Weisberg, S. (1982) \emph{Residuals and Influence in Regression}.
 
 DOI:10.1214/aos/1176345513 (\href{https://projecteuclid.org/euclid.aos/1176345513}{Pregibon; 1981})
 
-Zhu, H.T., Lee, S.Y., Wei, B.C., Zhu, J. (2001) \emph{Case-deletion measures formodels with incomplete data.} Biometrika, 88, 727–737. \href{https://www.jstor.org/stable/2673442?seq=1}{https://www.jstor.org/stable/2673442?seq=1}
+Zhu, H.T., Lee, S.Y., Wei, B.C., Zhu, J. (2001) \emph{Case-deletion measures formodels with incomplete data.} Biometrika, 88, 727–737. \href{https://www.jstor.org/stable/2673442}{https://www.jstor.org/stable/2673442}
 }

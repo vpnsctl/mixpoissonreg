@@ -273,7 +273,7 @@ mixpoissonreg <- function(formula, data, link.mean = c("log", "sqrt"),
 #' @rdname mixpoissonreg
 #' @export
 
-mixpoissonreg.fit <- function(y, x, w = NULL, link.mean = c("log", "sqrt"),
+mixpoissonreg.fit <- function(x, y, w = NULL, link.mean = c("log", "sqrt"),
                       link.precision = c("identity", "log", "inverse.sqrt"),
                       model = c("NB", "PIG"), method = c("EM", "ML"),
                       residual = c("pearson", "score"), envelope = 0,
@@ -726,7 +726,7 @@ mixpoissonregML <- function(formula, data, link.mean = c("log", "sqrt"),
 #' @rdname mixpoissonregML
 #' @export
 
-mixpoissonregML.fit <- function(y, x, w = NULL, link.mean = c("log", "sqrt"),
+mixpoissonregML.fit <- function(x, y, w = NULL, link.mean = c("log", "sqrt"),
                               link.precision = c("identity", "log", "inverse.sqrt"),
                               model = c("NB", "PIG"),
                               residual = c("pearson", "score"), envelope = 0,

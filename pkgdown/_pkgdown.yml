@@ -15,7 +15,7 @@ reference:
     - mixpoissonregML
     - mixpoissonregML.fit
 
-  - title: Extract information
+  - title: Information extraction
     contents:
     - summary.mixpoissonreg
     - fitted.mixpoissonreg

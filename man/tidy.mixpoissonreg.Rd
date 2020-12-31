@@ -2,9 +2,10 @@
 % Please edit documentation in R/8_tidy_mixpoissonreg.R
 \name{tidy.mixpoissonreg}
 \alias{tidy.mixpoissonreg}
+\alias{tidy}
 \title{Tidy a \code{mixpoissonreg} object}
 \usage{
-\method{tidy}{mixpoissonreg}(x, conf.int = FALSE, conf.level = 0.95)
+\method{tidy}{mixpoissonreg}(x, conf.int = FALSE, conf.level = 0.95, ...)
 }
 \arguments{
 \item{x}{A \code{mixpoissonreg} object.}
@@ -13,6 +14,8 @@
 
 \item{conf.level}{The confidence level to use for the confidence interval if conf.int = TRUE.
 Must be strictly greater than 0 and less than 1. Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
+
+\item{...}{Additional arguments. Currently not used.}
 }
 \description{
 Tidy returns a \code{\link[tibble:tibble]{tibble::tibble()}} containing

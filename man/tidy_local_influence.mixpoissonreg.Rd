@@ -25,7 +25,8 @@
   direction = c("canonical", "max.eigen"),
   parameters = c("all", "mean", "precision"),
   mean.covariates = NULL,
-  precision.covariates = NULL
+  precision.covariates = NULL,
+  ...
 )
 }
 \arguments{

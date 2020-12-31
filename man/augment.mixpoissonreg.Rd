@@ -2,6 +2,7 @@
 % Please edit documentation in R/8_tidy_mixpoissonreg.R
 \name{augment.mixpoissonreg}
 \alias{augment.mixpoissonreg}
+\alias{augment}
 \title{Augment data with information from a \code{mixpoissonreg} object}
 \usage{
 \method{augment}{mixpoissonreg}(

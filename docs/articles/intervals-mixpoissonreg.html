@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>intervals-mixpoissonreg • mixpoissonreg</title>
+<title>Confidence and prediction intervals with  the mixpoissonreg package • mixpoissonreg</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="intervals-mixpoissonreg">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Confidence and prediction intervals with  the mixpoissonreg package">
 <meta property="og:description" content="mixpoissonreg">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -57,13 +57,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/influence-mixpoissonreg.html">influence-mixpoissonreg</a>
+      <a href="../articles/influence-mixpoissonreg.html">Global and local influence analysis with the *mixpoissonreg* package</a>
     </li>
     <li>
-      <a href="../articles/intervals-mixpoissonreg.html">intervals-mixpoissonreg</a>
+      <a href="../articles/intervals-mixpoissonreg.html">Confidence and prediction intervals with  the mixpoissonreg package</a>
     </li>
     <li>
-      <a href="../articles/ml-mixpoissonreg.html">ml-mixpoissonreg</a>
+      <a href="../articles/ml-mixpoissonreg.html">Maximum-likelihood estimation with the mixpoissonreg package</a>
     </li>
     <li>
       <a href="../articles/plots-mixpoissonreg.html">plots-mixpoissonreg</a>
@@ -100,8 +100,10 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>intervals-mixpoissonreg</h1>
+      <h1 data-toc-skip>Confidence and prediction intervals with the mixpoissonreg package</h1>
+                        <h4 class="author">Alexandre B. Simas</h4>
             
+            <h4 class="date">2020-12-31</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/vpnsctl/mixpoissonreg/blob/master/vignettes/intervals-mixpoissonreg.Rmd"><code>vignettes/intervals-mixpoissonreg.Rmd</code></a></small>
       <div class="hidden name"><code>intervals-mixpoissonreg.Rmd</code></div>
@@ -110,13 +112,266 @@
 
     
     
+<div id="standard-errors-for-the-means" class="section level1">
+<h1 class="hasAnchor">
+<a href="#standard-errors-for-the-means" class="anchor"></a>Standard errors for the means</h1>
+<div id="standard-errors-for-the-means-using-the-predict-method" class="section level2">
+<h2 class="hasAnchor">
+<a href="#standard-errors-for-the-means-using-the-predict-method" class="anchor"></a>Standard errors for the means using the <code>predict</code> method</h2>
+<p>The <code>predict</code> method for <code>mixpoissonreg</code> objects allows one to obtain standard errors for the means in the scale of the linear predictors. To this end one must set the argument <code>type</code> to “link” to indicate that the predicted values will be given in the scale of the linear predictors and <code>se.fit</code> to <code>TRUE</code>. The <code>predict</code> method will return a list with two components: <code>fit</code> containing the fitted values and <code>se.fit</code> containing the standard errors.</p>
+<p>For example:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/vpnsctl/mixpoissonreg/">mixpoissonreg</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/vpnsctl/mixpoissonreg/">mixpoissonreg</a></span><span class="op">)</span>
+
+<span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonreg.html">mixpoissonreg</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span>, 
+                        data <span class="op">=</span> <span class="va">Attendance</span><span class="op">)</span>
+
+<span class="va">pred_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="st">"link"</span>, se.fit <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">pred_fit</span><span class="op">$</span><span class="va">fit</span><span class="op">)</span>
+<span class="co">#&gt;        1        2        3        4        5        6 </span>
+<span class="co">#&gt; 1.679089 1.903565 2.158279 2.183221 2.270517 1.840271</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">pred_fit</span><span class="op">$</span><span class="va">se.fit</span><span class="op">)</span>
+<span class="co">#&gt;         1         2         3         4         5         6 </span>
+<span class="co">#&gt; 0.1181008 0.1074558 0.1151626 0.1203237 0.1424633 0.1231964</span></code></pre></div>
+<p>Since no data was passed, the predicted values were obtained with respect to the model’s data.</p>
+<p>To pass a new data, one must pass a <code>data.frame</code> with the values of the covariates of interest to the <code>newdata</code> argument. For instance:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit</span>, newdata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>gender <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"male"</span>, <span class="st">"female"</span><span class="op">)</span>, math <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">34</span>, <span class="fl">85</span><span class="op">)</span>, 
+                                  prog <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"General"</span>, <span class="st">"Academic"</span><span class="op">)</span>, 
+                                  levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"General"</span>, <span class="st">"Academic"</span>, <span class="st">"Vocational"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
+        type <span class="op">=</span> <span class="st">"link"</span>, se.fit <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="co">#&gt; $fit</span>
+<span class="co">#&gt;        1        2 </span>
+<span class="co">#&gt; 2.284493 1.752975 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $se.fit</span>
+<span class="co">#&gt;         1         2 </span>
+<span class="co">#&gt; 0.1787343 0.1461214</span></code></pre></div>
+</div>
+<div id="standard-errors-for-the-means-using-the-augment-method" class="section level2">
+<h2 class="hasAnchor">
+<a href="#standard-errors-for-the-means-using-the-augment-method" class="anchor"></a>Standard errors for the means using the <code>augment</code> method</h2>
+<p>One can also obtain the standard errors in a tidy manner by using the augment method with the argument <code>type.predict</code> to “link” and the argument <code>se_fit</code> to <code>TRUE</code>. This will return a <code><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble::tibble</a></code> object with several columns, including <code>.fitted</code> containing the fitted values and <code>.se.fit</code> containing the standard errors.</p>
+<p>The following example shows how to use the <code>augment</code> method to obtain the fitted values in the scale of the linear predictor along with the corresponding standard errors:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
+
+<span class="fu"><a href="../reference/augment.mixpoissonreg.html">augment</a></span><span class="op">(</span><span class="va">fit</span>, type.predict <span class="op">=</span> <span class="st">"link"</span>, se_fit <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">.fitted</span>, <span class="va">.se.fit</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 314 x 2</span>
+<span class="co">#&gt;    .fitted .se.fit</span>
+<span class="co">#&gt;      &lt;dbl&gt;   &lt;dbl&gt;</span>
+<span class="co">#&gt;  1   1.68    0.118</span>
+<span class="co">#&gt;  2   1.90    0.107</span>
+<span class="co">#&gt;  3   2.16    0.115</span>
+<span class="co">#&gt;  4   2.18    0.120</span>
+<span class="co">#&gt;  5   2.27    0.142</span>
+<span class="co">#&gt;  6   1.84    0.123</span>
+<span class="co">#&gt;  7   1.89    0.113</span>
+<span class="co">#&gt;  8   2.05    0.137</span>
+<span class="co">#&gt;  9   1.75    0.107</span>
+<span class="co">#&gt; 10   0.938   0.129</span>
+<span class="co">#&gt; # … with 304 more rows</span></code></pre></div>
+</div>
+</div>
+<div id="confidence-intervals-for-the-means" class="section level1">
+<h1 class="hasAnchor">
+<a href="#confidence-intervals-for-the-means" class="anchor"></a>Confidence intervals for the means</h1>
+<div id="confidence-intervals-for-the-means-using-the-predict-method" class="section level2">
+<h2 class="hasAnchor">
+<a href="#confidence-intervals-for-the-means-using-the-predict-method" class="anchor"></a>Confidence intervals for the means using the <code>predict</code> method</h2>
+<p>The <code>predict</code> method for <code>mixpoissonreg</code> objects <strong>does not</strong> provide standard errors for the fitted values at the response scale, however it provides confidence intervals for the means at the response scale. To this end it is enough to set the <code>interval</code> argument to “confidence” since the default type of prediction is already “response”. It is also possible to change the level of confidence by setting the <code>level</code> argument, which defaults to <code>0.95</code>.</p>
+<p>For example:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">fit_math</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonreg.html">mixpoissonreg</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">math</span>, 
+                        data <span class="op">=</span> <span class="va">Attendance</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit_math</span>, interval <span class="op">=</span> <span class="st">"confidence"</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt;        fit      lwr       upr</span>
+<span class="co">#&gt; 1 4.930072 4.245108  5.725558</span>
+<span class="co">#&gt; 2 7.152910 6.080109  8.415001</span>
+<span class="co">#&gt; 3 7.689724 6.387717  9.257118</span>
+<span class="co">#&gt; 4 8.014373 6.560871  9.789885</span>
+<span class="co">#&gt; 5 9.262442 7.166667 11.971092</span>
+<span class="co">#&gt; 6 4.538743 3.817703  5.395965</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit_math</span>, interval <span class="op">=</span> <span class="st">"confidence"</span>, level <span class="op">=</span> <span class="fl">0.99</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt;        fit      lwr       upr</span>
+<span class="co">#&gt; 1 4.930072 4.050190  6.001105</span>
+<span class="co">#&gt; 2 7.152910 5.777451  8.855831</span>
+<span class="co">#&gt; 3 7.689724 6.026016  9.812760</span>
+<span class="co">#&gt; 4 8.014373 6.161026 10.425241</span>
+<span class="co">#&gt; 5 9.262442 6.611655 12.975998</span>
+<span class="co">#&gt; 6 4.538743 3.615709  5.697414</span></code></pre></div>
+<p>One can, for instance, use this matrix to create a plot of the fitted values against the <code>math</code> variable along with their confidence intervals using R’s base graphics:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"Attendance"</span>, package <span class="op">=</span> <span class="st">"mixpoissonreg"</span><span class="op">)</span>
+
+<span class="va">new_math</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span>, by<span class="op">=</span><span class="fl">0.25</span><span class="op">)</span>
+<span class="va">conf_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit_math</span>, newdata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>math <span class="op">=</span> <span class="va">new_math</span><span class="op">)</span>, interval <span class="op">=</span> <span class="st">"confidence"</span><span class="op">)</span>
+
+
+<span class="fu">graphics</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">Attendance</span><span class="op">$</span><span class="va">math</span>, <span class="va">Attendance</span><span class="op">$</span><span class="va">daysabs</span>, xlab <span class="op">=</span> <span class="st">"Math score"</span>, ylab <span class="op">=</span> <span class="st">"Days abscent"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/curve.html">curve</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="va">fit_math</span><span class="op">$</span><span class="va">coefficients</span><span class="op">$</span><span class="va">mean</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="va">fit_math</span><span class="op">$</span><span class="va">coefficients</span><span class="op">$</span><span class="va">mean</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">*</span><span class="va">x</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+
+<span class="fu">graphics</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="va">new_math</span>, <span class="va">conf_fit</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>, col <span class="op">=</span> <span class="fu">grDevices</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grDevices/rgb.html">rgb</a></span><span class="op">(</span><span class="fl">0.7</span>, <span class="fl">0.7</span>, <span class="fl">0.7</span><span class="op">)</span><span class="op">)</span>
+<span class="fu">graphics</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="va">new_math</span>, <span class="va">conf_fit</span><span class="op">[</span>, <span class="fl">3</span><span class="op">]</span>, col <span class="op">=</span> <span class="fu">grDevices</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grDevices/rgb.html">rgb</a></span><span class="op">(</span><span class="fl">0.7</span>, <span class="fl">0.7</span>, <span class="fl">0.7</span><span class="op">)</span><span class="op">)</span>
+<span class="fu">graphics</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/graphics/polygon.html">polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">new_math</span>, <span class="fu"><a href="https://rdrr.io/r/base/rev.html">rev</a></span><span class="op">(</span><span class="va">new_math</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">conf_fit</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/rev.html">rev</a></span><span class="op">(</span><span class="va">conf_fit</span><span class="op">[</span>, <span class="fl">3</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>, 
+                  col <span class="op">=</span> <span class="fu">grDevices</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grDevices/rgb.html">rgb</a></span><span class="op">(</span><span class="fl">0.7</span>, <span class="fl">0.7</span>, <span class="fl">0.7</span>, <span class="fl">0.7</span><span class="op">)</span>, border <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></code></pre></div>
+<p><img src="intervals-mixpoissonreg_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
+<p>Observe that the confidence intervals tend to be narrow. They are confidence intervals for the means, not for the response variables. The intervals that play the role of “confidence intervals” for response variables are the prediction intervals, which are much wider and provide estimate of intervals for which future observations will fall with the prescribed probability.</p>
+</div>
+<div id="confidence-intervals-for-the-means-using-the-augment-method" class="section level2">
+<h2 class="hasAnchor">
+<a href="#confidence-intervals-for-the-means-using-the-augment-method" class="anchor"></a>Confidence intervals for the means using the <code>augment</code> method</h2>
+<p>The <code>augment</code> method produces confidence intervals for the mean parameters in the response scale by default. The confidence level can be changed by setting the <code>level</code> argument to the desired level.</p>
+<p>For example, let us consider the <code>fit_math</code> object and get the confidence intervals with 99% level along with the response variable <code>daysabs</code> and the covariate <code>math</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/augment.mixpoissonreg.html">augment</a></span><span class="op">(</span><span class="va">fit_math</span>, level <span class="op">=</span> <span class="fl">0.99</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">math</span>, <span class="va">daysabs</span>, <span class="va">.fittedlwrconf</span>, <span class="va">.fitteduprconf</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 314 x 4</span>
+<span class="co">#&gt;     math daysabs .fittedlwrconf .fitteduprconf</span>
+<span class="co">#&gt;    &lt;dbl&gt;   &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;</span>
+<span class="co">#&gt;  1    63       4           4.25           5.73</span>
+<span class="co">#&gt;  2    27       4           6.08           8.42</span>
+<span class="co">#&gt;  3    20       2           6.39           9.26</span>
+<span class="co">#&gt;  4    16       3           6.56           9.79</span>
+<span class="co">#&gt;  5     2       3           7.17          12.0 </span>
+<span class="co">#&gt;  6    71      13           3.82           5.40</span>
+<span class="co">#&gt;  7    63      11           4.25           5.73</span>
+<span class="co">#&gt;  8     3       7           7.12          11.8 </span>
+<span class="co">#&gt;  9    51      10           4.90           6.35</span>
+<span class="co">#&gt; 10    49       9           5.01           6.48</span>
+<span class="co">#&gt; # … with 304 more rows</span></code></pre></div>
+<p>Let us now use the <code>augment</code> method to produce a plot of the data, the fitted curve and the confidence intervals with confidence level of 99%:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+
+<span class="va">fit_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/augment.mixpoissonreg.html">augment</a></span><span class="op">(</span><span class="va">fit_math</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">math</span>, <span class="va">daysabs</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span><span class="st">"Math Score"</span> <span class="op">=</span> <span class="va">math</span>, <span class="st">"Days Abscent"</span> <span class="op">=</span> <span class="va">daysabs</span><span class="op">)</span>
+
+<span class="va">new_math</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span>, by<span class="op">=</span><span class="fl">0.25</span><span class="op">)</span>
+
+<span class="va">fit_int</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/augment.mixpoissonreg.html">augment</a></span><span class="op">(</span><span class="va">fit_math</span>, newdata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>math <span class="op">=</span> <span class="va">new_math</span><span class="op">)</span>, level <span class="op">=</span> <span class="fl">0.99</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span><span class="st">"Math Score"</span> <span class="op">=</span> <span class="va">math</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="st">"Days Abscent"</span> <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
+
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">fit_data</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">`Math Score`</span>, y <span class="op">=</span> <span class="va">`Days Abscent`</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_function.html">geom_function</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="va">fit_math</span><span class="op">$</span><span class="va">coefficients</span><span class="op">$</span><span class="va">mean</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">+</span> 
+                                        <span class="va">fit_math</span><span class="op">$</span><span class="va">coefficients</span><span class="op">$</span><span class="va">mean</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">*</span><span class="va">x</span><span class="op">)</span><span class="op">}</span>, colour <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">geom_ribbon</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">fit_int</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>ymin <span class="op">=</span> <span class="va">.fittedlwrconf</span>, ymax <span class="op">=</span> <span class="va">.fitteduprconf</span><span class="op">)</span>, 
+              fill <span class="op">=</span> <span class="st">"grey70"</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span></code></pre></div>
+<p><img src="intervals-mixpoissonreg_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
+</div>
+</div>
+<div id="prediction-intervals-for-the-response-variables" class="section level1">
+<h1 class="hasAnchor">
+<a href="#prediction-intervals-for-the-response-variables" class="anchor"></a>Prediction intervals for the response variables</h1>
+<div id="prediction-intervals-for-the-response-variables-using-the-predict-method" class="section level2">
+<h2 class="hasAnchor">
+<a href="#prediction-intervals-for-the-response-variables-using-the-predict-method" class="anchor"></a>Prediction intervals for the response variables using the <code>predict</code> method</h2>
+<p>Let us now use the <code>predict</code> method to obtain prediction intervals for the reponse variables. As we did not obtain an approximate distribution for the response variable, we obtain the prediction intervals by simulation, which is computationally intensive.</p>
+<p>To obtain prediction intervals, one must set the <code>interval</code> argument to “prediction” since the default type of prediction is already “response”. It is also possible to change the significance level by setting the <code>level</code> argument, which defaults to <code>0.95</code>, to change the number of mean and prediction parameter generated by setting the <code>nsim_pred</code> argument to the desired value, the default is 100, and to change the number of response variables <em>y</em> generated for each pair of mean and precision parameters by setting the <code>nsim_pred_y</code> to the desired value, the default is 100.</p>
+<p>For example, we will consider <code>nsim_pred = 50</code> and <code>nsim_pred_y = 50</code> to avoid long computations in our example:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">fit_math</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonreg.html">mixpoissonreg</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">math</span>, 
+                        data <span class="op">=</span> <span class="va">Attendance</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit_math</span>, interval <span class="op">=</span> <span class="st">"prediction"</span>, nsim_pred <span class="op">=</span> <span class="fl">50</span>, nsim_pred_y <span class="op">=</span> <span class="fl">50</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; Warning in predict.mixpoissonreg(fit_math, interval = "prediction", nsim_pred =</span>
+<span class="co">#&gt; 50, : predictions on current data refer to _future_ responses</span>
+<span class="co">#&gt;        fit lwr upr</span>
+<span class="co">#&gt; 1 4.930072   0  22</span>
+<span class="co">#&gt; 2 7.152910   0  30</span>
+<span class="co">#&gt; 3 7.689724   0  35</span>
+<span class="co">#&gt; 4 8.014373   0  36</span>
+<span class="co">#&gt; 5 9.262442   0  38</span>
+<span class="co">#&gt; 6 4.538743   0  19</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit_math</span>, interval <span class="op">=</span> <span class="st">"prediction"</span>, level <span class="op">=</span> <span class="fl">0.99</span>, nsim_pred <span class="op">=</span> <span class="fl">50</span>, nsim_pred_y <span class="op">=</span> <span class="fl">50</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; Warning in predict.mixpoissonreg(fit_math, interval = "prediction", level =</span>
+<span class="co">#&gt; 0.99, : predictions on current data refer to _future_ responses</span>
+<span class="co">#&gt;        fit lwr upr</span>
+<span class="co">#&gt; 1 4.930072   0  29</span>
+<span class="co">#&gt; 2 7.152910   0  40</span>
+<span class="co">#&gt; 3 7.689724   0  45</span>
+<span class="co">#&gt; 4 8.014373   0  58</span>
+<span class="co">#&gt; 5 9.262442   0  62</span>
+<span class="co">#&gt; 6 4.538743   0  32</span></code></pre></div>
+<p>Notice that the intervals are now much wider.</p>
+<p>We will now use the above matrix to create a plot of the fitted values against the <code>math</code> variable along with their prediction intervals using R’s base graphics:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">new_math</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span>, by<span class="op">=</span><span class="fl">0.25</span><span class="op">)</span>
+<span class="va">pred_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit_math</span>, newdata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>math <span class="op">=</span> <span class="va">new_math</span><span class="op">)</span>, interval <span class="op">=</span> <span class="st">"prediction"</span>,
+                    nsim_pred <span class="op">=</span> <span class="fl">50</span>, nsim_pred_y <span class="op">=</span> <span class="fl">50</span><span class="op">)</span>
+<span class="co">#&gt; Warning in predict.mixpoissonreg(fit_math, newdata = data.frame(math =</span>
+<span class="co">#&gt; new_math), : predictions on current data refer to _future_ responses</span>
+
+
+<span class="fu">graphics</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">Attendance</span><span class="op">$</span><span class="va">math</span>, <span class="va">Attendance</span><span class="op">$</span><span class="va">daysabs</span>, xlab <span class="op">=</span> <span class="st">"Math score"</span>, ylab <span class="op">=</span> <span class="st">"Days abscent"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/curve.html">curve</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="va">fit_math</span><span class="op">$</span><span class="va">coefficients</span><span class="op">$</span><span class="va">mean</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="va">fit_math</span><span class="op">$</span><span class="va">coefficients</span><span class="op">$</span><span class="va">mean</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">*</span><span class="va">x</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+
+<span class="fu">graphics</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="va">new_math</span>, <span class="va">pred_fit</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>, col <span class="op">=</span> <span class="fu">grDevices</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grDevices/rgb.html">rgb</a></span><span class="op">(</span><span class="fl">0.7</span>, <span class="fl">0.7</span>, <span class="fl">0.7</span><span class="op">)</span><span class="op">)</span>
+<span class="fu">graphics</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="va">new_math</span>, <span class="va">pred_fit</span><span class="op">[</span>, <span class="fl">3</span><span class="op">]</span>, col <span class="op">=</span> <span class="fu">grDevices</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grDevices/rgb.html">rgb</a></span><span class="op">(</span><span class="fl">0.7</span>, <span class="fl">0.7</span>, <span class="fl">0.7</span><span class="op">)</span><span class="op">)</span>
+<span class="fu">graphics</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/graphics/polygon.html">polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">new_math</span>, <span class="fu"><a href="https://rdrr.io/r/base/rev.html">rev</a></span><span class="op">(</span><span class="va">new_math</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">pred_fit</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/rev.html">rev</a></span><span class="op">(</span><span class="va">pred_fit</span><span class="op">[</span>, <span class="fl">3</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>, 
+                  col <span class="op">=</span> <span class="fu">grDevices</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grDevices/rgb.html">rgb</a></span><span class="op">(</span><span class="fl">0.7</span>, <span class="fl">0.7</span>, <span class="fl">0.7</span>, <span class="fl">0.7</span><span class="op">)</span>, border <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></code></pre></div>
+<p><img src="intervals-mixpoissonreg_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
+<p>Observe that unlike the confidence intervals, the prediction intervals now cover the majority of the observed response variables. These intervals should be used for future observations as they are intervals such that the future response variables will fall with the prescribed probability.</p>
+</div>
+<div id="prediction-intervals-for-the-response-variables-using-the-augment-method" class="section level2">
+<h2 class="hasAnchor">
+<a href="#prediction-intervals-for-the-response-variables-using-the-augment-method" class="anchor"></a>Prediction intervals for the response variables using the <code>augment</code> method</h2>
+<p>To obtain prediction intervals using the <code>augment</code> method, one must set the <code>pred_int</code> argument to <code>TRUE</code>. The significance level can be changed by setting the <code>level</code> argument to the desired level. To change the number of mean and prediction parameter generated, one must set the <code>nsim_pred</code> argument to the desired value, the default is 100, and to change the number of response variables <em>y</em> generated for each pair of mean and precision parameters, one must set the <code>nsim_pred_y</code> to the desired value, the default is 100.</p>
+<p>For example, let us consider the <code>fit_math</code> object and obtain prediction intervals with 99% level along with the response variable <code>daysabs</code> and the covariate <code>math</code>. We will also set <code>nsim_pred</code> and <code>nsim_pred_y</code> to 50 to reduce computational cost.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/augment.mixpoissonreg.html">augment</a></span><span class="op">(</span><span class="va">fit_math</span>, pred_int <span class="op">=</span> <span class="cn">TRUE</span>, level <span class="op">=</span> <span class="fl">0.99</span>,
+        nsim_pred <span class="op">=</span> <span class="fl">50</span>, nsim_pred_y <span class="op">=</span> <span class="fl">50</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">math</span>, <span class="va">daysabs</span>, <span class="va">.fittedlwrpred</span>, <span class="va">.fitteduprpred</span><span class="op">)</span>
+<span class="co">#&gt; Warning in predict.mixpoissonreg(x, newdata = newdata, type = "response", :</span>
+<span class="co">#&gt; predictions on current data refer to _future_ responses</span>
+<span class="co">#&gt; # A tibble: 314 x 4</span>
+<span class="co">#&gt;     math daysabs .fittedlwrpred .fitteduprpred</span>
+<span class="co">#&gt;    &lt;dbl&gt;   &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;</span>
+<span class="co">#&gt;  1    63       4              0             33</span>
+<span class="co">#&gt;  2    27       4              0             42</span>
+<span class="co">#&gt;  3    20       2              0             47</span>
+<span class="co">#&gt;  4    16       3              0             47</span>
+<span class="co">#&gt;  5     2       3              0             59</span>
+<span class="co">#&gt;  6    71      13              0             28</span>
+<span class="co">#&gt;  7    63      11              0             34</span>
+<span class="co">#&gt;  8     3       7              0             52</span>
+<span class="co">#&gt;  9    51      10              0             35</span>
+<span class="co">#&gt; 10    49       9              0             34</span>
+<span class="co">#&gt; # … with 304 more rows</span></code></pre></div>
+<p>Let us now use the <code>augment</code> method to produce a plot of the data, the fitted curve and the prediction intervals with the default significance level:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+
+<span class="va">fit_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/augment.mixpoissonreg.html">augment</a></span><span class="op">(</span><span class="va">fit_math</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">math</span>, <span class="va">daysabs</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span><span class="st">"Math Score"</span> <span class="op">=</span> <span class="va">math</span>, <span class="st">"Days Abscent"</span> <span class="op">=</span> <span class="va">daysabs</span><span class="op">)</span>
+
+<span class="va">new_math</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span>, by<span class="op">=</span><span class="fl">0.25</span><span class="op">)</span>
+
+<span class="va">fit_pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/augment.mixpoissonreg.html">augment</a></span><span class="op">(</span><span class="va">fit_math</span>, newdata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>math <span class="op">=</span> <span class="va">new_math</span><span class="op">)</span>, 
+                   pred_int <span class="op">=</span> <span class="cn">TRUE</span>, nsim_pred <span class="op">=</span> <span class="fl">50</span>, nsim_pred_y <span class="op">=</span> <span class="fl">50</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span><span class="st">"Math Score"</span> <span class="op">=</span> <span class="va">math</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="st">"Days Abscent"</span> <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
+<span class="co">#&gt; Warning in predict.mixpoissonreg(x, newdata = newdata, type = "response", :</span>
+<span class="co">#&gt; predictions on current data refer to _future_ responses</span>
+
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">fit_data</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">`Math Score`</span>, y <span class="op">=</span> <span class="va">`Days Abscent`</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_function.html">geom_function</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="va">fit_math</span><span class="op">$</span><span class="va">coefficients</span><span class="op">$</span><span class="va">mean</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">+</span> 
+                                        <span class="va">fit_math</span><span class="op">$</span><span class="va">coefficients</span><span class="op">$</span><span class="va">mean</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">*</span><span class="va">x</span><span class="op">)</span><span class="op">}</span>, colour <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">geom_ribbon</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">fit_pred</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>ymin <span class="op">=</span> <span class="va">.fittedlwrpred</span>, ymax <span class="op">=</span> <span class="va">.fitteduprpred</span><span class="op">)</span>, 
+              fill <span class="op">=</span> <span class="st">"grey70"</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span></code></pre></div>
+<p><img src="intervals-mixpoissonreg_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
+</div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 

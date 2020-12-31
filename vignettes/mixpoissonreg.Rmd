@@ -16,6 +16,212 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+# What is *mixpoissonreg* for?
+
+The *mixpoissonreg* package is useful for fitting and analysing regression models with **overdispersed** count responses. It provides two regression models for
+overdispersed count data: 
+
+* Negative-Binomial regression models;
+
+* Poisson Inverse Gaussian regression models.
+
+The parameters of the above models may be estimated by the Expectation-Maximization algorithm or by direct maximization of the likelihood function. 
+
+There are several functions to aid the user to check the adequacy of the fitted model, perform some inference and study influential observations.
+
+For theoretical details we refer the reader to [Barreto-Souza and Simas (2016)](https://doi.org/10.1007/s11222-015-9601-6)
+
+# Why use the mixpoissonreg package?
+
+Some reasons are:
+
+* `glm`-like functions to fit and analyze fitted models
+
+* Useful plots for fitted models available using `R`'s base graphics or `ggplot2`
+
+* Estimation of parameters via EM-algorithm
+
+* Easy to do inference on fitted models with help of `lmtest` package
+
+* Regression structure for the precision parameter
+
+* Several global and local influence measures implemented (along with corresponding plots)
+
+* Compatibility with the `tidyverse`
+
+We will now delve into the reasons above in more detail.
+
+## `glm`-like functions to fit and analyze fitted models
+
+If you know how to fit `glm` models then you already know how to fit `mixpoissonreg` models. You use a `formula` expression for the
+regression with respect to mean parameter:
+
+```{r}
 library(mixpoissonreg)
+
+fit <- mixpoissonreg(daysabs ~ gender + math + prog, data = Attendance)
 ```
+
+If you do not provide further arguments, the *mixpoissonreg* package will fit a *Negative-Binomial* model with a *log* link function for the mean estimated via EM-algorithm. 
+Just like you would do with a `glm` fit, you can just type `fit` to get a simplified output of the fit, or get a summary, by typing `summary(fit)`:
+
+```{r}
+fit
+
+summary(fit)
+```
+
+If you want to fit a Poisson Inverse Gaussian regression model, just set the `model` argument to `PIG`:
+
+```{r}
+fit_pig <- mixpoissonreg(daysabs ~ gender + math + prog, model = "PIG", data = Attendance)
+
+summary(fit_pig)
+```
+
+There are also several standard methods implemented for `mixpoissonreg` fitted objects: `plot`, `residuals`, `vcov`, `influence`, `cooks.distance`, `hatvalues`, `predict`, etc.
+
+A fitted `mixpoissonreg` object is compatible with the `lrtest`, `waldtest`, `coeftest` and `coefci` methods from the `lmtest` package, which, for instance, allows one to easily perform ANOVA-like tests for `mixpoissonreg` models.
+
+We refer the reader to the [Analyzing overdispersed count data with the *mixpoissonreg* package](tutorial-mixpoissonreg.html) vignette for further details on fitting `mixpoissonreg` objects.
+
+## Useful plots for fitted models available using `R`'s base graphics or `ggplot2`
+
+Once you have a fitted `mixpoissonreg` object, say `fit`, you can easily produce useful plots by typing `plot(fit)`:
+
+```{r}
+plot(fit)
+```
+
+You can also have the `ggplot2` version of the above plots by typing `autoplot(fit)`:
+
+```{r}
+autoplot(fit)
+```
+
+For further details on plots of `mixpoissonreg` objects, we refer the reader to the [Diagnostic plots with the *mixpoissonreg* package](plots-mixpoissonreg.html) vignette.
+
+## Estimation of parameters via EM-algorithm
+
+The EM-algorithm also tries to find the maximum-likelihood estimate of the parameters. So, why is there advantage on using the EM-algorithm? The reason is purely numerical. Sometimes the 
+log-likelihood function has several local maxima or almost flat, which makes the direct maximization of the likelihood function converge (and making it very difficult not to obtain early convergence) before reaching its maximum. In such situations the EM-algorithm may be able to obtain estimates closer to the maximum-likelihood estimate. However, it has a drawback that it may take much longer to converge on such situations. 
+
+We refer the reader to the Supplementary Material of [Barreto-Souza and Simas (2016)](https://doi.org/10.1007/s11222-015-9601-6) and to [Barreto-Souza and Simas (2017)](https://doi.org/10.1080/00949655.2017.1350679) for numerical studies.
+
+## Easy to do inference on fitted models with help of `lmtest` package
+
+We can easily perform ANOVA-like tests using the `lmtest` package. Let us perform a likelihood-ratio test against the NULL model that only contains the intercept:
+
+```{r warning = FALSE}
+lmtest::lrtest(fit)
+```
+
+Now let us perform the Wald test against the NULL model that only contains the intercept:
+
+```{r warning = FALSE}
+lmtest::waldtest(fit)
+```
+
+Let us now consider a reduced model:
+
+```{r}
+fit_red <- mixpoissonreg(daysabs ~ math, data = Attendance)
+```
+
+We can perform a likelihood ratio test of full `fit` model against the NULL of the reduced model as:
+
+```{r}
+lmtest::lrtest(fit, fit_red)
+```
+
+In the same fashion, we can perform a Wald test of full `fit` model against the NULL of the reduced model as:
+
+```{r}
+lmtest::waldtest(fit, fit_red)
+```
+
+We can obtain confidence intervals for the estimated parameters by using the `coefci` method:
+
+```{r}
+lmtest::coefci(fit)
+```
+
+## Regression structure for the precision parameter
+
+The `mixpoissonreg` package allows the regression models to also have a regression structure on the precision parameter. It is very simple to fit such models, one simply write the
+`formula` as `formula_1 | formula_2`, where `formula_1` corresponds to the regression structure with respect to the mean parameter and contains the response variable and `formula_2` corresponds to the regression structure with respect to the precision parameter and **does not** contain the response variable. 
+
+Consider the following example:
+
+```{r}
+fit_prec <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, 
+                          data = Attendance)
+
+summary(fit_prec)
+```
+
+In the abscence of `link.precision` argument, a *log* link will be used as link function for the precision parameter. 
+
+## Several global and local influence measures implemented (along with corresponding plots)
+
+There are several global influence measures implemented. See `influence`, `hatvalues`, `cooks.distance` and their arguments.
+
+The easiest way to perform global influence analysis on a `mixpoissonreg` fitted object is to obtain the plots related to global influence:
+
+```{r}
+plot(fit_prec, which = c(3,4,5))
+```
+
+One can also get the `ggplot2` version of the above plots:
+
+```{r}
+autoplot(fit_prec, which = c(3,4,5))
+```
+
+In a similar fashion, there are several local influence measures implemented in the `local_influence` method. In the same spirit as above, the easiest way to perform local 
+influence analysis on a `mixpoissonreg` fitted object is to obtain plots by using `local_influence_plot` method:
+
+```{r}
+local_influence_plot(fit_prec)
+```
+
+One can also obtain `ggplot2` versions of the above plots by using the `local_influence_autoplot` method:
+
+```{r}
+local_influence_autoplot(fit_prec)
+```
+
+For further details on global and local influence analyses of `mixpoissonreg` objects, we refer the reader to the [Global and local influence analysis with the *mixpoissonreg* package](influence-mixpoissonreg.html) vignette.
+
+## Compatibility with the `tidyverse`
+
+We provide the standard methods from the `broom` package, namely `augment`, `glance` and `tidy`, for `mixpoissonreg` objects:
+
+```{r}
+augment(fit_prec)
+
+glance(fit_prec)
+
+tidy(fit_prec)
+```
+
+As seen above, the `autoplot` method from `ggplot2` package is also implemented for `mixpoissonreg` objects.
+
+```{r}
+autoplot(fit_prec)
+```
+
+
+Finally, we provide additional methods related to local influence analysis: `tidy_local_influence`, `local_influence_benchmarks` and `local_influence_autoplot`:
+
+```{r}
+tidy_local_influence(fit_prec)
+
+local_influence_benchmarks(fit_prec)
+
+local_influence_autoplot(fit_prec)
+```
+
+For further details on `tidyverse` compatibility of `mixpoissonreg` objects and how to use it to produce nice diagnostics and plots, we refer the reader to the [*mixpoissonreg* in the *tidyverse*](tidyverse-mixpoissonreg.html) vignette.
+
+

@@ -2,6 +2,7 @@
 % Please edit documentation in R/8_tidy_mixpoissonreg.R
 \name{glance.mixpoissonreg}
 \alias{glance.mixpoissonreg}
+\alias{glance}
 \title{Glance at a \code{mixpoissonreg} object}
 \usage{
 \method{glance}{mixpoissonreg}(x, ...)

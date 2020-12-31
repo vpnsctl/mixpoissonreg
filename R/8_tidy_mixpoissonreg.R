@@ -10,10 +10,14 @@
 #' @importFrom methods new
 #' @importClassesFrom ggfortify ggmultiplot
 #' @export autoplot
+#' @export augment
+#' @export tidy
+#' @export glance
 
 #############################################################################################
 #' @name augment.mixpoissonreg
 #' @title Augment data with information from a \code{mixpoissonreg} object
+#' @aliases augment augment.mixpoissonreg
 #' @description Augment accepts a model object and a dataset and adds information about each observation in the dataset. It includes
 #' predicted values in the \code{.fitted} column, residuals in the \code{.resid} column, and standard errors for the fitted values in a \code{.se.fit} column, if
 #' the type of prediction is 'link'. New columns always begin with a . prefix to avoid overwriting columns in the original dataset.
@@ -114,6 +118,7 @@ augment.mixpoissonreg <- function(x, data = stats::model.frame(x), newdata = NUL
 #############################################################################################
 #' @name glance.mixpoissonreg
 #' @title Glance at a \code{mixpoissonreg} object
+#' @aliases glance glance.mixpoissonreg
 #' @description Glance accepts a \code{mixpoissonreg} object and returns a
 #' \code{\link[tibble:tibble]{tibble::tibble()}} with exactly one row of model summaries.
 #' The summaries are Efron's pseudo-\eqn{R^2}, degrees of freedom, AIC, BIC, log-likelihood,
@@ -146,6 +151,7 @@ glance.mixpoissonreg <- function(x, ...){
 #############################################################################################
 #' @name tidy.mixpoissonreg
 #' @title Tidy a \code{mixpoissonreg} object
+#' @aliases tidy tidy.mixpoissonreg
 #' @description Tidy returns a \code{\link[tibble:tibble]{tibble::tibble()}} containing
 #' informations on the coefficients of the model, such as the estimated parameters,
 #' standard errors, z-statistics and p-values. Additionally, it may return confidence
@@ -154,11 +160,12 @@ glance.mixpoissonreg <- function(x, ...){
 #' @param conf.int Logical indicating whether or not to include a confidence interval in the tidied output. Defaults to FALSE.
 #' @param conf.level The confidence level to use for the confidence interval if conf.int = TRUE.
 #' Must be strictly greater than 0 and less than 1. Defaults to 0.95, which corresponds to a 95 percent confidence interval.
+#' @param ... Additional arguments. Currently not used.
 #' @seealso \code{\link{glance.mixpoissonreg}}, \code{\link{augment.mixpoissonreg}}, \code{\link{tidy_local_influence.mixpoissonreg}},
 #' \code{\link{autoplot.mixpoissonreg}}, \code{\link{local_influence_autoplot.mixpoissonreg}}
 #' @export
 
-tidy.mixpoissonreg <- function(x, conf.int = FALSE, conf.level = 0.95){
+tidy.mixpoissonreg <- function(x, conf.int = FALSE, conf.level = 0.95, ...){
   join_term <- NULL
   retmean <- as_tibble(summary(x)$coefficients$mean, rownames = "term")
   colnames(retmean) <- c("term", "estimate", "std.error", "statistic",
@@ -763,11 +770,12 @@ tidy_local_influence.mixpoissonreg <- function(model, perturbation = c("case_wei
 }
 
 #' @rdname tidy_local_influence.mixpoissonreg
+#' @export
 local_influence_benchmarks.mixpoissonreg <- function(model, perturbation = c("case_weights", "hidden_variable",
                                                            "mean_explanatory", "precision_explanatory",
                                                            "simultaneous_explanatory"), curvature = c("conformal", "normal"),
                                        direction = c("canonical", "max.eigen"), parameters = c("all", "mean", "precision"),
-                                       mean.covariates = NULL, precision.covariates = NULL){
+                                       mean.covariates = NULL, precision.covariates = NULL, ...){
   loc_infl <- local_influence(model, perturbation = perturbation, curvature = curvature, direction = direction,
                               parameters = parameters, mean.covariates = mean.covariates, precision.covariates = precision.covariates)
   benchmarks <- c()

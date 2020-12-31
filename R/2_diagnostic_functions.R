@@ -27,6 +27,7 @@
 #' @param include.residualtype local. Indicates whether the name of the residual ('Pearson' or 'Score') should be displayed on the caption of plot 1 (Residuals vs. Index).
 #' @param qqline logical; if \code{TRUE} and the fit does *not* contain simulated
 #' envelopes, a qqline passing through the first and third quartiles of a standard normal distribution will be added to the normal Q-Q plot.
+#' @param alpha_env alpha channel for envelope shading when the \code{mixpoissonreg} object was fitted with envelopes.
 #' @param ... graphical parameters to be passed.
 #' @details
 #' The \code{plot} method is implemented following the same structure as the \link[stats]{plot.lm}, so it will be easy to be used by practitioners that
@@ -71,7 +72,8 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
                                               "Cook's dist vs Generalized Cook's dist",
                                               "Response vs Fitted means"
                                               ),
-                               sub.caption = NULL, qqline = TRUE, main = "",
+                               sub.caption = NULL, qqline = TRUE, alpha_env = 0.7,
+                               main = "",
                                ask = prod(graphics::par("mfcol")) <
                                  length(which) && grDevices::dev.interactive(),
                                labels.id = names(stats::residuals(x)),
@@ -192,7 +194,7 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
       aux <- sort(qq$x)
       graphics::lines(aux, env[1, ], col = grDevices::rgb(0.7, 0.7, 0.7))
       graphics::lines(aux, env[3, ], col = grDevices::rgb(0.7, 0.7, 0.7))
-      graphics::polygon(c(aux, rev(aux)), c(env[3, ], rev(env[1, ])), col = grDevices::rgb(0.7, 0.7, 0.7), border = NA)
+      graphics::polygon(c(aux, rev(aux)), c(env[3, ], rev(env[1, ])), col = grDevices::rgb(0.7, 0.7, 0.7, alpha_env), border = NA)
       graphics::lines(aux, env[2, ], lty = 2, lwd = 2)
     } else {
       if (qqline) {

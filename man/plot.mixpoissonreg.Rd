@@ -12,6 +12,7 @@
     "Response vs Fitted means"),
   sub.caption = NULL,
   qqline = TRUE,
+  alpha_env = 0.7,
   main = "",
   ask = prod(graphics::par("mfcol")) < length(which) && grDevices::dev.interactive(),
   labels.id = names(stats::residuals(x)),
@@ -40,6 +41,8 @@ plot number 2, 'Normal Q-Q', if the \code{mixpoissonreg} object was fitted with 
 
 \item{qqline}{logical; if \code{TRUE} and the fit does \emph{not} contain simulated
 envelopes, a qqline passing through the first and third quartiles of a standard normal distribution will be added to the normal Q-Q plot.}
+
+\item{alpha_env}{alpha channel for envelope shading when the \code{mixpoissonreg} object was fitted with envelopes.}
 
 \item{main}{character; title to be placed at each plot additionally (and above) all captions.}
 

@@ -25,8 +25,8 @@ mixpoissonreg(
 )
 
 mixpoissonreg.fit(
-  y,
   x,
+  y,
   w = NULL,
   link.mean = c("log", "sqrt"),
   link.precision = c("identity", "log", "inverse.sqrt"),
