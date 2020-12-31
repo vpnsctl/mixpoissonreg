@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>influence-mixpoissonreg • mixpoissonreg</title>
+<title>Global and local influence analysis with the *mixpoissonreg* package • mixpoissonreg</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="influence-mixpoissonreg">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Global and local influence analysis with the *mixpoissonreg* package">
 <meta property="og:description" content="mixpoissonreg">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -57,13 +57,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/influence-mixpoissonreg.html">influence-mixpoissonreg</a>
+      <a href="../articles/influence-mixpoissonreg.html">Global and local influence analysis with the *mixpoissonreg* package</a>
     </li>
     <li>
-      <a href="../articles/intervals-mixpoissonreg.html">intervals-mixpoissonreg</a>
+      <a href="../articles/intervals-mixpoissonreg.html">Confidence and prediction intervals with  the mixpoissonreg package</a>
     </li>
     <li>
-      <a href="../articles/ml-mixpoissonreg.html">ml-mixpoissonreg</a>
+      <a href="../articles/ml-mixpoissonreg.html">Maximum-likelihood estimation with the mixpoissonreg package</a>
     </li>
     <li>
       <a href="../articles/plots-mixpoissonreg.html">plots-mixpoissonreg</a>
@@ -100,8 +100,10 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>influence-mixpoissonreg</h1>
+      <h1 data-toc-skip>Global and local influence analysis with the <em>mixpoissonreg</em> package</h1>
+                        <h4 class="author">Alexandre B. Simas</h4>
             
+            <h4 class="date">2020-12-31</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/vpnsctl/mixpoissonreg/blob/master/vignettes/influence-mixpoissonreg.Rmd"><code>vignettes/influence-mixpoissonreg.Rmd</code></a></small>
       <div class="hidden name"><code>influence-mixpoissonreg.Rmd</code></div>
@@ -110,13 +112,260 @@
 
     
     
+<div id="global-influence" class="section level1">
+<h1 class="hasAnchor">
+<a href="#global-influence" class="anchor"></a>Global Influence</h1>
+<p>In the <em>mixpoissonreg</em> package the following global influence methods are implemented: <code>hatvalues</code>, <code>cooks.distance</code> and <code>influence</code>. Below, we discuss the implementations of these methods in detail.</p>
+<div id="hatvalues-method" class="section level2">
+<h2 class="hasAnchor">
+<a href="#hatvalues-method" class="anchor"></a><code>hatvalues</code> method</h2>
+<p>To define “hat values” for mixed Poisson regression models, we follow <a href="https://www.jstor.org/stable/2673442">Zhu et al. (2001)</a> to consider the negative of the hessian of the Q-function as weight matrix, and follow <a href="https://projecteuclid.org/euclid.aos/1176345513">Pregibon (1981)</a> to define the “hat” matrix with respect to this weight matrix. We can consider the hessian of the Q-function with respect to mean-related parameters, which is the default. We can also consider the hessian of the Q-function with respect to the precision-related parameters to give rise to hat values related to the precision parameters.</p>
+<p>To obtain the mean-related hat values one simply calls the <code>hatvalues</code> method:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/vpnsctl/mixpoissonreg/">mixpoissonreg</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/vpnsctl/mixpoissonreg/">mixpoissonreg</a></span><span class="op">)</span>
+
+<span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonreg.html">mixpoissonreg</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span> <span class="op">|</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span>, 
+                        data <span class="op">=</span> <span class="va">Attendance</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">hatvalues</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt;           1           2           3           4           5           6 </span>
+<span class="co">#&gt; 0.009079739 0.006988288 0.004624419 0.006642724 0.009645108 0.026264888</span></code></pre></div>
+<p>The hat values are used to obtain Cook’s distance. One can also use the hat values to define leverage-adjusted residuals by dividing the residuals by <code><a href="https://rdrr.io/r/base/MathFun.html">sqrt(hatvalues(fitted_object))</a></code>.</p>
+<p>To obtain precision-related hat values one must set <code>parameters</code> to “precision”:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">hatvalues</a></span><span class="op">(</span><span class="va">fit</span>, parameters <span class="op">=</span> <span class="st">"precision"</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt;           1           2           3           4           5           6 </span>
+<span class="co">#&gt; 0.003308865 0.004137420 0.015968704 0.012503542 0.020321253 0.007444368</span></code></pre></div>
+</div>
+<div id="cooks-distance-method" class="section level2">
+<h2 class="hasAnchor">
+<a href="#cooks-distance-method" class="anchor"></a><code>cooks.distance</code> method</h2>
+<p>The implementation of the <code>cooks.distance</code> method for <code>mixpoissonreg</code> models contains several “Cook’s distance”-like measures. More precisely, it contains the standard Cook’s distance, the generalized Cook’s distance, the likelihood displacement and the Q-displacement.</p>
+<div id="cooks-distance" class="section level3">
+<h3 class="hasAnchor">
+<a href="#cooks-distance" class="anchor"></a>Cook’s distance</h3>
+<p>The implementation of the standard Cook’s distance uses the usual formula for Cook’s distance in terms of the “hat” matrix, where the “hat” matrix is the one given above. The standard Cook’s distance returned by default in the <code>cooks.distance</code> method. So, to obtain Cook’s distance, we simply call the <code>cooks.distance</code> method:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">cooks.distance</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt;            1            2            3            4            5            6 </span>
+<span class="co">#&gt; 7.412875e-05 1.938615e-04 6.180147e-04 6.839705e-04 1.170998e-03 5.061612e-03</span></code></pre></div>
+<p>Since there is also a “hat” matrix with respect to the precision parameters, we may compute Cook’s distance using the hat values with respect to the precision parameters. To compute Cook’s distance with the “hat” matrix with respect to the precision parameters we simply set the <code>hat</code> argument to “precision”:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">cooks.distance</a></span><span class="op">(</span><span class="va">fit</span>, hat <span class="op">=</span> <span class="st">"precision"</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt;            1            2            3            4            5            6 </span>
+<span class="co">#&gt; 0.0000267023 0.0001141196 0.0021835715 0.0013027589 0.0025212380 0.0013807438</span></code></pre></div>
+</div>
+<div id="generalized-cooks-distance-and-q-displacement" class="section level3">
+<h3 class="hasAnchor">
+<a href="#generalized-cooks-distance-and-q-displacement" class="anchor"></a>generalized Cook’s distance and Q-displacement</h3>
+<p>The Generalized Cook’s distance and Q-displacement (also called Q-distance) for EM-based models were defined in <a href="https://www.jstor.org/stable/2673442">Zhu et al. (2001)</a> and computed for mixed Poisson regression models in <a href="https://doi.org/10.1007/s11222-015-9601-6">Barreto-Souza and Simas (2016)</a>. We implemented first-order approximation to these quantities to make it computationally feasible. These first-order approximations are available in <a href="https://doi.org/10.1007/s11222-015-9601-6">Barreto-Souza and Simas (2016)</a>. We also provide versions of generalized Cook’s distance for mean-related or precision-related parameters, whose details can be found in <a href="https://doi.org/10.1007/s11222-015-9601-6">Barreto-Souza and Simas (2016)</a>.</p>
+<p>To compute the generalized Cook’s distance with respect to the mean and precision parameters jointly, simply set the <code>type</code> argument to “GCD”:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">cooks.distance</a></span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="st">"GCD"</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt;           1           2           3           4           5           6 </span>
+<span class="co">#&gt; 0.004246910 0.002821262 0.002072318 0.001018639 0.001979334 0.003445146</span></code></pre></div>
+<p>To compute the generalized Cook’s distance with respect to the mean-related parameters, set the <code>type</code> argument to “GCDmean”:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">cooks.distance</a></span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="st">"GCDmean"</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt;            1            2            3            4            5            6 </span>
+<span class="co">#&gt; 6.176761e-05 1.885887e-04 1.180572e-03 1.009911e-03 1.806187e-03 1.660795e-03</span></code></pre></div>
+<p>and to compute the generalized Cook’s distance with respect to the precision-related parameters, set the <code>type</code> argument to “GCDprecision”:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">cooks.distance</a></span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="st">"GCDprecision"</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt;            1            2            3            4            5            6 </span>
+<span class="co">#&gt; 4.185142e-03 2.632673e-03 8.917459e-04 8.727751e-06 1.731469e-04 1.784352e-03</span></code></pre></div>
+<p>To compute the Q-displacement one sets the <code>type</code> argument to “QD”:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">cooks.distance</a></span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="st">"QD"</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt;           1           2           3           4           5           6 </span>
+<span class="co">#&gt; 0.004222877 0.002776973 0.002041359 0.001022342 0.001969761 0.003506476</span></code></pre></div>
+</div>
+<div id="likelihood-displacement" class="section level3">
+<h3 class="hasAnchor">
+<a href="#likelihood-displacement" class="anchor"></a>Likelihood displacement</h3>
+<p>The likelihood displacement (also called likelihood distance) was defined in Cook and Weisberg (1982). To compute this measure, one simply set the <code>type</code> argument to “LD”:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">cooks.distance</a></span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="st">"LD"</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt;            1            2            3            4            5            6 </span>
+<span class="co">#&gt; 0.0019138351 0.0013800327 0.0006547844 0.0001521722 0.0003604836 0.0012531224</span></code></pre></div>
+</div>
+</div>
+<div id="influence-method" class="section level2">
+<h2 class="hasAnchor">
+<a href="#influence-method" class="anchor"></a><code>influence</code> method</h2>
+<p>The <code>influence</code> method returns a <code>list</code> with several quantities:</p>
+<ul>
+<li>
+<strong>hat.mean</strong> hat values with respect to the mean;</li>
+<li>
+<strong>hat.precision</strong> hat with respect to the precision parameters;</li>
+<li>
+<strong>pear.res</strong> Pearson residuals;</li>
+<li>
+<strong>score.res</strong> Score residuals</li>
+</ul>
+<p>and if the argument <code>do.coef</code> is <code>TRUE</code> the returned <code>list</code> also contains:</p>
+<ul>
+<li>
+<strong>coefficients.mean</strong> first-order approximation to the impact on the estimate of each mean-related parameter if each observation is removed;</li>
+<li>
+<strong>coefficients.precision</strong> first-order approximation to the impact on the estimate of each precision-related parameter if each observation is removed.</li>
+</ul>
+<p>For the two elements above, the <em>i</em>th row corresponds to the parameter estimates with the <em>i</em>th observation removed.</p>
+<p>The <code>influence</code> method has only one argument, <code>do.coef</code>, which, by default, is set to <code>TRUE</code> since its computation is not computationally intensive.</p>
+<p>Let us call this method on the <code>fit</code> object:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">influence_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.influence.html">influence</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">influence_fit</span><span class="op">$</span><span class="va">coefficients.mean</span><span class="op">)</span>
+<span class="co">#&gt;    (Intercept)   gendermale         math progAcademic progVocational</span>
+<span class="co">#&gt; 1  2.745886631 -1.269649740 -0.426834669 -0.006599528   -0.245424207</span>
+<span class="co">#&gt; 2 -0.244893977  2.746348319 -1.269386963 -0.425421206   -0.006613588</span>
+<span class="co">#&gt; 3 -0.006613246 -0.245462581  2.751482711 -1.270173978   -0.425953726</span>
+<span class="co">#&gt; 4 -0.425848228 -0.006619664 -0.246447333  2.746481615   -1.270762217</span>
+<span class="co">#&gt; 5 -1.269850559 -0.426202055 -0.006650788 -0.245225919    2.746880872</span>
+<span class="co">#&gt; 6  2.746076794 -1.269674897 -0.429480315 -0.006616788   -0.246166667</span></code></pre></div>
+</div>
+<div id="global-influence-plots" class="section level2">
+<h2 class="hasAnchor">
+<a href="#global-influence-plots" class="anchor"></a>Global influence plots</h2>
+<p>The main global influence plots are implemented in the <code>plot</code> and <code>autoplot</code> methods. They are the plots number 3, 4 and 5, which are, respectively, the Cook’s distance plot, the generalized Cook’s distance plot and Cook’s distance vs generalized Cook’s distance. The <code>plot</code> and <code>autoplot</code> methods provide the same plots, the difference between them being that the former uses R’s base graphics whereas the latter uses the <code>ggplot2</code> package.</p>
+<p>Let us build these plots:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-12-1.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-12-2.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-12-3.png" width="700"></p>
+<p>and</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-13-1.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-13-2.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-13-3.png" width="700"></p>
+<p>These plots identify the most extreme points. By the default they identify 3 points, but the number of identified points can be changed by setting the <code>id.n</code> argument to the desired value for the <code>plot</code> method and by setting the <code>label.n</code> argument to the desired value for the <code>autoplot</code> method:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span><span class="op">)</span>, id.n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
+<p><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-14-1.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-14-2.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-14-3.png" width="700"></p>
+<p>and</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span><span class="op">)</span>, label.n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
+<p><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-15-1.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-15-2.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-15-3.png" width="700"></p>
+<p>For further details customizing plots of <code>mixpoissonreg</code> objects, we refer the reader to the <a href="plots-mixpoissonreg.html">Diagnostic plots with the <em>mixpoissonreg</em> package</a> vignette.</p>
+<p>We now turn to the problem of plotting Q-displacements and likelihood displacements. Both of these plots can easily be built “by hand”.</p>
+<p>R’s base graphics:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">qd_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">cooks.distance</a></span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="st">"QD"</span><span class="op">)</span>
+
+<span class="co"># Get the extreme points:</span>
+<span class="va">extreme_points</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="fu">Rfast</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Rfast/man/colnth.html">nth</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">qd_fit</span><span class="op">)</span>, k <span class="op">=</span> <span class="fl">5</span>,
+                                    num.of.nths <span class="op">=</span> <span class="fl">5</span>,
+                                    index.return <span class="op">=</span> <span class="cn">TRUE</span>, descending <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
+<span class="va">idx_y</span> <span class="op">&lt;-</span> <span class="va">qd_fit</span><span class="op">[</span><span class="va">extreme_points</span><span class="op">]</span>
+
+<span class="va">ylim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/range.html">range</a></span><span class="op">(</span><span class="va">qd_fit</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+
+<span class="va">ylim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/extendrange.html">extendrange</a></span><span class="op">(</span>r <span class="op">=</span> <span class="va">ylim</span>, f <span class="op">=</span> <span class="fl">0.15</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">qd_fit</span>, xlab <span class="op">=</span> <span class="st">"Obs. number"</span>, ylab <span class="op">=</span> <span class="st">"Q-displacement"</span>, ylim <span class="op">=</span> <span class="va">ylim</span>, type <span class="op">=</span> <span class="st">"h"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/text.html">text</a></span><span class="op">(</span><span class="va">extreme_points</span>, <span class="va">idx_y</span>, labels <span class="op">=</span> <span class="va">extreme_points</span>, pos <span class="op">=</span> <span class="fl">3</span>, offset <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></code></pre></div>
+<p><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
+<p>and</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ld_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">cooks.distance</a></span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="st">"LD"</span><span class="op">)</span>
+
+<span class="co"># Get 5 most extreme points:</span>
+<span class="va">extreme_points</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="fu">Rfast</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Rfast/man/colnth.html">nth</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">ld_fit</span><span class="op">)</span>, k <span class="op">=</span> <span class="fl">5</span>,
+                                    num.of.nths <span class="op">=</span> <span class="fl">5</span>,
+                                    index.return <span class="op">=</span> <span class="cn">TRUE</span>, descending <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
+<span class="va">idx_y</span> <span class="op">&lt;-</span> <span class="va">ld_fit</span><span class="op">[</span><span class="va">extreme_points</span><span class="op">]</span>
+
+<span class="va">ylim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/range.html">range</a></span><span class="op">(</span><span class="va">ld_fit</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+
+<span class="va">ylim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/extendrange.html">extendrange</a></span><span class="op">(</span>r <span class="op">=</span> <span class="va">ylim</span>, f <span class="op">=</span> <span class="fl">0.15</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">ld_fit</span>, xlab <span class="op">=</span> <span class="st">"Obs. number"</span>, ylab <span class="op">=</span> <span class="st">"Likelihood displacement"</span>, ylim <span class="op">=</span> <span class="va">ylim</span>, type <span class="op">=</span> <span class="st">"h"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/text.html">text</a></span><span class="op">(</span><span class="va">extreme_points</span>, <span class="va">idx_y</span>, labels <span class="op">=</span> <span class="va">extreme_points</span>, pos <span class="op">=</span> <span class="fl">3</span>, offset <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></code></pre></div>
+<p><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
+<p>Now the <code>ggplot2</code> version:</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://github.com/slowkow/ggrepel">ggrepel</a></span><span class="op">)</span>
+
+<span class="va">qd_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">cooks.distance</a></span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="st">"QD"</span><span class="op">)</span>
+
+<span class="va">qd_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span><span class="st">"Q-displacement"</span> <span class="op">=</span> <span class="va">qd_fit</span>, <span class="st">"Obs. number"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">qd_fit</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co"># Get 5 most extreme points</span>
+<span class="va">qd.extreme</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">qd_tbl</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">`Q-displacement`</span><span class="op">)</span><span class="op">)</span>
+<span class="va">qd.extreme</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">qd.extreme</span>, <span class="fl">5</span><span class="op">)</span>
+
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">qd_tbl</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">`Obs. number`</span>, y <span class="op">=</span> <span class="va">`Q-displacement`</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html">geom_linerange</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>ymin <span class="op">=</span> <span class="fl">0</span>, ymax <span class="op">=</span> <span class="va">`Q-displacement`</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/ggrepel/man/geom_text_repel.html">geom_text_repel</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">qd.extreme</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">`Obs. number`</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
+<p>and</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ld_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">cooks.distance</a></span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="st">"LD"</span><span class="op">)</span>
+
+<span class="va">ld_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span><span class="st">"Likelihood displacement"</span> <span class="op">=</span> <span class="va">ld_fit</span>, <span class="st">"Obs. number"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">ld_fit</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co"># Get 5 most extreme points</span>
+<span class="va">ld.extreme</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">ld_tbl</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">`Likelihood displacement`</span><span class="op">)</span><span class="op">)</span>
+<span class="va">ld.extreme</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">ld.extreme</span>, <span class="fl">5</span><span class="op">)</span>
+
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">ld_tbl</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">`Obs. number`</span>, y <span class="op">=</span> <span class="va">`Likelihood displacement`</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html">geom_linerange</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>ymin <span class="op">=</span> <span class="fl">0</span>, ymax <span class="op">=</span> <span class="va">`Likelihood displacement`</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/ggrepel/man/geom_text_repel.html">geom_text_repel</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">ld.extreme</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">`Obs. number`</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-19-1.png" width="700"></p>
+</div>
+</div>
+<div id="local-influence" class="section level1">
+<h1 class="hasAnchor">
+<a href="#local-influence" class="anchor"></a>Local Influence</h1>
+<div id="conformal-normal-curvature" class="section level2">
+<h2 class="hasAnchor">
+<a href="#conformal-normal-curvature" class="anchor"></a>Conformal normal curvature</h2>
+<div id="total-local-influence" class="section level3">
+<h3 class="hasAnchor">
+<a href="#total-local-influence" class="anchor"></a>Total local influence</h3>
+</div>
+<div id="direction-of-largest-curvature" class="section level3">
+<h3 class="hasAnchor">
+<a href="#direction-of-largest-curvature" class="anchor"></a>Direction of largest curvature</h3>
+</div>
+</div>
+<div id="normal-curvature" class="section level2">
+<h2 class="hasAnchor">
+<a href="#normal-curvature" class="anchor"></a>Normal curvature</h2>
+<div id="total-local-influence-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#total-local-influence-1" class="anchor"></a>Total local influence</h3>
+</div>
+<div id="direction-of-largest-curvature-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#direction-of-largest-curvature-1" class="anchor"></a>Direction of largest curvature</h3>
+</div>
+</div>
+<div id="perturbation-schemes-with-respect-to-a-subset-of-the-covariates" class="section level2">
+<h2 class="hasAnchor">
+<a href="#perturbation-schemes-with-respect-to-a-subset-of-the-covariates" class="anchor"></a>Perturbation schemes with respect to a subset of the covariates</h2>
+</div>
+<div id="local-influence-plots" class="section level2">
+<h2 class="hasAnchor">
+<a href="#local-influence-plots" class="anchor"></a>Local influence plots</h2>
+</div>
+</div>
+<div id="references" class="section level1">
+<h1 class="hasAnchor">
+<a href="#references" class="anchor"></a>References</h1>
+<ul>
+<li>Cook, R. D. and Weisberg, S. (1982) <em>Residuals and Influence in Regression.</em> New York and London: Chapman and Hall.</li>
+</ul>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 

@@ -101,13 +101,13 @@ on cooks.distance.mixpoissonreg function)." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/influence-mixpoissonreg.html">influence-mixpoissonreg</a>
+      <a href="../articles/influence-mixpoissonreg.html">Global and local influence analysis with the *mixpoissonreg* package</a>
     </li>
     <li>
-      <a href="../articles/intervals-mixpoissonreg.html">intervals-mixpoissonreg</a>
+      <a href="../articles/intervals-mixpoissonreg.html">Confidence and prediction intervals with  the mixpoissonreg package</a>
     </li>
     <li>
-      <a href="../articles/ml-mixpoissonreg.html">ml-mixpoissonreg</a>
+      <a href="../articles/ml-mixpoissonreg.html">Maximum-likelihood estimation with the mixpoissonreg package</a>
     </li>
     <li>
       <a href="../articles/plots-mixpoissonreg.html">plots-mixpoissonreg</a>
@@ -210,12 +210,12 @@ if 'hat' is set to 'precision', the model must be fitted with 'w' set to TRUE.</
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>For hatvalues of mixed Poisson regression models, we follow Zhu et al. (2001) to consider the negative of the hessian of the Q-function as weight matrix, and follow
+    <p>For hat values of mixed Poisson regression models, we follow Zhu et al. (2001) to consider the negative of the hessian of the Q-function as weight matrix, and follow
 Pregibon (1981) to define the 'hat' matrix with respect to this weight matrix. We can consider the hessian of the Q-function with respect to mean-related parameters,
-which usually considered. We can also consider the hessian of the Q-function with respect to the precision-related parameters to give rise to hatvalues related to the precision
+which is the default. We can also consider the hessian of the Q-function with respect to the precision-related parameters to give rise to hat values related to the precision
 parameters.</p>
 <p>The Generalized Cook's distance and Q-displacement for EM-based models were defined in Zhu et al. (2001) and computed for mixed Poisson regression models
-in Barreto-Souza and Simas (2016). We implemented first-order approximation to these quantities to be computationally feasible. These first-order approximations
+in Barreto-Souza and Simas (2016). We implemented first-order approximation to these quantities to make it computationally feasible. These first-order approximations
 are available in Barreto-Souza and Simas (2016). We also provide versions of generalized Cook's distance for mean-related or precision-related parameters, whose
 details can be found in Barreto-Souza and Simas (2016).</p>
 <p>In the influence method we provide a 'do.coef' argument that computes first-order approximations to the impact of removal of each case to each parameter, in the
@@ -225,7 +225,7 @@ same spirit as the 'do.coeff' argument in 'influence.lm'.</p>
     <p>DOI:10.1007/s11222-015-9601-6 (<a href='https://doi.org/10.1007/s11222-015-9601-6'>Barreto-Souza and Simas; 2016</a>)</p>
 <p>Cook, D.R. and Weisberg, S. (1982) <em>Residuals and Influence in Regression</em>. (New York: Chapman and Hall, 1982)</p>
 <p>DOI:10.1214/aos/1176345513 (<a href='https://projecteuclid.org/euclid.aos/1176345513'>Pregibon; 1981</a>)</p>
-<p>Zhu, H.T., Lee, S.Y., Wei, B.C., Zhu, J. (2001) <em>Case-deletion measures formodels with incomplete data.</em> Biometrika, 88, 727–737. <a href='https://www.jstor.org/stable/2673442?seq=1'>https://www.jstor.org/stable/2673442?seq=1</a></p>
+<p>Zhu, H.T., Lee, S.Y., Wei, B.C., Zhu, J. (2001) <em>Case-deletion measures formodels with incomplete data.</em> Biometrika, 88, 727–737. <a href='https://www.jstor.org/stable/2673442'>https://www.jstor.org/stable/2673442</a></p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
