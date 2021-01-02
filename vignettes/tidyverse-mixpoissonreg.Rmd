@@ -223,7 +223,7 @@ When we call the `local_influence_benchmarks` method it returns a `tibble::tibbl
 local_influence_benchmarks(fit)
 ```
 
-One possible application is the following: select the observations whose curvature are above the benchmarks, then `leftjoin` this `tibble` with a subset of the `tibble` returned by the `augment` method containing the model's matrix. This facilitates the study of the influential observations.
+One possible application is the following: select the observations whose curvature are above the benchmarks, then `left_join` this `tibble` with a subset of the `tibble` returned by the `augment` method containing the model's matrix. This facilitates the study of the influential observations.
 
 ```{r warning=FALSE, message=FALSE}
 library(tidyr)

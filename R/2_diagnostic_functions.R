@@ -17,6 +17,9 @@
 #' @param ask logical; if \code{TRUE}, the user is asked before each plot.
 #' @param id.n number of points to be labelled in each plot, starting with the most extreme.
 #' @param main character; title to be placed at each plot additionally (and above) all captions.
+#' @param fill_col_env fill color for the simulated envelopes if the \code{mixpoissonreg} object was fitted with envelopes. Notice that an alpha transparency may be passed by using
+#' grDevices::rgb function.
+#' @param line_col_env line color for the upper and lower quantile curves of the simulated envelopes if the \code{mixpoissonreg} object was fitted with envelopes.
 #' @param labels.id	 vector of labels, from which the labels for extreme points will be chosen. The default uses the observation numbers.
 #' @param label.pos positioning of labels, for the left half and right half of the graph respectively, for plots 2 and 6.
 #' @param type.cookplot character; what type of plot should be drawn for Cook's and Generalized Cook's distances (plots 3 and 4). The default is 'h'.
@@ -27,7 +30,6 @@
 #' @param include.residualtype local. Indicates whether the name of the residual ('Pearson' or 'Score') should be displayed on the caption of plot 1 (Residuals vs. Index).
 #' @param qqline logical; if \code{TRUE} and the fit does *not* contain simulated
 #' envelopes, a qqline passing through the first and third quartiles of a standard normal distribution will be added to the normal Q-Q plot.
-#' @param alpha_env alpha channel for envelope shading when the \code{mixpoissonreg} object was fitted with envelopes.
 #' @param ... graphical parameters to be passed.
 #' @details
 #' The \code{plot} method is implemented following the same structure as the \link[stats]{plot.lm}, so it will be easy to be used by practitioners that
@@ -72,8 +74,10 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
                                               "Cook's dist vs Generalized Cook's dist",
                                               "Response vs Fitted means"
                                               ),
-                               sub.caption = NULL, qqline = TRUE, alpha_env = 0.7,
+                               sub.caption = NULL, qqline = TRUE, 
                                main = "",
+                               line_col_env = grDevices::rgb(0.7, 0.7, 0.7),
+                               fill_col_env = grDevices::rgb(0.7, 0.7, 0.7, 0.7),
                                ask = prod(graphics::par("mfcol")) <
                                  length(which) && grDevices::dev.interactive(),
                                labels.id = names(stats::residuals(x)),
@@ -192,9 +196,9 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
 
     if (is.null(env) == FALSE) {
       aux <- sort(qq$x)
-      graphics::lines(aux, env[1, ], col = grDevices::rgb(0.7, 0.7, 0.7))
-      graphics::lines(aux, env[3, ], col = grDevices::rgb(0.7, 0.7, 0.7))
-      graphics::polygon(c(aux, rev(aux)), c(env[3, ], rev(env[1, ])), col = grDevices::rgb(0.7, 0.7, 0.7, alpha_env), border = NA)
+      graphics::lines(aux, env[1, ], col = line_col_env)
+      graphics::lines(aux, env[3, ], col = line_col_env)
+      graphics::polygon(c(aux, rev(aux)), c(env[3, ], rev(env[1, ])), col = fill_col_env, border = NA)
       graphics::lines(aux, env[2, ], lty = 2, lwd = 2)
     } else {
       if (qqline) {

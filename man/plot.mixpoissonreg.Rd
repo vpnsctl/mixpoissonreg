@@ -12,8 +12,9 @@
     "Response vs Fitted means"),
   sub.caption = NULL,
   qqline = TRUE,
-  alpha_env = 0.7,
   main = "",
+  line_col_env = grDevices::rgb(0.7, 0.7, 0.7),
+  fill_col_env = grDevices::rgb(0.7, 0.7, 0.7, 0.7),
   ask = prod(graphics::par("mfcol")) < length(which) && grDevices::dev.interactive(),
   labels.id = names(stats::residuals(x)),
   label.pos = c(4, 2),
@@ -42,9 +43,12 @@ plot number 2, 'Normal Q-Q', if the \code{mixpoissonreg} object was fitted with 
 \item{qqline}{logical; if \code{TRUE} and the fit does \emph{not} contain simulated
 envelopes, a qqline passing through the first and third quartiles of a standard normal distribution will be added to the normal Q-Q plot.}
 
-\item{alpha_env}{alpha channel for envelope shading when the \code{mixpoissonreg} object was fitted with envelopes.}
-
 \item{main}{character; title to be placed at each plot additionally (and above) all captions.}
+
+\item{line_col_env}{line color for the upper and lower quantile curves of the simulated envelopes if the \code{mixpoissonreg} object was fitted with envelopes.}
+
+\item{fill_col_env}{fill color for the simulated envelopes if the \code{mixpoissonreg} object was fitted with envelopes. Notice that an alpha transparency may be passed by using
+grDevices::rgb function.}
 
 \item{ask}{logical; if \code{TRUE}, the user is asked before each plot.}
 
