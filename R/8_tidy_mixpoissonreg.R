@@ -7,8 +7,6 @@
 #' @importFrom ggrepel geom_text_repel
 #' @importFrom rlang arg_match
 #' @importFrom rlang :=
-#' @importFrom methods new
-#' @importClassesFrom ggfortify ggmultiplot
 #' @export autoplot
 #' @export augment
 #' @export tidy
@@ -686,15 +684,10 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
   if(!dev_ask){
     grDevices::devAskNewPage(ask = FALSE)
     plot.list <- list(p1, p2, p3, p4, p5, p6)[which]
-    if(is.null(nrow))
-      nrow <- 0
-    if(is.null(ncol))
-      ncol <- 0
-    p <- methods::new("ggmultiplot", plots = plot.list, nrow = nrow, ncol = ncol)
 
     gpar_multi <- do.call(grid::gpar, gpar_sub.caption)
     title_multi <- grid::textGrob(sub.caption, gp=gpar_multi)
-    gridExtra::grid.arrange(grobs = p@plots, top = title_multi)
+    gridExtra::grid.arrange(grobs = plot.list, top = title_multi, nrow = nrow, ncol = ncol)
     grDevices::devAskNewPage(ask = grDevices::dev.interactive())
   } else{
     invisible()
@@ -1141,15 +1134,10 @@ local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), ti
   if(!dev_ask){
     grDevices::devAskNewPage(ask = FALSE)
     plot.list <- lapply(which, function(i){p[[i]]})
-    if(is.null(nrow))
-      nrow <- 0
-    if(is.null(ncol))
-      ncol <- 0
-    p <- methods::new("ggmultiplot", plots = plot.list, nrow = nrow, ncol = ncol)
 
     gpar_multi <- do.call(grid::gpar, gpar_sub.caption)
     title_multi <- grid::textGrob(sub.caption, gp=gpar_multi)
-    gridExtra::grid.arrange(grobs = p@plots, top = title_multi)
+    gridExtra::grid.arrange(grobs = plot.list, top = title_multi, nrow = nrow, ncol = ncol)
     grDevices::devAskNewPage(ask = grDevices::dev.interactive())
   } else{
     invisible()

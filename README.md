@@ -42,7 +42,8 @@ yum install gsl gsl-devel
 ```
 
 The *mixpoissonreg* package also imports the following packages:
-`pbapply`, `Formula`,  `gamlss`, `gamlss.dist`, `rlang`, `statmod`, `lmtest`, `methods`, `generics`, `magrittr`, `tibble`, `dplyr`, `ggplot2`, `ggfortify`, `ggrepel`, `gridExtra`
+`pbapply`, `Formula`,  `gamlss`, `gamlss.dist`, `rlang`, `statmod`, `lmtest`, `methods`, `generics`, `magrittr`, `tibble`, `dplyr`, `ggplot2`,
+`ggrepel`, `gridExtra`
 
 ## Useful Resources
 
