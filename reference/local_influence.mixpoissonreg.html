@@ -112,7 +112,7 @@ it takes values on \([0,1]\) and other nice properties (see Zhu and Lee, 2001 an
       <a href="../articles/plots-mixpoissonreg.html">plots-mixpoissonreg</a>
     </li>
     <li>
-      <a href="../articles/tidyverse-mixpoissonreg.html">tidyverse-mixpoissonreg</a>
+      <a href="../articles/tidyverse-mixpoissonreg.html">mixpoissonreg in the tidyverse</a>
     </li>
     <li>
       <a href="../articles/tutorial-mixpoissonreg.html">tutorial-mixpoissonreg</a>
@@ -232,7 +232,7 @@ the 'case-weights' perturbation; the second plot considers the 'hidden-variable'
 considers the mean-explanatory perturbation; the fourth plot considers the precision-explanatory perturbation; the fifth plot considers the simultanous-explanatory perturbation.</p>
 <p>For both <code>local_influence.mixpoissonreg</code> and <code>local_influence_plot.mixpoissonreg</code>, one can select which covariates will be perturbed in the 'mean-explanatory',
 'precision-explanatory' and 'simultaneous-explanatory' perturbation schemes. These are chosen in the 'mean.covariates' and 'precision.covariates' arguments.</p>
-<p>If one considers the total local influence, then Zhu and Lee (2002) provides benchmark for influential observations for all perturbation schemes. These are returned as
+<p>If one considers the total local influence, then Zhu and Lee (2001) provides benchmark for influential observations for all perturbation schemes. These are returned as
 attributes in the returned list from <code>local_influence.mixpoissonreg</code>. When using the <code>local_influence_plot.mixpoissonreg</code>, only points above the benchmark
 will be displayed. One can also set the option 'draw_benchmark' to TRUE to plot the benchmark line.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
@@ -240,8 +240,8 @@ will be displayed. One can also set the option 'draw_benchmark' to TRUE to plot 
     <p>DOI:10.1007/s11222-015-9601-6 (<a href='https://doi.org/10.1007/s11222-015-9601-6'>Barreto-Souza and Simas; 2016</a>)</p>
 <p>Cook, R. D. (1986) <em>Assessment of Local Influence.</em> Journal of the Royal Statistical Society. Series B (Methodological), Vol. 48, pp.133-169. <a href='https://rss.onlinelibrary.wiley.com/doi/10.1111/j.2517-6161.1986.tb01398.x'>https://rss.onlinelibrary.wiley.com/doi/10.1111/j.2517-6161.1986.tb01398.x</a></p>
 <p>Lesaffre, E. and Verbeke, G. (1998) <em>Local Influence in Linear Mixed Models</em>. Biometrics, 54, pp. 570-582. <a href='https://www.jstor.org/stable/3109764'>https://www.jstor.org/stable/3109764</a></p>
-<p>Poon, W.-Y. and Poon, Y.S. (2002) <em>Conformal normal curvature and assessment of local influence.</em>  Journal of the Royal Statistical Society. Series B (Methodological), Vol. 61, pp.51-61. <a href='https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162'>https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162</a></p>
-<p>Zhu, H.-T. and Lee, S.-Y. (2002) <em>Local influence for incomplete data models.</em> Journal of the Royal Statistical Society. Series B (Methodological), Vol. 63, pp.111-126. <a href='https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279'>https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279</a></p>
+<p>Poon, W.-Y. and Poon, Y.S. (1999) <em>Conformal normal curvature and assessment of local influence.</em>  Journal of the Royal Statistical Society. Series B (Methodological), Vol. 61, pp.51-61. <a href='https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162'>https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162</a></p>
+<p>Zhu, H.-T. and Lee, S.-Y. (2001) <em>Local influence for incomplete data models.</em> Journal of the Royal Statistical Society. Series B (Methodological), Vol. 63, pp.111-126. <a href='https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279'>https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
