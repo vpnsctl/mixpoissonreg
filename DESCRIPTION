@@ -19,7 +19,7 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/vpnsctl/mixpoissonreg/, https://vpnsctl.github.io/mixpoissonreg/
 BugReports: https://github.com/vpnsctl/mixpoissonreg/issues
-Imports: pbapply, Formula, Rfast, dplyr, gamlss.dist, generics, ggplot2, gridExtra, lmtest, magrittr, statmod, tibble, rlang, ggrepel, methods, gamlss
+Imports: pbapply, Formula, Rfast, dplyr, gamlss.dist, generics, ggplot2, gridExtra, lmtest, magrittr, statmod, tibble, rlang, ggrepel, gamlss
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 NeedsCompilation: no
