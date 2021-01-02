@@ -735,9 +735,9 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
 #'
 #' Lesaffre, E. and Verbeke, G. (1998) *Local Influence in Linear Mixed Models*. Biometrics, 54, pp. 570-582. \href{https://www.jstor.org/stable/3109764}{https://www.jstor.org/stable/3109764}
 #'
-#' Poon, W.-Y. and Poon, Y.S. (2002) *Conformal normal curvature and assessment of local influence.*  Journal of the Royal Statistical Society. Series B (Methodological), Vol. 61, pp.51-61. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}
+#' Poon, W.-Y. and Poon, Y.S. (1999) *Conformal normal curvature and assessment of local influence.*  Journal of the Royal Statistical Society. Series B (Methodological), Vol. 61, pp.51-61. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}
 #'
-#' Zhu, H.-T. and Lee, S.-Y. (2002) *Local influence for incomplete data models.* Journal of the Royal Statistical Society. Series B (Methodological), Vol. 63, pp.111-126. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}
+#' Zhu, H.-T. and Lee, S.-Y. (2001) *Local influence for incomplete data models.* Journal of the Royal Statistical Society. Series B (Methodological), Vol. 63, pp.111-126. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}
 #' @seealso \code{\link{glance.mixpoissonreg}}, \code{\link{augment.mixpoissonreg}}, \code{\link{tidy.mixpoissonreg}}, \code{\link{autoplot.mixpoissonreg}}
 #' @examples
 #' \donttest{
@@ -853,7 +853,7 @@ local_influence_benchmarks.mixpoissonreg <- function(model, perturbation = c("ca
 #'
 #' Poon, W.-Y. and Poon, Y.S. (2002) *Conformal normal curvature and assessment of local influence.*  Journal of the Royal Statistical Society. Series B (Methodological), Vol. 61, pp.51-61. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}
 #'
-#' Zhu, H.-T. and Lee, S.-Y. (2002) *Local influence for incomplete data models.* Journal of the Royal Statistical Society. Series B (Methodological), Vol. 63, pp.111-126. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}
+#' Zhu, H.-T. and Lee, S.-Y. (2001) *Local influence for incomplete data models.* Journal of the Royal Statistical Society. Series B (Methodological), Vol. 63, pp.111-126. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}
 #' @seealso \code{\link{glance.mixpoissonreg}}, \code{\link{augment.mixpoissonreg}}, \code{\link{tidy.mixpoissonreg}}, \code{\link{autoplot.mixpoissonreg}}
 #' @examples
 #' \donttest{
@@ -1165,15 +1165,15 @@ local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), ti
 #' @param model A model object for which local influence diagnostics are desired.
 #' @param ... additional arguments to be passed.
 #' @details
-#' Local influence diagnostics were first introduced by Cook (1986), where several perturbation schemes were introduced and normal curvatures were obtained. Poon and Poon (2002)
-#' introduced the conformal normal curvature, which has nice properties and takes values on the unit interval \eqn{[0,1]}. Zhu and Lee (2002) following Cook (1986) and Poon and Poon (2002)
+#' Local influence diagnostics were first introduced by Cook (1986), where several perturbation schemes were introduced and normal curvatures were obtained. Poon and Poon (1999)
+#' introduced the conformal normal curvature, which has nice properties and takes values on the unit interval \eqn{[0,1]}. Zhu and Lee (2001) following Cook (1986) and Poon and Poon (1999)
 #' introduced normal and conformal normal curvatures for EM-based models.
 #' @references
 #' Cook, R. D. (1986) *Assessment of Local Influence.* Journal of the Royal Statistical Society. Series B (Methodological), Vol. 48, pp.133-169. \href{https://rss.onlinelibrary.wiley.com/doi/10.1111/j.2517-6161.1986.tb01398.x}{https://rss.onlinelibrary.wiley.com/doi/10.1111/j.2517-6161.1986.tb01398.x}
 #'
-#' Poon, W.-Y. and Poon, Y.S. (2002) *Conformal normal curvature and assessment of local influence.*  Journal of the Royal Statistical Society. Series B (Methodological), Vol. 61, pp.51-61. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}
+#' Poon, W.-Y. and Poon, Y.S. (1999) *Conformal normal curvature and assessment of local influence.*  Journal of the Royal Statistical Society. Series B (Methodological), Vol. 61, pp.51-61. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}
 #'
-#' Zhu, H.-T. and Lee, S.-Y. (2002) *Local influence for incomplete data models.* Journal of the Royal Statistical Society. Series B (Methodological), Vol. 63, pp.111-126. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}
+#' Zhu, H.-T. and Lee, S.-Y. (2001) *Local influence for incomplete data models.* Journal of the Royal Statistical Society. Series B (Methodological), Vol. 63, pp.111-126. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}
 
 #' @rdname tidy_local_influence
 #' @export

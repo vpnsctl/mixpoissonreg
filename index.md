@@ -10,7 +10,7 @@
 The *mixpoissonreg* package deals with regression models with response variables being count data. 
 It is aimed towards overdispersed data. It currently provides implementation of two regression models: Negative Binomial and Poisson Inverse Gaussian regression models. For both of these models there are two estimation procedures implemented: the EM-algorithm and direct maximization of the 
 log-likelihood function.  The definition of both these regression models along with the EM-algorithm approach
-for them can be found at <http://doi.org/10.1007/s11222-015-9601-6>. The direct maximization
+for them can be found at [Barreto-Souza and Simas (2016)](https://doi.org/10.1007/s11222-015-9601-6). The direct maximization
 of the log-likelihood is only recommended when the EM-algorithm takes too long to converge.
 Several global and local influence measures are implemented and easy to interpret through plot visualization. There are plot implementations
 using base-R and *ggplot2*. For further details, and also more tutorials, we refer the reader to the **vignettes** whose links can be found on the **Articles** menu above 
@@ -18,7 +18,7 @@ or by using `vignette(mixpoissonreg)`.
 
 ## Installing the *mixpoissonreg* package
 
-The latest development version can be installed from github:
+The latest **stable** development version can be installed from github:
 
 ```{r}
 #install.packages("devtools")

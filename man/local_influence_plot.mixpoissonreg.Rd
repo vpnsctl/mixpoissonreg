@@ -112,7 +112,7 @@ considers the mean-explanatory perturbation; the fourth plot considers the preci
 For both \code{local_influence.mixpoissonreg} and \code{local_influence_plot.mixpoissonreg}, one can select which covariates will be perturbed in the 'mean-explanatory',
 'precision-explanatory' and 'simultaneous-explanatory' perturbation schemes. These are chosen in the 'mean.covariates' and 'precision.covariates' arguments.
 
-If one considers the total local influence, then Zhu and Lee (2002) provides benchmark for influential observations for all perturbation schemes. These are returned as
+If one considers the total local influence, then Zhu and Lee (2001) provides benchmark for influential observations for all perturbation schemes. These are returned as
 attributes in the returned list from \code{local_influence.mixpoissonreg}. When using the \code{local_influence_plot.mixpoissonreg}, only points above the benchmark
 will be displayed. One can also set the option 'draw_benchmark' to TRUE to plot the benchmark line.
 }
@@ -136,7 +136,7 @@ Cook, R. D. (1986) \emph{Assessment of Local Influence.} Journal of the Royal St
 
 Lesaffre, E. and Verbeke, G. (1998) \emph{Local Influence in Linear Mixed Models}. Biometrics, 54, pp. 570-582. \href{https://www.jstor.org/stable/3109764}{https://www.jstor.org/stable/3109764}
 
-Poon, W.-Y. and Poon, Y.S. (2002) \emph{Conformal normal curvature and assessment of local influence.}  Journal of the Royal Statistical Society. Series B (Methodological), Vol. 61, pp.51-61. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}
+Poon, W.-Y. and Poon, Y.S. (1999) \emph{Conformal normal curvature and assessment of local influence.}  Journal of the Royal Statistical Society. Series B (Methodological), Vol. 61, pp.51-61. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}
 
-Zhu, H.-T. and Lee, S.-Y. (2002) \emph{Local influence for incomplete data models.} Journal of the Royal Statistical Society. Series B (Methodological), Vol. 63, pp.111-126. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}
+Zhu, H.-T. and Lee, S.-Y. (2001) \emph{Local influence for incomplete data models.} Journal of the Royal Statistical Society. Series B (Methodological), Vol. 63, pp.111-126. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}
 }

@@ -82,9 +82,9 @@ Cook, R. D. (1986) \emph{Assessment of Local Influence.} Journal of the Royal St
 
 Lesaffre, E. and Verbeke, G. (1998) \emph{Local Influence in Linear Mixed Models}. Biometrics, 54, pp. 570-582. \href{https://www.jstor.org/stable/3109764}{https://www.jstor.org/stable/3109764}
 
-Poon, W.-Y. and Poon, Y.S. (2002) \emph{Conformal normal curvature and assessment of local influence.}  Journal of the Royal Statistical Society. Series B (Methodological), Vol. 61, pp.51-61. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}
+Poon, W.-Y. and Poon, Y.S. (1999) \emph{Conformal normal curvature and assessment of local influence.}  Journal of the Royal Statistical Society. Series B (Methodological), Vol. 61, pp.51-61. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00162}
 
-Zhu, H.-T. and Lee, S.-Y. (2002) \emph{Local influence for incomplete data models.} Journal of the Royal Statistical Society. Series B (Methodological), Vol. 63, pp.111-126. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}
+Zhu, H.-T. and Lee, S.-Y. (2001) \emph{Local influence for incomplete data models.} Journal of the Royal Statistical Society. Series B (Methodological), Vol. 63, pp.111-126. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}
 }
 \seealso{
 \code{\link{glance.mixpoissonreg}}, \code{\link{augment.mixpoissonreg}}, \code{\link{tidy.mixpoissonreg}}, \code{\link{autoplot.mixpoissonreg}}

@@ -144,7 +144,7 @@ to change the significance level by setting the `level` argument, which defaults
 
 For example, we will consider `nsim_pred = 50` and `nsim_pred_y = 50` to avoid long computations in our example:
 
-```{r}
+```{r warning=FALSE}
 fit_math <- mixpoissonreg(daysabs ~ math, 
                         data = Attendance)
 
@@ -157,18 +157,18 @@ Notice that the intervals are now much wider.
 
 We will now use the above matrix to create a plot of the fitted values against the `math` variable along with their prediction intervals using R's base graphics:
 
-```{r}
+```{r warning=FALSE}
 new_math <- seq(0, 100, by=0.25)
 pred_fit <- predict(fit_math, newdata = data.frame(math = new_math), interval = "prediction",
                     nsim_pred = 50, nsim_pred_y = 50)
 
 
-graphics::plot(Attendance$math, Attendance$daysabs, xlab = "Math score", ylab = "Days abscent")
+plot(Attendance$math, Attendance$daysabs, xlab = "Math score", ylab = "Days abscent")
 curve(exp(fit_math$coefficients$mean[1] + fit_math$coefficients$mean[2]*x), add = TRUE)
 
-graphics::lines(new_math, pred_fit[, 2], col = grDevices::rgb(0.7, 0.7, 0.7))
-graphics::lines(new_math, pred_fit[, 3], col = grDevices::rgb(0.7, 0.7, 0.7))
-graphics::polygon(c(new_math, rev(new_math)), c(pred_fit[, 2], rev(pred_fit[, 3])), 
+lines(new_math, pred_fit[, 2], col = grDevices::rgb(0.7, 0.7, 0.7))
+lines(new_math, pred_fit[, 3], col = grDevices::rgb(0.7, 0.7, 0.7))
+polygon(c(new_math, rev(new_math)), c(pred_fit[, 2], rev(pred_fit[, 3])), 
                   col = grDevices::rgb(0.7, 0.7, 0.7, 0.7), border = NA)
 ```
 
@@ -182,14 +182,14 @@ To obtain prediction intervals using the `augment` method, one must set the `pre
 For example, let us consider the `fit_math` object and obtain prediction intervals with 99% level along with the response variable `daysabs` and the covariate `math`. We will
 also set `nsim_pred` and `nsim_pred_y` to 50 to reduce computational cost.
 
-```{r}
+```{r warning=FALSE}
 augment(fit_math, pred_int = TRUE, level = 0.99,
         nsim_pred = 50, nsim_pred_y = 50) %>% select(math, daysabs, .fittedlwrpred, .fitteduprpred)
 ```
 
 Let us now use the `augment` method to produce a plot of the data, the fitted curve and the prediction intervals with the default significance level:
 
-```{r message=FALSE}
+```{r message=FALSE, warning=FALSE}
 library(ggplot2)
 
 fit_data <- augment(fit_math) %>%
