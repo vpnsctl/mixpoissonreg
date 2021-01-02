@@ -87,8 +87,6 @@ augment(fit) %>% mutate(.index = row_number()) %>% arrange(desc(.cooksd)) %>%
 and
 
 ```{r}
-library(dplyr)
-
 augment(fit) %>% mutate(.index = row_number()) %>% arrange(desc(.gencooksd)) %>% 
     select(.index, daysabs, gender, math,prog,.gencooksd)
 ```
@@ -175,7 +173,7 @@ tidy(fit, conf.int = TRUE) %>%
 
 or separately (since the precision regression structure does not contain all the covariates)
 
-```{r}
+```{r message=FALSE}
 library(gridExtra)
 
 pmean <- tidy(fit, conf.int = TRUE) %>% filter(component == "mean") %>%
@@ -227,7 +225,7 @@ local_influence_benchmarks(fit)
 
 One possible application is the following: select the observations whose curvature are above the benchmarks, then `leftjoin` this `tibble` with a subset of the `tibble` returned by the `augment` method containing the model's matrix. This facilitates the study of the influential observations.
 
-```{r warning=FALSE}
+```{r warning=FALSE, message=FALSE}
 library(tidyr)
 
 inf_tbl <- tidy_local_influence(fit) %>% mutate(.index = row_number()) %>% 
@@ -271,7 +269,7 @@ likelihood function to reduce computational cost.
 ```{r warning=FALSE}
 fit_env <- mixpoissonregML(daysabs ~ gender + math + prog | prog, 
                        model = "PIG", data = Attendance,
-                       envelope = 15)
+                       envelope = 100)
 
 autoplot(fit_env)
 ```

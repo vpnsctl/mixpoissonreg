@@ -222,8 +222,8 @@
 <span class="co">#&gt; # A tibble: 2 x 6</span>
 <span class="co">#&gt;   gender  math prog     .fitted .fittedlwrpred .fitteduprpred</span>
 <span class="co">#&gt;   &lt;fct&gt;  &lt;dbl&gt; &lt;fct&gt;      &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 male      34 General     9.57              0             37</span>
-<span class="co">#&gt; 2 female    85 Academic    5.59              0             40</span></code></pre></div>
+<span class="co">#&gt; 1 male      34 General     9.57              0             38</span>
+<span class="co">#&gt; 2 female    85 Academic    5.59              0             46</span></code></pre></div>
 <p>With the <code>augment</code> method it is simple to sort the observations by their Cook’s distance or by their generalized Cook’s distance along with their indexes and the model’s matrix in order to facilitate the study of their influence:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
@@ -246,9 +246,7 @@
 <span class="co">#&gt; # … with 304 more rows</span></code></pre></div>
 <p>and</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
-
-<span class="fu"><a href="../reference/augment.mixpoissonreg.html">augment</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>.index <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/ranking.html">row_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">.gencooksd</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<code class="sourceCode R"><span class="fu"><a href="../reference/augment.mixpoissonreg.html">augment</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>.index <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/ranking.html">row_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">.gencooksd</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">.index</span>, <span class="va">daysabs</span>, <span class="va">gender</span>, <span class="va">math</span>,<span class="va">prog</span>,<span class="va">.gencooksd</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 314 x 6</span>
 <span class="co">#&gt;    .index daysabs gender  math prog       .gencooksd</span>
@@ -360,11 +358,6 @@
 <p>or separately (since the precision regression structure does not contain all the covariates)</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">gridExtra</span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'gridExtra'</span>
-<span class="co">#&gt; The following object is masked from 'package:dplyr':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     combine</span>
 
 <span class="va">pmean</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tidy.mixpoissonreg.html">tidy</a></span><span class="op">(</span><span class="va">fit</span>, conf.int <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">component</span> <span class="op">==</span> <span class="st">"mean"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">term</span>, y <span class="op">=</span> <span class="va">estimate</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
@@ -489,7 +482,7 @@
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit_env</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonregML.html">mixpoissonregML</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span> <span class="op">|</span> <span class="va">prog</span>, 
                        model <span class="op">=</span> <span class="st">"PIG"</span>, data <span class="op">=</span> <span class="va">Attendance</span>,
-                       envelope <span class="op">=</span> <span class="fl">15</span><span class="op">)</span>
+                       envelope <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit_env</span><span class="op">)</span></code></pre></div>
 <p><img src="tidyverse-mixpoissonreg_files/figure-html/unnamed-chunk-23-1.png" width="700"><img src="tidyverse-mixpoissonreg_files/figure-html/unnamed-chunk-23-2.png" width="700"><img src="tidyverse-mixpoissonreg_files/figure-html/unnamed-chunk-23-3.png" width="700"><img src="tidyverse-mixpoissonreg_files/figure-html/unnamed-chunk-23-4.png" width="700"></p>
