@@ -1,5 +1,7 @@
 ---
-title: "plots-mixpoissonreg"
+title: "Diagnostic plots with the mixpoissonreg package"
+author: "Alexandre B. Simas"
+date: '`r format(Sys.time(), "%Y-%m-%d")`'
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{plots-mixpoissonreg}
@@ -14,6 +16,32 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-library(mixpoissonreg)
-```
+# Plots using R's base graphics 
+
+## Choosing plots
+
+## Titles and subtitles
+
+Incluir comentários sobre  include.modeltype = TRUE, include.residualtype = FALSE
+
+## Colors, sizes, point types and line types
+
+Também mudar o tipo de gráfico da distância de Cook.
+
+## Points to be identified
+
+Mexer nas quantidades e nos labels.
+
+## Multiple plots
+
+# Plots using `ggplot2`
+
+## Choosing plots
+
+## Titles and subtitles
+
+## Colors, sizes, point types and line types
+
+## Points to be identified
+
+## Multiple plots

@@ -1,5 +1,7 @@
 ---
-title: "tutorial-mixpoissonreg"
+title: "Analyzing overdispersed count data with the mixpoissonreg package"
+author: "Alexandre B. Simas"
+date: '`r format(Sys.time(), "%Y-%m-%d")`'
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{tutorial-mixpoissonreg}
@@ -14,6 +16,20 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-library(mixpoissonreg)
-```
+# Description of the dataset
+
+# Model fitting and inference
+
+Montar tabelinha com média esperada de faltas.
+
+Considerar: Geral, Vocacional Academico, Homem, Mulher, Min_math, Max_math
+
+
+                                  _________Mean abscence________ 
+                 Program | Gender | Min_math (0) | Max_math (99)
+
+# Residual analysis
+
+Também ajustar modelo com resíduo "score" com envelope 
+
+# Influence analysis
