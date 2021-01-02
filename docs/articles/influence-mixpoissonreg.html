@@ -69,7 +69,7 @@
       <a href="../articles/plots-mixpoissonreg.html">plots-mixpoissonreg</a>
     </li>
     <li>
-      <a href="../articles/tidyverse-mixpoissonreg.html">tidyverse-mixpoissonreg</a>
+      <a href="../articles/tidyverse-mixpoissonreg.html">mixpoissonreg in the tidyverse</a>
     </li>
     <li>
       <a href="../articles/tutorial-mixpoissonreg.html">tutorial-mixpoissonreg</a>
@@ -103,7 +103,7 @@
       <h1 data-toc-skip>Global and local influence analysis with the <em>mixpoissonreg</em> package</h1>
                         <h4 class="author">Alexandre B. Simas</h4>
             
-            <h4 class="date">2020-12-31</h4>
+            <h4 class="date">2021-01-02</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/vpnsctl/mixpoissonreg/blob/master/vignettes/influence-mixpoissonreg.Rmd"><code>vignettes/influence-mixpoissonreg.Rmd</code></a></small>
       <div class="hidden name"><code>influence-mixpoissonreg.Rmd</code></div>
@@ -115,7 +115,7 @@
 <div id="global-influence" class="section level1">
 <h1 class="hasAnchor">
 <a href="#global-influence" class="anchor"></a>Global Influence</h1>
-<p>In the <em>mixpoissonreg</em> package the following global influence methods are implemented: <code>hatvalues</code>, <code>cooks.distance</code> and <code>influence</code>. Below, we discuss the implementations of these methods in detail.</p>
+<p>In the <em>mixpoissonreg</em> package the following global influence methods are implemented: <code>hatvalues</code>, <code>cooks.distance</code> and <code>influence</code>. Below, we discuss the implementations of these methods in detail. Notice that in this vignette we do not provide interpretations of the influence results, we focus on how to compute the measures. For interpretations of the influence measures we refer the reader to the <a href="tutorial-mixpoissonreg.html">Analyzing overdispersed count data with the <em>mixpoissonreg</em> package</a> vignette.</p>
 <div id="hatvalues-method" class="section level2">
 <h2 class="hasAnchor">
 <a href="#hatvalues-method" class="anchor"></a><code>hatvalues</code> method</h2>
@@ -319,44 +319,384 @@
 <div id="local-influence" class="section level1">
 <h1 class="hasAnchor">
 <a href="#local-influence" class="anchor"></a>Local Influence</h1>
-<div id="conformal-normal-curvature" class="section level2">
+<p>The <em>mixpoissonreg</em> package contains the <code>local_influence</code> method implemented. This method contains conformal normal curvatures and normal curvatures under several perturbation schemes. It returns a list whose elements are the perturbation schemes contained in the <code>perturbation</code> argument.</p>
+<p>The local influence was introduced in the seminal paper <a href="https://www.doi.org/10.1111/j.2517-6161.1986.tb01398.x">Cook (1986)</a>, in which the normal curvatures under different perturbations schemes were introduced. Cook suggested the analysis of the perturbation schemes in the directions of largest curvatures. <a href="https://doi.org/10.2307/3109764">Lesaffre and Verbeke (1998)</a> suggested the analysis for each canonical direction and called this “total local influence”. <a href="https://doi.org/10.1111/1467-9868.00162">Poon and Poon (1999)</a> introduced the <em>conformal normal curvature</em> which has the advantadge of taking values in the standard unit interval [0,1]. Finally, <a href="https://doi.org/10.1111/1467-9868.00279">Zhu and Lee (2001)</a> introduced local influence measures for EM-based models. They computed normal and conformal normal curvatures for EM-based models.</p>
+<p>Below, we discuss the arguments of the <code>local_influence</code> method in detail. Notice that in this vignette we do not provide interpretations of the influence results, we focus on how to compute the measures. For interpretations of the influence measures we refer the reader to the <a href="tutorial-mixpoissonreg.html">Analyzing overdispersed count data with the <em>mixpoissonreg</em> package</a> vignette.</p>
+<div id="curvature" class="section level2">
 <h2 class="hasAnchor">
-<a href="#conformal-normal-curvature" class="anchor"></a>Conformal normal curvature</h2>
-<div id="total-local-influence" class="section level3">
-<h3 class="hasAnchor">
-<a href="#total-local-influence" class="anchor"></a>Total local influence</h3>
+<a href="#curvature" class="anchor"></a>Curvature</h2>
+<p>By default, the <code>local_influence</code> method for <code>mixpoissonreg</code> objects returns the <em>conformal normal curvature</em> since it takes values in the standard unit interval [0,1]. For conformal normal curvatures the <em>benchmark</em> suggested by <a href="https://doi.org/10.1111/1467-9868.00279">Zhu and Lee (2001)</a> is returned as the <code>benchmark</code> attribute to each returned element, i.e., for each perturbation considered.</p>
+<p>For example:</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonreg.html">mixpoissonreg</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span> <span class="op">|</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span>, 
+                        data <span class="op">=</span> <span class="va">Attendance</span><span class="op">)</span>
+
+<span class="va">loc_inf_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/local_influence.html">local_influence</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="va">loc_inf_fit</span><span class="op">)</span>
+<span class="co">#&gt; [1] "case_weights"             "hidden_variable"         </span>
+<span class="co">#&gt; [3] "mean_explanatory"         "precision_explanatory"   </span>
+<span class="co">#&gt; [5] "simultaneous_explanatory"</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">loc_inf_fit</span><span class="op">$</span><span class="va">case_weights</span><span class="op">)</span>
+<span class="co">#&gt;            1            2            3            4            5            6 </span>
+<span class="co">#&gt; 0.0014599080 0.0009698306 0.0007123753 0.0003501649 0.0006804113 0.0011842955</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">loc_inf_fit</span><span class="op">$</span><span class="va">case_weights</span>, <span class="st">"benchmark"</span><span class="op">)</span>
+<span class="co">#&gt; [1] 0.01398709</span></code></pre></div>
+<p>To compute the normal curvature, simply set the <code>curvature</code> argument to “normal”. For normal curvature the <code>benchmark</code> attribute contains the benchmark suggested by <a href="https://www.springer.com/gp/book/9781441902993">Verbeke and Molenberghs (2000, sect. 11.3)</a>. For example:</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">loc_inf_normal_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/local_influence.html">local_influence</a></span><span class="op">(</span><span class="va">fit</span>, curvature <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="va">loc_inf_normal_fit</span><span class="op">)</span>
+<span class="co">#&gt; [1] "case_weights"             "hidden_variable"         </span>
+<span class="co">#&gt; [3] "mean_explanatory"         "precision_explanatory"   </span>
+<span class="co">#&gt; [5] "simultaneous_explanatory"</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">loc_inf_normal_fit</span><span class="op">$</span><span class="va">case_weights</span><span class="op">)</span>
+<span class="co">#&gt;           1           2           3           4           5           6 </span>
+<span class="co">#&gt; 0.004246910 0.002821262 0.002072318 0.001018639 0.001979334 0.003445146</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">loc_inf_normal_fit</span><span class="op">$</span><span class="va">case_weights</span>, <span class="st">"benchmark"</span><span class="op">)</span>
+<span class="co">#&gt; [1] 0.01852883</span></code></pre></div>
 </div>
-<div id="direction-of-largest-curvature" class="section level3">
-<h3 class="hasAnchor">
-<a href="#direction-of-largest-curvature" class="anchor"></a>Direction of largest curvature</h3>
-</div>
-</div>
-<div id="normal-curvature" class="section level2">
+<div id="direction" class="section level2">
 <h2 class="hasAnchor">
-<a href="#normal-curvature" class="anchor"></a>Normal curvature</h2>
-<div id="total-local-influence-1" class="section level3">
-<h3 class="hasAnchor">
-<a href="#total-local-influence-1" class="anchor"></a>Total local influence</h3>
+<a href="#direction" class="anchor"></a>Direction</h2>
+<p>The default direction of <code>local_influence</code> method for <code>mixpoissonreg</code> objects is the canonical direction, that is, it computes the <em>total local influence</em> (<a href="https://doi.org/10.2307/3109764">Lesaffre and Verbeke, 1998</a>).</p>
+<p>For canonical directions the <code>local_influence</code> method also returns <em>benchmarks</em> for each perturbation scheme, following <a href="https://doi.org/10.1111/1467-9868.00279">Zhu and Lee (2001)</a> for conformal normal curvatures and <a href="https://www.springer.com/gp/book/9781441902993">Verbeke and Molenberghs (2000, sect. 11.3)</a> for normal curvatures.</p>
+<p>To change the directions to the directions of largest curvatures one must set the <code>direction</code> argument to “max.eigen”.</p>
+<p>For mixed Poisson regression models (and actually for very large class of regression models) both the normal and conformal normal curvatures are quadratic forms with respect to the direction, that is, by seeing the direction as the variable. The name “max.eigen” for the direction of largest curvature comes from the fact that the direction of largest curvature is the direction of the eigenvector of the associated quadratic form associated to the eigenvalue with largest absolute value.</p>
+<p>Notice that for direction of largest curvature no benchmark is returned, so if one calls the <code>benchmark</code> attribute, the returned value will be <code>NA</code>:</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Conformal normal curvature</span>
+
+<span class="va">loc_inf_fit_larg_curv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/local_influence.html">local_influence</a></span><span class="op">(</span><span class="va">fit</span>, direction <span class="op">=</span> <span class="st">"max.eigen"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="va">loc_inf_fit_larg_curv</span><span class="op">)</span>
+<span class="co">#&gt; [1] "case_weights"             "hidden_variable"         </span>
+<span class="co">#&gt; [3] "mean_explanatory"         "precision_explanatory"   </span>
+<span class="co">#&gt; [5] "simultaneous_explanatory"</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">loc_inf_fit_larg_curv</span><span class="op">$</span><span class="va">case_weights</span><span class="op">)</span>
+<span class="co">#&gt;            1            2            3            4            5            6 </span>
+<span class="co">#&gt; -0.057396784 -0.068340607  0.021970870 -0.004724743  0.006115203 -0.015803801</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">loc_inf_fit_larg_curv</span><span class="op">$</span><span class="va">case_weights</span>, <span class="st">"benchmark"</span><span class="op">)</span>
+<span class="co">#&gt; [1] NA</span>
+
+<span class="co"># Normal curvature</span>
+
+<span class="va">loc_inf_normal_fit_larg_curv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/local_influence.html">local_influence</a></span><span class="op">(</span><span class="va">fit</span>, curvature <span class="op">=</span> <span class="st">"normal"</span>, 
+                                                direction <span class="op">=</span> <span class="st">"max.eigen"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="va">loc_inf_normal_fit_larg_curv</span><span class="op">)</span>
+<span class="co">#&gt; [1] "case_weights"             "hidden_variable"         </span>
+<span class="co">#&gt; [3] "mean_explanatory"         "precision_explanatory"   </span>
+<span class="co">#&gt; [5] "simultaneous_explanatory"</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">loc_inf_normal_fit_larg_curv</span><span class="op">$</span><span class="va">case_weights</span><span class="op">)</span>
+<span class="co">#&gt;            1            2            3            4            5            6 </span>
+<span class="co">#&gt; -0.057396784 -0.068340607  0.021970870 -0.004724743  0.006115203 -0.015803801</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">loc_inf_normal_fit_larg_curv</span><span class="op">$</span><span class="va">case_weights</span>, <span class="st">"benchmark"</span><span class="op">)</span>
+<span class="co">#&gt; [1] NA</span></code></pre></div>
 </div>
-<div id="direction-of-largest-curvature-1" class="section level3">
-<h3 class="hasAnchor">
-<a href="#direction-of-largest-curvature-1" class="anchor"></a>Direction of largest curvature</h3>
+<div id="perturbation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#perturbation" class="anchor"></a>Perturbation</h2>
+<p>The available perturbation schemes are <em>“case_weights”</em>, <em>“hidden_variable”</em>, <em>“mean_explanatory”</em>, <em>“precision_explanatory”</em>, <em>“simultaneous_explanatory”</em>. For mixed Poisson regression models, these perturbation schemes are given in <a href="https://doi.org/10.1007/s11222-015-9601-6">Barreto-Souza and Simas (2016)</a>. The <em>case weights</em> and <em>explanatory variable</em> perturbations were introduced by <a href="https://www.doi.org/10.1111/j.2517-6161.1986.tb01398.x">Cook (1986)</a> whereas the <em>hidden variable</em> perturbation requires a latent variable and was introduced by <a href="https://doi.org/10.1007/s11222-015-9601-6">Barreto-Souza and Simas (2016)</a>. Notice that there is not a <em>response variable</em> perturbation scheme since the response variable is discrete, so it does not make sense to do such a perturbation.</p>
+<p>By default, the <code>local_influence</code> method for <code>mixpoissonreg</code> object returns a list with all the available perturbation schemes.</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">loc_inf_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/local_influence.html">local_influence</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="va">loc_inf_fit</span><span class="op">)</span>
+<span class="co">#&gt; [1] "case_weights"             "hidden_variable"         </span>
+<span class="co">#&gt; [3] "mean_explanatory"         "precision_explanatory"   </span>
+<span class="co">#&gt; [5] "simultaneous_explanatory"</span></code></pre></div>
+<p>Notice that if there is no precision covariates, then the returned values for “precision_explanatory” and “simultaneous_explanatory” are <code>NA</code> and a <em>warning</em> message is generated:</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonreg.html">mixpoissonreg</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span>, 
+                        data <span class="op">=</span> <span class="va">Attendance</span><span class="op">)</span>
+
+<span class="va">loc_inf_fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/local_influence.html">local_influence</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span>
+<span class="co">#&gt; Warning in local_influence.mixpoissonreg(fit2): Precision explanatory and simultaneous explanatory should not be considered since</span>
+<span class="co">#&gt;           there is only the intercept for the precision parameter.</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="va">loc_inf_fit2</span><span class="op">)</span>
+<span class="co">#&gt; [1] "case_weights"             "hidden_variable"         </span>
+<span class="co">#&gt; [3] "mean_explanatory"         "precision_explanatory"   </span>
+<span class="co">#&gt; [5] "simultaneous_explanatory"</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">loc_inf_fit2</span><span class="op">$</span><span class="va">case_weights</span><span class="op">)</span>
+<span class="co">#&gt;            1            2            3            4            5            6 </span>
+<span class="co">#&gt; 0.0007928476 0.0007005787 0.0006602506 0.0005594278 0.0008113136 0.0017174080</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">loc_inf_fit2</span><span class="op">$</span><span class="va">precision_explanatory</span><span class="op">)</span>
+<span class="co">#&gt;  1  2  3  4  5  6 </span>
+<span class="co">#&gt; NA NA NA NA NA NA</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">loc_inf_fit2</span><span class="op">$</span><span class="va">simultaneous_explanatory</span><span class="op">)</span>
+<span class="co">#&gt;  1  2  3  4  5  6 </span>
+<span class="co">#&gt; NA NA NA NA NA NA</span></code></pre></div>
+<p>To select a subset of perturbations, enter a list or vector with the desired perturbations as the <code>perturbation</code> argument:</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">loc_inf_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/local_influence.html">local_influence</a></span><span class="op">(</span><span class="va">fit</span>, perturbation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"case_weights"</span>, <span class="st">"hidden_variable"</span><span class="op">)</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="va">loc_inf_1</span><span class="op">)</span>
+<span class="co">#&gt; [1] "case_weights"    "hidden_variable"</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">loc_inf_1</span><span class="op">$</span><span class="va">case_weights</span><span class="op">)</span>
+<span class="co">#&gt;            1            2            3            4            5            6 </span>
+<span class="co">#&gt; 0.0014599080 0.0009698306 0.0007123753 0.0003501649 0.0006804113 0.0011842955</span>
+
+<span class="va">loc_inf_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/local_influence.html">local_influence</a></span><span class="op">(</span><span class="va">fit</span>, perturbation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"case_weights"</span>, <span class="st">"hidden_variable"</span><span class="op">)</span>,
+                             curvature <span class="op">=</span> <span class="st">"normal"</span>,
+                             direction <span class="op">=</span> <span class="st">"max.eigen"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="va">loc_inf_2</span><span class="op">)</span>
+<span class="co">#&gt; [1] "case_weights"    "hidden_variable"</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">loc_inf_2</span><span class="op">$</span><span class="va">case_weights</span><span class="op">)</span>
+<span class="co">#&gt;            1            2            3            4            5            6 </span>
+<span class="co">#&gt; -0.057396784 -0.068340607  0.021970870 -0.004724743  0.006115203 -0.015803801</span></code></pre></div>
 </div>
+<div id="parameters" class="section level2">
+<h2 class="hasAnchor">
+<a href="#parameters" class="anchor"></a>Parameters</h2>
+<p>The <code>parameters</code> argument of the <code>local_influence</code> method for <code>mixpoissonreg</code> objects refer to the “case_weights” and “hidden_variable” perturbation schemes. One can obtain <em>case weights</em> and <em>hidden variable</em> perturbations with respect to <em>all</em> parameters, with respect to the <em>mean</em>-related parameters and with respect to the <em>precision</em>-related parameters.</p>
+<p>By default, the <em>case weights</em> and <em>hidden variable</em> perturbations are returned with respect to <em>all</em> parameters. To return <em>case weights</em> and <em>hidden variable</em> perturbations with respect to the <em>mean</em>-related parameters, one must set the <code>parameters</code> argument to “mean”:</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">loc_inf_fit_mean</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/local_influence.html">local_influence</a></span><span class="op">(</span><span class="va">fit</span>, parameters <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">loc_inf_fit_mean</span><span class="op">$</span><span class="va">case_weights</span><span class="op">)</span>
+<span class="co">#&gt;            1            2            3            4            5            6 </span>
+<span class="co">#&gt; 6.649621e-05 2.030260e-04 1.270950e-03 1.087224e-03 1.944459e-03 1.787936e-03</span></code></pre></div>
+<p>Analogously, to return <em>case weights</em> and <em>hidden variable</em> perturbations with respect to the <em>precision</em>-related parameters, one must set the <code>parameters</code> argument to “precision”:</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">loc_inf_fit_precision</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/local_influence.html">local_influence</a></span><span class="op">(</span><span class="va">fit</span>, parameters <span class="op">=</span> <span class="st">"precision"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">loc_inf_fit_precision</span><span class="op">$</span><span class="va">case_weights</span><span class="op">)</span>
+<span class="co">#&gt;            1            2            3            4            5            6 </span>
+<span class="co">#&gt; 2.113563e-03 1.329541e-03 4.503457e-04 4.407651e-06 8.744190e-05 9.011256e-04</span></code></pre></div>
 </div>
 <div id="perturbation-schemes-with-respect-to-a-subset-of-the-covariates" class="section level2">
 <h2 class="hasAnchor">
 <a href="#perturbation-schemes-with-respect-to-a-subset-of-the-covariates" class="anchor"></a>Perturbation schemes with respect to a subset of the covariates</h2>
+<p>The <code>mean.covariates</code> argument refers to the “mean.explanatory” and “simultaneous.explanatory” perturbations schemes, whereas the <code>precision.covariates</code> argument refers to the “precision.explanatory” and “simultaneous.explanatory” perturbations schemes. The idea is that only the covariates listed in these arguments will be perturbed, so one can see the influence of observations with respect to those covariates. If <code>mean.covariates</code> is <code>NULL</code>, then all the mean-related covariates will be considered. Analogously, if <code>precision.covariates</code> is <code>NULL</code>, then all the precision-related covariates will be considered.</p>
+<p><strong>Remark:</strong> Notice that factor and integer-valued covariates should not be perturbed since it <strong>does not</strong> make sense to make infinitesimal perturbations on them. You should only perturb continuous variables.</p>
+<p>By default both <code>mean.covariates</code> and <code>precision.covariates</code> are <code>NULL</code>, so all <strong>non-factor</strong> covariates are perturbed. Notice that integer non-factor covariates will be perturbed, so you should manually remove them.</p>
+<p>Let us consider, for example, the following model:</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R">    <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span>
+    
+    <span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html">rexp</a></span><span class="op">(</span><span class="fl">200</span>, rate <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+    <span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">200</span><span class="op">)</span>
+    <span class="va">x3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="fl">2</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fl">200</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>
+    <span class="va">x4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="fl">10</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fl">200</span><span class="op">)</span><span class="op">)</span>
+    
+    <span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/NegBinomial.html">rnbinom</a></span><span class="op">(</span><span class="fl">200</span>, mu <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">x1</span><span class="op">-</span><span class="va">x2</span><span class="op">-</span><span class="op">(</span><span class="va">x3</span><span class="op">==</span><span class="fl">2</span><span class="op">)</span><span class="op">+</span><span class="fl">0.1</span><span class="op">*</span><span class="va">x4</span><span class="op">)</span>, 
+                       size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fl">1</span><span class="op">+</span><span class="fl">2</span><span class="op">*</span><span class="va">x1</span><span class="op">+</span><span class="va">x2</span><span class="op">)</span><span class="op">)</span>
+    
+    <span class="va">fit_example</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonreg.html">mixpoissonreg</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span> <span class="op">+</span> <span class="va">x3</span> <span class="op">+</span> <span class="va">x4</span> <span class="op">|</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span><span class="op">)</span>
+    
+    <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit_example</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Negative Binomial Regression - Expectation-Maximization Algorithm</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; mixpoissonreg(formula = y ~ x1 + x2 + x3 + x4 | x1 + x2)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Pearson residuals:</span>
+<span class="co">#&gt;      RSS      Min       1Q   Median       3Q      Max </span>
+<span class="co">#&gt; 184.5453  -1.5734  -0.6603  -0.3186   0.4244   3.8463 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients modeling the mean (with  link):</span>
+<span class="co">#&gt;             Estimate Std.error z-value Pr(&gt;|z|)    </span>
+<span class="co">#&gt; (Intercept)  0.88326   0.18901   4.673 2.97e-06 ***</span>
+<span class="co">#&gt; x1          -1.28119   0.18554  -6.905 5.02e-12 ***</span>
+<span class="co">#&gt; x2          -0.99689   0.08599 -11.593  &lt; 2e-16 ***</span>
+<span class="co">#&gt; x32         -1.16354   0.15225  -7.642 2.13e-14 ***</span>
+<span class="co">#&gt; x4           0.14923   0.02512   5.940 2.86e-09 ***</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients modeling the precision (with  link):</span>
+<span class="co">#&gt;             Estimate Std.error z-value Pr(&gt;|z|)   </span>
+<span class="co">#&gt; (Intercept)   1.0732    0.4655   2.305  0.02114 * </span>
+<span class="co">#&gt; x1            2.6328    1.0927   2.410  0.01597 * </span>
+<span class="co">#&gt; x2            1.0744    0.3353   3.204  0.00136 **</span>
+<span class="co">#&gt; ---</span>
+<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Efron's pseudo R-squared:  0.521234 </span>
+<span class="co">#&gt; Number of iterations of the EM algorithm = 39</span></code></pre></div>
+<p><strong>Remark:</strong> Notice that since <em>x3</em> is a factor and <em>x4</em> is integer-valued, they are discrete and it <strong>does not</strong> make sense to make infinitesimal perturbations on them. You should only perturb continuous variables.</p>
+<p>To consider the “mean_explanatory” and “simultaneous_explanatory” perturbation schemes with respect to the “x1” covariate, we simply set the <code>mean.covariates</code> argument to “x1”:</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">loc_inf_x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/local_influence.html">local_influence</a></span><span class="op">(</span><span class="va">fit_example</span>, mean.covariates <span class="op">=</span> <span class="st">"x1"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">loc_inf_x1</span><span class="op">$</span><span class="va">mean_explanatory</span><span class="op">)</span>
+<span class="co">#&gt;            1            2            3            4            5            6 </span>
+<span class="co">#&gt; 9.183691e-09 3.334748e-06 1.352123e-06 4.736427e-07 5.714998e-09 1.752997e-06</span></code></pre></div>
+<p>To consider more than one covariate, simply enter the covariates as a vector. For instance, to consider the “mean_explanatory” and “simultaneous_explanatory” perturbation schemes with respect to the “x1” and “x2” covariates, we simply set the <code>mean.covariates</code> argument to <code><a href="https://rdrr.io/r/base/c.html">c("x1", "x2")</a></code>:</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">loc_inf_x1_x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/local_influence.html">local_influence</a></span><span class="op">(</span><span class="va">fit_example</span>, mean.covariates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"x1"</span>, <span class="st">"x2"</span><span class="op">)</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">loc_inf_x1_x2</span><span class="op">$</span><span class="va">mean_explanatory</span><span class="op">)</span>
+<span class="co">#&gt;            1            2            3            4            5            6 </span>
+<span class="co">#&gt; 9.183691e-09 3.334748e-06 1.352123e-06 4.736427e-07 5.714998e-09 1.752997e-06</span></code></pre></div>
+<p>The covariates used in the “mean_explanatory” and “simultaneous_explanatory” perturbation schemes are returned as <code>covariates</code> attributes in the “mean_explanatory” and “simultaneous_explanatory” perturbation schemes:</p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">loc_inf_x1</span><span class="op">$</span><span class="va">mean_explanatory</span>, <span class="st">"covariates"</span><span class="op">)</span>
+<span class="co">#&gt; [1] "x1"</span>
+<span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">loc_inf_x1</span><span class="op">$</span><span class="va">simultaneous_explanatory</span>, <span class="st">"covariates"</span><span class="op">)</span>
+<span class="co">#&gt; $mean</span>
+<span class="co">#&gt; [1] "x1"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $precision</span>
+<span class="co">#&gt; [1] "all"</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">loc_inf_x1_x2</span><span class="op">$</span><span class="va">mean_explanatory</span>, <span class="st">"covariates"</span><span class="op">)</span>
+<span class="co">#&gt; [1] "x1" "x2"</span>
+<span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">loc_inf_x1_x2</span><span class="op">$</span><span class="va">simultaneous_explanatory</span>, <span class="st">"covariates"</span><span class="op">)</span>
+<span class="co">#&gt; $mean</span>
+<span class="co">#&gt; [1] "x1" "x2"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $precision</span>
+<span class="co">#&gt; [1] "all"</span></code></pre></div>
+<p>Analogously, to consider the “precision_explanatory” and “simultaneous_explanatory” perturbation schemes with respect to the “x1” covariate, we simply set the <code>precision.covariates</code> argument to “x1”:</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">loc_inf_prec_x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/local_influence.html">local_influence</a></span><span class="op">(</span><span class="va">fit_example</span>, precision.covariates <span class="op">=</span> <span class="st">"x1"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">loc_inf_prec_x1</span><span class="op">$</span><span class="va">precision_explanatory</span><span class="op">)</span>
+<span class="co">#&gt;            1            2            3            4            5            6 </span>
+<span class="co">#&gt; 0.0112811713 0.0008059272 0.0015554050 0.0073938677 0.0054376517 0.0015445382</span></code></pre></div>
+<p>In the same manner as in the “mean_explanatory” perturbation scheme, to consider more than one covariate, simply enter the covariates as a vector. For instance, to consider the “precision_explanatory” and “simultaneous_explanatory” perturbation schemes with respect to the “x1” and “x2” covariates, we simply set the <code>precision.covariates</code> argument to <code><a href="https://rdrr.io/r/base/c.html">c("x1", "x2")</a></code>:</p>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">loc_inf_prec_x1_x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/local_influence.html">local_influence</a></span><span class="op">(</span><span class="va">fit_example</span>, precision.covariates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"x1"</span>, <span class="st">"x2"</span><span class="op">)</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">loc_inf_prec_x1_x2</span><span class="op">$</span><span class="va">precision_explanatory</span><span class="op">)</span>
+<span class="co">#&gt;            1            2            3            4            5            6 </span>
+<span class="co">#&gt; 0.0112811713 0.0008059272 0.0015554050 0.0073938677 0.0054376517 0.0015445382</span></code></pre></div>
+<p>The covariates used in the “precision_explanatory” and “simultaneous_explanatory” perturbation schemes are returned as <code>covariates</code> attributes in the “precision_explanatory” and “simultaneous_explanatory” perturbation schemes:</p>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">loc_inf_prec_x1</span><span class="op">$</span><span class="va">precision_explanatory</span>, <span class="st">"covariates"</span><span class="op">)</span>
+<span class="co">#&gt; [1] "x1"</span>
+<span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">loc_inf_prec_x1</span><span class="op">$</span><span class="va">simultaneous_explanatory</span>, <span class="st">"covariates"</span><span class="op">)</span>
+<span class="co">#&gt; $mean</span>
+<span class="co">#&gt; [1] "all"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $precision</span>
+<span class="co">#&gt; [1] "x1"</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">loc_inf_prec_x1_x2</span><span class="op">$</span><span class="va">precision_explanatory</span>, <span class="st">"covariates"</span><span class="op">)</span>
+<span class="co">#&gt; [1] "x1" "x2"</span>
+<span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">loc_inf_prec_x1_x2</span><span class="op">$</span><span class="va">simultaneous_explanatory</span>, <span class="st">"covariates"</span><span class="op">)</span>
+<span class="co">#&gt; $mean</span>
+<span class="co">#&gt; [1] "all"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $precision</span>
+<span class="co">#&gt; [1] "x1" "x2"</span></code></pre></div>
 </div>
 <div id="local-influence-plots" class="section level2">
 <h2 class="hasAnchor">
 <a href="#local-influence-plots" class="anchor"></a>Local influence plots</h2>
+<p>It is possible to plot the perturbation schemes for all the possible combinations of arguments of the <code>local_influence</code> method by using the <code>local_influence_plot</code> and <code>local_influence_autoplot</code> methods. The <code>local_influence_plot</code> and <code>local_influence_autoplot</code> methods provide the same plots, the difference between them being that the former uses R’s base graphics whereas the latter uses the <code>ggplot2</code> package.</p>
+<p>If the <code>direction</code> argument is set to “canonical” (the default), then the <code>n.influential</code> points above the <em>benchmarks</em> are automatically identified, where the default value for <code>n.influential</code> is 5. Recall that we use the benchmarks suggested by <a href="https://doi.org/10.1111/1467-9868.00279">Zhu and Lee (2001)</a> for conformal normal curvatures and the benchmarks suggested by <a href="https://www.springer.com/gp/book/9781441902993">Verbeke and Molenberghs (2000, sect. 11.3)</a> for normal curvatures. For <code>direction = "max.eigen"</code>, no benchmark is provided. In this case, the <code>local_influence_plot</code> and <code>local_influence_autoplot</code> methods automatically identify the <code>n.influential</code> most extremes points.</p>
+<p>Let us build these plots. First, the standard arguments provide the plots of conformal normal curvature in the canonical directions for the “case_weights”, “hidden_variable”, “mean_explanatory” and “precision_explanatory” perturbation schemes with “case_weights” and “hidden_variable” being computed for all parameters, and the explanatory perturbations being computed for all covariates:</p>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonreg.html">mixpoissonreg</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span> <span class="op">|</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span>, 
+                        data <span class="op">=</span> <span class="va">Attendance</span><span class="op">)</span>
+
+<span class="co"># Notice that since gender and prog are factors,</span>
+<span class="co"># they are not considered in the computation of the </span>
+<span class="co"># explanatory variables perturbation schemes</span>
+
+<span class="fu"><a href="../reference/local_influence.html">local_influence_plot</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></code></pre></div>
+<p><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-35-1.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-35-2.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-35-3.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-35-4.png" width="700"></p>
+<p>and</p>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/tidy_local_influence.html">local_influence_autoplot</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></code></pre></div>
+<p><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-36-1.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-36-2.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-36-3.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-36-4.png" width="700"></p>
+<p>To change to normal curvature simply set the <code>curvature</code> argument to “normal”:</p>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/local_influence.html">local_influence_plot</a></span><span class="op">(</span><span class="va">fit</span>, curvature <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span></code></pre></div>
+<p><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-37-1.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-37-2.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-37-3.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-37-4.png" width="700"></p>
+<p>and</p>
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/tidy_local_influence.html">local_influence_autoplot</a></span><span class="op">(</span><span class="va">fit</span>, curvature <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span></code></pre></div>
+<p><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-38-1.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-38-2.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-38-3.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-38-4.png" width="700"></p>
+<p>We can change the direction to the direction of largest curvature by setting the <code>direction</code> to “max.eigen”:</p>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/local_influence.html">local_influence_plot</a></span><span class="op">(</span><span class="va">fit</span>, direction <span class="op">=</span> <span class="st">"max.eigen"</span><span class="op">)</span></code></pre></div>
+<p><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-39-1.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-39-2.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-39-3.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-39-4.png" width="700"></p>
+<p>and</p>
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/tidy_local_influence.html">local_influence_autoplot</a></span><span class="op">(</span><span class="va">fit</span>, direction <span class="op">=</span> <span class="st">"max.eigen"</span><span class="op">)</span></code></pre></div>
+<p><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-40-1.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-40-2.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-40-3.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-40-4.png" width="700"></p>
+<p>In this case the <code>n.influential</code> most extreme points are identified. We can change this number by changing the <code>n.influential</code> argument. We can also set the curvature to “normal”.</p>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/local_influence.html">local_influence_plot</a></span><span class="op">(</span><span class="va">fit</span>, direction <span class="op">=</span> <span class="st">"max.eigen"</span>, curvature <span class="op">=</span> <span class="st">"normal"</span>,
+                     n.influential <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
+<p><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-41-1.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-41-2.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-41-3.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-41-4.png" width="700"></p>
+<p>and</p>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/tidy_local_influence.html">local_influence_autoplot</a></span><span class="op">(</span><span class="va">fit</span>, direction <span class="op">=</span> <span class="st">"max.eigen"</span>, curvature <span class="op">=</span> <span class="st">"normal"</span>,
+                     n.influential <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
+<p><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-42-1.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-42-2.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-42-3.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-42-4.png" width="700"></p>
+<p>We can change the perturbations schemes to be displayed by providing a list or vector containing the numbers relative to the wanted perturbations. The number 1 is the <em>case weights</em> perturbation, number 2 is the <em>hidden variable</em> perturbation, number 3 is <em>mean explanatory</em> perturbation, number 4 is <em>precision explanatory</em> perturbation and number 5 is <em>simultaneous explanatory</em> perturbation.</p>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/local_influence.html">local_influence_plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-43-1.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-43-2.png" width="700"></p>
+<p>and</p>
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/tidy_local_influence.html">local_influence_autoplot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-44-1.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-44-2.png" width="700"></p>
+<p>We can draw the benchmark line (when <code>direction</code> is “canonical”) by setting the <code>draw.benchmark</code> argument to <code>TRUE</code>:</p>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/local_influence.html">local_influence_plot</a></span><span class="op">(</span><span class="va">fit</span>, draw.benchmark <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<p><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-45-1.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-45-2.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-45-3.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-45-4.png" width="700"></p>
+<p>and</p>
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/tidy_local_influence.html">local_influence_autoplot</a></span><span class="op">(</span><span class="va">fit</span>, draw.benchmark <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<p><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-46-1.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-46-2.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-46-3.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-46-4.png" width="700"></p>
+<p>Finally, we can change the covariates by setting the <code>mean.covariates</code> and <code>precision.covariates</code> argument. Consider the <code>fit_example</code> we fit above:</p>
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<code class="sourceCode R">    <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span>
+    
+    <span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html">rexp</a></span><span class="op">(</span><span class="fl">200</span>, rate <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+    <span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">200</span><span class="op">)</span>
+    <span class="va">x3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="fl">2</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fl">200</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>
+    <span class="va">x4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="fl">10</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fl">200</span><span class="op">)</span><span class="op">)</span>
+    
+    <span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/NegBinomial.html">rnbinom</a></span><span class="op">(</span><span class="fl">200</span>, mu <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">x1</span><span class="op">-</span><span class="va">x2</span><span class="op">-</span><span class="op">(</span><span class="va">x3</span><span class="op">==</span><span class="fl">2</span><span class="op">)</span><span class="op">+</span><span class="fl">0.1</span><span class="op">*</span><span class="va">x4</span><span class="op">)</span>, 
+                       size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fl">1</span><span class="op">+</span><span class="fl">2</span><span class="op">*</span><span class="va">x1</span><span class="op">+</span><span class="va">x2</span><span class="op">)</span><span class="op">)</span>
+    
+    <span class="va">fit_example</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonreg.html">mixpoissonreg</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span> <span class="op">+</span> <span class="va">x3</span> <span class="op">+</span> <span class="va">x4</span> <span class="op">|</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span><span class="op">)</span></code></pre></div>
+<p>We will consider the “mean explanatory”, “precision explanatory” and “simultaneous explanatory” perturbations with respect to the <code>x1</code> covariate:</p>
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/local_influence.html">local_influence_plot</a></span><span class="op">(</span><span class="va">fit_example</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span><span class="op">)</span>, 
+                     mean.covariates <span class="op">=</span> <span class="st">"x1"</span>, precision.covariates <span class="op">=</span> <span class="st">"x1"</span><span class="op">)</span></code></pre></div>
+<p><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-48-1.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-48-2.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-48-3.png" width="700"></p>
+<p>and</p>
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/tidy_local_influence.html">local_influence_autoplot</a></span><span class="op">(</span><span class="va">fit_example</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span><span class="op">)</span>, 
+                         mean.covariates <span class="op">=</span> <span class="st">"x1"</span>, precision.covariates <span class="op">=</span> <span class="st">"x1"</span><span class="op">)</span></code></pre></div>
+<p><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-49-1.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-49-2.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-49-3.png" width="700"></p>
 </div>
 </div>
 <div id="references" class="section level1">
 <h1 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h1>
 <ul>
-<li>Cook, R. D. and Weisberg, S. (1982) <em>Residuals and Influence in Regression.</em> New York and London: Chapman and Hall.</li>
+<li><p>Barreto-Souza, W. and Simas, A.B. (2016) <em>General mixed Poisson regression models with varying dispersion.</em> Statistics and Computing volume 26, pp.1263-1280.</p></li>
+<li><p>Cook, R. D. (1986) <em>Assessment of Local Influence.</em> Journal of the Royal Statistical Society. Series B (Methodological), Vol. 48, pp.133-169.</p></li>
+<li><p>Cook, R. D. and Weisberg, S. (1982) <em>Residuals and Influence in Regression.</em> New York and London: Chapman and Hall.</p></li>
+<li><p>Poon, W.-Y. and Poon, Y.S. (1999) <em>Conformal normal curvature and assessment of local influence.</em> Journal of the Royal Statistical Society. Series B (Methodological), Vol. 61, pp.51-61.</p></li>
+<li><p>Pregibon, D. (1981) <em>Logistic Regression Diagnostics</em>. Ann. Stat. 9, 705-724.</p></li>
+<li><p>Verbeke, G. and Molenberghs, G. (2000) <em>Linear Mixed Models for Longitudinal Data</em>. Springer-Verlag New York</p></li>
+<li><p>Zhu, H.-T. and Lee, S.-Y. (2001) <em>Local influence for incomplete data models.</em> Journal of the Royal Statistical Society. Series B (Methodological), Vol. 63, pp.111-126.</p></li>
+<li><p>Zhu, H.T., Lee, S.Y., Wei, B.C., Zhu, J. (2001) <em>Case-deletion measures formodels with incomplete data.</em> Biometrika, 88, 727–737.</p></li>
 </ul>
 </div>
   </div>

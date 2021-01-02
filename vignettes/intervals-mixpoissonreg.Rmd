@@ -190,8 +190,6 @@ augment(fit_math, pred_int = TRUE, level = 0.99,
 Let us now use the `augment` method to produce a plot of the data, the fitted curve and the prediction intervals with the default significance level:
 
 ```{r message=FALSE, warning=FALSE}
-library(ggplot2)
-
 fit_data <- augment(fit_math) %>%
   dplyr::select(math, daysabs) %>% 
   dplyr::rename("Math Score" = math, "Days Abscent" = daysabs)

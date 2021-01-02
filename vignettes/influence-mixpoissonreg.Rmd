@@ -550,6 +550,18 @@ and
 local_influence_autoplot(fit, which = c(1,2))
 ```
 
+We can draw the benchmark line (when `direction` is "canonical") by setting the `draw.benchmark` argument to `TRUE`:
+
+```{r}
+local_influence_plot(fit, draw.benchmark = TRUE)
+```
+
+and
+
+```{r}
+local_influence_autoplot(fit, draw.benchmark = TRUE)
+```
+
 
 Finally, we can change the covariates by setting the `mean.covariates` and `precision.covariates` argument. Consider the `fit_example` we fit above:
 
