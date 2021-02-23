@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -83,7 +83,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/vpnsctl/mixpoissonreg/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -97,13 +97,13 @@
 
       
 
-      </header><div class="row">
+      </header><script src="tidyverse-mixpoissonreg_files/header-attrs-2.7/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>mixpoissonreg in the tidyverse</h1>
                         <h4 class="author">Alexandre B. Simas</h4>
             
-            <h4 class="date">2021-01-02</h4>
+            <h4 class="date">2021-02-23</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/vpnsctl/mixpoissonreg/blob/master/vignettes/tidyverse-mixpoissonreg.Rmd"><code>vignettes/tidyverse-mixpoissonreg.Rmd</code></a></small>
       <div class="hidden name"><code>tidyverse-mixpoissonreg.Rmd</code></div>
@@ -130,72 +130,72 @@
 
 <span class="fu"><a href="../reference/augment.mixpoissonreg.html">augment</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 314 x 12</span>
-<span class="co">#&gt;    daysabs gender  math prog  .fitted .fittedlwrconf .fitteduprconf  .resid</span>
-<span class="co">#&gt;      &lt;dbl&gt; &lt;fct&gt;  &lt;dbl&gt; &lt;fct&gt;   &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;   &lt;dbl&gt;</span>
-<span class="co">#&gt;  1       4 male      63 Acad…    5.00           3.91           6.41 -0.158 </span>
-<span class="co">#&gt;  2       4 male      27 Acad…    6.62           5.23           8.37 -0.316 </span>
-<span class="co">#&gt;  3       2 female    20 Acad…    9.27           7.23          11.9  -0.634 </span>
-<span class="co">#&gt;  4       3 female    16 Acad…    9.56           7.39          12.4  -0.555 </span>
-<span class="co">#&gt;  5       3 female     2 Acad…   10.7            7.94          14.3  -0.584 </span>
-<span class="co">#&gt;  6      13 female    71 Acad…    6.24           4.80           8.10  0.862 </span>
-<span class="co">#&gt;  7      11 female    63 Acad…    6.64           5.20           8.47  0.524 </span>
-<span class="co">#&gt;  8       7 male       3 Acad…    7.98           5.98          10.6  -0.0985</span>
-<span class="co">#&gt;  9      10 male      51 Acad…    5.49           4.37           6.91  0.648 </span>
-<span class="co">#&gt; 10       9 male      49 Voca…    2.52           1.81           3.52  1.57  </span>
+<span class="co">#&gt;    daysabs gender  math prog       .fitted .fittedlwrconf .fitteduprconf  .resid</span>
+<span class="co">#&gt;      &lt;dbl&gt; &lt;fct&gt;  &lt;dbl&gt; &lt;fct&gt;        &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;   &lt;dbl&gt;</span>
+<span class="co">#&gt;  1       4 male      63 Academic      5.00           3.91           6.41 -0.158 </span>
+<span class="co">#&gt;  2       4 male      27 Academic      6.62           5.23           8.37 -0.316 </span>
+<span class="co">#&gt;  3       2 female    20 Academic      9.27           7.23          11.9  -0.634 </span>
+<span class="co">#&gt;  4       3 female    16 Academic      9.56           7.39          12.4  -0.555 </span>
+<span class="co">#&gt;  5       3 female     2 Academic     10.7            7.94          14.3  -0.584 </span>
+<span class="co">#&gt;  6      13 female    71 Academic      6.24           4.80           8.10  0.862 </span>
+<span class="co">#&gt;  7      11 female    63 Academic      6.64           5.20           8.47  0.524 </span>
+<span class="co">#&gt;  8       7 male       3 Academic      7.98           5.98          10.6  -0.0985</span>
+<span class="co">#&gt;  9      10 male      51 Academic      5.49           4.37           6.91  0.648 </span>
+<span class="co">#&gt; 10       9 male      49 Vocational    2.52           1.81           3.52  1.57  </span>
 <span class="co">#&gt; # … with 304 more rows, and 4 more variables: .resfit &lt;dbl&gt;, .hat &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   .cooksd &lt;dbl&gt;, .gencooksd &lt;dbl&gt;</span></code></pre></div>
 <p>One can also set the type of fitted values by changing the <code>type.predict</code> argument, where the options are “response” (the default), “link”, “precision”, “variance”.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/augment.mixpoissonreg.html">augment</a></span><span class="op">(</span><span class="va">fit</span>, type.predict <span class="op">=</span> <span class="st">"link"</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 314 x 12</span>
-<span class="co">#&gt;    daysabs gender  math prog  .fitted .fittedlwrconf .fitteduprconf  .resid</span>
-<span class="co">#&gt;      &lt;dbl&gt; &lt;fct&gt;  &lt;dbl&gt; &lt;fct&gt;   &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;   &lt;dbl&gt;</span>
-<span class="co">#&gt;  1       4 male      63 Acad…   1.61           1.36            1.86 -0.158 </span>
-<span class="co">#&gt;  2       4 male      27 Acad…   1.89           1.66            2.13 -0.316 </span>
-<span class="co">#&gt;  3       2 female    20 Acad…   2.23           1.98            2.48 -0.634 </span>
-<span class="co">#&gt;  4       3 female    16 Acad…   2.26           2.00            2.52 -0.555 </span>
-<span class="co">#&gt;  5       3 female     2 Acad…   2.37           2.07            2.66 -0.584 </span>
-<span class="co">#&gt;  6      13 female    71 Acad…   1.83           1.57            2.09  0.862 </span>
-<span class="co">#&gt;  7      11 female    63 Acad…   1.89           1.65            2.14  0.524 </span>
-<span class="co">#&gt;  8       7 male       3 Acad…   2.08           1.79            2.36 -0.0985</span>
-<span class="co">#&gt;  9      10 male      51 Acad…   1.70           1.47            1.93  0.648 </span>
-<span class="co">#&gt; 10       9 male      49 Voca…   0.926          0.594           1.26  1.57  </span>
+<span class="co">#&gt;    daysabs gender  math prog       .fitted .fittedlwrconf .fitteduprconf  .resid</span>
+<span class="co">#&gt;      &lt;dbl&gt; &lt;fct&gt;  &lt;dbl&gt; &lt;fct&gt;        &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;   &lt;dbl&gt;</span>
+<span class="co">#&gt;  1       4 male      63 Academic     1.61           1.36            1.86 -0.158 </span>
+<span class="co">#&gt;  2       4 male      27 Academic     1.89           1.66            2.13 -0.316 </span>
+<span class="co">#&gt;  3       2 female    20 Academic     2.23           1.98            2.48 -0.634 </span>
+<span class="co">#&gt;  4       3 female    16 Academic     2.26           2.00            2.52 -0.555 </span>
+<span class="co">#&gt;  5       3 female     2 Academic     2.37           2.07            2.66 -0.584 </span>
+<span class="co">#&gt;  6      13 female    71 Academic     1.83           1.57            2.09  0.862 </span>
+<span class="co">#&gt;  7      11 female    63 Academic     1.89           1.65            2.14  0.524 </span>
+<span class="co">#&gt;  8       7 male       3 Academic     2.08           1.79            2.36 -0.0985</span>
+<span class="co">#&gt;  9      10 male      51 Academic     1.70           1.47            1.93  0.648 </span>
+<span class="co">#&gt; 10       9 male      49 Vocational   0.926          0.594           1.26  1.57  </span>
 <span class="co">#&gt; # … with 304 more rows, and 4 more variables: .resfit &lt;dbl&gt;, .hat &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   .cooksd &lt;dbl&gt;, .gencooksd &lt;dbl&gt;</span></code></pre></div>
 <p>If <code>type.predict</code> is “link”, one can set <code>se_fit</code> to <code>TRUE</code> to obtain standard errors for the mean parameters in the linear predictor scale.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/augment.mixpoissonreg.html">augment</a></span><span class="op">(</span><span class="va">fit</span>, type.predict <span class="op">=</span> <span class="st">"link"</span>, se_fit <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 314 x 13</span>
-<span class="co">#&gt;    daysabs gender  math prog  .fitted .se.fit .fittedlwrconf .fitteduprconf</span>
-<span class="co">#&gt;      &lt;dbl&gt; &lt;fct&gt;  &lt;dbl&gt; &lt;fct&gt;   &lt;dbl&gt;   &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;</span>
-<span class="co">#&gt;  1       4 male      63 Acad…   1.61    0.126          1.36            1.86</span>
-<span class="co">#&gt;  2       4 male      27 Acad…   1.89    0.120          1.66            2.13</span>
-<span class="co">#&gt;  3       2 female    20 Acad…   2.23    0.127          1.98            2.48</span>
-<span class="co">#&gt;  4       3 female    16 Acad…   2.26    0.131          2.00            2.52</span>
-<span class="co">#&gt;  5       3 female     2 Acad…   2.37    0.151          2.07            2.66</span>
-<span class="co">#&gt;  6      13 female    71 Acad…   1.83    0.133          1.57            2.09</span>
-<span class="co">#&gt;  7      11 female    63 Acad…   1.89    0.125          1.65            2.14</span>
-<span class="co">#&gt;  8       7 male       3 Acad…   2.08    0.147          1.79            2.36</span>
-<span class="co">#&gt;  9      10 male      51 Acad…   1.70    0.117          1.47            1.93</span>
-<span class="co">#&gt; 10       9 male      49 Voca…   0.926   0.169          0.594           1.26</span>
+<span class="co">#&gt;    daysabs gender  math prog       .fitted .se.fit .fittedlwrconf .fitteduprconf</span>
+<span class="co">#&gt;      &lt;dbl&gt; &lt;fct&gt;  &lt;dbl&gt; &lt;fct&gt;        &lt;dbl&gt;   &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;</span>
+<span class="co">#&gt;  1       4 male      63 Academic     1.61    0.126          1.36            1.86</span>
+<span class="co">#&gt;  2       4 male      27 Academic     1.89    0.120          1.66            2.13</span>
+<span class="co">#&gt;  3       2 female    20 Academic     2.23    0.127          1.98            2.48</span>
+<span class="co">#&gt;  4       3 female    16 Academic     2.26    0.131          2.00            2.52</span>
+<span class="co">#&gt;  5       3 female     2 Academic     2.37    0.151          2.07            2.66</span>
+<span class="co">#&gt;  6      13 female    71 Academic     1.83    0.133          1.57            2.09</span>
+<span class="co">#&gt;  7      11 female    63 Academic     1.89    0.125          1.65            2.14</span>
+<span class="co">#&gt;  8       7 male       3 Academic     2.08    0.147          1.79            2.36</span>
+<span class="co">#&gt;  9      10 male      51 Academic     1.70    0.117          1.47            1.93</span>
+<span class="co">#&gt; 10       9 male      49 Vocational   0.926   0.169          0.594           1.26</span>
 <span class="co">#&gt; # … with 304 more rows, and 5 more variables: .resid &lt;dbl&gt;, .resfit &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   .hat &lt;dbl&gt;, .cooksd &lt;dbl&gt;, .gencooksd &lt;dbl&gt;</span></code></pre></div>
 <p>By default the <code>augment</code> method returns the Pearson’s residuals. To return the score residuals one simply has to set the <code>type.residuals</code> argument to “score”:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/augment.mixpoissonreg.html">augment</a></span><span class="op">(</span><span class="va">fit</span>, type.residuals <span class="op">=</span> <span class="st">"score"</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 314 x 12</span>
-<span class="co">#&gt;    daysabs gender  math prog  .fitted .fittedlwrconf .fitteduprconf   .resid</span>
-<span class="co">#&gt;      &lt;dbl&gt; &lt;fct&gt;  &lt;dbl&gt; &lt;fct&gt;   &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;    &lt;dbl&gt;</span>
-<span class="co">#&gt;  1       4 male      63 Acad…    5.00           3.91           6.41  0.189  </span>
-<span class="co">#&gt;  2       4 male      27 Acad…    6.62           5.23           8.37 -0.00561</span>
-<span class="co">#&gt;  3       2 female    20 Acad…    9.27           7.23          11.9  -0.839  </span>
-<span class="co">#&gt;  4       3 female    16 Acad…    9.56           7.39          12.4  -0.542  </span>
-<span class="co">#&gt;  5       3 female     2 Acad…   10.7            7.94          14.3  -0.642  </span>
-<span class="co">#&gt;  6      13 female    71 Acad…    6.24           4.80           8.10  0.980  </span>
-<span class="co">#&gt;  7      11 female    63 Acad…    6.64           5.20           8.47  0.790  </span>
-<span class="co">#&gt;  8       7 male       3 Acad…    7.98           5.98          10.6   0.312  </span>
-<span class="co">#&gt;  9      10 male      51 Acad…    5.49           4.37           6.91  0.851  </span>
-<span class="co">#&gt; 10       9 male      49 Voca…    2.52           1.81           3.52  1.11   </span>
+<span class="co">#&gt;    daysabs gender  math prog      .fitted .fittedlwrconf .fitteduprconf   .resid</span>
+<span class="co">#&gt;      &lt;dbl&gt; &lt;fct&gt;  &lt;dbl&gt; &lt;fct&gt;       &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;    &lt;dbl&gt;</span>
+<span class="co">#&gt;  1       4 male      63 Academic     5.00           3.91           6.41  0.189  </span>
+<span class="co">#&gt;  2       4 male      27 Academic     6.62           5.23           8.37 -0.00561</span>
+<span class="co">#&gt;  3       2 female    20 Academic     9.27           7.23          11.9  -0.839  </span>
+<span class="co">#&gt;  4       3 female    16 Academic     9.56           7.39          12.4  -0.542  </span>
+<span class="co">#&gt;  5       3 female     2 Academic    10.7            7.94          14.3  -0.642  </span>
+<span class="co">#&gt;  6      13 female    71 Academic     6.24           4.80           8.10  0.980  </span>
+<span class="co">#&gt;  7      11 female    63 Academic     6.64           5.20           8.47  0.790  </span>
+<span class="co">#&gt;  8       7 male       3 Academic     7.98           5.98          10.6   0.312  </span>
+<span class="co">#&gt;  9      10 male      51 Academic     5.49           4.37           6.91  0.851  </span>
+<span class="co">#&gt; 10       9 male      49 Vocation…    2.52           1.81           3.52  1.11   </span>
 <span class="co">#&gt; # … with 304 more rows, and 4 more variables: .resfit &lt;dbl&gt;, .hat &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   .cooksd &lt;dbl&gt;, .gencooksd &lt;dbl&gt;</span></code></pre></div>
 <p>It is possible to obtain predictions for newdata by using the <code>newdata</code> argument. To such an end, the <code>newdata</code> argument must be set to a <code>data.frame</code> object containing the values of the covariates for which the predictions are desired. For example:</p>
@@ -205,7 +205,7 @@
                                   levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"General"</span>, <span class="st">"Academic"</span>, <span class="st">"Vocational"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 2 x 6</span>
 <span class="co">#&gt;   gender  math prog     .fitted .fittedlwrconf .fitteduprconf</span>
-<span class="co">#&gt;   &lt;fct&gt;  &lt;dbl&gt; &lt;fct&gt;      &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;</span>
+<span class="co">#&gt;   &lt;chr&gt;  &lt;dbl&gt; &lt;fct&gt;      &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;</span>
 <span class="co">#&gt; 1 male      34 General     9.57           7.36          12.5 </span>
 <span class="co">#&gt; 2 female    85 Academic    5.59           4.14           7.55</span></code></pre></div>
 <p>Notice that in the above example the confidence intervals for the means were returned by default. However, it is important to obtain prediction intervals, i.e., intervals for which the future observations will fall with the prescribed probability. It is important to notice that since we did not obtain an approximate distribution for the response variable, we obtain the prediction intervals by simulation, which is computationally intensive.</p>
@@ -221,9 +221,9 @@
 <span class="co">#&gt; predictions on current data refer to _future_ responses</span>
 <span class="co">#&gt; # A tibble: 2 x 6</span>
 <span class="co">#&gt;   gender  math prog     .fitted .fittedlwrpred .fitteduprpred</span>
-<span class="co">#&gt;   &lt;fct&gt;  &lt;dbl&gt; &lt;fct&gt;      &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 male      34 General     9.57              0             40</span>
-<span class="co">#&gt; 2 female    85 Academic    5.59              0             47</span></code></pre></div>
+<span class="co">#&gt;   &lt;chr&gt;  &lt;dbl&gt; &lt;fct&gt;      &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 male      34 General     9.57              0             41</span>
+<span class="co">#&gt; 2 female    85 Academic    5.59              0             42</span></code></pre></div>
 <p>With the <code>augment</code> method it is simple to sort the observations by their Cook’s distance or by their generalized Cook’s distance along with their indexes and the model’s matrix in order to facilitate the study of their influence:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
@@ -265,7 +265,7 @@
 <p>Finally, it is easy to use the <code>augment</code> method to build useful plots. For instance, let us consider a new model containing only “math” as covariate and let us create confidence intervals for the means and prediction intervals for the response variables.</p>
 <p>First, the plot with confidence intervals for the means:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 
 <span class="va">fit_math</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonreg.html">mixpoissonreg</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">math</span>, 
                         data <span class="op">=</span> <span class="va">Attendance</span><span class="op">)</span>
@@ -387,36 +387,36 @@
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/tidy_local_influence.html">tidy_local_influence</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 314 x 5</span>
-<span class="co">#&gt;    case_weights hidden_variable mean_explanatory precision_expla…</span>
-<span class="co">#&gt;           &lt;dbl&gt;           &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;</span>
-<span class="co">#&gt;  1     0.000948        0.000493         0.000358        0.00255  </span>
-<span class="co">#&gt;  2     0.000526        0.000433         0.000580        0.00191  </span>
-<span class="co">#&gt;  3     0.00155         0.000516         0.000518        0.0000402</span>
-<span class="co">#&gt;  4     0.000380        0.000527         0.000737        0.000191 </span>
-<span class="co">#&gt;  5     0.000841        0.000732         0.000867        0.0000561</span>
-<span class="co">#&gt;  6     0.00200         0.00472          0.00447         0.00233  </span>
-<span class="co">#&gt;  7     0.00186         0.00279          0.00347         0.00302  </span>
-<span class="co">#&gt;  8     0.00143         0.00167          0.00186         0.00315  </span>
-<span class="co">#&gt;  9     0.00179         0.00221          0.00220         0.00277  </span>
-<span class="co">#&gt; 10     0.00335         0.00396          0.000388        0.00298  </span>
+<span class="co">#&gt;    case_weights hidden_variable mean_explanatory precision_explanatory</span>
+<span class="co">#&gt;           &lt;dbl&gt;           &lt;dbl&gt;            &lt;dbl&gt;                 &lt;dbl&gt;</span>
+<span class="co">#&gt;  1     0.000948        0.000493         0.000358             0.00255  </span>
+<span class="co">#&gt;  2     0.000526        0.000433         0.000580             0.00191  </span>
+<span class="co">#&gt;  3     0.00155         0.000516         0.000518             0.0000402</span>
+<span class="co">#&gt;  4     0.000380        0.000527         0.000737             0.000191 </span>
+<span class="co">#&gt;  5     0.000841        0.000732         0.000867             0.0000561</span>
+<span class="co">#&gt;  6     0.00200         0.00472          0.00447              0.00233  </span>
+<span class="co">#&gt;  7     0.00186         0.00279          0.00347              0.00302  </span>
+<span class="co">#&gt;  8     0.00143         0.00167          0.00186              0.00315  </span>
+<span class="co">#&gt;  9     0.00179         0.00221          0.00220              0.00277  </span>
+<span class="co">#&gt; 10     0.00335         0.00396          0.000388             0.00298  </span>
 <span class="co">#&gt; # … with 304 more rows, and 1 more variable: simultaneous_explanatory &lt;dbl&gt;</span></code></pre></div>
 <p>One can, for instance, change the curvature and the direction:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/tidy_local_influence.html">tidy_local_influence</a></span><span class="op">(</span><span class="va">fit</span>, curvature <span class="op">=</span> <span class="st">"normal"</span>,
                      direction <span class="op">=</span> <span class="st">"max.eigen"</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 314 x 5</span>
-<span class="co">#&gt;    case_weights hidden_variable mean_explanatory precision_expla…</span>
-<span class="co">#&gt;           &lt;dbl&gt;           &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;</span>
-<span class="co">#&gt;  1     -0.0541          0.00496          -0.0189         -0.0505 </span>
-<span class="co">#&gt;  2     -0.0379         -0.00703          -0.0241         -0.0437 </span>
-<span class="co">#&gt;  3      0.0587         -0.0174           -0.0228          0.00634</span>
-<span class="co">#&gt;  4      0.0199         -0.0234           -0.0272         -0.0138 </span>
-<span class="co">#&gt;  5      0.0308         -0.0283           -0.0294         -0.00749</span>
-<span class="co">#&gt;  6     -0.0641         -0.0255           -0.0668         -0.0482 </span>
-<span class="co">#&gt;  7     -0.0713         -0.0286           -0.0589         -0.0549 </span>
-<span class="co">#&gt;  8     -0.0641         -0.0260           -0.0432         -0.0561 </span>
-<span class="co">#&gt;  9     -0.0719          0.00166          -0.0469         -0.0527 </span>
-<span class="co">#&gt; 10     -0.00232         0.0122           -0.0197         -0.0546 </span>
+<span class="co">#&gt;    case_weights hidden_variable mean_explanatory precision_explanatory</span>
+<span class="co">#&gt;           &lt;dbl&gt;           &lt;dbl&gt;            &lt;dbl&gt;                 &lt;dbl&gt;</span>
+<span class="co">#&gt;  1     -0.0541          0.00496          -0.0189              -0.0505 </span>
+<span class="co">#&gt;  2     -0.0379         -0.00703          -0.0241              -0.0437 </span>
+<span class="co">#&gt;  3      0.0587         -0.0174           -0.0228               0.00634</span>
+<span class="co">#&gt;  4      0.0199         -0.0234           -0.0272              -0.0138 </span>
+<span class="co">#&gt;  5      0.0308         -0.0283           -0.0294              -0.00749</span>
+<span class="co">#&gt;  6     -0.0641         -0.0255           -0.0668              -0.0482 </span>
+<span class="co">#&gt;  7     -0.0713         -0.0286           -0.0589              -0.0549 </span>
+<span class="co">#&gt;  8     -0.0641         -0.0260           -0.0432              -0.0561 </span>
+<span class="co">#&gt;  9     -0.0719          0.00166          -0.0469              -0.0527 </span>
+<span class="co">#&gt; 10     -0.00232         0.0122           -0.0197              -0.0546 </span>
 <span class="co">#&gt; # … with 304 more rows, and 1 more variable: simultaneous_explanatory &lt;dbl&gt;</span></code></pre></div>
 <p>Useful plots of the local influence measures can be obtained by using the <code>local_influence_autoplot</code> method.</p>
 <p>The <code>local_influence_benchmarks</code> method for <code>mixpoissonreg</code> objects returns the benchmarks for the different perturbation schemes. We use the benchmarks suggested by <a href="https://doi.org/10.1111/1467-9868.00279">Zhu and Lee (2001)</a> for conformal normal curvatures and the benchmarks suggested by <a href="https://www.springer.com/gp/book/9781441902993">Verbeke and Molenberghs (2000, sect. 11.3)</a> for normal curvatures. For <code>direction = "max.eigen"</code>, no benchmark is provided.</p>
@@ -424,9 +424,9 @@
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/tidy_local_influence.html">local_influence_benchmarks</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 1 x 5</span>
-<span class="co">#&gt;   case_weights hidden_variable mean_explanatory precision_expla…</span>
-<span class="co">#&gt;          &lt;dbl&gt;           &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;</span>
-<span class="co">#&gt; 1       0.0114          0.0162           0.0196           0.0149</span>
+<span class="co">#&gt;   case_weights hidden_variable mean_explanatory precision_explanatory</span>
+<span class="co">#&gt;          &lt;dbl&gt;           &lt;dbl&gt;            &lt;dbl&gt;                 &lt;dbl&gt;</span>
+<span class="co">#&gt; 1       0.0114          0.0162           0.0196                0.0149</span>
 <span class="co">#&gt; # … with 1 more variable: simultaneous_explanatory &lt;dbl&gt;</span></code></pre></div>
 <p>One possible application is the following: select the observations whose curvature are above the benchmarks, then <code>left_join</code> this <code>tibble</code> with a subset of the <code>tibble</code> returned by the <code>augment</code> method containing the model’s matrix. This facilitates the study of the influential observations.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
