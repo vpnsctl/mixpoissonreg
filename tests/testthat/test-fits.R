@@ -5,19 +5,19 @@ fit1 <- mixpoissonreg(daysabs ~ prog + math, data = Attendance,
 fit2 <- mixpoissonreg(daysabs ~ prog + math | math, data = Attendance,
                       em_controls = list(maxit = 5))
 
-fit1env <- expect_warning(mixpoissonreg(daysabs ~ prog + math, data = Attendance, envelope = 10,
+fit1env <- suppressWarnings(mixpoissonreg(daysabs ~ prog + math, data = Attendance, envelope = 10,
                          em_controls = list(maxit = 5)))
-fit2env <- expect_warning(mixpoissonreg(daysabs ~ prog + math, data = Attendance, envelope = 10,
-                         em_controls = list(maxit = 5)))
-
-fit1pig <- expect_warning(mixpoissonreg(daysabs ~ prog + math, data = Attendance, model = "PIG",
-                         em_controls = list(maxit = 5)))
-fit2pig <- expect_warning(mixpoissonreg(daysabs ~ prog + math | math, data = Attendance, model = "PIG",
+fit2env <- suppressWarnings(mixpoissonreg(daysabs ~ prog + math, data = Attendance, envelope = 10,
                          em_controls = list(maxit = 5)))
 
-fit1pigenv <- expect_warning(mixpoissonreg(daysabs ~ prog + math, data = Attendance, model = "PIG", envelope = 10,
+fit1pig <- suppressWarnings(mixpoissonreg(daysabs ~ prog + math, data = Attendance, model = "PIG",
+                         em_controls = list(maxit = 5)))
+fit2pig <- suppressWarnings(mixpoissonreg(daysabs ~ prog + math | math, data = Attendance, model = "PIG",
+                         em_controls = list(maxit = 5)))
+
+fit1pigenv <- suppressWarnings(mixpoissonreg(daysabs ~ prog + math, data = Attendance, model = "PIG", envelope = 10,
                             em_controls = list(maxit = 5)))
-fit2pigenv <- expect_warning(mixpoissonreg(daysabs ~ prog + math | math, data = Attendance, model = "PIG", envelope = 10,
+fit2pigenv <- suppressWarnings(mixpoissonreg(daysabs ~ prog + math | math, data = Attendance, model = "PIG", envelope = 10,
                             em_controls = list(maxit = 10)))
 
 fit_ml1 <- mixpoissonregML(daysabs ~ prog + math, data = Attendance)
@@ -27,27 +27,27 @@ fit_ml2 <- mixpoissonregML(daysabs ~ prog + math | math, data = Attendance)
 fit_ml1env <- mixpoissonregML(daysabs ~ prog + math, data = Attendance, envelope = 10)
 fit_ml2env <- mixpoissonregML(daysabs ~ prog + math | math, data = Attendance, envelope = 10)
 
-fit_ml1pig <- expect_warning(mixpoissonregML(daysabs ~ prog + math, data = Attendance, model = "PIG"))
-fit_ml2pig <- expect_warning(mixpoissonregML(daysabs ~ prog + math | math, data = Attendance, model = "PIG"))
+fit_ml1pig <- suppressWarnings(mixpoissonregML(daysabs ~ prog + math, data = Attendance, model = "PIG"))
+fit_ml2pig <- suppressWarnings(mixpoissonregML(daysabs ~ prog + math | math, data = Attendance, model = "PIG"))
 
-fit_ml1pigenv <- expect_warning(mixpoissonregML(daysabs ~ prog + math, data = Attendance, model = "PIG", envelope = 10))
-fit_ml2pigenv <- expect_warning(mixpoissonregML(daysabs ~ prog + math | math, data = Attendance, model = "PIG", envelope = 10))
+fit_ml1pigenv <- suppressWarnings(mixpoissonregML(daysabs ~ prog + math, data = Attendance, model = "PIG", envelope = 10))
+fit_ml2pigenv <- suppressWarnings(mixpoissonregML(daysabs ~ prog + math | math, data = Attendance, model = "PIG", envelope = 10))
 
-fit1sq <- expect_warning(mixpoissonreg(daysabs ~ prog + math, data = Attendance, link.mean = "sqrt",
+fit1sq <- suppressWarnings(mixpoissonreg(daysabs ~ prog + math, data = Attendance, link.mean = "sqrt",
                                        em_controls = list(maxit = 10)))
-fit2sq <- expect_warning(mixpoissonreg(daysabs ~ math | math, data = Attendance, link.precision = "inverse.sqrt",
+fit2sq <- suppressWarnings(mixpoissonreg(daysabs ~ math | math, data = Attendance, link.precision = "inverse.sqrt",
                                        em_controls = list(maxit = 10)))
 
 fit_ml1sq <- mixpoissonregML(daysabs ~ prog + math, data = Attendance, link.mean = "sqrt")
-fit_ml2sq <- expect_warning(mixpoissonregML(daysabs ~ math | math, data = Attendance, link.precision = "inverse.sqrt"))
+fit_ml2sq <- suppressWarnings(mixpoissonregML(daysabs ~ math | math, data = Attendance, link.precision = "inverse.sqrt"))
 
 fit1pigsq <- mixpoissonreg(daysabs ~ prog + math, data = Attendance, model = "PIG", link.mean = "sqrt")
-fit2pigsq <- expect_warning(mixpoissonreg(daysabs ~ math | math, data = Attendance,
+fit2pigsq <- suppressWarnings(mixpoissonreg(daysabs ~ math | math, data = Attendance,
                                           model = "PIG", link.precision = "inverse.sqrt",
                                           em_controls = list(maxit = 5)))
 
 fit_ml1pigsq <- mixpoissonregML(daysabs ~ prog + math, data = Attendance, model = "PIG", link.mean = "sqrt")
-fit_ml2pigsq <- expect_warning(mixpoissonregML(daysabs ~ math | math, data = Attendance, model = "PIG", link.precision = "inverse.sqrt"))
+fit_ml2pigsq <- suppressWarnings(mixpoissonregML(daysabs ~ math | math, data = Attendance, model = "PIG", link.precision = "inverse.sqrt"))
 
 
 print(fit1)
@@ -61,13 +61,13 @@ vcov(fit1, parameters = "precision")
 predict(fit1)
 predict(fit1, interval = "confidence")
 predict(fit1, interval = "confidence", type = "link")
-expect_warning(predict(fit1, interval = "confidence", type = "precision"))
-expect_warning(predict(fit1, interval = "confidence", type = "variance"))
+suppressWarnings(predict(fit1, interval = "confidence", type = "precision"))
+suppressWarnings(predict(fit1, interval = "confidence", type = "variance"))
 
-expect_warning(predict(fit1, interval = "prediction", nsim_pred = 2, nsim_pred_y = 2))
-expect_warning(predict(fit1, interval = "prediction", type = "link", nsim_pred = 2, nsim_pred_y = 2))
-expect_warning(predict(fit1, interval = "prediction", type = "precision", nsim_pred = 2, nsim_pred_y = 2))
-expect_warning(predict(fit1, interval = "prediction", type = "variance", nsim_pred = 2, nsim_pred_y = 2))
+suppressWarnings(predict(fit1, interval = "prediction", nsim_pred = 2, nsim_pred_y = 2))
+suppressWarnings(predict(fit1, interval = "prediction", type = "link", nsim_pred = 2, nsim_pred_y = 2))
+suppressWarnings(predict(fit1, interval = "prediction", type = "precision", nsim_pred = 2, nsim_pred_y = 2))
+suppressWarnings(predict(fit1, interval = "prediction", type = "variance", nsim_pred = 2, nsim_pred_y = 2))
 predict(fit1, type = "link", se.fit = TRUE)
 predict(fit1, type = "precision")
 predict(fit1, type = "variance")
@@ -83,15 +83,15 @@ coeftest.mixpoissonreg(fit1)
 coefci(fit1)
 
 predict(fit1, newdata = data.frame(math = 1, prog = factor(c("Academic", "Vocational"), levels = c("General", "Academic", "Vocational"))))
-expect_warning(predict(fit1, interval = "prediction", nsim_pred = 2, nsim_pred_y = 2, newdata = data.frame(math = 1, prog = factor(c("Academic", "Vocational"), levels = c("General", "Academic", "Vocational")))))
-expect_warning(predict(fit1, interval = "prediction", nsim_pred = 2, nsim_pred_y = 2, type = "link", newdata = data.frame(math = 1, prog = factor(c("Academic", "Vocational"), levels = c("General", "Academic", "Vocational")))))
-expect_warning(predict(fit1, interval = "prediction", nsim_pred = 2, nsim_pred_y = 2, type = "precision", newdata = data.frame(math = 1, prog = factor(c("Academic", "Vocational"), levels = c("General", "Academic", "Vocational")))))
-expect_warning(predict(fit1, interval = "prediction", nsim_pred = 2, nsim_pred_y = 2, type = "variance", newdata = data.frame(math = 1, prog = factor(c("Academic", "Vocational"), levels = c("General", "Academic", "Vocational")))))
+suppressWarnings(predict(fit1, interval = "prediction", nsim_pred = 2, nsim_pred_y = 2, newdata = data.frame(math = 1, prog = factor(c("Academic", "Vocational"), levels = c("General", "Academic", "Vocational")))))
+suppressWarnings(predict(fit1, interval = "prediction", nsim_pred = 2, nsim_pred_y = 2, type = "link", newdata = data.frame(math = 1, prog = factor(c("Academic", "Vocational"), levels = c("General", "Academic", "Vocational")))))
+suppressWarnings(predict(fit1, interval = "prediction", nsim_pred = 2, nsim_pred_y = 2, type = "precision", newdata = data.frame(math = 1, prog = factor(c("Academic", "Vocational"), levels = c("General", "Academic", "Vocational")))))
+suppressWarnings(predict(fit1, interval = "prediction", nsim_pred = 2, nsim_pred_y = 2, type = "variance", newdata = data.frame(math = 1, prog = factor(c("Academic", "Vocational"), levels = c("General", "Academic", "Vocational")))))
 
 predict(fit1, interval = "confidence", newdata = data.frame(math = 1, prog = factor(c("Academic", "Vocational"), levels = c("General", "Academic", "Vocational"))))
 predict(fit1, interval = "confidence", type = "link", newdata = data.frame(math = 1, prog = factor(c("Academic", "Vocational"), levels = c("General", "Academic", "Vocational"))))
-expect_warning(predict(fit1, interval = "confidence", type = "precision", newdata = data.frame(math = 1, prog = factor(c("Academic", "Vocational"), levels = c("General", "Academic", "Vocational")))))
-expect_warning(predict(fit1, interval = "confidence",  type = "variance", newdata = data.frame(math = 1, prog = factor(c("Academic", "Vocational"), levels = c("General", "Academic", "Vocational")))))
+suppressWarnings(predict(fit1, interval = "confidence", type = "precision", newdata = data.frame(math = 1, prog = factor(c("Academic", "Vocational"), levels = c("General", "Academic", "Vocational")))))
+suppressWarnings(predict(fit1, interval = "confidence",  type = "variance", newdata = data.frame(math = 1, prog = factor(c("Academic", "Vocational"), levels = c("General", "Academic", "Vocational")))))
 
 
 predict(fit1, type = "link", se.fit = TRUE, newdata = data.frame(math = 1, prog = factor(c("Academic", "Vocational"), levels = c("General", "Academic", "Vocational"))))
@@ -149,7 +149,7 @@ expect_error(mixpoissonreg(daysabs ~ prog + math, data = Attendance, envelope = 
 
 expect_error(mixpoissonreg(daysabs ~ prog + math, data = Attendance, prob = "bla"))
 
-expect_warning(mixpoissonreg(daysabs ~ math, data = Attendance, prob = 0.9))
+suppressWarnings(mixpoissonreg(daysabs ~ math, data = Attendance, prob = 0.9))
 
 
 expect_error(mixpoissonregML( x ~ -1))
@@ -172,7 +172,7 @@ expect_error(mixpoissonregML(daysabs ~ prog + math, data = Attendance, envelope 
 
 expect_error(mixpoissonregML(daysabs ~ prog + math, data = Attendance, prob = "bla"))
 
-expect_warning(mixpoissonregML(daysabs ~ math, data = Attendance, prob = 0.9))
+suppressWarnings(mixpoissonregML(daysabs ~ math, data = Attendance, prob = 0.9))
 
 x1 <- rexp(30)
 
@@ -180,9 +180,9 @@ x2 <- rnorm(30)
 
 y <- rpois(30, exp(2+2*x1 - 2*x2))
 
-expect_warning(mixpoissonreg(y ~ x1, envelope = 10, model = "PIG", em_controls = list(maxit = 20)))
+suppressWarnings(mixpoissonreg(y ~ x1, envelope = 10, model = "PIG", em_controls = list(maxit = 20)))
 
-expect_warning(mixpoissonreg(y ~ x1, envelope = 10, model = "NB", em_controls = list(maxit = 20)))
+suppressWarnings(mixpoissonreg(y ~ x1, envelope = 10, model = "NB", em_controls = list(maxit = 20)))
 
 set.seed(1216)
 
@@ -190,11 +190,11 @@ x1 <- rexp(30)
 
 x2 <- rnorm(30)
 
-y <- rpois(30, exp(2+2*x1 - 2*x2))
+y <- rpois(30, exp(2))
 
-expect_warning(mixpoissonregML(y ~ x1+x2 | x2 + x1 -1, envelope = 100, model = "NB"))
+expect_error(mixpoissonregML(y ~ x1+x2 | x2 + x1 -1, envelope = 500, model = "NB"))
 
-expect_warning(mixpoissonregML(y ~ x1 + x2 | x1 + x2, envelope = 10, model = "PIG"))
+expect_error(mixpoissonregML(y ~ x1 + x2 | x1 + x2, envelope = 500, model = "PIG"))
 
 
 
@@ -239,7 +239,7 @@ for(i in 1:50){
   c_mean_em <- rbind(c_mean_em, coef(fit_test))
   
   if(i == 7){
-    fit_test <- expect_warning(mixpoissonregML(y ~ x1+x2 | x1 + x2, model = "PIG"))
+    fit_test <- suppressWarnings(mixpoissonregML(y ~ x1+x2 | x1 + x2, model = "PIG"))
   } else{
     fit_test <- mixpoissonregML(y ~ x1+x2 | x1 + x2, model = "PIG")
   }
