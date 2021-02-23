@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -83,7 +83,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/vpnsctl/mixpoissonreg/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -97,13 +97,13 @@
 
       
 
-      </header><div class="row">
+      </header><script src="influence-mixpoissonreg_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Global and local influence analysis with the <em>mixpoissonreg</em> package</h1>
                         <h4 class="author">Alexandre B. Simas</h4>
             
-            <h4 class="date">2021-01-02</h4>
+            <h4 class="date">2021-02-23</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/vpnsctl/mixpoissonreg/blob/master/vignettes/influence-mixpoissonreg.Rmd"><code>vignettes/influence-mixpoissonreg.Rmd</code></a></small>
       <div class="hidden name"><code>influence-mixpoissonreg.Rmd</code></div>
@@ -232,7 +232,7 @@
 <p>The main global influence plots are implemented in the <code>plot</code> and <code>autoplot</code> methods. They are the plots number 3, 4 and 5, which are, respectively, the Cook’s distance plot, the generalized Cook’s distance plot and Cook’s distance vs generalized Cook’s distance. The <code>plot</code> and <code>autoplot</code> methods provide the same plots, the difference between them being that the former uses R’s base graphics whereas the latter uses the <code>ggplot2</code> package.</p>
 <p>Let us build these plots:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-12-1.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-12-2.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-12-3.png" width="700"></p>
 <p>and</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
@@ -240,7 +240,7 @@
 <p><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-13-1.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-13-2.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-13-3.png" width="700"></p>
 <p>These plots identify the most extreme points. By the default they identify 3 points, but the number of identified points can be changed by setting the <code>id.n</code> argument to the desired value for the <code>plot</code> method and by setting the <code>label.n</code> argument to the desired value for the <code>autoplot</code> method:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span><span class="op">)</span>, id.n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span><span class="op">)</span>, id.n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
 <p><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-14-1.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-14-2.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-14-3.png" width="700"></p>
 <p>and</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
@@ -262,7 +262,7 @@
 
 <span class="va">ylim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/extendrange.html">extendrange</a></span><span class="op">(</span>r <span class="op">=</span> <span class="va">ylim</span>, f <span class="op">=</span> <span class="fl">0.15</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">qd_fit</span>, xlab <span class="op">=</span> <span class="st">"Obs. number"</span>, ylab <span class="op">=</span> <span class="st">"Q-displacement"</span>, ylim <span class="op">=</span> <span class="va">ylim</span>, type <span class="op">=</span> <span class="st">"h"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">qd_fit</span>, xlab <span class="op">=</span> <span class="st">"Obs. number"</span>, ylab <span class="op">=</span> <span class="st">"Q-displacement"</span>, ylim <span class="op">=</span> <span class="va">ylim</span>, type <span class="op">=</span> <span class="st">"h"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/text.html">text</a></span><span class="op">(</span><span class="va">extreme_points</span>, <span class="va">idx_y</span>, labels <span class="op">=</span> <span class="va">extreme_points</span>, pos <span class="op">=</span> <span class="fl">3</span>, offset <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></code></pre></div>
 <p><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
 <p>and</p>
@@ -279,14 +279,14 @@
 
 <span class="va">ylim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/extendrange.html">extendrange</a></span><span class="op">(</span>r <span class="op">=</span> <span class="va">ylim</span>, f <span class="op">=</span> <span class="fl">0.15</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">ld_fit</span>, xlab <span class="op">=</span> <span class="st">"Obs. number"</span>, ylab <span class="op">=</span> <span class="st">"Likelihood displacement"</span>, ylim <span class="op">=</span> <span class="va">ylim</span>, type <span class="op">=</span> <span class="st">"h"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">ld_fit</span>, xlab <span class="op">=</span> <span class="st">"Obs. number"</span>, ylab <span class="op">=</span> <span class="st">"Likelihood displacement"</span>, ylim <span class="op">=</span> <span class="va">ylim</span>, type <span class="op">=</span> <span class="st">"h"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/text.html">text</a></span><span class="op">(</span><span class="va">extreme_points</span>, <span class="va">idx_y</span>, labels <span class="op">=</span> <span class="va">extreme_points</span>, pos <span class="op">=</span> <span class="fl">3</span>, offset <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></code></pre></div>
 <p><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
 <p>Now the <code>ggplot2</code> version:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://github.com/slowkow/ggrepel">ggrepel</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/slowkow/ggrepel">ggrepel</a></span><span class="op">)</span>
 
 <span class="va">qd_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">cooks.distance</a></span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="st">"QD"</span><span class="op">)</span>
 
@@ -523,7 +523,7 @@
 <span class="co">#&gt; Coefficients modeling the precision (with  link):</span>
 <span class="co">#&gt;             Estimate Std.error z-value Pr(&gt;|z|)   </span>
 <span class="co">#&gt; (Intercept)   1.0732    0.4655   2.305  0.02114 * </span>
-<span class="co">#&gt; x1            2.6328    1.0927   2.410  0.01597 * </span>
+<span class="co">#&gt; x1            2.6328    1.0926   2.410  0.01597 * </span>
 <span class="co">#&gt; x2            1.0744    0.3353   3.204  0.00136 **</span>
 <span class="co">#&gt; ---</span>
 <span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 </span>

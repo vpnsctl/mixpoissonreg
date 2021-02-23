@@ -1,4 +1,4 @@
-pandoc: '2.5'
+pandoc: 2.7.3
 pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
@@ -9,7 +9,7 @@ articles:
   plots-mixpoissonreg: plots-mixpoissonreg.html
   tidyverse-mixpoissonreg: tidyverse-mixpoissonreg.html
   tutorial-mixpoissonreg: tutorial-mixpoissonreg.html
-last_built: 2021-01-02T21:23Z
+last_built: 2021-02-23T19:14Z
 urls:
   reference: https://vpnsctl.github.io/mixpoissonreg//reference
   article: https://vpnsctl.github.io/mixpoissonreg//articles

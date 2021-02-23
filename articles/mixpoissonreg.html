@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -83,7 +83,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/vpnsctl/mixpoissonreg/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -97,13 +97,13 @@
 
       
 
-      </header><div class="row">
+      </header><script src="mixpoissonreg_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Introduction to mixpoissonreg</h1>
                         <h4 class="author">Alexandre B. Simas</h4>
             
-            <h4 class="date">2021-01-02</h4>
+            <h4 class="date">2021-02-23</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/vpnsctl/mixpoissonreg/blob/master/vignettes/mixpoissonreg.Rmd"><code>vignettes/mixpoissonreg.Rmd</code></a></small>
       <div class="hidden name"><code>mixpoissonreg.Rmd</code></div>
@@ -231,9 +231,9 @@
 <h2 class="hasAnchor">
 <a href="#useful-plots-for-fitted-models-available-using-rs-base-graphics-or-ggplot2" class="anchor"></a>Useful plots for fitted models available using <code>R</code>’s base graphics or <code>ggplot2</code>
 </h2>
-<p>Once you have a fitted <code>mixpoissonreg</code> object, say <code>fit</code>, you can easily produce useful plots by typing <code><a href="https://rdrr.io/r/graphics/plot.html">plot(fit)</a></code>:</p>
+<p>Once you have a fitted <code>mixpoissonreg</code> object, say <code>fit</code>, you can easily produce useful plots by typing <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot(fit)</a></code>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></code></pre></div>
 <p><img src="mixpoissonreg_files/figure-html/unnamed-chunk-5-1.png" width="700"><img src="mixpoissonreg_files/figure-html/unnamed-chunk-5-2.png" width="700"><img src="mixpoissonreg_files/figure-html/unnamed-chunk-5-3.png" width="700"><img src="mixpoissonreg_files/figure-html/unnamed-chunk-5-4.png" width="700"></p>
 <p>You can also have the <code>ggplot2</code> version of the above plots by typing <code><a href="../reference/autoplot.mixpoissonreg.html">autoplot(fit)</a></code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -362,7 +362,7 @@
 <p>There are several global influence measures implemented. See <code>influence</code>, <code>hatvalues</code>, <code>cooks.distance</code> and their arguments.</p>
 <p>The easiest way to perform global influence analysis on a <code>mixpoissonreg</code> fitted object is to obtain the plots related to global influence:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">fit_prec</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit_prec</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="mixpoissonreg_files/figure-html/unnamed-chunk-14-1.png" width="700"><img src="mixpoissonreg_files/figure-html/unnamed-chunk-14-2.png" width="700"><img src="mixpoissonreg_files/figure-html/unnamed-chunk-14-3.png" width="700"></p>
 <p>One can also get the <code>ggplot2</code> version of the above plots:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
@@ -386,18 +386,18 @@
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/augment.mixpoissonreg.html">augment</a></span><span class="op">(</span><span class="va">fit_prec</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 314 x 12</span>
-<span class="co">#&gt;    daysabs gender  math prog  .fitted .fittedlwrconf .fitteduprconf .resid</span>
-<span class="co">#&gt;      &lt;dbl&gt; &lt;fct&gt;  &lt;dbl&gt; &lt;fct&gt;   &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;  &lt;dbl&gt;</span>
-<span class="co">#&gt;  1       4 male      63 Acad…    5.25           4.14           6.66 -0.200</span>
-<span class="co">#&gt;  2       4 male      27 Acad…    6.66           5.40           8.22 -0.370</span>
-<span class="co">#&gt;  3       2 female    20 Acad…    8.92           7.21          11.0  -0.814</span>
-<span class="co">#&gt;  4       3 female    16 Acad…    9.15           7.34          11.4  -0.713</span>
-<span class="co">#&gt;  5       3 female     2 Acad…   10.0            7.76          13.0  -0.772</span>
-<span class="co">#&gt;  6      13 female    71 Acad…    6.36           5.02           8.07  0.956</span>
-<span class="co">#&gt;  7      11 female    63 Acad…    6.71           5.39           8.34  0.599</span>
-<span class="co">#&gt;  8       7 male       3 Acad…    7.81           6.04          10.1  -0.102</span>
-<span class="co">#&gt;  9      10 male      51 Acad…    5.68           4.58           7.05  0.660</span>
-<span class="co">#&gt; 10       9 male      49 Voca…    2.48           1.86           3.30  1.86 </span>
+<span class="co">#&gt;    daysabs gender  math prog       .fitted .fittedlwrconf .fitteduprconf .resid</span>
+<span class="co">#&gt;      &lt;dbl&gt; &lt;fct&gt;  &lt;dbl&gt; &lt;fct&gt;        &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;  &lt;dbl&gt;</span>
+<span class="co">#&gt;  1       4 male      63 Academic      5.25           4.14           6.66 -0.200</span>
+<span class="co">#&gt;  2       4 male      27 Academic      6.66           5.40           8.22 -0.370</span>
+<span class="co">#&gt;  3       2 female    20 Academic      8.92           7.21          11.0  -0.814</span>
+<span class="co">#&gt;  4       3 female    16 Academic      9.15           7.34          11.4  -0.713</span>
+<span class="co">#&gt;  5       3 female     2 Academic     10.0            7.76          13.0  -0.772</span>
+<span class="co">#&gt;  6      13 female    71 Academic      6.36           5.02           8.07  0.956</span>
+<span class="co">#&gt;  7      11 female    63 Academic      6.71           5.39           8.34  0.599</span>
+<span class="co">#&gt;  8       7 male       3 Academic      7.81           6.04          10.1  -0.102</span>
+<span class="co">#&gt;  9      10 male      51 Academic      5.68           4.58           7.05  0.660</span>
+<span class="co">#&gt; 10       9 male      49 Vocational    2.48           1.86           3.30  1.86 </span>
 <span class="co">#&gt; # … with 304 more rows, and 4 more variables: .resfit &lt;dbl&gt;, .hat &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   .cooksd &lt;dbl&gt;, .gencooksd &lt;dbl&gt;</span>
 
@@ -430,25 +430,25 @@
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/tidy_local_influence.html">tidy_local_influence</a></span><span class="op">(</span><span class="va">fit_prec</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 314 x 5</span>
-<span class="co">#&gt;    case_weights hidden_variable mean_explanatory precision_expla…</span>
-<span class="co">#&gt;           &lt;dbl&gt;           &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;</span>
-<span class="co">#&gt;  1     0.00146         0.000353         0.000533         0.00217 </span>
-<span class="co">#&gt;  2     0.000970        0.000268         0.000782         0.00129 </span>
-<span class="co">#&gt;  3     0.000712        0.000369         0.000535         0.00132 </span>
-<span class="co">#&gt;  4     0.000350        0.000328         0.000875         0.000130</span>
-<span class="co">#&gt;  5     0.000680        0.000562         0.00101          0.000701</span>
-<span class="co">#&gt;  6     0.00118         0.00387          0.00494          0.000740</span>
-<span class="co">#&gt;  7     0.00125         0.00230          0.00396          0.00139 </span>
-<span class="co">#&gt;  8     0.00243         0.00127          0.00230          0.00185 </span>
-<span class="co">#&gt;  9     0.00107         0.00180          0.00266          0.00160 </span>
-<span class="co">#&gt; 10     0.00249         0.00325          0.000340         0.000788</span>
+<span class="co">#&gt;    case_weights hidden_variable mean_explanatory precision_explanatory</span>
+<span class="co">#&gt;           &lt;dbl&gt;           &lt;dbl&gt;            &lt;dbl&gt;                 &lt;dbl&gt;</span>
+<span class="co">#&gt;  1     0.00146         0.000353         0.000533              0.00217 </span>
+<span class="co">#&gt;  2     0.000970        0.000268         0.000782              0.00129 </span>
+<span class="co">#&gt;  3     0.000712        0.000369         0.000535              0.00132 </span>
+<span class="co">#&gt;  4     0.000350        0.000328         0.000875              0.000130</span>
+<span class="co">#&gt;  5     0.000680        0.000562         0.00101               0.000701</span>
+<span class="co">#&gt;  6     0.00118         0.00387          0.00494               0.000740</span>
+<span class="co">#&gt;  7     0.00125         0.00230          0.00396               0.00139 </span>
+<span class="co">#&gt;  8     0.00243         0.00127          0.00230               0.00185 </span>
+<span class="co">#&gt;  9     0.00107         0.00180          0.00266               0.00160 </span>
+<span class="co">#&gt; 10     0.00249         0.00325          0.000340              0.000788</span>
 <span class="co">#&gt; # … with 304 more rows, and 1 more variable: simultaneous_explanatory &lt;dbl&gt;</span>
 
 <span class="fu"><a href="../reference/tidy_local_influence.html">local_influence_benchmarks</a></span><span class="op">(</span><span class="va">fit_prec</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 1 x 5</span>
-<span class="co">#&gt;   case_weights hidden_variable mean_explanatory precision_expla…</span>
-<span class="co">#&gt;          &lt;dbl&gt;           &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;</span>
-<span class="co">#&gt; 1       0.0140          0.0206           0.0182           0.0195</span>
+<span class="co">#&gt;   case_weights hidden_variable mean_explanatory precision_explanatory</span>
+<span class="co">#&gt;          &lt;dbl&gt;           &lt;dbl&gt;            &lt;dbl&gt;                 &lt;dbl&gt;</span>
+<span class="co">#&gt; 1       0.0140          0.0206           0.0182                0.0195</span>
 <span class="co">#&gt; # … with 1 more variable: simultaneous_explanatory &lt;dbl&gt;</span>
 
 <span class="fu"><a href="../reference/tidy_local_influence.html">local_influence_autoplot</a></span><span class="op">(</span><span class="va">fit_prec</span><span class="op">)</span></code></pre></div>
