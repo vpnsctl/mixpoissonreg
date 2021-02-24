@@ -171,6 +171,8 @@ plot(fit, sub.caption = "My subcaption", cex.oma.main = 3)
 
 ## Colors, sizes, point types and line types
 
+In this section we show how to customize colors, sizes and types of lines and points. 
+
 Também mudar o tipo de gráfico da distância de Cook.
 
 ## Points to be identified
