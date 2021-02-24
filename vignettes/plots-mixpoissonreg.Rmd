@@ -20,9 +20,154 @@ knitr::opts_chunk$set(
 
 ## Choosing plots
 
+The first, and maybe the easiest, customizable option is the choice of plots to be displayed. The current available plots are (together with their corresponding numbers):
+
+1. *Residuals vs Obs. number* 
+2. *Normal Q-Q*
+3. *Cook's distance*
+4. *Generalized Cook's distance*
+5. *Cook's dist vs Generalized Cook's dist*
+6. *Response vs Fitted means*
+
+These plots can be chosen by giving a list of the numbers of the wanted plots in the `which` argument. 
+
+If the argument `which` is not provided, then, by default, the plots 1, 2, 5 and 6 will be displayed:
+
+```{r}
+library(mixpoissonreg)
+
+fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, 
+                        data = Attendance)
+
+plot(fit)
+```
+
+If we want only a single plot, we simply indicate its number. For instance, if we only want the plot of Cook's distances, we simply set `which = 3`:
+
+```{r}
+plot(fit, which = 3)
+```
+
+If we want more than one, we provide a list with the desired plots. Suppose we want the global influence-related plots, that is, plots 3, 4 and 5. Then, we set `which = c(3,4,5)`:
+
+```{r}
+plot(fit, which = c(3,4,5))
+```
+
+
 ## Titles and subtitles
 
-Incluir comentários sobre  include.modeltype = TRUE, include.residualtype = FALSE
+In this section we will describe how to customize titles and subtitles. 
+
+First of all, by default, the type of the fitted model is included in each caption. See, for instance, the plot below:
+
+```{r}
+plot(fit, which = 1)
+```
+
+To remove the model type, simply set `include.modeltype` to `FALSE`:
+
+```{r}
+plot(fit, which = 1, include.modeltype = FALSE)
+```
+
+One should notice that in both plots, the type of the residual was only included in the *y*-axis label. To also include the type of the residual at the caption, simply set `include.residualtype` to `TRUE`:
+
+```{r}
+plot(fit, which = 1, include.residualtype = TRUE)
+```
+
+One can define one common title to all plots by setting the `main` parameter to such common title. For instance,
+
+```{r}
+plot(fit, main = "Mixed Poisson Regression")
+```
+
+
+The `main` parameter also works to provide an additional title to a single plot, by also setting the `which` parameter to the desired plot:
+
+```{r}
+plot(fit, which = 1, main = "Mixed Poisson Regression")
+```
+
+The captions (displayed above the plot) can be altered by setting the `caption` parameter to a list containing the wanted captions. One drawback is that we have to provide a list containing the captions we want in the positions of the plots we want. For example, if we only have one plot, the following example will change the caption:
+
+```{r}
+plot(fit, which = 1, caption = "My caption")
+```
+
+However, it will not work for the remaining plots, for instance:
+
+```{r}
+plot(fit, which = 2, caption = "My caption")
+```
+
+A simple way to circumvent the above situation is to create an empty list and set the titles at the positions we want:
+
+```{r}
+my_captions <- rep("",6)
+my_captions[2] <- "My caption 2"
+my_captions[4] <- "My caption 4"
+
+plot(fit, which = c(2,4), caption = my_captions)
+```
+
+Notice that, since we did not change the `include.modeltype` argument, the model type are added in the new captions.
+
+We can change the size of the captions with the argument `cex.caption`. The default size is `1`. So, for instance,
+
+```{r}
+my_captions <- rep("",6)
+my_captions[2] <- "My caption 2"
+my_captions[4] <- "My caption 4"
+
+plot(fit, which = c(2,4), caption = my_captions, cex.caption = 1.5)
+```
+
+We can also change the subcaption. By default, the subcaption is a simplified version of the call to the `mixpoissonreg` function that was used to fit the model.
+
+We must have some caution on describing the subcaption. If each plot is given in one windows (without using the `par(...)` command, for example), then the subcaption is the caption below the *x*-axis label. However, if multiple plots are given at once, and there is space on the upper part of the plot, then the subcaption is a general caption for all the plots. 
+
+We will illustrate the above description with examples to make it clearer.
+
+The subcaption can be altered by setting the `sub.caption` parameter to the desired caption. 
+
+Thus, we begin by providing the plots without the usage of `par` function.
+
+```{r}
+plot(fit, which = 1, sub.caption = "My subcaption")
+```
+
+Notice that the subcaption is below the *x*-axis label. The same happens even if we there is more than one plot and we do not use the `par` function:
+
+```{r}
+plot(fit, sub.caption = "My subcaption")
+```
+
+Now, notice the position of the subcaption when we gather multiple plots using the `par` function (while we provide room the subcaption by using the `oma` argument):
+
+```
+# Unfortunately the output of the code below does not work on vignettes
+# so this must be copied and pasted to an R console.
+
+library(mixpoissonreg)
+
+fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, 
+                        data = Attendance)
+
+par(mfrow = c(2, 2), oma = c(0, 0, 2, 0))
+plot(fit, sub.caption = "My subcaption")
+```
+
+In the previous case (whose output unfortunately cannot be given on vignette), that is, the case in which we have the subcaption above all plots, one can change the size of the subcaption using the argument `cex.oma.main`. 
+
+For instance,
+
+```
+par(mfrow = c(2, 2), oma = c(0, 0, 2, 0))
+
+plot(fit, sub.caption = "My subcaption", cex.oma.main = 3)
+```
 
 ## Colors, sizes, point types and line types
 

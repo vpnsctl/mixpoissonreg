@@ -320,7 +320,7 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
   }
 
   if (!one.fig && graphics::par("oma")[3L] >= 1)
-    graphics::mtext(sub.caption, outer = TRUE, cex = 1.25)
+    graphics::mtext(sub.caption, outer = TRUE, cex = cex.oma.main)
 
   invisible()
 }
