@@ -118,15 +118,116 @@
 <div id="choosing-plots" class="section level2">
 <h2 class="hasAnchor">
 <a href="#choosing-plots" class="anchor"></a>Choosing plots</h2>
+<p>The first, and maybe the easiest, customizable option is the choice of plots to be displayed. The current available plots are (together with their corresponding numbers):</p>
+<ol style="list-style-type: decimal">
+<li><em>Residuals vs Obs. number</em></li>
+<li><em>Normal Q-Q</em></li>
+<li><em>Cook’s distance</em></li>
+<li><em>Generalized Cook’s distance</em></li>
+<li><em>Cook’s dist vs Generalized Cook’s dist</em></li>
+<li><em>Response vs Fitted means</em></li>
+</ol>
+<p>These plots can be chosen by giving a list of the numbers of the wanted plots in the <code>which</code> argument.</p>
+<p>If the argument <code>which</code> is not provided, then, by default, the plots 1, 2, 5 and 6 will be displayed:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/vpnsctl/mixpoissonreg/">mixpoissonreg</a></span><span class="op">)</span>
+
+<span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonreg.html">mixpoissonreg</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span> <span class="op">|</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span>, 
+                        data <span class="op">=</span> <span class="va">Attendance</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-2-1.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-2-2.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-2-3.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-2-4.png" width="700"></p>
+<p>If we want only a single plot, we simply indicate its number. For instance, if we only want the plot of Cook’s distances, we simply set <code>which = 3</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
+<p>If we want more than one, we provide a list with the desired plots. Suppose we want the global influence-related plots, that is, plots 3, 4 and 5. Then, we set <code>which = c(3,4,5)</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-4-1.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-4-2.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-4-3.png" width="700"></p>
 </div>
 <div id="titles-and-subtitles" class="section level2">
 <h2 class="hasAnchor">
 <a href="#titles-and-subtitles" class="anchor"></a>Titles and subtitles</h2>
-<p>Incluir comentários sobre include.modeltype = TRUE, include.residualtype = FALSE</p>
+<p>In this section we will describe how to customize titles and subtitles.</p>
+<p>First of all, by default, the type of the fitted model is included in each caption. See, for instance, the plot below:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+<p>To remove the model type, simply set <code>include.modeltype</code> to <code>FALSE</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">1</span>, include.modeltype <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
+<p>One should notice that in both plots, the type of the residual was only included in the <em>y</em>-axis label. To also include the type of the residual at the caption, simply set <code>include.residualtype</code> to <code>TRUE</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">1</span>, include.residualtype <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+<p>One can define one common title to all plots by setting the <code>main</code> parameter to such common title. For instance,</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, main <span class="op">=</span> <span class="st">"Mixed Poisson Regression"</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-8-1.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-8-2.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-8-3.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-8-4.png" width="700"></p>
+<p>The <code>main</code> parameter also works to provide an additional title to a single plot, by also setting the <code>which</code> parameter to the desired plot:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">1</span>, main <span class="op">=</span> <span class="st">"Mixed Poisson Regression"</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
+<p>The captions (displayed above the plot) can be altered by setting the <code>caption</code> parameter to a list containing the wanted captions. One drawback is that we have to provide a list containing the captions we want in the positions of the plots we want. For example, if we only have one plot, the following example will change the caption:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">1</span>, caption <span class="op">=</span> <span class="st">"My caption"</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
+<p>However, it will not work for the remaining plots, for instance:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">2</span>, caption <span class="op">=</span> <span class="st">"My caption"</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
+<p>A simple way to circumvent the above situation is to create an empty list and set the titles at the positions we want:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">my_captions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">""</span>,<span class="fl">6</span><span class="op">)</span>
+<span class="va">my_captions</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"My caption 2"</span>
+<span class="va">my_captions</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"My caption 4"</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">4</span><span class="op">)</span>, caption <span class="op">=</span> <span class="va">my_captions</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-12-1.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-12-2.png" width="700"></p>
+<p>Notice that, since we did not change the <code>include.modeltype</code> argument, the model type are added in the new captions.</p>
+<p>We can change the size of the captions with the argument <code>cex.caption</code>. The default size is <code>1</code>. So, for instance,</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">my_captions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">""</span>,<span class="fl">6</span><span class="op">)</span>
+<span class="va">my_captions</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"My caption 2"</span>
+<span class="va">my_captions</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"My caption 4"</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">4</span><span class="op">)</span>, caption <span class="op">=</span> <span class="va">my_captions</span>, cex.caption <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-13-1.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-13-2.png" width="700"></p>
+<p>We can also change the subcaption. By default, the subcaption is a simplified version of the call to the <code>mixpoissonreg</code> function that was used to fit the model.</p>
+<p>We must have some caution on describing the subcaption. If each plot is given in one windows (without using the <code><a href="https://rdrr.io/r/graphics/par.html">par(...)</a></code> command, for example), then the subcaption is the caption below the <em>x</em>-axis label. However, if multiple plots are given at once, and there is space on the upper part of the plot, then the subcaption is a general caption for all the plots.</p>
+<p>We will illustrate the above description with examples to make it clearer.</p>
+<p>The subcaption can be altered by setting the <code>sub.caption</code> parameter to the desired caption.</p>
+<p>Thus, we begin by providing the plots without the usage of <code>par</code> function.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">1</span>, sub.caption <span class="op">=</span> <span class="st">"My subcaption"</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
+<p>Notice that the subcaption is below the <em>x</em>-axis label. The same happens even if we there is more than one plot and we do not use the <code>par</code> function:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, sub.caption <span class="op">=</span> <span class="st">"My subcaption"</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-15-1.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-15-2.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-15-3.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-15-4.png" width="700"></p>
+<p>Now, notice the position of the subcaption when we gather multiple plots using the <code>par</code> function (while we provide room the subcaption by using the <code>oma</code> argument):</p>
+<pre><code><a href="https://github.com/vpnsctl/mixpoissonreg/"># Unfortunately the output of the code below does not work on vignettes
+# so this must be copied and pasted to an R console.
+
+library(mixpoissonreg)
+
+fit &lt;- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, 
+                        data = Attendance)
+
+par(mfrow = c(2, 2), oma = c(0, 0, 2, 0))
+plot(fit, sub.caption = "My subcaption")</a></code></pre>
+<p>In the previous case (whose output unfortunately cannot be given on vignette), that is, the case in which we have the subcaption above all plots, one can change the size of the subcaption using the argument <code>cex.oma.main</code>.</p>
+<p>For instance,</p>
+<pre><code><a href="https://rdrr.io/r/graphics/par.html">par(mfrow = c(2, 2), oma = c(0, 0, 2, 0))
+
+plot(fit, sub.caption = "My subcaption", cex.oma.main = 3)</a></code></pre>
 </div>
 <div id="colors-sizes-point-types-and-line-types" class="section level2">
 <h2 class="hasAnchor">
 <a href="#colors-sizes-point-types-and-line-types" class="anchor"></a>Colors, sizes, point types and line types</h2>
+<p>In this section we show how to customize colors, sizes and types of lines and points.</p>
 <p>Também mudar o tipo de gráfico da distância de Cook.</p>
 </div>
 <div id="points-to-be-identified" class="section level2">
