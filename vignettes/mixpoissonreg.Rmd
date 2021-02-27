@@ -4,7 +4,7 @@ author: "Alexandre B. Simas"
 date: '`r format(Sys.time(), "%Y-%m-%d")`'
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{mixpoissonreg}
+  %\VignetteIndexEntry{Introduction to mixpoissonreg}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -99,7 +99,7 @@ You can also have the `ggplot2` version of the above plots by typing `autoplot(f
 autoplot(fit)
 ```
 
-For further details on plots of `mixpoissonreg` objects, we refer the reader to the [Diagnostic plots with the *mixpoissonreg* package](plots-mixpoissonreg.html) vignette.
+For further details on plots of `mixpoissonreg` objects, we refer the reader to the [Building and customizing base-R diagnostic plots with the mixpoissonreg package](plots-mixpoissonreg.html) and [Building and customizing ggplot2-based diagnostic plots with the mixpoissonreg package](ggplot2-plots-mixpoissonreg.html) vignettes.
 
 ## Estimation of parameters via EM-algorithm
 

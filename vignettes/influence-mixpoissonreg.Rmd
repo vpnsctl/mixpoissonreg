@@ -4,7 +4,7 @@ author: "Alexandre B. Simas"
 date: '`r format(Sys.time(), "%Y-%m-%d")`'
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{influence-mixpoissonreg}
+  %\VignetteIndexEntry{Global and local influence analysis with the *mixpoissonreg* package}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

@@ -11,7 +11,16 @@
   title = list("Residuals vs Obs. number", "Normal Q-Q", "Cook's distance",
     "Generalized Cook's distance", "Cook's dist vs Generalized Cook's dist",
     "Response vs Fitted means"),
+  title.bold = FALSE,
+  title.size = NULL,
+  title.colour = NULL,
   label.repel = TRUE,
+  x.axis.col = NULL,
+  y.axis.col = NULL,
+  x.axis.size = NULL,
+  y.axis.size = NULL,
+  cook.plot.type = "linerange",
+  cook.plot.pointshape = NULL,
   nrow = NULL,
   ncol = NULL,
   qqline = TRUE,
@@ -19,6 +28,9 @@
   include.modeltype = TRUE,
   include.residualtype = FALSE,
   sub.caption = NULL,
+  sub.caption.col = NULL,
+  sub.caption.size = NULL,
+  sub.caption.face = NULL,
   env_alpha = 0.5,
   env_fill = "grey70",
   gpar_sub.caption = list(fontface = "bold"),
@@ -50,12 +62,31 @@
 \item{object}{A \code{mixpoissonreg} object.}
 
 \item{which}{a list or vector indicating which plots should be displayed.     If a subset of the plots is required, specify a subset of the numbers 1:6,
-see caption below for the different kinds. In
+see title below for the different kinds. In
 plot number 2, 'Normal Q-Q', if the \code{mixpoissonreg} object was fitted with envelopes, a quantile-quantile plot with simulated envelopes will be displayed.}
 
-\item{title}{titles to appear above the plots; character vector or list of valid graphics annotations. Can be set to "" to suppress all captions.}
+\item{title}{titles to appear above the plots; character vector or list of valid graphics annotations. Can be set to "" to suppress all titles.}
+
+\item{title.bold}{logical indicating whether the titles should be bold. The default is FALSE.}
+
+\item{title.size}{numerical indicating the size of the titles.}
+
+\item{title.colour}{title colour.}
 
 \item{label.repel}{Logical flag indicating whether to use \pkg{ggrepel} to place the labels.}
+
+\item{x.axis.col}{colour of the x axis title.}
+
+\item{y.axis.col}{colour of the y axis title.}
+
+\item{x.axis.size}{size of the x axis title.}
+
+\item{y.axis.size}{size of the y axis title.}
+
+\item{cook.plot.type}{character indicating the type of plot for Cook's distance
+and generalized Cook's distance. Default is "linerange". The options are "linerange" and "points".}
+
+\item{cook.plot.pointshape}{the shape of points if "cook.plot.type" is set to "points".}
 
 \item{nrow}{Number of facet/subplot rows. If both \code{nrow} and \code{ncol} are \code{NULL}, the plots will be placed one at a time. For multiple plots, set values for \code{nrow}
 or \code{ncol}.}
@@ -68,11 +99,17 @@ envelopes, a qqline passing through the first and third quartiles of a standard 
 
 \item{ask}{logical; if \code{TRUE}, the user is asked before each plot.}
 
-\item{include.modeltype}{logical. Indicates whether the model type ('NB' or 'PIG') should be displayed on the captions.}
+\item{include.modeltype}{logical. Indicates whether the model type ('NB' or 'PIG') should be displayed on the titles.}
 
-\item{include.residualtype}{local. Indicates whether the name of the residual ('Pearson' or 'Score') should be displayed on the caption of plot 1 (Residuals vs. Index).}
+\item{include.residualtype}{local. Indicates whether the name of the residual ('Pearson' or 'Score') should be displayed on the title of plot 1 (Residuals vs. Index).}
 
 \item{sub.caption}{common title-above the figures if there are more than one. If NULL, as by default, a possible abbreviated version of \code{deparse(x$call)} is used.}
+
+\item{sub.caption.col}{color of subcaption (when one figure at a time).}
+
+\item{sub.caption.size}{size of subcaption (when one figure at a time).}
+
+\item{sub.caption.face}{font face for subcaption, options are: "plain", "bold", "italic" and "bold.italic".}
 
 \item{env_alpha}{alpha of the envelope region (when the fitted model has envelopes)}
 

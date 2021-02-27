@@ -1,10 +1,10 @@
 ---
-title: "Diagnostic plots with the mixpoissonreg package"
+title: "Building and customizing base-R diagnostic plots with the mixpoissonreg package"
 author: "Alexandre B. Simas"
 date: '`r format(Sys.time(), "%Y-%m-%d")`'
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{plots-mixpoissonreg}
+  %\VignetteIndexEntry{Building and customizing base-R diagnostic plots with the mixpoissonreg package}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Plots using R's base graphics 
+# base-R diagnostic plots
 
 ## Choosing plots
 
@@ -59,7 +59,7 @@ plot(fit, which = c(3,4,5))
 
 In this section we will describe how to customize titles and subtitles. 
 
-First of all, by default, the type of the fitted model is included in each caption. See, for instance, the plot below:
+First of all, by default, the type of the fitted model (that is, if it is a Negative-Binomial or Poisson Inverse Gaussian regression) is included in each caption. See, for instance, the plot below:
 
 ```{r}
 plot(fit, which = 1)
@@ -126,7 +126,7 @@ plot(fit, which = c(2,4), caption = my_captions, cex.caption = 1.5)
 
 We can also change the subcaption. By default, the subcaption is a simplified version of the call to the `mixpoissonreg` function that was used to fit the model.
 
-We must have some caution on describing the subcaption. If each plot is given in one windows (without using the `par(...)` command, for example), then the subcaption is the caption below the *x*-axis label. However, if multiple plots are given at once, and there is space on the upper part of the plot, then the subcaption is a general caption for all the plots. 
+We must have some caution on describing the subcaption. If each plot is given in one window (without using the `par(...)` command, for example), then the subcaption is the caption below the *x*-axis label. However, if multiple plots are given at once, and there is space on the upper part of the plot, then the subcaption is a general caption for all the plots. 
 
 We will illustrate the above description with examples to make it clearer.
 
@@ -146,25 +146,17 @@ plot(fit, sub.caption = "My subcaption")
 
 Now, notice the position of the subcaption when we gather multiple plots using the `par` function (while we provide room the subcaption by using the `oma` argument):
 
-```
-# Unfortunately the output of the code below does not work on vignettes
-# so this must be copied and pasted to an R console.
-
-library(mixpoissonreg)
-
-fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, 
-                        data = Attendance)
-
-par(mfrow = c(2, 2), oma = c(0, 0, 2, 0))
+```{r}
+par(mfrow = c(2, 2), oma = c(0, 0, 2, 0), mar=par("mar")/2)
 plot(fit, sub.caption = "My subcaption")
 ```
 
-In the previous case (whose output unfortunately cannot be given on vignette), that is, the case in which we have the subcaption above all plots, one can change the size of the subcaption using the argument `cex.oma.main`. 
+In the previous case, that is, the case in which we have the subcaption above all plots, one can change the size of the subcaption using the argument `cex.oma.main`. 
 
 For instance,
 
-```
-par(mfrow = c(2, 2), oma = c(0, 0, 2, 0))
+```{r}
+par(mfrow = c(2, 2), oma = c(0, 0, 2, 0), mar=par("mar")/2)
 
 plot(fit, sub.caption = "My subcaption", cex.oma.main = 3)
 ```
@@ -173,22 +165,154 @@ plot(fit, sub.caption = "My subcaption", cex.oma.main = 3)
 
 In this section we show how to customize colors, sizes and types of lines and points. 
 
-Também mudar o tipo de gráfico da distância de Cook.
+First of all, notice that several graphical parameters may be passed as additional parameters through the three dots ellipsis. For instance, we may pass the argument `pch` from `plot.default` to change the type of points:
+
+```{r}
+plot(fit, which = 1, pch = 2)
+```
+
+Another example is the `main` color. Let us set a main title with the `main` argument, and change its color with the `col.main` argument:
+
+```{r}
+plot(fit, which = 1, main = "Plot 1", col.main = "red")
+```
+
+We can also change the `main` size, by using the `cex.main` argument:
+
+```{r}
+plot(fit, which = 1, main = "Plot 1", col.main = "red", cex.main = 2)
+```
+
+Similarly, we can change the *x* and *y* label's colors by using the `col.lab` argument:
+
+```{r}
+plot(fit, which = 1, col.lab = "red")
+```
+
+As well as change their sizes by using the `cex.lab` argument:
+
+```{r}
+plot(fit, which = 1, cex.lab = 2)
+```
+
+We can change the `sub.caption` color by using the `col.sub` argument:
+
+```{r}
+plot(fit, which = 1, col.sub = "red")
+```
+
+and change its size by using the `cex.sub` argument:
+
+```{r}
+plot(fit, which = 1, cex.sub = 2)
+```
+
+Now, we deal with specific arguments of the `plot.mixpoissonreg`. We begin by dealing with the point colors. To change the colors of the points, we use the `col.points` argument:
+
+```{r}
+plot(fit, which = 1, col.points = "red")
+```
+
+
+To change the point sizes, we use the argument `cex.points`:
+
+```{r}
+plot(fit, which = 1, cex.points = 2)
+```
+
+We will now deal with point labels. First of all, we may change the color of the point labels by using the argument `col.id`:
+
+```{r}
+plot(fit, which = 1, col.id = "red")
+```
+
+We can change the point labels' sizes by using the `cex.id` argument:
+
+```{r}
+plot(fit, which = 1, cex.id = 2)
+```
+
+Let us now customize the lines in the Cook's distance plots, namely plots 3 and 4. By default, the line type for Cook's distance plots is `'h'`:
+
+```{r}
+plot(fit, which = c(3,4))
+```
+
+Let us change the line type for Cook's distance plots to points and change the point types to crosses:
+
+```{r}
+plot(fit, which = c(3,4), type.cookplot = "p", pch = 4)
+```
+
+Let us now change the colors of titles and captions. To change the caption's color, we use the `col.caption` argument:
+
+```{r}
+plot(fit, which = 1:2, col.caption = "red")
+```
+
+Finally, let us customize the quantile-quantile plots with and without simulated envelopes, namely, plot 2. The first customization is to remove the diagonal Q-Q line in the quantile-quantile plot without simulated envelopes:
+
+```{r}
+plot(fit, which = 2, qqline = FALSE)
+```
+
+We can change the qqline color by using the `col.qqline` argument:
+
+```{r}
+plot(fit, which = 2, col.qqline = "red")
+```
+
+Finally, let us consider a fitting with simulated envelopes:
+
+```{r}
+fit_env <- mixpoissonregML(daysabs ~ gender + math + prog | gender + 
+                           math + prog, envelope = 10, data = Attendance)
+
+plot(fit_env, which = 2)
+```
+
+Let us first change the color of the lines of the upper and lower bands of the simulated envelopes:
+
+```{r}
+plot(fit_env, which = 2, line_col_env = "red")
+```
+
+Let us now change the color of the median curve of the simulated envelopes:
+
+```{r}
+plot(fit_env, which = 2, line_col_median = "red")
+```
+
+Let us also change the fill color of the simulated envelopes:
+
+```{r}
+plot(fit_env, which = 2, line_col_env = "red", fill_col_env = "red")
+```
+
+Let us change the color transparency. To such an end we use the argument `fill_alpha_env`:
+
+```{r}
+plot(fit_env, which = 2, line_col_env = "red", fill_col_env = "red",
+     fill_alpha_env = 0.3)
+```
+
 
 ## Points to be identified
 
-Mexer nas quantidades e nos labels.
+By default the `plot.mixpoissonreg` function always identifies the 3 "most extreme" points. We can change it so that it does not identify any points by setting the argument `id.n` to 0:
 
-## Multiple plots
+```{r}
+plot(fit, id.n = 0)
+```
 
-# Plots using `ggplot2`
+We can also increase the number of identified points. For instance:
 
-## Choosing plots
+```{r}
+plot(fit, id.n = 5)
+```
 
-## Titles and subtitles
+Finally, we can change the labels of the identified points with the argument `labels.id`. For instance, we may want to have the value of the `prog` covariate instead:
 
-## Colors, sizes, point types and line types
-
-## Points to be identified
-
-## Multiple plots
+```{r}
+plot(fit, labels.id = model.frame(fit)$prog)
+```

@@ -10,6 +10,14 @@
   title = list("Case Weights Perturbation", "Hidden Variable Perturbation",
     "Mean Explanatory Perturbation", "Precision Explanatory Perturbation",
     "Simultaneous Explanatory Perturbation"),
+  title.size = NULL,
+  title.bold = FALSE,
+  title.colour = NULL,
+  x.axis.col = NULL,
+  y.axis.col = NULL,
+  x.axis.size = NULL,
+  y.axis.size = NULL,
+  type.plot = "linerange",
   curvature = c("conformal", "normal"),
   direction = c("canonical", "max.eigen"),
   parameters = c("all", "mean", "precision"),
@@ -21,6 +29,9 @@
   ask = prod(graphics::par("mfcol")) < length(which) && grDevices::dev.interactive(),
   include.modeltype = TRUE,
   sub.caption = NULL,
+  sub.caption.col = NULL,
+  sub.caption.size = NULL,
+  sub.caption.face = NULL,
   gpar_sub.caption = list(fontface = "bold"),
   detect.influential = TRUE,
   n.influential = 5,
@@ -55,6 +66,22 @@
 
 \item{title}{titles to appear above the plots; character vector or list of valid graphics annotations. Can be set to "" to suppress all titles.}
 
+\item{title.size}{numerical indicating the size of the titles.}
+
+\item{title.bold}{logical indicating whether the titles should be bold. The default is FALSE.}
+
+\item{title.colour}{title colour.}
+
+\item{x.axis.col}{colour of the x axis title.}
+
+\item{y.axis.col}{colour of the y axis title.}
+
+\item{x.axis.size}{size of the x axis title.}
+
+\item{y.axis.size}{size of the y axis title.}
+
+\item{type.plot}{a character indicating the type of the plots. The default is "linerange". The options are "linerange" and "points".}
+
 \item{curvature}{the curvature to be returned, 'conformal' for the conformal normal curvature (see Zhu and Lee, 2001 and Poon and Poon, 1999) or
 'normal' (see Zhu and Lee, 2001 and Cook, 1986).}
 
@@ -87,6 +114,12 @@ or \code{ncol}.}
 \item{include.modeltype}{logical. Indicates whether the model type ('NB' or 'PIG') should be displayed on the captions.}
 
 \item{sub.caption}{common title-above the figures if there are more than one. If NULL, as by default, a possible abbreviated version of deparse(x$call) is used.}
+
+\item{sub.caption.col}{color of subcaption (when one figure at a time).}
+
+\item{sub.caption.size}{size of subcaption (when one figure at a time).}
+
+\item{sub.caption.face}{font face for subcaption, options are: "plain", "bold", "italic" and "bold.italic".}
 
 \item{gpar_sub.caption}{list of gpar parameters to be used as common title in the case of multiple plots. The title will be given in sub.caption argument. See
 the help of \code{\link[grid]{gpar}} function from the \pkg{grid} package for all the available options.}

@@ -1,5 +1,5 @@
 #' @importFrom generics augment tidy glance
-#' @importFrom ggplot2 ggplot geom_text geom_hline geom_abline geom_linerange geom_point aes autoplot
+#' @importFrom ggplot2 ggplot geom_text geom_hline geom_abline geom_linerange geom_point aes autoplot theme element_text labs
 #' @importFrom tibble tibble as_tibble add_column
 #' @importFrom magrittr `%>%`
 #' @importFrom dplyr arrange desc bind_rows mutate filter select left_join
@@ -199,18 +199,27 @@ tidy.mixpoissonreg <- function(x, conf.int = FALSE, conf.level = 0.95, ...){
 #' If both ncol and nrow are \code{NULL}, the plots will be placed one at a time. To place multiple plots, set the values for \code{nrow} or \code{ncol}.
 #' @param object A \code{mixpoissonreg} object.
 #' @param which a list or vector indicating which plots should be displayed. 	If a subset of the plots is required, specify a subset of the numbers 1:6,
-#' see caption below for the different kinds. In
+#' see title below for the different kinds. In
 #' plot number 2, 'Normal Q-Q', if the \code{mixpoissonreg} object was fitted with envelopes, a quantile-quantile plot with simulated envelopes will be displayed.
-#' @param title titles to appear above the plots; character vector or list of valid graphics annotations. Can be set to "" to suppress all captions.
+#' @param title titles to appear above the plots; character vector or list of valid graphics annotations. Can be set to "" to suppress all titles.
+#' @param title.bold logical indicating whether the titles should be bold. The default is FALSE.
+#' @param title.size numerical indicating the size of the titles.
+#' @param title.colour title colour.
 #' @param sub.caption common title-above the figures if there are more than one. If NULL, as by default, a possible abbreviated version of \code{deparse(x$call)} is used.
+#' @param sub.caption.col color of subcaption (when one figure at a time).
+#' @param sub.caption.size size of subcaption (when one figure at a time).
+#' @param sub.caption.face font face for subcaption, options are: "plain", "bold", "italic" and "bold.italic".
+#' @param cook.plot.type character indicating the type of plot for Cook's distance 
+#' and generalized Cook's distance. Default is "linerange". The options are "linerange" and "points".
+#' @param cook.plot.pointshape the shape of points if "cook.plot.type" is set to "points".
 #' @param ask logical; if \code{TRUE}, the user is asked before each plot.
 #' @param label.label vector of labels. If \code{NULL}, rownames will be used as labels.
 #' @param env_alpha alpha of the envelope region (when the fitted model has envelopes)
 #' @param env_fill the colour of the filling in the envelopes.
 #' @param gpar_sub.caption list of gpar parameters to be used as common title in the case of multiple plots. The title will be given in sub.caption argument. See
 #' the help of \code{\link[grid]{gpar}} function from the \pkg{grid} package for all the available options.
-#' @param include.modeltype logical. Indicates whether the model type ('NB' or 'PIG') should be displayed on the captions.
-#' @param include.residualtype local. Indicates whether the name of the residual ('Pearson' or 'Score') should be displayed on the caption of plot 1 (Residuals vs. Index).
+#' @param include.modeltype logical. Indicates whether the model type ('NB' or 'PIG') should be displayed on the titles.
+#' @param include.residualtype local. Indicates whether the name of the residual ('Pearson' or 'Score') should be displayed on the title of plot 1 (Residuals vs. Index).
 #' @param label.repel Logical flag indicating whether to use \pkg{ggrepel} to place the labels.
 #' @param nrow Number of facet/subplot rows. If both \code{nrow} and \code{ncol} are \code{NULL}, the plots will be placed one at a time. For multiple plots, set values for \code{nrow}
 #' or \code{ncol}.
@@ -224,6 +233,10 @@ tidy.mixpoissonreg <- function(x, conf.int = FALSE, conf.level = 0.95, ...){
 #' @param alpha	alpha of the plot.
 #' @param fill fill colour.
 #' @param shape	point shape.
+#' @param x.axis.col colour of the x axis title.
+#' @param y.axis.col colour of the y axis title.
+#' @param x.axis.size size of the x axis title.
+#' @param y.axis.size size of the y axis title.
 #' @param label Logical value whether to display labels.
 #' @param label.colour Colour for text labels.
 #' @param label.alpha	Alpha for text labels.
@@ -268,11 +281,24 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
                                                                             "Generalized Cook's distance",
                                                                             "Cook's dist vs Generalized Cook's dist",
                                                                             "Response vs Fitted means"),
+                                   title.bold = FALSE,
+                                   title.size = NULL,
+                                   title.colour = NULL,
                                    label.repel = TRUE,
+                                   x.axis.col = NULL,
+                                   y.axis.col = NULL,
+                                   x.axis.size = NULL,
+                                   y.axis.size = NULL,
+                                   cook.plot.type = "linerange",
+                                   cook.plot.pointshape = NULL,
                                    nrow = NULL, ncol = NULL,
                                    qqline = TRUE, ask = prod(graphics::par("mfcol")) <
                                      length(which) && grDevices::dev.interactive(), include.modeltype = TRUE,
-                                   include.residualtype = FALSE, sub.caption = NULL,
+                                   include.residualtype = FALSE, 
+                                   sub.caption = NULL,
+                                   sub.caption.col = NULL,
+                                   sub.caption.size = NULL,
+                                   sub.caption.face = NULL,
                                    env_alpha = 0.5, env_fill = "grey70", gpar_sub.caption = list(fontface = "bold"),
                                    colour = "#444444", size = NULL, linetype = NULL, alpha = NULL, fill = NULL,
                                    shape = NULL, label = TRUE, label.label = NULL, label.colour = "#000000",
@@ -466,7 +492,16 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
   # Internal function from ggfortify package (https://github.com/sinhrks/ggfortify)
 
   .decorate.plot <- function(p, xlab = NULL, ylab = NULL, title = NULL) {
-    p + ggplot2::xlab(xlab) + ggplot2::ylab(ylab) + ggplot2::ggtitle(title)
+    if(title.bold){
+      p + ggplot2::xlab(xlab) + ggplot2::ylab(ylab) + ggplot2::ggtitle(title) + 
+        theme(plot.title = element_text(size = title.size, 
+                                        face = "bold", colour = title.colour))
+    } else{
+      p + ggplot2::xlab(xlab) + ggplot2::ylab(ylab) + ggplot2::ggtitle(title) + 
+        theme(plot.title = element_text(size = title.size, 
+                                        colour = title.colour))
+    }
+    
   }
   
   # Plots
@@ -495,14 +530,15 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
                                    size = ad.size, colour = ad.colour)
     p1 <- .decorate.label(p1, r.data)
 
-    if(sub.caption == "" | !dev_ask){
-      xlab = "Obs. number"
-    } else {
-      xlab = paste0("Obs. number\n",sub.caption)
-    }
+    xlab = "Obs. number"
+    
     p1 <- .decorate.plot(p1, xlab = xlab, ylab = ylab,
-                         title = t1)
+                         title = t1) + theme(axis.title.x = element_text(colour = x.axis.col, size = x.axis.size),
+                                             axis.title.y = element_text(colour = y.axis.col, size = y.axis.size))
     if(dev_ask){
+      p1 <- p1 + labs(caption = sub.caption) + theme(plot.caption = element_text(color = sub.caption.col, 
+                                                                                 face = sub.caption.face, 
+                                                                                 size = sub.caption.size))
       print(p1)
     }
   }
@@ -540,16 +576,16 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
 
     ylab <- paste0(residualname, " residuals")
 
-    if(sub.caption == "" | !dev_ask){
-      xlab = "Theoretical Quantiles"
-    } else {
-      xlab = paste0("Theoretical Quantiles\n", sub.caption)
-    }
+    xlab = "Theoretical Quantiles"
 
     p2 <- .decorate.label(p2, r.data)
     p2 <- .decorate.plot(p2, xlab = xlab,
-                         ylab = ylab, title = t2)
+                         ylab = ylab, title = t2) + theme(axis.title.x = element_text(colour = x.axis.col, size = x.axis.size),
+                                                         axis.title.y = element_text(colour = y.axis.col, size = y.axis.size))
     if(dev_ask){
+      p2 <- p2 + labs(caption = sub.caption) + theme(plot.caption = element_text(color = sub.caption.col, 
+                                                                                    face = sub.caption.face, 
+                                                                                    size = sub.caption.size))
       print(p2)
     }
   }
@@ -566,21 +602,28 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
                                    ymin = 0, ymax = ".cooksd")
     p3 <- ggplot2::ggplot(data = plot.data, mapping = mapping)
     if (!is.logical(shape) || shape) {
-      p3 <- p3 + geom_factory(geom_linerange, plot.data,
-                              colour = colour, size = size, linetype = linetype,
-                              alpha = alpha, fill = fill, shape = shape)
+      if(cook.plot.type == "linerange"){
+        p3 <- p3 + geom_factory(geom_linerange, plot.data,
+                                colour = colour, size = size, linetype = linetype,
+                                alpha = alpha, fill = fill, shape = shape)
+      } else if(cook.plot.type == "points"){
+        p3 <- p3 + geom_factory(geom_point, plot.data,
+                                colour = colour, size = size, linetype = linetype,
+                                alpha = alpha, fill = fill, shape = cook.plot.pointshape)
+      }
+
     }
     p3 <- .decorate.label(p3, cd.data)
 
-    if(sub.caption == "" | !dev_ask){
-      xlab = "Obs. Number"
-    } else {
-      xlab = paste0("Obs. Number\n", sub.caption)
-    }
+    xlab = "Obs. Number"
 
     p3 <- .decorate.plot(p3, xlab = xlab, ylab = "Cook's distance",
-                         title = t3)
+                         title = t3) + theme(axis.title.x = element_text(colour = x.axis.col, size = x.axis.size),
+                                             axis.title.y = element_text(colour = y.axis.col, size = y.axis.size))
     if(dev_ask){
+      p3 <- p3 + labs(caption = sub.caption) + theme(plot.caption = element_text(color = sub.caption.col, 
+                                                                                 face = sub.caption.face, 
+                                                                                 size = sub.caption.size))
       print(p3)
     }
   }
@@ -597,21 +640,27 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
                                    ymin = 0, ymax = ".gencooksd")
     p4 <- ggplot2::ggplot(data = plot.data, mapping = mapping)
     if (!is.logical(shape) || shape) {
-      p4 <- p4 + geom_factory(geom_linerange, plot.data,
+      if(cook.plot.type == "linerange"){
+        p4 <- p4 + geom_factory(geom_linerange, plot.data,
                               colour = colour, size = size, linetype = linetype,
                               alpha = alpha, fill = fill, shape = shape)
+      } else if(cook.plot.type == "points"){
+        p4 <- p4 + geom_factory(geom_point, plot.data,
+                                colour = colour, size = size, linetype = linetype,
+                                alpha = alpha, fill = fill, shape = cook.plot.pointshape)
+      }
     }
     p4 <- .decorate.label(p4, gcd.data)
 
-    if(sub.caption == "" | !dev_ask){
-      xlab = "Obs. Number"
-    } else {
-      xlab = paste0("Obs. Number\n", sub.caption)
-    }
+    xlab = "Obs. Number"
 
     p4 <- .decorate.plot(p4, xlab = xlab, ylab = "Generalized Cook's distance",
-                         title = t4)
+                         title = t4) + theme(axis.title.x = element_text(colour = x.axis.col, size = x.axis.size),
+                                             axis.title.y = element_text(colour = y.axis.col, size = y.axis.size))
     if(dev_ask){
+      p4 <- p4 + labs(caption = sub.caption) + theme(plot.caption = element_text(color = sub.caption.col, 
+                                                                                 face = sub.caption.face, 
+                                                                                 size = sub.caption.size))
       print(p4)
     }
   }
@@ -635,15 +684,15 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
                                    size = ad.size, colour = ad.colour)
     p5 <- .decorate.label(p5, cdgcd.data)
 
-    if(sub.caption == "" | !dev_ask){
-      xlab = "Generalized Cook's distance"
-    } else {
-      xlab = paste0("Generalized Cook's distance\n", sub.caption)
-    }
-
+    xlab = "Generalized Cook's distance"
+      
     p5 <- .decorate.plot(p5, xlab = xlab, ylab = "Cook's distance",
-                         title = t5)
+                         title = t5) + theme(axis.title.x = element_text(colour = x.axis.col, size = x.axis.size),
+                                             axis.title.y = element_text(colour = y.axis.col, size = y.axis.size))
     if(dev_ask){
+      p5 <- p5 + labs(caption = sub.caption) + theme(plot.caption = element_text(color = sub.caption.col, 
+                                                                                 face = sub.caption.face, 
+                                                                                 size = sub.caption.size))
       print(p5)
     }
   }
@@ -667,15 +716,15 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
                                     size = ad.size, colour = ad.colour)
     p6 <- .decorate.label(p6, respobs.data)
 
-    if(sub.caption == "" | !dev_ask){
       xlab = "Predicted values"
-    } else {
-      xlab = paste0("Predicted values\n", sub.caption)
-    }
 
     p6 <- .decorate.plot(p6, xlab = xlab, ylab = "Response values",
-                         title = t6)
+                         title = t6) + theme(axis.title.x = element_text(colour = x.axis.col, size = x.axis.size),
+                                             axis.title.y = element_text(colour = y.axis.col, size = y.axis.size))
     if(dev_ask){
+      p6 <- p6 + labs(caption = sub.caption) + theme(plot.caption = element_text(color = sub.caption.col, 
+                                                                                 face = sub.caption.face, 
+                                                                                 size = sub.caption.size))
       print(p6)
     }
   }
@@ -788,7 +837,18 @@ local_influence_benchmarks.mixpoissonreg <- function(model, perturbation = c("ca
 #' @param model A \code{mixpoissonreg} model.
 #' @param which a list or vector indicating which plots should be displayed. 	If a subset of the plots is required, specify a subset of the numbers 1:5, see caption below (and the 'Details') for the different kinds.
 #' @param title titles to appear above the plots; character vector or list of valid graphics annotations. Can be set to "" to suppress all titles.
+#' @param title.bold logical indicating whether the titles should be bold. The default is FALSE.
+#' @param title.size numerical indicating the size of the titles.
+#' @param title.colour title colour.
+#' @param type.plot a character indicating the type of the plots. The default is "linerange". The options are "linerange" and "points".
+#' @param x.axis.col colour of the x axis title.
+#' @param y.axis.col colour of the y axis title.
+#' @param x.axis.size size of the x axis title.
+#' @param y.axis.size size of the y axis title.
 #' @param sub.caption	common title-above the figures if there are more than one. If NULL, as by default, a possible abbreviated version of deparse(x$call) is used.
+#' @param sub.caption.col color of subcaption (when one figure at a time).
+#' @param sub.caption.size size of subcaption (when one figure at a time).
+#' @param sub.caption.face font face for subcaption, options are: "plain", "bold", "italic" and "bold.italic".
 #' @param curvature the curvature to be returned, 'conformal' for the conformal normal curvature (see Zhu and Lee, 2001 and Poon and Poon, 1999) or
 #' 'normal' (see Zhu and Lee, 2001 and Cook, 1986).
 #' @param direction the 'max.eigen' returns the eigenvector associated to the largest eigenvalue of the perturbation matrix. The 'canonical' considers
@@ -868,6 +928,14 @@ local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), ti
                                                                                            "Mean Explanatory Perturbation",
                                                                                            "Precision Explanatory Perturbation",
                                                                                            "Simultaneous Explanatory Perturbation"),
+                                                   title.size = NULL,
+                                                   title.bold = FALSE,
+                                                   title.colour = NULL,
+                                                   x.axis.col = NULL,
+                                                   y.axis.col = NULL,
+                                                   x.axis.size = NULL,
+                                                   y.axis.size = NULL,
+                                                   type.plot = "linerange",
                                                    curvature = c("conformal", "normal"),
                                                    direction = c("canonical", "max.eigen"), parameters = c("all", "mean", "precision"),
                                                    mean.covariates = NULL, precision.covariates = NULL,
@@ -876,6 +944,9 @@ local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), ti
                                                    ask = prod(graphics::par("mfcol")) <
                                                      length(which) && grDevices::dev.interactive(), include.modeltype = TRUE,
                                                    sub.caption = NULL,
+                                                   sub.caption.col = NULL,
+                                                   sub.caption.size = NULL,
+                                                   sub.caption.face = NULL,
                                                    gpar_sub.caption = list(fontface = "bold"), detect.influential = TRUE, n.influential = 5,
                                                    draw.benchmark = FALSE,
                                                    colour = "#444444", size = NULL, linetype = NULL, alpha = NULL, fill = NULL,
@@ -1066,7 +1137,11 @@ local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), ti
   # Based on internal function from ggfortify package (https://github.com/sinhrks/ggfortify)
 
   .decorate.plot <- function(p, xlab = NULL, ylab = NULL, title = NULL) {
-    p + ggplot2::xlab(xlab) + ggplot2::ylab(ylab) + ggplot2::ggtitle(title)
+    if(title.bold){
+      p + ggplot2::xlab(xlab) + ggplot2::ylab(ylab) + ggplot2::ggtitle(title) + theme(plot.title = element_text(size = title.size, face = "bold", colour = title.colour))
+    } else{
+      p + ggplot2::xlab(xlab) + ggplot2::ylab(ylab) + ggplot2::ggtitle(title) + theme(plot.title = element_text(size = title.size, colour = title.colour))
+    }
   }
 
   ylab_infl <- switch(curvature,
@@ -1097,22 +1172,26 @@ local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), ti
                                      ymin = 0, ymax = pert[[i]])
       p[[i]] <- ggplot2::ggplot(data = plot.data, mapping = mapping)
       if (!is.logical(shape) || shape) {
-        p[[i]] <- p[[i]] + geom_factory_influential(geom_linerange, plot.data,
-                                                    colour = colour, size = size, linetype = linetype,
-                                                    alpha = alpha, fill = fill, shape = shape)
+        if(type.plot == "linerange"){
+          p[[i]] <- p[[i]] + geom_factory_influential(geom_linerange, plot.data,
+                                                      colour = colour, size = size, linetype = linetype,
+                                                      alpha = alpha, fill = fill, shape = shape)
+        } else if(type.plot == "points"){
+          p[[i]] <- p[[i]] + geom_factory_influential(geom_point, plot.data,
+                                                      colour = colour, size = size, linetype = linetype,
+                                                      alpha = alpha, fill = fill, shape = shape)
+        }
+        
       }
       if(detect.influential){
         p[[i]] <- .decorate.label.influential(p[[i]], p.data[[i]])
       }
 
-      if(sub.caption == "" | !dev_ask){
-        xlab = "Obs. Number"
-      } else {
-        xlab = paste0("Obs. Number\n", sub.caption)
-      }
+      xlab = "Obs. Number"
 
       p[[i]] <- .decorate.plot(p[[i]], xlab = xlab, ylab = ylab_infl,
-                               title = t)
+                               title = t) + theme(axis.title.x = element_text(colour = x.axis.col, size = x.axis.size),
+                                                  axis.title.y = element_text(colour = y.axis.col, size = y.axis.size))
 
       bm_i <- bm[[pert[[i]]]]
 
@@ -1124,6 +1203,10 @@ local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), ti
       }
 
       if(dev_ask){
+        p[[i]] <- p[[i]] + labs(caption = sub.caption) + theme(plot.caption = element_text(color = sub.caption.col, 
+                                                                                            face = sub.caption.face, 
+                                                                                            size = sub.caption.size))
+        
         print(p[[i]])
       }
 

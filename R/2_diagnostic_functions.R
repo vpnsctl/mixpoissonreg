@@ -1,5 +1,5 @@
 #' @importFrom lmtest coeftest coefci lrtest waldtest coefci.default coeftest.default
-
+#' @importFrom grDevices col2rgb rgb
 #############################################################################################
 #' @name plot.mixpoissonreg
 #' @title Plot Diagnostics for \code{mixpoissonreg} Objects
@@ -17,19 +17,25 @@
 #' @param ask logical; if \code{TRUE}, the user is asked before each plot.
 #' @param id.n number of points to be labelled in each plot, starting with the most extreme.
 #' @param main character; title to be placed at each plot additionally (and above) all captions.
-#' @param fill_col_env fill color for the simulated envelopes if the \code{mixpoissonreg} object was fitted with envelopes. Notice that an alpha transparency may be passed by using
-#' grDevices::rgb function.
+#' @param fill_col_env fill color for the simulated envelopes if the \code{mixpoissonreg} object was fitted with envelopes. 
+#' @param fill_alpha_env alpha of the envelope region, when the \code{mixpoissonreg} object was fitted with envelopes. 
 #' @param line_col_env line color for the upper and lower quantile curves of the simulated envelopes if the \code{mixpoissonreg} object was fitted with envelopes.
+#' @param line_col_median line color for the median curve of the simulated envelopes if the \code{mixpoissonreg} object was fitted with envelopes.
 #' @param labels.id	 vector of labels, from which the labels for extreme points will be chosen. The default uses the observation numbers.
 #' @param label.pos positioning of labels, for the left half and right half of the graph respectively, for plots 2 and 6.
 #' @param type.cookplot character; what type of plot should be drawn for Cook's and Generalized Cook's distances (plots 3 and 4). The default is 'h'.
+#' @param col.id color of point labels.
 #' @param cex.id magnification of point labels.
 #' @param cex.caption	controls the size of caption.
+#' @param col.caption controls the caption color.
+#' @param cex.points controls the size of the points.
+#' @param col.points controls the colors of the points.
 #' @param cex.oma.main controls the size of the sub.caption only if that is above the figures when there is more than one.
 #' @param include.modeltype logical. Indicates whether the model type ('NB' or 'PIG') should be displayed on the captions.
 #' @param include.residualtype local. Indicates whether the name of the residual ('Pearson' or 'Score') should be displayed on the caption of plot 1 (Residuals vs. Index).
 #' @param qqline logical; if \code{TRUE} and the fit does *not* contain simulated
 #' envelopes, a qqline passing through the first and third quartiles of a standard normal distribution will be added to the normal Q-Q plot.
+#' @param col.qqline color of the qqline.
 #' @param ... graphical parameters to be passed.
 #' @details
 #' The \code{plot} method is implemented following the same structure as the \link[stats]{plot.lm}, so it will be easy to be used by practitioners that
@@ -73,19 +79,26 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
                                               "Cook's dist vs Generalized Cook's dist",
                                               "Response vs Fitted means"
                                               ),
-                               sub.caption = NULL, qqline = TRUE, 
+                               sub.caption = NULL, qqline = TRUE,
+                               col.qqline = "black",
                                main = "",
-                               line_col_env = grDevices::rgb(0.7, 0.7, 0.7),
-                               fill_col_env = grDevices::rgb(0.7, 0.7, 0.7, 0.7),
+                               line_col_env = "gray",
+                               line_col_median = "black",
+                               fill_col_env = "gray",
+                               fill_alpha_env = 0.7,
                                ask = prod(graphics::par("mfcol")) <
                                  length(which) && grDevices::dev.interactive(),
                                labels.id = names(stats::residuals(x)),
                                label.pos = c(4,2),
                                type.cookplot = 'h',
                                id.n = 3,
+                               col.id = NULL,
                                cex.id = 0.75,
                                cex.oma.main = 1.25,
                                cex.caption = 1,
+                               col.caption = "black",
+                               cex.points = 1,
+                               col.points = "black",
                                include.modeltype = TRUE,
                                include.residualtype = FALSE,
                                ...) {
@@ -127,17 +140,17 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
       idx_x_pos_id <- x_coord[idx_x_pos]
       idx_x_neg_id <- x_coord[idx_x_neg]
       if(length(idx_x_pos)>0){
-        graphics::text(idx_x_pos_id, idx_y_pos, labels = labels.id[idx_x_pos], cex = cex.id, xpd = TRUE, pos = 3, offset = offset)
+        graphics::text(idx_x_pos_id, idx_y_pos, labels = labels.id[idx_x_pos], col = col.id, cex = cex.id, xpd = TRUE, pos = 3, offset = offset)
       }
       if(length(idx_x_neg)>0){
-        graphics::text(idx_x_neg_id, idx_y_neg, labels = labels.id[idx_x_neg], cex = cex.id, xpd = TRUE, pos = 1, offset = offset)
+        graphics::text(idx_x_neg_id, idx_y_neg, labels = labels.id[idx_x_neg], col = col.id, cex = cex.id, xpd = TRUE, pos = 1, offset = offset)
       }
     } else{
       idx_x <- extreme_points
       idx_y <- y_coord[idx_x]
       idx_x_id <- x_coord[idx_x]
       labpos <- label.pos[1 + as.numeric(idx_x_id > mean(range(x_coord)))]
-      graphics::text(idx_x_id, idx_y, labels = labels.id[idx_x], cex = cex.id, pos = labpos, xpd = TRUE, offset = offset)
+      graphics::text(idx_x_id, idx_y, labels = labels.id[idx_x], col = col.id, cex = cex.id, pos = labpos, xpd = TRUE, offset = offset)
     }
   }
 
@@ -163,15 +176,17 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
     }
 
     ylab <- paste0(residualname, " residuals")
-    graphics::plot(res, ylab = ylab, xlab = "Obs. number", main = main, ylim = ylim, ...)
+    graphics::plot(res, ylab = ylab, xlab = "Obs. number", main = main, ylim = ylim, cex = cex.points, col = col.points, ...)
     graphics::abline(0, 0, lty = 3)
 
     if (one.fig)
       graphics::title(sub = sub.caption, ...)
 
-    graphics::mtext(getCaption(1), side = 3, cex = cex.caption)
+    graphics::mtext(getCaption(1), side = 3, cex = cex.caption, col = col.caption)
 
-    place_ids(1:length(res), res, 0.5, TRUE)
+    if(id.n > 0)
+      place_ids(1:length(res), res, 0.5, TRUE)
+    
     grDevices::dev.flush()
   }
 
@@ -188,7 +203,7 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
     if (!is.null(env)) {
       caption[[2]] <- paste0(caption[[2]]," with simulated envelopes")
     }
-    qq <- stats::qqnorm(res, xlab = "Theoretical quantiles", ylab = ylab, ylim = ylim, main = main, ...)
+    qq <- stats::qqnorm(res, xlab = "Theoretical quantiles", ylab = ylab, ylim = ylim, main = main, cex = cex.points, col = col.points, ...)
 
     if (one.fig)
       graphics::title(sub = sub.caption, ...)
@@ -197,17 +212,18 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
       aux <- sort(qq$x)
       graphics::lines(aux, env[1, ], col = line_col_env)
       graphics::lines(aux, env[3, ], col = line_col_env)
-      graphics::polygon(c(aux, rev(aux)), c(env[3, ], rev(env[1, ])), col = fill_col_env, border = NA)
-      graphics::lines(aux, env[2, ], lty = 2, lwd = 2)
+      fill_temp_col <- rgb(t(col2rgb(fill_col_env)), alpha = fill_alpha_env * 255, maxColorValue = 255)
+      graphics::polygon(c(aux, rev(aux)), c(env[3, ], rev(env[1, ])), col = fill_temp_col, border = NA)
+      graphics::lines(aux, env[2, ], lty = 2, lwd = 2, col = line_col_median)
     } else {
       if (qqline) {
-        stats::qqline(res, lty = 3)
+        stats::qqline(res, lty = 3, col = col.qqline)
       }
     }
-    graphics::points(qq$x, qq$y, ...)
+    graphics::points(qq$x, qq$y, cex = cex.points,  col = col.points, ...)
     if (id.n > 0)
       place_ids(qq$x, qq$y, 0.5, FALSE)
-    graphics::mtext(getCaption(2), side = 3, cex = cex.caption)
+    graphics::mtext(getCaption(2), side = 3, cex = cex.caption, col = col.caption)
     grDevices::dev.flush()
   }
 
@@ -224,11 +240,11 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
     if(id.n >0)
       ylim <- grDevices::extendrange(r = ylim, f = 0.08)
 
-    graphics::plot(CD, type = type.cookplot, main = main, xlab = "Obs. number", ylab = ylab, ylim=ylim, ...)
+    graphics::plot(CD, type = type.cookplot, main = main, xlab = "Obs. number", ylab = ylab, ylim=ylim, cex = cex.points,  col = col.points,...)
     if (one.fig)
       graphics::title(sub = sub.caption, ...)
 
-    graphics::mtext(getCaption(3), side = 3, cex = cex.caption)
+    graphics::mtext(getCaption(3), side = 3, cex = cex.caption, col = col.caption)
 
     if (id.n > 0)
       place_ids(1:length(CD), CD, 0.2, TRUE)
@@ -249,11 +265,11 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
       ylim <- grDevices::extendrange(r = ylim, f = 0.08)
 
     graphics::plot(GCD, type = type.cookplot, main = main, ylab = ylab,
-                   xlab = "Obs. number", ylim=ylim, ...)
+                   xlab = "Obs. number", ylim=ylim, cex = cex.points,  col = col.points, ...)
     if (one.fig)
       graphics::title(sub = sub.caption, ...)
 
-    graphics::mtext(getCaption(4), side = 3, cex = cex.caption)
+    graphics::mtext(getCaption(4), side = 3, cex = cex.caption, col = col.caption)
 
     if (id.n > 0)
       place_ids(1:length(GCD), GCD, 0.2, TRUE)
@@ -273,18 +289,18 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
 
     grDevices::dev.hold()
 
-    graphics::plot(GCD, CD, main = main, ylab = "Cook's distance", xlab = "Generalized Cook's distance", ylim=ylim, ...)
+    graphics::plot(GCD, CD, main = main, ylab = "Cook's distance", xlab = "Generalized Cook's distance", ylim=ylim, cex = cex.points,  col = col.points, ...)
     if (one.fig)
       graphics::title(sub = sub.caption, ...)
 
-    graphics::mtext(getCaption(5), side = 3, cex = cex.caption)
+    graphics::mtext(getCaption(5), side = 3, cex = cex.caption, col = col.caption)
 
     if (id.n > 0){
       extreme_points <- as.vector(Rfast::nth((CD/sum(CD))^2 + (GCD/sum(GCD))^2, k = id.n,
                                       num.of.nths = id.n,
                                       index.return = TRUE, descending = TRUE))
       labpos <- label.pos[1 + as.numeric(GCD[extreme_points] > mean(range(GCD)))]
-      graphics::text(GCD[extreme_points], CD[extreme_points], labels = labels.id[extreme_points], cex = cex.id, pos = labpos,
+      graphics::text(GCD[extreme_points], CD[extreme_points], labels = labels.id[extreme_points], col = col.id, cex = cex.id, pos = labpos,
                      xpd = TRUE, offset = 0.5)
     }
 
@@ -301,18 +317,18 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
       y = x$y
     }
 
-    graphics::plot(mu_est, y, xlab = "Predicted values", ylab = "Response values", main = main, ...)
+    graphics::plot(mu_est, y, xlab = "Predicted values", ylab = "Response values", main = main, cex = cex.points, col = col.points, ...)
     if (one.fig)
       graphics::title(sub = sub.caption, ...)
     graphics::abline(0, 1, lty = 3)
-    graphics::mtext(getCaption(6), side = 3, cex = cex.caption)
+    graphics::mtext(getCaption(6), side = 3, cex = cex.caption, col = col.caption)
 
     if (id.n > 0){
       extreme_points <- as.vector(Rfast::nth(abs(y - mu_est), k = id.n,
                                       num.of.nths = id.n,
                                       index.return = TRUE, descending = TRUE))
       labpos <- label.pos[1 + as.numeric(mu_est[extreme_points] > mean(range(mu_est)))]
-      graphics::text(mu_est[extreme_points], y[extreme_points], labels = labels.id[extreme_points], cex = cex.id, pos = labpos,
+      graphics::text(mu_est[extreme_points], y[extreme_points], labels = labels.id[extreme_points], col = col.id, cex = cex.id, pos = labpos,
                      xpd = TRUE, offset = 0.5)
     }
 

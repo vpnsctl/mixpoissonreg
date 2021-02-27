@@ -12,17 +12,24 @@
     "Response vs Fitted means"),
   sub.caption = NULL,
   qqline = TRUE,
+  col.qqline = "black",
   main = "",
-  line_col_env = grDevices::rgb(0.7, 0.7, 0.7),
-  fill_col_env = grDevices::rgb(0.7, 0.7, 0.7, 0.7),
+  line_col_env = "gray",
+  line_col_median = "black",
+  fill_col_env = "gray",
+  fill_alpha_env = 0.7,
   ask = prod(graphics::par("mfcol")) < length(which) && grDevices::dev.interactive(),
   labels.id = names(stats::residuals(x)),
   label.pos = c(4, 2),
   type.cookplot = "h",
   id.n = 3,
+  col.id = NULL,
   cex.id = 0.75,
   cex.oma.main = 1.25,
   cex.caption = 1,
+  col.caption = "black",
+  cex.points = 1,
+  col.points = "black",
   include.modeltype = TRUE,
   include.residualtype = FALSE,
   ...
@@ -43,12 +50,17 @@ plot number 2, 'Normal Q-Q', if the \code{mixpoissonreg} object was fitted with 
 \item{qqline}{logical; if \code{TRUE} and the fit does \emph{not} contain simulated
 envelopes, a qqline passing through the first and third quartiles of a standard normal distribution will be added to the normal Q-Q plot.}
 
+\item{col.qqline}{color of the qqline.}
+
 \item{main}{character; title to be placed at each plot additionally (and above) all captions.}
 
 \item{line_col_env}{line color for the upper and lower quantile curves of the simulated envelopes if the \code{mixpoissonreg} object was fitted with envelopes.}
 
-\item{fill_col_env}{fill color for the simulated envelopes if the \code{mixpoissonreg} object was fitted with envelopes. Notice that an alpha transparency may be passed by using
-grDevices::rgb function.}
+\item{line_col_median}{line color for the median curve of the simulated envelopes if the \code{mixpoissonreg} object was fitted with envelopes.}
+
+\item{fill_col_env}{fill color for the simulated envelopes if the \code{mixpoissonreg} object was fitted with envelopes.}
+
+\item{fill_alpha_env}{alpha of the envelope region, when the \code{mixpoissonreg} object was fitted with envelopes.}
 
 \item{ask}{logical; if \code{TRUE}, the user is asked before each plot.}
 
@@ -60,11 +72,19 @@ grDevices::rgb function.}
 
 \item{id.n}{number of points to be labelled in each plot, starting with the most extreme.}
 
+\item{col.id}{color of point labels.}
+
 \item{cex.id}{magnification of point labels.}
 
 \item{cex.oma.main}{controls the size of the sub.caption only if that is above the figures when there is more than one.}
 
 \item{cex.caption}{controls the size of caption.}
+
+\item{col.caption}{controls the caption color.}
+
+\item{cex.points}{controls the size of the points.}
+
+\item{col.points}{controls the colors of the points.}
 
 \item{include.modeltype}{logical. Indicates whether the model type ('NB' or 'PIG') should be displayed on the captions.}
 
