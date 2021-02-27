@@ -182,6 +182,7 @@
   sub.caption.col <span class='op'>=</span> <span class='cn'>NULL</span>,
   sub.caption.size <span class='op'>=</span> <span class='cn'>NULL</span>,
   sub.caption.face <span class='op'>=</span> <span class='cn'>NULL</span>,
+  sub.caption.hjust <span class='op'>=</span> <span class='fl'>0.5</span>,
   gpar_sub.caption <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>fontface <span class='op'>=</span> <span class='st'>"bold"</span><span class='op'>)</span>,
   detect.influential <span class='op'>=</span> <span class='cn'>TRUE</span>,
   n.influential <span class='op'>=</span> <span class='fl'>5</span>,
@@ -322,6 +323,12 @@ or <code>ncol</code>.</p></td>
     <tr>
       <th>sub.caption.face</th>
       <td><p>font face for subcaption, options are: "plain", "bold", "italic" and "bold.italic".</p></td>
+    </tr>
+    <tr>
+      <th>sub.caption.hjust</th>
+      <td><p>indicates the position of the subcaption (when one figure at a time). The
+default is 0.5, which indicates that the subcaption is centered, a value 0 places the subcaption
+at the left side of the plot whereas a value of 1 places the subcaption at the right side of the plot.</p></td>
     </tr>
     <tr>
       <th>gpar_sub.caption</th>
