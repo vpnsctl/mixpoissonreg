@@ -69,7 +69,7 @@
 #'
 #' daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
 #' prog | gender + math + prog, data = Attendance, envelope = 100)
-#' local_influence_plot(daysabs_fit_ml, perturbation = "case_weights")
+#' local_influence_plot(daysabs_fit_ml, which = 1)
 #' }
 #' @export
 local_influence.mixpoissonreg <- function(model, perturbation = c("case_weights", "hidden_variable",
