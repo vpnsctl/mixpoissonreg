@@ -270,79 +270,87 @@
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">1</span>, sub.caption.face <span class="op">=</span> <span class="st">"italic"</span><span class="op">)</span></code></pre></div>
 <p><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-28-1.png" width="700"></p>
-<p>Let us now customize the lines in the Cook’s distance plots, namely plots 3 and 4. By default, the line type for Cook’s distance plots is “linerange”:</p>
+<p>We can change the position of the subcaption by changing the <code>sub.caption.hjust</code> argument. The default is 0.5 which indicates that the subcaption is centered. We can place the subcaption to the left side of the plot by setting it to 0:</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-29-1.png" width="700"><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-29-2.png" width="700"></p>
-<p>We change the line colors by using the <code>colour</code> argument:</p>
+<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">1</span>, sub.caption.hjust <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></code></pre></div>
+<p><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-29-1.png" width="700"></p>
+<p>We can also place it on the right side of the plot by setting it to 1:</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span><span class="op">)</span>, colour <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
-<p><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-30-1.png" width="700"><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-30-2.png" width="700"></p>
-<p>Let us change the line type for Cook’s distance plots to points and change the point types to crosses:</p>
+<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">1</span>, sub.caption.hjust <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
+<p><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-30-1.png" width="700"></p>
+<p>Let us now customize the lines in the Cook’s distance plots, namely plots 3 and 4. By default, the line type for Cook’s distance plots is “linerange”:</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span><span class="op">)</span>, cook.plot.type <span class="op">=</span> <span class="st">"points"</span>, cook.plot.pointshape <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-31-1.png" width="700"><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-31-2.png" width="700"></p>
-<p>Finally, let us customize the quantile-quantile plots with and without simulated envelopes, namely, plot 2. The first customization is to remove the diagonal Q-Q line in the quantile-quantile plot without simulated envelopes:</p>
+<p>We change the line colors by using the <code>colour</code> argument:</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">2</span>, qqline <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
-<p><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-32-1.png" width="700"></p>
-<p>We can change the qqline color by using the <code>ad.colour</code> argument:</p>
+<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span><span class="op">)</span>, colour <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
+<p><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-32-1.png" width="700"><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-32-2.png" width="700"></p>
+<p>Let us change the line type for Cook’s distance plots to points and change the point types to crosses:</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">2</span>, ad.colour <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
-<p><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-33-1.png" width="700"></p>
-<p>Finally, let us consider a fitting with simulated envelopes:</p>
+<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span><span class="op">)</span>, cook.plot.type <span class="op">=</span> <span class="st">"points"</span>, cook.plot.pointshape <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></code></pre></div>
+<p><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-33-1.png" width="700"><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-33-2.png" width="700"></p>
+<p>Finally, let us customize the quantile-quantile plots with and without simulated envelopes, namely, plot 2. The first customization is to remove the diagonal Q-Q line in the quantile-quantile plot without simulated envelopes:</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">2</span>, qqline <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<p><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-34-1.png" width="700"></p>
+<p>We can change the qqline color by using the <code>ad.colour</code> argument:</p>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">2</span>, ad.colour <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
+<p><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-35-1.png" width="700"></p>
+<p>Finally, let us consider a fitting with simulated envelopes:</p>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit_env</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonregML.html">mixpoissonregML</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span> <span class="op">|</span> <span class="va">gender</span> <span class="op">+</span> 
                            <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span>, envelope <span class="op">=</span> <span class="fl">10</span>, data <span class="op">=</span> <span class="va">Attendance</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit_env</span>, which <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
-<p><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-34-1.png" width="700"></p>
-<p>Let us first change the color of the median line of the simulated envelopes:</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit_env</span>, which <span class="op">=</span> <span class="fl">2</span>, ad.colour <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
-<p><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-35-1.png" width="700"></p>
-<p>Let us also change the fill color of the simulated envelopes:</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit_env</span>, which <span class="op">=</span> <span class="fl">2</span>, env_fill <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
 <p><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-36-1.png" width="700"></p>
-<p>We can change the transparency of the envelope by changing the <code>env_alpha</code> argument:</p>
+<p>Let us first change the color of the median line of the simulated envelopes:</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit_env</span>, which <span class="op">=</span> <span class="fl">2</span>, env_fill <span class="op">=</span> <span class="st">"red"</span>, env_alpha <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit_env</span>, which <span class="op">=</span> <span class="fl">2</span>, ad.colour <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
 <p><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-37-1.png" width="700"></p>
+<p>Let us also change the fill color of the simulated envelopes:</p>
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit_env</span>, which <span class="op">=</span> <span class="fl">2</span>, env_fill <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
+<p><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-38-1.png" width="700"></p>
+<p>We can change the transparency of the envelope by changing the <code>env_alpha</code> argument:</p>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit_env</span>, which <span class="op">=</span> <span class="fl">2</span>, env_fill <span class="op">=</span> <span class="st">"red"</span>, env_alpha <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></code></pre></div>
+<p><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-39-1.png" width="700"></p>
 </div>
 <div id="points-to-be-identified" class="section level2">
 <h2 class="hasAnchor">
 <a href="#points-to-be-identified" class="anchor"></a>Points to be identified</h2>
 <p>By default the <code>autoplot.mixpoissonreg</code> function always identifies the 3 “most extreme” points. We can change it so that it does not identify any points by setting the argument <code>label.n</code> to 0:</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit</span>, label.n <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></code></pre></div>
-<p><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-38-1.png" width="700"><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-38-2.png" width="700"><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-38-3.png" width="700"><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-38-4.png" width="700"></p>
-<p>We can also increase the number of identified points. For instance:</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit</span>, label.n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
-<p><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-39-1.png" width="700"><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-39-2.png" width="700"><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-39-3.png" width="700"><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-39-4.png" width="700"></p>
-<p>Finally, we can change the labels of the identified points with the argument <code>label.label</code>. For instance, we may want to have the value of the <code>prog</code> covariate instead:</p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit</span>, label.label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.frame.html">model.frame</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">$</span><span class="va">prog</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit</span>, label.n <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></code></pre></div>
 <p><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-40-1.png" width="700"><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-40-2.png" width="700"><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-40-3.png" width="700"><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-40-4.png" width="700"></p>
+<p>We can also increase the number of identified points. For instance:</p>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit</span>, label.n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
+<p><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-41-1.png" width="700"><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-41-2.png" width="700"><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-41-3.png" width="700"><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-41-4.png" width="700"></p>
+<p>Finally, we can change the labels of the identified points with the argument <code>label.label</code>. For instance, we may want to have the value of the <code>prog</code> covariate instead:</p>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit</span>, label.label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.frame.html">model.frame</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">$</span><span class="va">prog</span><span class="op">)</span></code></pre></div>
+<p><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-42-1.png" width="700"><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-42-2.png" width="700"><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-42-3.png" width="700"><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-42-4.png" width="700"></p>
 </div>
 <div id="multiple-plots" class="section level2">
 <h2 class="hasAnchor">
 <a href="#multiple-plots" class="anchor"></a>Multiple plots</h2>
 <p>We can easily create frames of multiple plots by simply using one of the arguments <code>nrow</code> or <code>ncol</code>. For instance,</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit</span>, nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
-<p><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-41-1.png" width="700"></p>
-<p>As previously mentioned, we can change the common title in a multiple plot by changing the <code>sub.caption</code> argument:</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit</span>, nrow <span class="op">=</span> <span class="fl">2</span>, sub.caption <span class="op">=</span> <span class="st">"Mixed Poisson Regression"</span><span class="op">)</span></code></pre></div>
-<p><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-42-1.png" width="700"></p>
-<p>To customize the common title, one can provide a list containing the “customizations” to the <code>gpar_sub.caption</code> argument. For instance:</p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit</span>, nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<p><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-43-1.png" width="700"></p>
+<p>As previously mentioned, we can change the common title in a multiple plot by changing the <code>sub.caption</code> argument:</p>
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit</span>, nrow <span class="op">=</span> <span class="fl">2</span>, sub.caption <span class="op">=</span> <span class="st">"Mixed Poisson Regression"</span><span class="op">)</span></code></pre></div>
+<p><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-44-1.png" width="700"></p>
+<p>To customize the common title, one can provide a list containing the “customizations” to the <code>gpar_sub.caption</code> argument. For instance:</p>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit</span>, nrow <span class="op">=</span> <span class="fl">2</span>, sub.caption <span class="op">=</span> <span class="st">"Mixed Poisson Regression"</span>,
          gpar_sub.caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>fontsize <span class="op">=</span> <span class="fl">30</span>, col <span class="op">=</span> <span class="st">"red"</span>, 
                                  fontface <span class="op">=</span> <span class="st">"italic"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-43-1.png" width="700"></p>
+<p><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-45-1.png" width="700"></p>
 </div>
 </div>
   </div>
