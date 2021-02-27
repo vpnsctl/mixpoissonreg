@@ -98,6 +98,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/ggplot2-plots-mixpoissonreg.html">Building and customizing ggplot2-based diagnostic plots with the mixpoissonreg package</a>
+    </li>
+    <li>
       <a href="../articles/influence-mixpoissonreg.html">Global and local influence analysis with the *mixpoissonreg* package</a>
     </li>
     <li>
@@ -107,7 +110,7 @@
       <a href="../articles/ml-mixpoissonreg.html">Maximum-likelihood estimation with the mixpoissonreg package</a>
     </li>
     <li>
-      <a href="../articles/plots-mixpoissonreg.html">Diagnostic plots with the mixpoissonreg package</a>
+      <a href="../articles/plots-mixpoissonreg.html">Building and customizing base-R diagnostic plots with the mixpoissonreg package</a>
     </li>
     <li>
       <a href="../articles/tidyverse-mixpoissonreg.html">mixpoissonreg in the tidyverse</a>
@@ -193,28 +196,28 @@ The variable <code>prog</code> is a three-level factor indicating the type of in
 #&gt; 
 #&gt; Pearson residuals:
 #&gt;      RSS      Min       1Q   Median       3Q      Max 
-#&gt; 239.2040  -1.0836  -0.6058  -0.3062   0.2519   4.1196 
+#&gt; 239.1932  -1.0839  -0.6058  -0.3062   0.2518   4.1190 
 #&gt; 
 #&gt; Coefficients modeling the mean (with  link):
 #&gt;                 Estimate Std.error z-value Pr(&gt;|z|)    
-#&gt; (Intercept)     2.750853  0.165416  16.630  &lt; 2e-16 ***
-#&gt; gendermale     -0.251161  0.136873  -1.835  0.06651 .  
-#&gt; math           -0.006730  0.002679  -2.512  0.01202 *  
-#&gt; progAcademic   -0.423484  0.148479  -2.852  0.00434 ** 
-#&gt; progVocational -1.260924  0.203436  -6.198 5.71e-10 ***
+#&gt; (Intercept)     2.750791  0.165376  16.634  &lt; 2e-16 ***
+#&gt; gendermale     -0.251195  0.136861  -1.835  0.06645 .  
+#&gt; math           -0.006730  0.002679  -2.512  0.01200 *  
+#&gt; progAcademic   -0.423365  0.148448  -2.852  0.00435 ** 
+#&gt; progVocational -1.260746  0.203430  -6.197 5.74e-10 ***
 #&gt; 
 #&gt; Coefficients modeling the precision (with  link):
 #&gt;                 Estimate Std.error z-value Pr(&gt;|z|)    
-#&gt; (Intercept)     1.211252  0.438442   2.763 0.005734 ** 
-#&gt; gendermale     -0.114332  0.304682  -0.375 0.707475    
-#&gt; math           -0.005686  0.006098  -0.932 0.351111    
-#&gt; progAcademic   -1.284018  0.386350  -3.323 0.000889 ***
-#&gt; progVocational -1.610037  0.475613  -3.385 0.000711 ***
+#&gt; (Intercept)     1.212095  0.438390   2.765 0.005694 ** 
+#&gt; gendermale     -0.114162  0.304677  -0.375 0.707886    
+#&gt; math           -0.005688  0.006098  -0.933 0.350952    
+#&gt; progAcademic   -1.284970  0.386300  -3.326 0.000880 ***
+#&gt; progVocational -1.611123  0.475586  -3.388 0.000705 ***
 #&gt; ---
 #&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
 #&gt; 
-#&gt; Efron's pseudo R-squared:  0.1861608 
-#&gt; Number of iterations of the EM algorithm = 2632</div><div class='input'>
+#&gt; Efron's pseudo R-squared:  0.1861612 
+#&gt; Number of iterations of the EM algorithm = 1733</div><div class='input'>
 <span class='va'>daysabs_fit_red</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mixpoissonreg.html'>mixpoissonreg</a></span><span class='op'>(</span><span class='va'>daysabs</span> <span class='op'>~</span> <span class='va'>gender</span> <span class='op'>+</span> <span class='va'>math</span> <span class='op'>+</span> <span class='va'>prog</span> <span class='op'>|</span> <span class='va'>prog</span>, 
 data <span class='op'>=</span> <span class='va'>Attendance</span>, model <span class='op'>=</span> <span class='st'>"PIG"</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>daysabs_fit_red</span><span class='op'>)</span>
