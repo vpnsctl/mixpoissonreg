@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Diagnostic plots with the mixpoissonreg package • mixpoissonreg</title>
+<title>Building and customizing base-R diagnostic plots with the mixpoissonreg package • mixpoissonreg</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Diagnostic plots with the mixpoissonreg package">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Building and customizing base-R diagnostic plots with the mixpoissonreg package">
 <meta property="og:description" content="mixpoissonreg">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -57,6 +57,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/ggplot2-plots-mixpoissonreg.html">Building and customizing ggplot2-based diagnostic plots with the mixpoissonreg package</a>
+    </li>
+    <li>
       <a href="../articles/influence-mixpoissonreg.html">Global and local influence analysis with the *mixpoissonreg* package</a>
     </li>
     <li>
@@ -66,7 +69,7 @@
       <a href="../articles/ml-mixpoissonreg.html">Maximum-likelihood estimation with the mixpoissonreg package</a>
     </li>
     <li>
-      <a href="../articles/plots-mixpoissonreg.html">Diagnostic plots with the mixpoissonreg package</a>
+      <a href="../articles/plots-mixpoissonreg.html">Building and customizing base-R diagnostic plots with the mixpoissonreg package</a>
     </li>
     <li>
       <a href="../articles/tidyverse-mixpoissonreg.html">mixpoissonreg in the tidyverse</a>
@@ -100,10 +103,10 @@
       </header><script src="plots-mixpoissonreg_files/header-attrs-2.7/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Diagnostic plots with the mixpoissonreg package</h1>
+      <h1 data-toc-skip>Building and customizing base-R diagnostic plots with the mixpoissonreg package</h1>
                         <h4 class="author">Alexandre B. Simas</h4>
             
-            <h4 class="date">2021-02-23</h4>
+            <h4 class="date">2021-02-27</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/vpnsctl/mixpoissonreg/blob/master/vignettes/plots-mixpoissonreg.Rmd"><code>vignettes/plots-mixpoissonreg.Rmd</code></a></small>
       <div class="hidden name"><code>plots-mixpoissonreg.Rmd</code></div>
@@ -112,56 +115,222 @@
 
     
     
-<div id="plots-using-rs-base-graphics" class="section level1">
+<div id="base-r-diagnostic-plots" class="section level1">
 <h1 class="hasAnchor">
-<a href="#plots-using-rs-base-graphics" class="anchor"></a>Plots using R’s base graphics</h1>
+<a href="#base-r-diagnostic-plots" class="anchor"></a>base-R diagnostic plots</h1>
 <div id="choosing-plots" class="section level2">
 <h2 class="hasAnchor">
 <a href="#choosing-plots" class="anchor"></a>Choosing plots</h2>
+<p>The first, and maybe the easiest, customizable option is the choice of plots to be displayed. The current available plots are (together with their corresponding numbers):</p>
+<ol style="list-style-type: decimal">
+<li><em>Residuals vs Obs. number</em></li>
+<li><em>Normal Q-Q</em></li>
+<li><em>Cook’s distance</em></li>
+<li><em>Generalized Cook’s distance</em></li>
+<li><em>Cook’s dist vs Generalized Cook’s dist</em></li>
+<li><em>Response vs Fitted means</em></li>
+</ol>
+<p>These plots can be chosen by giving a list of the numbers of the wanted plots in the <code>which</code> argument.</p>
+<p>If the argument <code>which</code> is not provided, then, by default, the plots 1, 2, 5 and 6 will be displayed:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/vpnsctl/mixpoissonreg/">mixpoissonreg</a></span><span class="op">)</span>
+
+<span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonreg.html">mixpoissonreg</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span> <span class="op">|</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span>, 
+                        data <span class="op">=</span> <span class="va">Attendance</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-2-1.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-2-2.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-2-3.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-2-4.png" width="700"></p>
+<p>If we want only a single plot, we simply indicate its number. For instance, if we only want the plot of Cook’s distances, we simply set <code>which = 3</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
+<p>If we want more than one, we provide a list with the desired plots. Suppose we want the global influence-related plots, that is, plots 3, 4 and 5. Then, we set <code>which = c(3,4,5)</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-4-1.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-4-2.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-4-3.png" width="700"></p>
 </div>
 <div id="titles-and-subtitles" class="section level2">
 <h2 class="hasAnchor">
 <a href="#titles-and-subtitles" class="anchor"></a>Titles and subtitles</h2>
-<p>Incluir comentários sobre include.modeltype = TRUE, include.residualtype = FALSE</p>
+<p>In this section we will describe how to customize titles and subtitles.</p>
+<p>First of all, by default, the type of the fitted model (that is, if it is a Negative-Binomial or Poisson Inverse Gaussian regression) is included in each caption. See, for instance, the plot below:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+<p>To remove the model type, simply set <code>include.modeltype</code> to <code>FALSE</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">1</span>, include.modeltype <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
+<p>One should notice that in both plots, the type of the residual was only included in the <em>y</em>-axis label. To also include the type of the residual at the caption, simply set <code>include.residualtype</code> to <code>TRUE</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">1</span>, include.residualtype <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+<p>One can define one common title to all plots by setting the <code>main</code> parameter to such common title. For instance,</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, main <span class="op">=</span> <span class="st">"Mixed Poisson Regression"</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-8-1.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-8-2.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-8-3.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-8-4.png" width="700"></p>
+<p>The <code>main</code> parameter also works to provide an additional title to a single plot, by also setting the <code>which</code> parameter to the desired plot:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">1</span>, main <span class="op">=</span> <span class="st">"Mixed Poisson Regression"</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
+<p>The captions (displayed above the plot) can be altered by setting the <code>caption</code> parameter to a list containing the wanted captions. One drawback is that we have to provide a list containing the captions we want in the positions of the plots we want. For example, if we only have one plot, the following example will change the caption:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">1</span>, caption <span class="op">=</span> <span class="st">"My caption"</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
+<p>However, it will not work for the remaining plots, for instance:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">2</span>, caption <span class="op">=</span> <span class="st">"My caption"</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
+<p>A simple way to circumvent the above situation is to create an empty list and set the titles at the positions we want:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">my_captions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">""</span>,<span class="fl">6</span><span class="op">)</span>
+<span class="va">my_captions</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"My caption 2"</span>
+<span class="va">my_captions</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"My caption 4"</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">4</span><span class="op">)</span>, caption <span class="op">=</span> <span class="va">my_captions</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-12-1.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-12-2.png" width="700"></p>
+<p>Notice that, since we did not change the <code>include.modeltype</code> argument, the model type are added in the new captions.</p>
+<p>We can change the size of the captions with the argument <code>cex.caption</code>. The default size is <code>1</code>. So, for instance,</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">my_captions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">""</span>,<span class="fl">6</span><span class="op">)</span>
+<span class="va">my_captions</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"My caption 2"</span>
+<span class="va">my_captions</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"My caption 4"</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">4</span><span class="op">)</span>, caption <span class="op">=</span> <span class="va">my_captions</span>, cex.caption <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-13-1.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-13-2.png" width="700"></p>
+<p>We can also change the subcaption. By default, the subcaption is a simplified version of the call to the <code>mixpoissonreg</code> function that was used to fit the model.</p>
+<p>We must have some caution on describing the subcaption. If each plot is given in one window (without using the <code><a href="https://rdrr.io/r/graphics/par.html">par(...)</a></code> command, for example), then the subcaption is the caption below the <em>x</em>-axis label. However, if multiple plots are given at once, and there is space on the upper part of the plot, then the subcaption is a general caption for all the plots.</p>
+<p>We will illustrate the above description with examples to make it clearer.</p>
+<p>The subcaption can be altered by setting the <code>sub.caption</code> parameter to the desired caption.</p>
+<p>Thus, we begin by providing the plots without the usage of <code>par</code> function.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">1</span>, sub.caption <span class="op">=</span> <span class="st">"My subcaption"</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
+<p>Notice that the subcaption is below the <em>x</em>-axis label. The same happens even if we there is more than one plot and we do not use the <code>par</code> function:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, sub.caption <span class="op">=</span> <span class="st">"My subcaption"</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-15-1.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-15-2.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-15-3.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-15-4.png" width="700"></p>
+<p>Now, notice the position of the subcaption when we gather multiple plots using the <code>par</code> function (while we provide room the subcaption by using the <code>oma</code> argument):</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>, oma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span>, mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span><span class="st">"mar"</span><span class="op">)</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, sub.caption <span class="op">=</span> <span class="st">"My subcaption"</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
+<p>In the previous case, that is, the case in which we have the subcaption above all plots, one can change the size of the subcaption using the argument <code>cex.oma.main</code>.</p>
+<p>For instance,</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>, oma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span>, mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span><span class="st">"mar"</span><span class="op">)</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, sub.caption <span class="op">=</span> <span class="st">"My subcaption"</span>, cex.oma.main <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
 </div>
 <div id="colors-sizes-point-types-and-line-types" class="section level2">
 <h2 class="hasAnchor">
 <a href="#colors-sizes-point-types-and-line-types" class="anchor"></a>Colors, sizes, point types and line types</h2>
-<p>Também mudar o tipo de gráfico da distância de Cook.</p>
+<p>In this section we show how to customize colors, sizes and types of lines and points.</p>
+<p>First of all, notice that several graphical parameters may be passed as additional parameters through the three dots ellipsis. For instance, we may pass the argument <code>pch</code> from <code>plot.default</code> to change the type of points:</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">1</span>, pch <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
+<p>Another example is the <code>main</code> color. Let us set a main title with the <code>main</code> argument, and change its color with the <code>col.main</code> argument:</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">1</span>, main <span class="op">=</span> <span class="st">"Plot 1"</span>, col.main <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-19-1.png" width="700"></p>
+<p>We can also change the <code>main</code> size, by using the <code>cex.main</code> argument:</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">1</span>, main <span class="op">=</span> <span class="st">"Plot 1"</span>, col.main <span class="op">=</span> <span class="st">"red"</span>, cex.main <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-20-1.png" width="700"></p>
+<p>Similarly, we can change the <em>x</em> and <em>y</em> label’s colors by using the <code>col.lab</code> argument:</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">1</span>, col.lab <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-21-1.png" width="700"></p>
+<p>As well as change their sizes by using the <code>cex.lab</code> argument:</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">1</span>, cex.lab <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-22-1.png" width="700"></p>
+<p>We can change the <code>sub.caption</code> color by using the <code>col.sub</code> argument:</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">1</span>, col.sub <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-23-1.png" width="700"></p>
+<p>and change its size by using the <code>cex.sub</code> argument:</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">1</span>, cex.sub <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-24-1.png" width="700"></p>
+<p>Now, we deal with specific arguments of the <code>plot.mixpoissonreg</code>. We begin by dealing with the point colors. To change the colors of the points, we use the <code>col.points</code> argument:</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">1</span>, col.points <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-25-1.png" width="700"></p>
+<p>To change the point sizes, we use the argument <code>cex.points</code>:</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">1</span>, cex.points <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-26-1.png" width="700"></p>
+<p>We will now deal with point labels. First of all, we may change the color of the point labels by using the argument <code>col.id</code>:</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">1</span>, col.id <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-27-1.png" width="700"></p>
+<p>We can change the point labels’ sizes by using the <code>cex.id</code> argument:</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">1</span>, cex.id <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-28-1.png" width="700"></p>
+<p>Let us now customize the lines in the Cook’s distance plots, namely plots 3 and 4. By default, the line type for Cook’s distance plots is <code>'h'</code>:</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-29-1.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-29-2.png" width="700"></p>
+<p>Let us change the line type for Cook’s distance plots to points and change the point types to crosses:</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span><span class="op">)</span>, type.cookplot <span class="op">=</span> <span class="st">"p"</span>, pch <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-30-1.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-30-2.png" width="700"></p>
+<p>Let us now change the colors of titles and captions. To change the caption’s color, we use the <code>col.caption</code> argument:</p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, col.caption <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-31-1.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-31-2.png" width="700"></p>
+<p>Finally, let us customize the quantile-quantile plots with and without simulated envelopes, namely, plot 2. The first customization is to remove the diagonal Q-Q line in the quantile-quantile plot without simulated envelopes:</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">2</span>, qqline <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-32-1.png" width="700"></p>
+<p>We can change the qqline color by using the <code>col.qqline</code> argument:</p>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fl">2</span>, col.qqline <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-33-1.png" width="700"></p>
+<p>Finally, let us consider a fitting with simulated envelopes:</p>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">fit_env</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonregML.html">mixpoissonregML</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span> <span class="op">|</span> <span class="va">gender</span> <span class="op">+</span> 
+                           <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span>, envelope <span class="op">=</span> <span class="fl">10</span>, data <span class="op">=</span> <span class="va">Attendance</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit_env</span>, which <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-34-1.png" width="700"></p>
+<p>Let us first change the color of the lines of the upper and lower bands of the simulated envelopes:</p>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit_env</span>, which <span class="op">=</span> <span class="fl">2</span>, line_col_env <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-35-1.png" width="700"></p>
+<p>Let us now change the color of the median curve of the simulated envelopes:</p>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit_env</span>, which <span class="op">=</span> <span class="fl">2</span>, line_col_median <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-36-1.png" width="700"></p>
+<p>Let us also change the fill color of the simulated envelopes:</p>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit_env</span>, which <span class="op">=</span> <span class="fl">2</span>, line_col_env <span class="op">=</span> <span class="st">"red"</span>, fill_col_env <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-37-1.png" width="700"></p>
+<p>Let us change the color transparency. To such an end we use the argument <code>fill_alpha_env</code>:</p>
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit_env</span>, which <span class="op">=</span> <span class="fl">2</span>, line_col_env <span class="op">=</span> <span class="st">"red"</span>, fill_col_env <span class="op">=</span> <span class="st">"red"</span>,
+     fill_alpha_env <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-38-1.png" width="700"></p>
 </div>
 <div id="points-to-be-identified" class="section level2">
 <h2 class="hasAnchor">
 <a href="#points-to-be-identified" class="anchor"></a>Points to be identified</h2>
-<p>Mexer nas quantidades e nos labels.</p>
-</div>
-<div id="multiple-plots" class="section level2">
-<h2 class="hasAnchor">
-<a href="#multiple-plots" class="anchor"></a>Multiple plots</h2>
-</div>
-</div>
-<div id="plots-using-ggplot2" class="section level1">
-<h1 class="hasAnchor">
-<a href="#plots-using-ggplot2" class="anchor"></a>Plots using <code>ggplot2</code>
-</h1>
-<div id="choosing-plots-1" class="section level2">
-<h2 class="hasAnchor">
-<a href="#choosing-plots-1" class="anchor"></a>Choosing plots</h2>
-</div>
-<div id="titles-and-subtitles-1" class="section level2">
-<h2 class="hasAnchor">
-<a href="#titles-and-subtitles-1" class="anchor"></a>Titles and subtitles</h2>
-</div>
-<div id="colors-sizes-point-types-and-line-types-1" class="section level2">
-<h2 class="hasAnchor">
-<a href="#colors-sizes-point-types-and-line-types-1" class="anchor"></a>Colors, sizes, point types and line types</h2>
-</div>
-<div id="points-to-be-identified-1" class="section level2">
-<h2 class="hasAnchor">
-<a href="#points-to-be-identified-1" class="anchor"></a>Points to be identified</h2>
-</div>
-<div id="multiple-plots-1" class="section level2">
-<h2 class="hasAnchor">
-<a href="#multiple-plots-1" class="anchor"></a>Multiple plots</h2>
+<p>By default the <code>plot.mixpoissonreg</code> function always identifies the 3 “most extreme” points. We can change it so that it does not identify any points by setting the argument <code>id.n</code> to 0:</p>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, id.n <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-39-1.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-39-2.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-39-3.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-39-4.png" width="700"></p>
+<p>We can also increase the number of identified points. For instance:</p>
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, id.n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-40-1.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-40-2.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-40-3.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-40-4.png" width="700"></p>
+<p>Finally, we can change the labels of the identified points with the argument <code>labels.id</code>. For instance, we may want to have the value of the <code>prog</code> covariate instead:</p>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, labels.id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.frame.html">model.frame</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">$</span><span class="va">prog</span><span class="op">)</span></code></pre></div>
+<p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-41-1.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-41-2.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-41-3.png" width="700"><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-41-4.png" width="700"></p>
 </div>
 </div>
   </div>
