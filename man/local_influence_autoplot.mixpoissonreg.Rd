@@ -32,6 +32,7 @@
   sub.caption.col = NULL,
   sub.caption.size = NULL,
   sub.caption.face = NULL,
+  sub.caption.hjust = 0.5,
   gpar_sub.caption = list(fontface = "bold"),
   detect.influential = TRUE,
   n.influential = 5,
@@ -120,6 +121,10 @@ or \code{ncol}.}
 \item{sub.caption.size}{size of subcaption (when one figure at a time).}
 
 \item{sub.caption.face}{font face for subcaption, options are: "plain", "bold", "italic" and "bold.italic".}
+
+\item{sub.caption.hjust}{indicates the position of the subcaption (when one figure at a time). The
+default is 0.5, which indicates that the subcaption is centered, a value 0 places the subcaption
+at the left side of the plot whereas a value of 1 places the subcaption at the right side of the plot.}
 
 \item{gpar_sub.caption}{list of gpar parameters to be used as common title in the case of multiple plots. The title will be given in sub.caption argument. See
 the help of \code{\link[grid]{gpar}} function from the \pkg{grid} package for all the available options.}

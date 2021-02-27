@@ -209,6 +209,9 @@ tidy.mixpoissonreg <- function(x, conf.int = FALSE, conf.level = 0.95, ...){
 #' @param sub.caption.col color of subcaption (when one figure at a time).
 #' @param sub.caption.size size of subcaption (when one figure at a time).
 #' @param sub.caption.face font face for subcaption, options are: "plain", "bold", "italic" and "bold.italic".
+#' @param sub.caption.hjust indicates the position of the subcaption (when one figure at a time). The 
+#' default is 0.5, which indicates that the subcaption is centered, a value 0 places the subcaption
+#' at the left side of the plot whereas a value of 1 places the subcaption at the right side of the plot.
 #' @param cook.plot.type character indicating the type of plot for Cook's distance 
 #' and generalized Cook's distance. Default is "linerange". The options are "linerange" and "points".
 #' @param cook.plot.pointshape the shape of points if "cook.plot.type" is set to "points".
@@ -299,6 +302,7 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
                                    sub.caption.col = NULL,
                                    sub.caption.size = NULL,
                                    sub.caption.face = NULL,
+                                   sub.caption.hjust = 0.5,
                                    env_alpha = 0.5, env_fill = "grey70", gpar_sub.caption = list(fontface = "bold"),
                                    colour = "#444444", size = NULL, linetype = NULL, alpha = NULL, fill = NULL,
                                    shape = NULL, label = TRUE, label.label = NULL, label.colour = "#000000",
@@ -538,7 +542,8 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
     if(dev_ask){
       p1 <- p1 + labs(caption = sub.caption) + theme(plot.caption = element_text(color = sub.caption.col, 
                                                                                  face = sub.caption.face, 
-                                                                                 size = sub.caption.size))
+                                                                                 size = sub.caption.size,
+                                                                                 hjust = sub.caption.hjust))
       print(p1)
     }
   }
@@ -585,7 +590,8 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
     if(dev_ask){
       p2 <- p2 + labs(caption = sub.caption) + theme(plot.caption = element_text(color = sub.caption.col, 
                                                                                     face = sub.caption.face, 
-                                                                                    size = sub.caption.size))
+                                                                                    size = sub.caption.size,
+                                                                                 hjust = sub.caption.hjust))
       print(p2)
     }
   }
@@ -623,7 +629,8 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
     if(dev_ask){
       p3 <- p3 + labs(caption = sub.caption) + theme(plot.caption = element_text(color = sub.caption.col, 
                                                                                  face = sub.caption.face, 
-                                                                                 size = sub.caption.size))
+                                                                                 size = sub.caption.size,
+                                                                                 hjust = sub.caption.hjust))
       print(p3)
     }
   }
@@ -660,7 +667,8 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
     if(dev_ask){
       p4 <- p4 + labs(caption = sub.caption) + theme(plot.caption = element_text(color = sub.caption.col, 
                                                                                  face = sub.caption.face, 
-                                                                                 size = sub.caption.size))
+                                                                                 size = sub.caption.size,
+                                                                                 hjust = sub.caption.hjust))
       print(p4)
     }
   }
@@ -692,7 +700,8 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
     if(dev_ask){
       p5 <- p5 + labs(caption = sub.caption) + theme(plot.caption = element_text(color = sub.caption.col, 
                                                                                  face = sub.caption.face, 
-                                                                                 size = sub.caption.size))
+                                                                                 size = sub.caption.size,
+                                                                                 hjust = sub.caption.hjust))
       print(p5)
     }
   }
@@ -724,7 +733,8 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
     if(dev_ask){
       p6 <- p6 + labs(caption = sub.caption) + theme(plot.caption = element_text(color = sub.caption.col, 
                                                                                  face = sub.caption.face, 
-                                                                                 size = sub.caption.size))
+                                                                                 size = sub.caption.size,
+                                                                                 hjust = sub.caption.hjust))
       print(p6)
     }
   }
@@ -849,6 +859,9 @@ local_influence_benchmarks.mixpoissonreg <- function(model, perturbation = c("ca
 #' @param sub.caption.col color of subcaption (when one figure at a time).
 #' @param sub.caption.size size of subcaption (when one figure at a time).
 #' @param sub.caption.face font face for subcaption, options are: "plain", "bold", "italic" and "bold.italic".
+#' @param sub.caption.hjust indicates the position of the subcaption (when one figure at a time). The 
+#' default is 0.5, which indicates that the subcaption is centered, a value 0 places the subcaption
+#' at the left side of the plot whereas a value of 1 places the subcaption at the right side of the plot.
 #' @param curvature the curvature to be returned, 'conformal' for the conformal normal curvature (see Zhu and Lee, 2001 and Poon and Poon, 1999) or
 #' 'normal' (see Zhu and Lee, 2001 and Cook, 1986).
 #' @param direction the 'max.eigen' returns the eigenvector associated to the largest eigenvalue of the perturbation matrix. The 'canonical' considers
@@ -947,6 +960,7 @@ local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), ti
                                                    sub.caption.col = NULL,
                                                    sub.caption.size = NULL,
                                                    sub.caption.face = NULL,
+                                                   sub.caption.hjust = 0.5,
                                                    gpar_sub.caption = list(fontface = "bold"), detect.influential = TRUE, n.influential = 5,
                                                    draw.benchmark = FALSE,
                                                    colour = "#444444", size = NULL, linetype = NULL, alpha = NULL, fill = NULL,
@@ -1205,7 +1219,8 @@ local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), ti
       if(dev_ask){
         p[[i]] <- p[[i]] + labs(caption = sub.caption) + theme(plot.caption = element_text(color = sub.caption.col, 
                                                                                             face = sub.caption.face, 
-                                                                                            size = sub.caption.size))
+                                                                                            size = sub.caption.size,
+                                                                                            hjust = sub.caption.hjust))
         
         print(p[[i]])
       }

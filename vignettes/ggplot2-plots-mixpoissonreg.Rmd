@@ -231,6 +231,18 @@ We can also change the font face by using the `sub.caption.face` argument:
 autoplot(fit, which = 1, sub.caption.face = "italic")
 ```
 
+We can change the position of the subcaption by changing the `sub.caption.hjust` argument. The default is 0.5 which indicates that the subcaption is centered. We can place the subcaption to the left side of the plot by setting it to 0:
+
+```{r}
+autoplot(fit, which = 1, sub.caption.hjust = 0)
+```
+
+We can also place it on the right side of the plot by setting it to 1:
+
+```{r}
+autoplot(fit, which = 1, sub.caption.hjust = 1)
+```
+
 Let us now customize the lines in the Cook's distance plots, namely plots 3 and 4. By default, the line type for Cook's distance plots is "linerange":
 
 ```{r}
