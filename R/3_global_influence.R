@@ -428,10 +428,10 @@ if(do.coef){
     c(new_beta, new_alpha)
   })
 
-  influence_mpreg$coefficients.mean <- matrix(sapply(new_coeff, function(coeffs){coeffs[1:n_beta]}), nrow = nrow(x))
+  influence_mpreg$coefficients.mean <- t(matrix(sapply(new_coeff, function(coeffs){coeffs[1:n_beta]}), nrow = length(coeff_beta)))
   colnames(influence_mpreg$coefficients.mean) <- names(model$coefficients$mean)
   rownames(influence_mpreg$coefficients.mean) <- 1:nrow(influence_mpreg$coefficients.mean)
-  influence_mpreg$coefficients.precision <- matrix(sapply(new_coeff, function(coeffs){coeffs[(n_beta+1):(n_beta+n_alpha)]}), nrow = nrow(w))
+  influence_mpreg$coefficients.precision <- t(matrix(sapply(new_coeff, function(coeffs){coeffs[(n_beta+1):(n_beta+n_alpha)]}), nrow = length(coeff_alpha)))
   colnames(influence_mpreg$coefficients.precision) <- names(model$coefficients$precision)
   rownames(influence_mpreg$coefficients.precision) <- 1:nrow(influence_mpreg$coefficients.precision)
 }

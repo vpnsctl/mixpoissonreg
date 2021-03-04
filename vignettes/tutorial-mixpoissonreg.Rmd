@@ -1,6 +1,6 @@
 ---
 title: "Analyzing overdispersed count data with the mixpoissonreg package"
-author: "Alexandre B. Simas"
+author: "Wagner Barreto-Souza and Alexandre B. Simas"
 date: '`r format(Sys.time(), "%Y-%m-%d")`'
 output: rmarkdown::html_vignette
 vignette: >
@@ -18,18 +18,337 @@ knitr::opts_chunk$set(
 
 # Description of the dataset
 
+We will consider the dataset studied in [Barreto-Souza and Simas (2016)](https://doi.org/10.1007/s11222-015-9601-6). The motivation for this study 
+was to assess the attendance of high school students with respect to their gender, math score and which program they are enrolled. The data consists on 314 high school juniors from two urban high schools. The response variable, denoted by *y*, and the covariates of interest are:
+
+* *y*: number of days absent;
+
+* *gender*: sex (0=female and 1=male);
+
+* *math*: standardized math score for each student;
+
+* *academic* : indicator of academic program;
+
+* *vocational*: indicator of vocational program.
+
 # Model fitting and inference
 
-Montar tabelinha com média esperada de faltas.
+It is well-known (see, for instance, https://stats.idre.ucla.edu/r/dae/negative-binomial-regression/) that the Poisson regression is not adequate for fitting this dataset. They also conclude that, when compared to the Poisson regression model, the Negative Binomial is more adequate. Therefore, this indicates that the data is overdispersed.
 
-Considerar: Geral, Vocacional Academico, Homem, Mulher, Min_math, Max_math
+We will assume that the response variables $Y_i\sim MP(\mu_i, \phi_i)$, that is, that each
+$Y_i$ follows a mixed possion distribution with mean $\mu_i$ and precision parameter $\phi_i$. 
 
+We assume the following regression structures for the mean and precision parameters:
 
-                                  _________Mean abscence________ 
-                 Program | Gender | Min_math (0) | Max_math (99)
+$$\log \mu_i = \beta_0 + \beta_1 {\tt gender}_i + \beta_2 {\tt math}_i + \beta_3 {\tt academic}_i + \beta_4 {\tt vocational}_i $$
+and
+
+$$\log \phi_i = \alpha_0 + \alpha_1 {\tt gender}_i + \alpha_2 {\tt math}_i + \alpha_3 {\tt academic}_i + \alpha_4 {\tt vocational}_i.$$
+Let us fit this model under the assumption of Negative Binomial (NB) and Poisson Inverse Gaussian (PIG) distributions.
+
+```{r}
+library(mixpoissonreg)
+
+fit_nb_full <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog,
+                             model = "NB", data = Attendance)
+
+fit_pig_full <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog,
+                             model = "PIG", data = Attendance)
+```
+
+The summary for the NB-regression fitting is:
+
+```{r}
+summary(fit_nb_full)
+```
+
+For the PIG-regressionm, the summary is
+
+```{r}
+summary(fit_pig_full)
+```
+
+These summaries suggest that *gender* and *math* covariates are not significant to explain the precision parameter. So we will obtain fits for the NB and PIG regressions without these variables for the precision paramters, then we will perform Wald and likelihood-ratio tests to confirm that indeed they are not significant.
+
+```{r}
+fit_nb_red <- mixpoissonreg(daysabs ~ gender + math + prog | prog,
+                             model = "NB", data = Attendance)
+
+fit_pig_red <- mixpoissonreg(daysabs ~ gender + math + prog | prog,
+                             model = "PIG", data = Attendance)
+```
+
+Let us check the summaries for these regressions:
+
+```{r}
+summary(fit_nb_red)
+```
+
+and
+
+```{r}
+summary(fit_pig_red)
+```
+
+Now, let us perform a Wald test:
+
+```{r}
+lmtest::waldtest(fit_nb_red, fit_nb_full)
+```
+
+and
+
+```{r}
+lmtest::waldtest(fit_pig_red, fit_pig_full)
+```
+
+Now, let us perform likelihood tests:
+
+```{r}
+lmtest::lrtest(fit_nb_red, fit_nb_full)
+```
+
+and
+
+```{r}
+lmtest::lrtest(fit_pig_red, fit_pig_full)
+```
+
+The above tests indicate that, indeed, *gender* and *math* are not significant for the precision parameter. So we will work with the reduced models.
+
+Let us also build a small data frame containing the estimated mean, 
+$\widehat{\mu}$, for some combinations of the covariates. First for the NB
+regression model:
+
+```{r}
+library(tidyr)
+library(dplyr)
+
+gender <- c("female", "male")
+prog <- c("Academic", "General", "Vocational")
+math <- c(0, 99)
+
+new_cov <- crossing(gender, prog, math)
+
+pred_values_nb <- predict(fit_nb_red, newdata = new_cov)
+
+bind_cols(new_cov, "Predicted_Means_NB" = pred_values_nb)
+```
+
+Now for the PIG regression model:
+
+```{r}
+pred_values_pig <- predict(fit_pig_red, newdata = new_cov)
+
+bind_cols(new_cov, "Predicted_Means_PIG" = pred_values_pig)
+```
 
 # Residual analysis
 
-Também ajustar modelo com resíduo "score" com envelope 
+Let us fit the reduced models with envelopes. To reduce computational cost, we will fit
+these models with the direct maximum likelihood estimation and with respect to the Pearson
+residual.
+
+```{r warning = FALSE}
+set.seed(2021) 
+# We are fixing the seed for reproducibility
+fit_nb_red_env <- mixpoissonregML(daysabs ~ gender + math + prog | prog,
+                             model = "NB", data = Attendance, envelope = 100)
+
+fit_pig_red_env <- mixpoissonregML(daysabs ~ gender + math + prog | prog,
+                             model = "PIG", data = Attendance, envelope = 100)
+```
+
+
+Let us check the coverage of the envelopes for the NB fit:
+
+```{r}
+summary(fit_nb_red_env)
+```
+
+and for the PIG fit:
+
+```{r}
+summary(fit_pig_red_env)
+```
+
+By looking at both coverages, the assumption of the response following a mixed Poisson distribution
+seems reasonable. Furthermore, both regressions seem to provide adequate fit.
+
+Also, notice that, even though the fits seem adequate, their Efron's $R^2$ are
+low, around 18\%. This is due to the high overdispersion of the responses, together with the fact
+that the mean is not a good predictor for the response when using counting data. 
+Therefore, for datasets with low Efron's pseudo-$R^2$, such as this one, we recommend
+to use the mode. We plan on providing a function from prediction based on the mode in the future.
+
+Let us check the diagnostic plots of the NB fit
+
+```{r}
+autoplot(fit_nb_red_env, which = c(1,2))
+```
+
+and for the PIG fit
+
+```{r}
+autoplot(fit_pig_red_env, which = c(1,2))
+```
+
+Notice that in Residuals vs. Obs. number, the residuals appear to be randomly distributed, skewed,
+and with no noticeable trend. Thus, also suggesting an adequate fit, together with
+the quantile-quantile plot with simulated envelopes. 
 
 # Influence analysis
+
+Let us begin with the global influence analysis. First, for the NB regression model:
+
+```{r}
+autoplot(fit_nb_red, which = c(3,4,5))
+```
+
+Second, for the PIG regression model:
+
+```{r}
+autoplot(fit_pig_red, which = c(3,4,5))
+```
+
+Let us check the impact on the estimates of the removal, for example, of case \# 94, which was significant for both models, as well as it was the most significant considering both the Cook's distance and generalized Cook's distance. First, for NB regression:
+
+```{r}
+# Relative change for mean-related coefficients
+(influence(fit_nb_red)$coefficients.mean[94,] - 
+   coefficients(fit_nb_red, parameters = "mean"))/
+  coefficients(fit_nb_red, parameters = "mean")
+
+# Relative change for precision-related coefficients
+(influence(fit_nb_red)$coefficients.precision[94,] - 
+    coefficients(fit_nb_red, parameters = "precision"))/
+  coefficients(fit_nb_red, parameters = "precision")
+```
+
+Now, for the PIG regression:
+
+```{r}
+# Relative change for mean-related coefficients
+(influence(fit_pig_red)$coefficients.mean[94,] - 
+   coefficients(fit_pig_red, parameters = "mean"))/
+  coefficients(fit_pig_red, parameters = "mean")
+
+# Relative change for precision-related coefficients
+(influence(fit_pig_red)$coefficients.precision[94,] - 
+    coefficients(fit_pig_red, parameters = "precision"))/
+  coefficients(fit_pig_red, parameters = "precision")
+```
+
+We see that case \# 94 mainly impacts the precision parameter estimates. Notice that for PIG regression models, the impact is less severe. 
+
+Let us check now the local influence. 
+
+First for the NB regression:
+
+```{r}
+local_influence_autoplot(fit_nb_red)
+```
+
+Now, for PIG regression:
+
+```{r}
+local_influence_autoplot(fit_pig_red)
+```
+
+Let us check the influential observations along with their associated covariates and response values.
+First for the NB regression:
+
+```{r warning=FALSE, message=FALSE}
+inf_nb_tbl <- tidy_local_influence(fit_nb_red) %>% mutate(.index = row_number()) %>% 
+  pivot_longer(!.index, names_to = "perturbation", values_to = "curvature") 
+bench_nb_tbl <- local_influence_benchmarks(fit_nb_red) %>% 
+  pivot_longer(everything(), names_to = "perturbation", values_to = "benchmark")
+
+inf_nb_bench_tbl <- left_join(inf_nb_tbl, bench_nb_tbl, by = "perturbation") %>% 
+  mutate(influential = curvature > benchmark) %>% filter(influential == TRUE) %>%
+  select(-influential, -benchmark, -curvature)
+
+data_nb_tbl <- augment(fit_nb_red) %>% mutate(.index = row_number()) %>% 
+  select(.index, daysabs, gender, math, prog)
+
+influential_nb <- left_join(inf_nb_bench_tbl, data_nb_tbl, by = ".index")
+
+influential_nb
+```
+
+Let us check the number of unique influential observations:
+
+```{r}
+influential_nb %>% select(.index) %>% unique() %>% count()
+```
+
+Now for the PIG regression:
+
+```{r warning=FALSE, message=FALSE}
+inf_pig_tbl <- tidy_local_influence(fit_pig_red) %>% mutate(.index = row_number()) %>% 
+  pivot_longer(!.index, names_to = "perturbation", values_to = "curvature") 
+bench_pig_tbl <- local_influence_benchmarks(fit_pig_red) %>% 
+  pivot_longer(everything(), names_to = "perturbation", values_to = "benchmark")
+
+inf_pig_bench_tbl <- left_join(inf_pig_tbl, bench_pig_tbl, by = "perturbation") %>% 
+  mutate(influential = curvature > benchmark) %>% filter(influential == TRUE) %>%
+  select(-influential, -benchmark, -curvature)
+
+data_pig_tbl <- augment(fit_pig_red) %>% mutate(.index = row_number()) %>% 
+  select(.index, daysabs, gender, math, prog)
+
+influential_pig <- left_join(inf_pig_bench_tbl, data_pig_tbl, by = ".index")
+
+influential_pig
+```
+
+Now, the number of unique influential observations for the PIG regression:
+
+```{r}
+influential_pig %>% select(.index) %>% unique() %>% count()
+```
+
+Let us check the informations of case \# 94 for the NB and PIG regressions:
+
+```{r}
+influential_nb %>% filter(.index == 94)
+
+influential_pig %>% filter(.index == 94)
+```
+
+So, notice that case \# 94 is a female, enrolled in the general program,
+with a high number of absences but with an unexpected high math score for
+this number of absences.
+
+It is also noteworthy that case \# 94 was considered influential for all 
+local perturbation schemes.
+
+Let us check the observations that were found influential for both models:
+
+```{r}
+ind_nb <- influential_nb %>% select(.index) %>% unique()
+
+ind_pig <- influential_pig %>% select(.index) %>% unique()
+
+ind_common <- intersect(ind_nb, ind_pig)
+
+influential_nb %>% filter(.index %in% ind_common$.index) %>% select(-perturbation) %>% unique()
+```
+
+Now, let us check the influential observations for the NB regression that were
+not influential for the PIG regression:
+
+```{r}
+ind_nb_pig <- setdiff(ind_nb, ind_pig)
+
+influential_nb %>% filter(.index %in% ind_nb_pig$.index) %>% select(-perturbation) %>% unique()
+```
+
+Finally, the influential observations for the PIG regression that were not influential
+for the NB regression:
+
+```{r}
+ind_pig_nb <- setdiff(ind_pig, ind_nb)
+
+influential_pig %>% filter(.index %in% ind_pig_nb$.index) %>% select(-perturbation) %>% unique()
+```
