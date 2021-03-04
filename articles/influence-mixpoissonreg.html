@@ -100,13 +100,13 @@
 
       
 
-      </header><script src="influence-mixpoissonreg_files/header-attrs-2.7/header-attrs.js"></script><div class="row">
+      </header><script src="influence-mixpoissonreg_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Global and local influence analysis with the <em>mixpoissonreg</em> package</h1>
                         <h4 class="author">Alexandre B. Simas</h4>
             
-            <h4 class="date">2021-02-28</h4>
+            <h4 class="date">2021-03-04</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/vpnsctl/mixpoissonreg/blob/master/vignettes/influence-mixpoissonreg.Rmd"><code>vignettes/influence-mixpoissonreg.Rmd</code></a></small>
       <div class="hidden name"><code>influence-mixpoissonreg.Rmd</code></div>
@@ -221,13 +221,13 @@
 <code class="sourceCode R"><span class="va">influence_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.influence.html">influence</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">influence_fit</span><span class="op">$</span><span class="va">coefficients.mean</span><span class="op">)</span>
-<span class="co">#&gt;    (Intercept)   gendermale         math progAcademic progVocational</span>
-<span class="co">#&gt; 1  2.745886631 -1.269649740 -0.426834669 -0.006599528   -0.245424207</span>
-<span class="co">#&gt; 2 -0.244893977  2.746348319 -1.269386963 -0.425421206   -0.006613588</span>
-<span class="co">#&gt; 3 -0.006613246 -0.245462581  2.751482711 -1.270173978   -0.425953726</span>
-<span class="co">#&gt; 4 -0.425848228 -0.006619664 -0.246447333  2.746481615   -1.270762217</span>
-<span class="co">#&gt; 5 -1.269850559 -0.426202055 -0.006650788 -0.245225919    2.746880872</span>
-<span class="co">#&gt; 6  2.746076794 -1.269674897 -0.429480315 -0.006616788   -0.246166667</span></code></pre></div>
+<span class="co">#&gt;   (Intercept) gendermale         math progAcademic progVocational</span>
+<span class="co">#&gt; 1    2.745887 -0.2448940 -0.006613246   -0.4258482      -1.269851</span>
+<span class="co">#&gt; 2    2.746077 -0.2447048 -0.006619850   -0.4257226      -1.269747</span>
+<span class="co">#&gt; 3    2.747010 -0.2459932 -0.006631529   -0.4252007      -1.269402</span>
+<span class="co">#&gt; 4    2.747015 -0.2459012 -0.006632510   -0.4252938      -1.269393</span>
+<span class="co">#&gt; 5    2.747544 -0.2460341 -0.006644716   -0.4252217      -1.269154</span>
+<span class="co">#&gt; 6    2.746786 -0.2443429 -0.006641268   -0.4268347      -1.269387</span></code></pre></div>
 </div>
 <div id="global-influence-plots" class="section level2">
 <h2 class="hasAnchor">

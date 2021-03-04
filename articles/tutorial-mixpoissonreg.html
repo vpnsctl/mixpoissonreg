@@ -100,13 +100,13 @@
 
       
 
-      </header><script src="tutorial-mixpoissonreg_files/header-attrs-2.7/header-attrs.js"></script><div class="row">
+      </header><script src="tutorial-mixpoissonreg_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Analyzing overdispersed count data with the mixpoissonreg package</h1>
-                        <h4 class="author">Alexandre B. Simas</h4>
+                        <h4 class="author">Wagner Barreto-Souza and Alexandre B. Simas</h4>
             
-            <h4 class="date">2021-02-28</h4>
+            <h4 class="date">2021-03-04</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/vpnsctl/mixpoissonreg/blob/master/vignettes/tutorial-mixpoissonreg.Rmd"><code>vignettes/tutorial-mixpoissonreg.Rmd</code></a></small>
       <div class="hidden name"><code>tutorial-mixpoissonreg.Rmd</code></div>
@@ -118,23 +118,573 @@
 <div id="description-of-the-dataset" class="section level1">
 <h1 class="hasAnchor">
 <a href="#description-of-the-dataset" class="anchor"></a>Description of the dataset</h1>
+<p>We will consider the dataset studied in <a href="https://doi.org/10.1007/s11222-015-9601-6">Barreto-Souza and Simas (2016)</a>. The motivation for this study was to assess the attendance of high school students with respect to their gender, math score and which program they are enrolled. The data consists on 314 high school juniors from two urban high schools. The response variable, denoted by <em>y</em>, and the covariates of interest are:</p>
+<ul>
+<li><p><em>y</em>: number of days absent;</p></li>
+<li><p><em>gender</em>: sex (0=female and 1=male);</p></li>
+<li><p><em>math</em>: standardized math score for each student;</p></li>
+<li><p><em>academic</em> : indicator of academic program;</p></li>
+<li><p><em>vocational</em>: indicator of vocational program.</p></li>
+</ul>
 </div>
 <div id="model-fitting-and-inference" class="section level1">
 <h1 class="hasAnchor">
 <a href="#model-fitting-and-inference" class="anchor"></a>Model fitting and inference</h1>
-<p>Montar tabelinha com média esperada de faltas.</p>
-<p>Considerar: Geral, Vocacional Academico, Homem, Mulher, Min_math, Max_math</p>
-<pre><code>                              _________Mean abscence________ 
-             Program | Gender | Min_math (0) | Max_math (99)</code></pre>
+<p>It is well-known (see, for instance, <a href="https://stats.idre.ucla.edu/r/dae/negative-binomial-regression/" class="uri">https://stats.idre.ucla.edu/r/dae/negative-binomial-regression/</a>) that the Poisson regression is not adequate for fitting this dataset. They also conclude that, when compared to the Poisson regression model, the Negative Binomial is more adequate. Therefore, this indicates that the data is overdispersed.</p>
+<p>We will assume that the response variables <span class="math inline">\(Y_i\sim MP(\mu_i, \phi_i)\)</span>, that is, that each <span class="math inline">\(Y_i\)</span> follows a mixed possion distribution with mean <span class="math inline">\(\mu_i\)</span> and precision parameter <span class="math inline">\(\phi_i\)</span>.</p>
+<p>We assume the following regression structures for the mean and precision parameters:</p>
+<p><span class="math display">\[\log \mu_i = \beta_0 + \beta_1 {\tt gender}_i + \beta_2 {\tt math}_i + \beta_3 {\tt academic}_i + \beta_4 {\tt vocational}_i \]</span> and</p>
+<p><span class="math display">\[\log \phi_i = \alpha_0 + \alpha_1 {\tt gender}_i + \alpha_2 {\tt math}_i + \alpha_3 {\tt academic}_i + \alpha_4 {\tt vocational}_i.\]</span> Let us fit this model under the assumption of Negative Binomial (NB) and Poisson Inverse Gaussian (PIG) distributions.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/vpnsctl/mixpoissonreg/">mixpoissonreg</a></span><span class="op">)</span>
+
+<span class="va">fit_nb_full</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonreg.html">mixpoissonreg</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span> <span class="op">|</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span>,
+                             model <span class="op">=</span> <span class="st">"NB"</span>, data <span class="op">=</span> <span class="va">Attendance</span><span class="op">)</span>
+
+<span class="va">fit_pig_full</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonreg.html">mixpoissonreg</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span> <span class="op">|</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span>,
+                             model <span class="op">=</span> <span class="st">"PIG"</span>, data <span class="op">=</span> <span class="va">Attendance</span><span class="op">)</span></code></pre></div>
+<p>The summary for the NB-regression fitting is:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit_nb_full</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Negative Binomial Regression - Expectation-Maximization Algorithm</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; mixpoissonreg(formula = daysabs ~ gender + math + prog | gender + </span>
+<span class="co">#&gt;     math + prog, data = Attendance, model = "NB")</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Pearson residuals:</span>
+<span class="co">#&gt;      RSS      Min       1Q   Median       3Q      Max </span>
+<span class="co">#&gt; 322.0142  -1.1751  -0.6992  -0.3600   0.3014   4.7178 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients modeling the mean (with  link):</span>
+<span class="co">#&gt;                 Estimate Std.error z-value Pr(&gt;|z|)    </span>
+<span class="co">#&gt; (Intercept)     2.746123  0.147412  18.629  &lt; 2e-16 ***</span>
+<span class="co">#&gt; gendermale     -0.245113  0.117967  -2.078  0.03773 *  </span>
+<span class="co">#&gt; math           -0.006617  0.002317  -2.856  0.00429 ** </span>
+<span class="co">#&gt; progAcademic   -0.425983  0.132144  -3.224  0.00127 ** </span>
+<span class="co">#&gt; progVocational -1.269755  0.174444  -7.279 3.37e-13 ***</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients modeling the precision (with  link):</span>
+<span class="co">#&gt;                 Estimate Std.error z-value Pr(&gt;|z|)    </span>
+<span class="co">#&gt; (Intercept)     1.414227  0.343243   4.120 3.79e-05 ***</span>
+<span class="co">#&gt; gendermale     -0.208397  0.203692  -1.023 0.306262    </span>
+<span class="co">#&gt; math           -0.005123  0.004181  -1.225 0.220458    </span>
+<span class="co">#&gt; progAcademic   -1.084418  0.305479  -3.550 0.000385 ***</span>
+<span class="co">#&gt; progVocational -1.422051  0.343812  -4.136 3.53e-05 ***</span>
+<span class="co">#&gt; ---</span>
+<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Efron's pseudo R-squared:  0.1860886 </span>
+<span class="co">#&gt; Number of iterations of the EM algorithm = 11</span></code></pre></div>
+<p>For the PIG-regressionm, the summary is</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit_pig_full</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Poisson Inverse Gaussian Regression - Expectation-Maximization Algorithm</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; mixpoissonreg(formula = daysabs ~ gender + math + prog | gender + </span>
+<span class="co">#&gt;     math + prog, data = Attendance, model = "PIG")</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Pearson residuals:</span>
+<span class="co">#&gt;      RSS      Min       1Q   Median       3Q      Max </span>
+<span class="co">#&gt; 239.2040  -1.0836  -0.6058  -0.3062   0.2519   4.1196 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients modeling the mean (with  link):</span>
+<span class="co">#&gt;                 Estimate Std.error z-value Pr(&gt;|z|)    </span>
+<span class="co">#&gt; (Intercept)     2.750853  0.165416  16.630  &lt; 2e-16 ***</span>
+<span class="co">#&gt; gendermale     -0.251161  0.136873  -1.835  0.06651 .  </span>
+<span class="co">#&gt; math           -0.006730  0.002679  -2.512  0.01202 *  </span>
+<span class="co">#&gt; progAcademic   -0.423484  0.148479  -2.852  0.00434 ** </span>
+<span class="co">#&gt; progVocational -1.260924  0.203436  -6.198 5.71e-10 ***</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients modeling the precision (with  link):</span>
+<span class="co">#&gt;                 Estimate Std.error z-value Pr(&gt;|z|)    </span>
+<span class="co">#&gt; (Intercept)     1.211252  0.438442   2.763 0.005734 ** </span>
+<span class="co">#&gt; gendermale     -0.114332  0.304682  -0.375 0.707475    </span>
+<span class="co">#&gt; math           -0.005686  0.006098  -0.932 0.351111    </span>
+<span class="co">#&gt; progAcademic   -1.284018  0.386350  -3.323 0.000889 ***</span>
+<span class="co">#&gt; progVocational -1.610037  0.475613  -3.385 0.000711 ***</span>
+<span class="co">#&gt; ---</span>
+<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Efron's pseudo R-squared:  0.1861608 </span>
+<span class="co">#&gt; Number of iterations of the EM algorithm = 2632</span></code></pre></div>
+<p>These summaries suggest that <em>gender</em> and <em>math</em> covariates are not significant to explain the precision parameter. So we will obtain fits for the NB and PIG regressions without these variables for the precision paramters, then we will perform Wald and likelihood-ratio tests to confirm that indeed they are not significant.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">fit_nb_red</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonreg.html">mixpoissonreg</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span> <span class="op">|</span> <span class="va">prog</span>,
+                             model <span class="op">=</span> <span class="st">"NB"</span>, data <span class="op">=</span> <span class="va">Attendance</span><span class="op">)</span>
+
+<span class="va">fit_pig_red</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonreg.html">mixpoissonreg</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span> <span class="op">|</span> <span class="va">prog</span>,
+                             model <span class="op">=</span> <span class="st">"PIG"</span>, data <span class="op">=</span> <span class="va">Attendance</span><span class="op">)</span></code></pre></div>
+<p>Let us check the summaries for these regressions:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit_nb_red</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Negative Binomial Regression - Expectation-Maximization Algorithm</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; mixpoissonreg(formula = daysabs ~ gender + math + prog | prog, </span>
+<span class="co">#&gt;     data = Attendance, model = "NB")</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Pearson residuals:</span>
+<span class="co">#&gt;      RSS      Min       1Q   Median       3Q      Max </span>
+<span class="co">#&gt; 323.6673  -1.0659  -0.7203  -0.3656   0.3064   4.8768 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients modeling the mean (with  link):</span>
+<span class="co">#&gt;                 Estimate Std.error z-value Pr(&gt;|z|)    </span>
+<span class="co">#&gt; (Intercept)     2.752395  0.152504  18.048  &lt; 2e-16 ***</span>
+<span class="co">#&gt; gendermale     -0.257188  0.116905  -2.200  0.02781 *  </span>
+<span class="co">#&gt; math           -0.006792  0.002274  -2.987  0.00282 ** </span>
+<span class="co">#&gt; progAcademic   -0.423971  0.132284  -3.205  0.00135 ** </span>
+<span class="co">#&gt; progVocational -1.238556  0.173103  -7.155 8.37e-13 ***</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients modeling the precision (with  link):</span>
+<span class="co">#&gt;                Estimate Std.error z-value Pr(&gt;|z|)    </span>
+<span class="co">#&gt; (Intercept)      1.1124    0.2783   3.997 6.41e-05 ***</span>
+<span class="co">#&gt; progAcademic    -1.0865    0.3074  -3.534 0.000409 ***</span>
+<span class="co">#&gt; progVocational  -1.5211    0.3395  -4.480 7.45e-06 ***</span>
+<span class="co">#&gt; ---</span>
+<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Efron's pseudo R-squared:  0.1861217 </span>
+<span class="co">#&gt; Number of iterations of the EM algorithm = 2453</span></code></pre></div>
+<p>and</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit_pig_red</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Poisson Inverse Gaussian Regression - Expectation-Maximization Algorithm</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; mixpoissonreg(formula = daysabs ~ gender + math + prog | prog, </span>
+<span class="co">#&gt;     data = Attendance, model = "PIG")</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Pearson residuals:</span>
+<span class="co">#&gt;      RSS      Min       1Q   Median       3Q      Max </span>
+<span class="co">#&gt; 239.2879  -1.0042  -0.6101  -0.3107   0.2734   4.2814 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients modeling the mean (with  link):</span>
+<span class="co">#&gt;                 Estimate Std.error z-value Pr(&gt;|z|)    </span>
+<span class="co">#&gt; (Intercept)     2.805150  0.162182  17.296  &lt; 2e-16 ***</span>
+<span class="co">#&gt; gendermale     -0.282333  0.122772  -2.300  0.02147 *  </span>
+<span class="co">#&gt; math           -0.007770  0.002398  -3.240  0.00120 ** </span>
+<span class="co">#&gt; progAcademic   -0.422885  0.148013  -2.857  0.00428 ** </span>
+<span class="co">#&gt; progVocational -1.215877  0.197264  -6.164 7.11e-10 ***</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients modeling the precision (with  link):</span>
+<span class="co">#&gt;                Estimate Std.error z-value Pr(&gt;|z|)    </span>
+<span class="co">#&gt; (Intercept)      0.9277    0.3308   2.805 0.005039 ** </span>
+<span class="co">#&gt; progAcademic    -1.2799    0.3853  -3.322 0.000894 ***</span>
+<span class="co">#&gt; progVocational  -1.7440    0.4506  -3.870 0.000109 ***</span>
+<span class="co">#&gt; ---</span>
+<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Efron's pseudo R-squared:  0.1858037 </span>
+<span class="co">#&gt; Number of iterations of the EM algorithm = 19</span></code></pre></div>
+<p>Now, let us perform a Wald test:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">lmtest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/waldtest.html">waldtest</a></span><span class="op">(</span><span class="va">fit_nb_red</span>, <span class="va">fit_nb_full</span><span class="op">)</span>
+<span class="co">#&gt; Wald test</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Model 1: daysabs ~ gender + math + prog | prog</span>
+<span class="co">#&gt; Model 2: daysabs ~ gender + math + prog | gender + math + prog</span>
+<span class="co">#&gt;   Res.Df Df  Chisq Pr(&gt;Chisq)</span>
+<span class="co">#&gt; 1    306                     </span>
+<span class="co">#&gt; 2    304  2 2.4149      0.299</span></code></pre></div>
+<p>and</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">lmtest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/waldtest.html">waldtest</a></span><span class="op">(</span><span class="va">fit_pig_red</span>, <span class="va">fit_pig_full</span><span class="op">)</span>
+<span class="co">#&gt; Wald test</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Model 1: daysabs ~ gender + math + prog | prog</span>
+<span class="co">#&gt; Model 2: daysabs ~ gender + math + prog | gender + math + prog</span>
+<span class="co">#&gt;   Res.Df Df  Chisq Pr(&gt;Chisq)</span>
+<span class="co">#&gt; 1    306                     </span>
+<span class="co">#&gt; 2    304  2 0.9304      0.628</span></code></pre></div>
+<p>Now, let us perform likelihood tests:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">lmtest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/lrtest.html">lrtest</a></span><span class="op">(</span><span class="va">fit_nb_red</span>, <span class="va">fit_nb_full</span><span class="op">)</span>
+<span class="co">#&gt; Likelihood ratio test</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Model 1: daysabs ~ gender + math + prog | prog</span>
+<span class="co">#&gt; Model 2: daysabs ~ gender + math + prog | gender + math + prog</span>
+<span class="co">#&gt;   #Df  LogLik Df  Chisq Pr(&gt;Chisq)</span>
+<span class="co">#&gt; 1   8 -854.41                     </span>
+<span class="co">#&gt; 2  10 -853.20  2 2.4077        0.3</span></code></pre></div>
+<p>and</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">lmtest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/lrtest.html">lrtest</a></span><span class="op">(</span><span class="va">fit_pig_red</span>, <span class="va">fit_pig_full</span><span class="op">)</span>
+<span class="co">#&gt; Likelihood ratio test</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Model 1: daysabs ~ gender + math + prog | prog</span>
+<span class="co">#&gt; Model 2: daysabs ~ gender + math + prog | gender + math + prog</span>
+<span class="co">#&gt;   #Df  LogLik Df  Chisq Pr(&gt;Chisq)</span>
+<span class="co">#&gt; 1   8 -857.52                     </span>
+<span class="co">#&gt; 2  10 -857.05  2 0.9507     0.6217</span></code></pre></div>
+<p>The above tests indicate that, indeed, <em>gender</em> and <em>math</em> are not significant for the precision parameter. So we will work with the reduced models.</p>
+<p>Let us also build a small data frame containing the estimated mean, <span class="math inline">\(\widehat{\mu}\)</span>, for some combinations of the covariates. First for the NB regression model:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org">tidyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'dplyr'</span>
+<span class="co">#&gt; The following objects are masked from 'package:stats':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     filter, lag</span>
+<span class="co">#&gt; The following objects are masked from 'package:base':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     intersect, setdiff, setequal, union</span>
+
+<span class="va">gender</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"female"</span>, <span class="st">"male"</span><span class="op">)</span>
+<span class="va">prog</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Academic"</span>, <span class="st">"General"</span>, <span class="st">"Vocational"</span><span class="op">)</span>
+<span class="va">math</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">99</span><span class="op">)</span>
+
+<span class="va">new_cov</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/expand.html">crossing</a></span><span class="op">(</span><span class="va">gender</span>, <span class="va">prog</span>, <span class="va">math</span><span class="op">)</span>
+
+<span class="va">pred_values_nb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit_nb_red</span>, newdata <span class="op">=</span> <span class="va">new_cov</span><span class="op">)</span>
+
+<span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_cols</a></span><span class="op">(</span><span class="va">new_cov</span>, <span class="st">"Predicted_Means_NB"</span> <span class="op">=</span> <span class="va">pred_values_nb</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 12 x 4</span>
+<span class="co">#&gt;    gender prog        math Predicted_Means_NB</span>
+<span class="co">#&gt;    &lt;chr&gt;  &lt;chr&gt;      &lt;dbl&gt;              &lt;dbl&gt;</span>
+<span class="co">#&gt;  1 female Academic       0              15.7 </span>
+<span class="co">#&gt;  2 female Academic      99               8.00</span>
+<span class="co">#&gt;  3 female General        0              10.3 </span>
+<span class="co">#&gt;  4 female General       99               5.24</span>
+<span class="co">#&gt;  5 female Vocational     0               4.54</span>
+<span class="co">#&gt;  6 female Vocational    99               2.32</span>
+<span class="co">#&gt;  7 male   Academic       0              12.1 </span>
+<span class="co">#&gt;  8 male   Academic      99               6.19</span>
+<span class="co">#&gt;  9 male   General        0               7.93</span>
+<span class="co">#&gt; 10 male   General       99               4.05</span>
+<span class="co">#&gt; 11 male   Vocational     0               3.51</span>
+<span class="co">#&gt; 12 male   Vocational    99               1.79</span></code></pre></div>
+<p>Now for the PIG regression model:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">pred_values_pig</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit_pig_red</span>, newdata <span class="op">=</span> <span class="va">new_cov</span><span class="op">)</span>
+
+<span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_cols</a></span><span class="op">(</span><span class="va">new_cov</span>, <span class="st">"Predicted_Means_PIG"</span> <span class="op">=</span> <span class="va">pred_values_pig</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 12 x 4</span>
+<span class="co">#&gt;    gender prog        math Predicted_Means_PIG</span>
+<span class="co">#&gt;    &lt;chr&gt;  &lt;chr&gt;      &lt;dbl&gt;               &lt;dbl&gt;</span>
+<span class="co">#&gt;  1 female Academic       0               16.5 </span>
+<span class="co">#&gt;  2 female Academic      99                7.66</span>
+<span class="co">#&gt;  3 female General        0               10.8 </span>
+<span class="co">#&gt;  4 female General       99                5.02</span>
+<span class="co">#&gt;  5 female Vocational     0                4.90</span>
+<span class="co">#&gt;  6 female Vocational    99                2.27</span>
+<span class="co">#&gt;  7 male   Academic       0               12.5 </span>
+<span class="co">#&gt;  8 male   Academic      99                5.78</span>
+<span class="co">#&gt;  9 male   General        0                8.17</span>
+<span class="co">#&gt; 10 male   General       99                3.78</span>
+<span class="co">#&gt; 11 male   Vocational     0                3.69</span>
+<span class="co">#&gt; 12 male   Vocational    99                1.71</span></code></pre></div>
 </div>
 <div id="residual-analysis" class="section level1">
 <h1 class="hasAnchor">
 <a href="#residual-analysis" class="anchor"></a>Residual analysis</h1>
-<p>Também ajustar modelo com resíduo “score” com envelope</p>
+<p>Let us fit the reduced models with envelopes. To reduce computational cost, we will fit these models with the direct maximum likelihood estimation and with respect to the Pearson residual.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2021</span><span class="op">)</span> 
+<span class="co"># We are fixing the seed for reproducibility</span>
+<span class="va">fit_nb_red_env</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonregML.html">mixpoissonregML</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span> <span class="op">|</span> <span class="va">prog</span>,
+                             model <span class="op">=</span> <span class="st">"NB"</span>, data <span class="op">=</span> <span class="va">Attendance</span>, envelope <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
+
+<span class="va">fit_pig_red_env</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonregML.html">mixpoissonregML</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span> <span class="op">|</span> <span class="va">prog</span>,
+                             model <span class="op">=</span> <span class="st">"PIG"</span>, data <span class="op">=</span> <span class="va">Attendance</span>, envelope <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></code></pre></div>
+<p>Let us check the coverage of the envelopes for the NB fit:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit_nb_red_env</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Negative Binomial Regression - Maximum-Likelihood Estimation</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; mixpoissonregML(formula = daysabs ~ gender + math + prog | prog, </span>
+<span class="co">#&gt;     data = Attendance, model = "NB", envelope = 100)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Pearson residuals:</span>
+<span class="co">#&gt;      RSS      Min       1Q   Median       3Q      Max </span>
+<span class="co">#&gt; 323.9340  -1.0684  -0.7203  -0.3660   0.3062   4.8766 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients modeling the mean (with  link):</span>
+<span class="co">#&gt;                 Estimate Std.error z-value Pr(&gt;|z|)    </span>
+<span class="co">#&gt; (Intercept)     2.752203  0.152251  18.077  &lt; 2e-16 ***</span>
+<span class="co">#&gt; gendermale     -0.256901  0.116816  -2.199  0.02786 *  </span>
+<span class="co">#&gt; math           -0.006791  0.002271  -2.989  0.00279 ** </span>
+<span class="co">#&gt; progAcademic   -0.423978  0.132089  -3.210  0.00133 ** </span>
+<span class="co">#&gt; progVocational -1.238641  0.172941  -7.162 7.94e-13 ***</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients modeling the precision (with  link):</span>
+<span class="co">#&gt;                Estimate Std.error z-value Pr(&gt;|z|)    </span>
+<span class="co">#&gt; (Intercept)      1.1185    0.2784   4.017 5.88e-05 ***</span>
+<span class="co">#&gt; progAcademic    -1.0925    0.3075  -3.552 0.000382 ***</span>
+<span class="co">#&gt; progVocational  -1.5270    0.3396  -4.496 6.91e-06 ***</span>
+<span class="co">#&gt; ---</span>
+<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Efron's pseudo R-squared:  0.1861221 </span>
+<span class="co">#&gt; Percentage of residuals within the envelope = 97.4522</span>
+<span class="co">#&gt; Number of function calls by 'optim' = 4</span></code></pre></div>
+<p>and for the PIG fit:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit_pig_red_env</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Poisson Inverse Gaussian Regression - Maximum-Likelihood Estimation</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; mixpoissonregML(formula = daysabs ~ gender + math + prog | prog, </span>
+<span class="co">#&gt;     data = Attendance, model = "PIG", envelope = 100)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Pearson residuals:</span>
+<span class="co">#&gt;      RSS      Min       1Q   Median       3Q      Max </span>
+<span class="co">#&gt; 239.2987  -1.0042  -0.6101  -0.3107   0.2734   4.2816 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients modeling the mean (with  link):</span>
+<span class="co">#&gt;                 Estimate Std.error z-value Pr(&gt;|z|)    </span>
+<span class="co">#&gt; (Intercept)     2.805150  0.162182  17.296  &lt; 2e-16 ***</span>
+<span class="co">#&gt; gendermale     -0.282333  0.122772  -2.300  0.02147 *  </span>
+<span class="co">#&gt; math           -0.007771  0.002398  -3.240  0.00120 ** </span>
+<span class="co">#&gt; progAcademic   -0.422885  0.148011  -2.857  0.00428 ** </span>
+<span class="co">#&gt; progVocational -1.215877  0.197261  -6.164  7.1e-10 ***</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients modeling the precision (with  link):</span>
+<span class="co">#&gt;                Estimate Std.error z-value Pr(&gt;|z|)    </span>
+<span class="co">#&gt; (Intercept)      0.9277    0.3308   2.805 0.005038 ** </span>
+<span class="co">#&gt; progAcademic    -1.2799    0.3853  -3.322 0.000894 ***</span>
+<span class="co">#&gt; progVocational  -1.7440    0.4506  -3.870 0.000109 ***</span>
+<span class="co">#&gt; ---</span>
+<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Efron's pseudo R-squared:  0.1858035 </span>
+<span class="co">#&gt; Percentage of residuals within the envelope = 94.9045</span>
+<span class="co">#&gt; Number of function calls by 'optim' = 6</span></code></pre></div>
+<p>By looking at both coverages, the assumption of the response following a mixed Poisson distribution seems reasonable. Furthermore, both regressions seem to provide adequate fit.</p>
+<p>Also, notice that, even though the fits seem adequate, their Efron’s <span class="math inline">\(R^2\)</span> are low, around 18%. This is due to the high overdispersion of the responses, together with the fact that the mean is not a good predictor for the response when using counting data. Therefore, for datasets with low Efron’s pseudo-<span class="math inline">\(R^2\)</span>, such as this one, we recommend to use the mode. We plan on providing a function from prediction based on the mode in the future.</p>
+<p>Let us check the diagnostic plots of the NB fit</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit_nb_red_env</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p><img src="tutorial-mixpoissonreg_files/figure-html/unnamed-chunk-17-1.png" width="700"><img src="tutorial-mixpoissonreg_files/figure-html/unnamed-chunk-17-2.png" width="700"></p>
+<p>and for the PIG fit</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit_pig_red_env</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p><img src="tutorial-mixpoissonreg_files/figure-html/unnamed-chunk-18-1.png" width="700"><img src="tutorial-mixpoissonreg_files/figure-html/unnamed-chunk-18-2.png" width="700"></p>
+<p>Notice that in Residuals vs. Obs. number, the residuals appear to be randomly distributed, skewed, and with no noticeable trend. Thus, also suggesting an adequate fit, together with the quantile-quantile plot with simulated envelopes.</p>
 </div>
 <div id="influence-analysis" class="section level1">
 <h1 class="hasAnchor">
 <a href="#influence-analysis" class="anchor"></a>Influence analysis</h1>
+<p>Let us begin with the global influence analysis. First, for the NB regression model:</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit_nb_red</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p><img src="tutorial-mixpoissonreg_files/figure-html/unnamed-chunk-19-1.png" width="700"><img src="tutorial-mixpoissonreg_files/figure-html/unnamed-chunk-19-2.png" width="700"><img src="tutorial-mixpoissonreg_files/figure-html/unnamed-chunk-19-3.png" width="700"></p>
+<p>Second, for the PIG regression model:</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit_pig_red</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p><img src="tutorial-mixpoissonreg_files/figure-html/unnamed-chunk-20-1.png" width="700"><img src="tutorial-mixpoissonreg_files/figure-html/unnamed-chunk-20-2.png" width="700"><img src="tutorial-mixpoissonreg_files/figure-html/unnamed-chunk-20-3.png" width="700"></p>
+<p>Let us check the impact on the estimates of the removal, for example, of case # 94, which was significant for both models, as well as it was the most significant considering both the Cook’s distance and generalized Cook’s distance. First, for NB regression:</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Relative change for mean-related coefficients</span>
+<span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.influence.html">influence</a></span><span class="op">(</span><span class="va">fit_nb_red</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients.mean</span><span class="op">[</span><span class="fl">94</span>,<span class="op">]</span> <span class="op">-</span> 
+   <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coefficients</a></span><span class="op">(</span><span class="va">fit_nb_red</span>, parameters <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span><span class="op">)</span><span class="op">/</span>
+  <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coefficients</a></span><span class="op">(</span><span class="va">fit_nb_red</span>, parameters <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span>
+<span class="co">#&gt;    (Intercept)     gendermale           math   progAcademic progVocational </span>
+<span class="co">#&gt;   -0.002673517   -0.012802496    0.017218704   -0.024328409   -0.010166827</span>
+
+<span class="co"># Relative change for precision-related coefficients</span>
+<span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.influence.html">influence</a></span><span class="op">(</span><span class="va">fit_nb_red</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients.precision</span><span class="op">[</span><span class="fl">94</span>,<span class="op">]</span> <span class="op">-</span> 
+    <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coefficients</a></span><span class="op">(</span><span class="va">fit_nb_red</span>, parameters <span class="op">=</span> <span class="st">"precision"</span><span class="op">)</span><span class="op">)</span><span class="op">/</span>
+  <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coefficients</a></span><span class="op">(</span><span class="va">fit_nb_red</span>, parameters <span class="op">=</span> <span class="st">"precision"</span><span class="op">)</span>
+<span class="co">#&gt;    (Intercept)   progAcademic progVocational </span>
+<span class="co">#&gt;     0.05296451     0.05422589     0.03873275</span></code></pre></div>
+<p>Now, for the PIG regression:</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Relative change for mean-related coefficients</span>
+<span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.influence.html">influence</a></span><span class="op">(</span><span class="va">fit_pig_red</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients.mean</span><span class="op">[</span><span class="fl">94</span>,<span class="op">]</span> <span class="op">-</span> 
+   <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coefficients</a></span><span class="op">(</span><span class="va">fit_pig_red</span>, parameters <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span><span class="op">)</span><span class="op">/</span>
+  <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coefficients</a></span><span class="op">(</span><span class="va">fit_pig_red</span>, parameters <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span>
+<span class="co">#&gt;    (Intercept)     gendermale           math   progAcademic progVocational </span>
+<span class="co">#&gt;   -0.001926543   -0.008484376    0.011185047   -0.018039686   -0.007642806</span>
+
+<span class="co"># Relative change for precision-related coefficients</span>
+<span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.influence.html">influence</a></span><span class="op">(</span><span class="va">fit_pig_red</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients.precision</span><span class="op">[</span><span class="fl">94</span>,<span class="op">]</span> <span class="op">-</span> 
+    <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coefficients</a></span><span class="op">(</span><span class="va">fit_pig_red</span>, parameters <span class="op">=</span> <span class="st">"precision"</span><span class="op">)</span><span class="op">)</span><span class="op">/</span>
+  <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coefficients</a></span><span class="op">(</span><span class="va">fit_pig_red</span>, parameters <span class="op">=</span> <span class="st">"precision"</span><span class="op">)</span>
+<span class="co">#&gt;    (Intercept)   progAcademic progVocational </span>
+<span class="co">#&gt;     0.04511006     0.03269834     0.02399582</span></code></pre></div>
+<p>We see that case # 94 mainly impacts the precision parameter estimates. Notice that for PIG regression models, the impact is less severe.</p>
+<p>Let us check now the local influence.</p>
+<p>First for the NB regression:</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/tidy_local_influence.html">local_influence_autoplot</a></span><span class="op">(</span><span class="va">fit_nb_red</span><span class="op">)</span></code></pre></div>
+<p><img src="tutorial-mixpoissonreg_files/figure-html/unnamed-chunk-23-1.png" width="700"><img src="tutorial-mixpoissonreg_files/figure-html/unnamed-chunk-23-2.png" width="700"><img src="tutorial-mixpoissonreg_files/figure-html/unnamed-chunk-23-3.png" width="700"><img src="tutorial-mixpoissonreg_files/figure-html/unnamed-chunk-23-4.png" width="700"></p>
+<p>Now, for PIG regression:</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/tidy_local_influence.html">local_influence_autoplot</a></span><span class="op">(</span><span class="va">fit_pig_red</span><span class="op">)</span></code></pre></div>
+<p><img src="tutorial-mixpoissonreg_files/figure-html/unnamed-chunk-24-1.png" width="700"><img src="tutorial-mixpoissonreg_files/figure-html/unnamed-chunk-24-2.png" width="700"><img src="tutorial-mixpoissonreg_files/figure-html/unnamed-chunk-24-3.png" width="700"><img src="tutorial-mixpoissonreg_files/figure-html/unnamed-chunk-24-4.png" width="700"></p>
+<p>Let us check the influential observations along with their associated covariates and response values. First for the NB regression:</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">inf_nb_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tidy_local_influence.html">tidy_local_influence</a></span><span class="op">(</span><span class="va">fit_nb_red</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>.index <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/ranking.html">row_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span><span class="op">!</span><span class="va">.index</span>, names_to <span class="op">=</span> <span class="st">"perturbation"</span>, values_to <span class="op">=</span> <span class="st">"curvature"</span><span class="op">)</span> 
+<span class="va">bench_nb_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tidy_local_influence.html">local_influence_benchmarks</a></span><span class="op">(</span><span class="va">fit_nb_red</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html">everything</a></span><span class="op">(</span><span class="op">)</span>, names_to <span class="op">=</span> <span class="st">"perturbation"</span>, values_to <span class="op">=</span> <span class="st">"benchmark"</span><span class="op">)</span>
+
+<span class="va">inf_nb_bench_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">inf_nb_tbl</span>, <span class="va">bench_nb_tbl</span>, by <span class="op">=</span> <span class="st">"perturbation"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>influential <span class="op">=</span> <span class="va">curvature</span> <span class="op">&gt;</span> <span class="va">benchmark</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">influential</span> <span class="op">==</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">influential</span>, <span class="op">-</span><span class="va">benchmark</span>, <span class="op">-</span><span class="va">curvature</span><span class="op">)</span>
+
+<span class="va">data_nb_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/augment.mixpoissonreg.html">augment</a></span><span class="op">(</span><span class="va">fit_nb_red</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>.index <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/ranking.html">row_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">.index</span>, <span class="va">daysabs</span>, <span class="va">gender</span>, <span class="va">math</span>, <span class="va">prog</span><span class="op">)</span>
+
+<span class="va">influential_nb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">inf_nb_bench_tbl</span>, <span class="va">data_nb_tbl</span>, by <span class="op">=</span> <span class="st">".index"</span><span class="op">)</span>
+
+<span class="va">influential_nb</span>
+<span class="co">#&gt; # A tibble: 55 x 6</span>
+<span class="co">#&gt;    .index perturbation             daysabs gender  math prog    </span>
+<span class="co">#&gt;     &lt;int&gt; &lt;chr&gt;                      &lt;dbl&gt; &lt;fct&gt;  &lt;dbl&gt; &lt;fct&gt;   </span>
+<span class="co">#&gt;  1     20 mean_explanatory              24 male       4 Academic</span>
+<span class="co">#&gt;  2     20 simultaneous_explanatory      24 male       4 Academic</span>
+<span class="co">#&gt;  3     36 mean_explanatory              28 female    20 Academic</span>
+<span class="co">#&gt;  4     36 simultaneous_explanatory      28 female    20 Academic</span>
+<span class="co">#&gt;  5     40 mean_explanatory              27 female    35 Academic</span>
+<span class="co">#&gt;  6     40 simultaneous_explanatory      27 female    35 Academic</span>
+<span class="co">#&gt;  7     55 hidden_variable               34 female     4 Academic</span>
+<span class="co">#&gt;  8     55 mean_explanatory              34 female     4 Academic</span>
+<span class="co">#&gt;  9     55 simultaneous_explanatory      34 female     4 Academic</span>
+<span class="co">#&gt; 10     57 case_weights                  28 male       5 General </span>
+<span class="co">#&gt; # … with 45 more rows</span></code></pre></div>
+<p>Let us check the number of unique influential observations:</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">influential_nb</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">.index</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 1 x 1</span>
+<span class="co">#&gt;       n</span>
+<span class="co">#&gt;   &lt;int&gt;</span>
+<span class="co">#&gt; 1    22</span></code></pre></div>
+<p>Now for the PIG regression:</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">inf_pig_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tidy_local_influence.html">tidy_local_influence</a></span><span class="op">(</span><span class="va">fit_pig_red</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>.index <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/ranking.html">row_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span><span class="op">!</span><span class="va">.index</span>, names_to <span class="op">=</span> <span class="st">"perturbation"</span>, values_to <span class="op">=</span> <span class="st">"curvature"</span><span class="op">)</span> 
+<span class="va">bench_pig_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tidy_local_influence.html">local_influence_benchmarks</a></span><span class="op">(</span><span class="va">fit_pig_red</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html">everything</a></span><span class="op">(</span><span class="op">)</span>, names_to <span class="op">=</span> <span class="st">"perturbation"</span>, values_to <span class="op">=</span> <span class="st">"benchmark"</span><span class="op">)</span>
+
+<span class="va">inf_pig_bench_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">inf_pig_tbl</span>, <span class="va">bench_pig_tbl</span>, by <span class="op">=</span> <span class="st">"perturbation"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>influential <span class="op">=</span> <span class="va">curvature</span> <span class="op">&gt;</span> <span class="va">benchmark</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">influential</span> <span class="op">==</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">influential</span>, <span class="op">-</span><span class="va">benchmark</span>, <span class="op">-</span><span class="va">curvature</span><span class="op">)</span>
+
+<span class="va">data_pig_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/augment.mixpoissonreg.html">augment</a></span><span class="op">(</span><span class="va">fit_pig_red</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>.index <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/ranking.html">row_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">.index</span>, <span class="va">daysabs</span>, <span class="va">gender</span>, <span class="va">math</span>, <span class="va">prog</span><span class="op">)</span>
+
+<span class="va">influential_pig</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">inf_pig_bench_tbl</span>, <span class="va">data_pig_tbl</span>, by <span class="op">=</span> <span class="st">".index"</span><span class="op">)</span>
+
+<span class="va">influential_pig</span>
+<span class="co">#&gt; # A tibble: 64 x 6</span>
+<span class="co">#&gt;    .index perturbation             daysabs gender  math prog    </span>
+<span class="co">#&gt;     &lt;int&gt; &lt;chr&gt;                      &lt;dbl&gt; &lt;fct&gt;  &lt;dbl&gt; &lt;fct&gt;   </span>
+<span class="co">#&gt;  1     20 hidden_variable               24 male       4 Academic</span>
+<span class="co">#&gt;  2     20 mean_explanatory              24 male       4 Academic</span>
+<span class="co">#&gt;  3     20 simultaneous_explanatory      24 male       4 Academic</span>
+<span class="co">#&gt;  4     28 case_weights                   0 female    21 Academic</span>
+<span class="co">#&gt;  5     31 case_weights                   0 male       1 Academic</span>
+<span class="co">#&gt;  6     36 hidden_variable               28 female    20 Academic</span>
+<span class="co">#&gt;  7     36 mean_explanatory              28 female    20 Academic</span>
+<span class="co">#&gt;  8     36 simultaneous_explanatory      28 female    20 Academic</span>
+<span class="co">#&gt;  9     39 precision_explanatory          5 male       1 General </span>
+<span class="co">#&gt; 10     40 mean_explanatory              27 female    35 Academic</span>
+<span class="co">#&gt; # … with 54 more rows</span></code></pre></div>
+<p>Now, the number of unique influential observations for the PIG regression:</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">influential_pig</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">.index</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 1 x 1</span>
+<span class="co">#&gt;       n</span>
+<span class="co">#&gt;   &lt;int&gt;</span>
+<span class="co">#&gt; 1    28</span></code></pre></div>
+<p>Let us check the informations of case # 94 for the NB and PIG regressions:</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">influential_nb</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">.index</span> <span class="op">==</span> <span class="fl">94</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 5 x 6</span>
+<span class="co">#&gt;   .index perturbation             daysabs gender  math prog   </span>
+<span class="co">#&gt;    &lt;int&gt; &lt;chr&gt;                      &lt;dbl&gt; &lt;fct&gt;  &lt;dbl&gt; &lt;fct&gt;  </span>
+<span class="co">#&gt; 1     94 case_weights                  29 female    70 General</span>
+<span class="co">#&gt; 2     94 hidden_variable               29 female    70 General</span>
+<span class="co">#&gt; 3     94 mean_explanatory              29 female    70 General</span>
+<span class="co">#&gt; 4     94 precision_explanatory         29 female    70 General</span>
+<span class="co">#&gt; 5     94 simultaneous_explanatory      29 female    70 General</span>
+
+<span class="va">influential_pig</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">.index</span> <span class="op">==</span> <span class="fl">94</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 5 x 6</span>
+<span class="co">#&gt;   .index perturbation             daysabs gender  math prog   </span>
+<span class="co">#&gt;    &lt;int&gt; &lt;chr&gt;                      &lt;dbl&gt; &lt;fct&gt;  &lt;dbl&gt; &lt;fct&gt;  </span>
+<span class="co">#&gt; 1     94 case_weights                  29 female    70 General</span>
+<span class="co">#&gt; 2     94 hidden_variable               29 female    70 General</span>
+<span class="co">#&gt; 3     94 mean_explanatory              29 female    70 General</span>
+<span class="co">#&gt; 4     94 precision_explanatory         29 female    70 General</span>
+<span class="co">#&gt; 5     94 simultaneous_explanatory      29 female    70 General</span></code></pre></div>
+<p>So, notice that case # 94 is a female, enrolled in the general program, with a high number of absences but with an unexpected high math score for this number of absences.</p>
+<p>It is also noteworthy that case # 94 was considered influential for all local perturbation schemes.</p>
+<p>Let us check the observations that were found influential for both models:</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ind_nb</span> <span class="op">&lt;-</span> <span class="va">influential_nb</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">.index</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="op">)</span>
+
+<span class="va">ind_pig</span> <span class="op">&lt;-</span> <span class="va">influential_pig</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">.index</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="op">)</span>
+
+<span class="va">ind_common</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://generics.r-lib.org/reference/setops.html">intersect</a></span><span class="op">(</span><span class="va">ind_nb</span>, <span class="va">ind_pig</span><span class="op">)</span>
+
+<span class="va">influential_nb</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">.index</span> <span class="op">%in%</span> <span class="va">ind_common</span><span class="op">$</span><span class="va">.index</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">perturbation</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 20 x 5</span>
+<span class="co">#&gt;    .index daysabs gender  math prog      </span>
+<span class="co">#&gt;     &lt;int&gt;   &lt;dbl&gt; &lt;fct&gt;  &lt;dbl&gt; &lt;fct&gt;     </span>
+<span class="co">#&gt;  1     20      24 male       4 Academic  </span>
+<span class="co">#&gt;  2     36      28 female    20 Academic  </span>
+<span class="co">#&gt;  3     40      27 female    35 Academic  </span>
+<span class="co">#&gt;  4     55      34 female     4 Academic  </span>
+<span class="co">#&gt;  5     57      28 male       5 General   </span>
+<span class="co">#&gt;  6     79      35 male       1 Academic  </span>
+<span class="co">#&gt;  7     80      23 female    21 Academic  </span>
+<span class="co">#&gt;  8     91      23 female    27 Academic  </span>
+<span class="co">#&gt;  9     94      29 female    70 General   </span>
+<span class="co">#&gt; 10    105      19 male      70 General   </span>
+<span class="co">#&gt; 11    117      35 female    35 Academic  </span>
+<span class="co">#&gt; 12    130      30 female    34 Academic  </span>
+<span class="co">#&gt; 13    140      30 female    27 General   </span>
+<span class="co">#&gt; 14    143       5 female     7 General   </span>
+<span class="co">#&gt; 15    150      34 female    29 General   </span>
+<span class="co">#&gt; 16    182      21 female    47 General   </span>
+<span class="co">#&gt; 17    186      16 male      81 Vocational</span>
+<span class="co">#&gt; 18    235       3 female    67 General   </span>
+<span class="co">#&gt; 19    260      19 male      49 Vocational</span>
+<span class="co">#&gt; 20    265      16 female    99 General</span></code></pre></div>
+<p>Now, let us check the influential observations for the NB regression that were not influential for the PIG regression:</p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ind_nb_pig</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://generics.r-lib.org/reference/setops.html">setdiff</a></span><span class="op">(</span><span class="va">ind_nb</span>, <span class="va">ind_pig</span><span class="op">)</span>
+
+<span class="va">influential_nb</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">.index</span> <span class="op">%in%</span> <span class="va">ind_nb_pig</span><span class="op">$</span><span class="va">.index</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">perturbation</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 2 x 5</span>
+<span class="co">#&gt;   .index daysabs gender  math prog      </span>
+<span class="co">#&gt;    &lt;int&gt;   &lt;dbl&gt; &lt;fct&gt;  &lt;dbl&gt; &lt;fct&gt;     </span>
+<span class="co">#&gt; 1    118      16 female     8 General   </span>
+<span class="co">#&gt; 2    188      16 female    75 Vocational</span></code></pre></div>
+<p>Finally, the influential observations for the PIG regression that were not influential for the NB regression:</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ind_pig_nb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://generics.r-lib.org/reference/setops.html">setdiff</a></span><span class="op">(</span><span class="va">ind_pig</span>, <span class="va">ind_nb</span><span class="op">)</span>
+
+<span class="va">influential_pig</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">.index</span> <span class="op">%in%</span> <span class="va">ind_pig_nb</span><span class="op">$</span><span class="va">.index</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">perturbation</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 8 x 5</span>
+<span class="co">#&gt;   .index daysabs gender  math prog    </span>
+<span class="co">#&gt;    &lt;int&gt;   &lt;dbl&gt; &lt;fct&gt;  &lt;dbl&gt; &lt;fct&gt;   </span>
+<span class="co">#&gt; 1     28       0 female    21 Academic</span>
+<span class="co">#&gt; 2     31       0 male       1 Academic</span>
+<span class="co">#&gt; 3     39       5 male       1 General </span>
+<span class="co">#&gt; 4     83       3 female    84 General </span>
+<span class="co">#&gt; 5    209       4 female    41 General </span>
+<span class="co">#&gt; 6    213       4 female    63 General </span>
+<span class="co">#&gt; 7    253       0 female    29 Academic</span>
+<span class="co">#&gt; 8    263       3 male      43 General</span></code></pre></div>
 </div>
   </div>
 
