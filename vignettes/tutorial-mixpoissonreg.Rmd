@@ -44,15 +44,16 @@ $$\log \mu_i = \beta_0 + \beta_1 {\tt gender}_i + \beta_2 {\tt math}_i + \beta_3
 and
 
 $$\log \phi_i = \alpha_0 + \alpha_1 {\tt gender}_i + \alpha_2 {\tt math}_i + \alpha_3 {\tt academic}_i + \alpha_4 {\tt vocational}_i.$$
-Let us fit this model under the assumption of Negative Binomial (NB) and Poisson Inverse Gaussian (PIG) distributions.
+Let us fit this model under the assumption of Negative Binomial (NB) and Poisson Inverse Gaussian (PIG) distributions. In this vignette (for CRAN), we fit using direct maximization
+of the likelihood to reduce computational cost.
 
 ```{r}
 library(mixpoissonreg)
 
-fit_nb_full <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog,
+fit_nb_full <- mixpoissonregML(daysabs ~ gender + math + prog | gender + math + prog,
                              model = "NB", data = Attendance)
 
-fit_pig_full <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog,
+fit_pig_full <- mixpoissonregML(daysabs ~ gender + math + prog | gender + math + prog,
                              model = "PIG", data = Attendance)
 ```
 
@@ -71,10 +72,10 @@ summary(fit_pig_full)
 These summaries suggest that *gender* and *math* covariates are not significant to explain the precision parameter. So we will obtain fits for the NB and PIG regressions without these variables for the precision paramters, then we will perform Wald and likelihood-ratio tests to confirm that indeed they are not significant.
 
 ```{r}
-fit_nb_red <- mixpoissonreg(daysabs ~ gender + math + prog | prog,
+fit_nb_red <- mixpoissonregML(daysabs ~ gender + math + prog | prog,
                              model = "NB", data = Attendance)
 
-fit_pig_red <- mixpoissonreg(daysabs ~ gender + math + prog | prog,
+fit_pig_red <- mixpoissonregML(daysabs ~ gender + math + prog | prog,
                              model = "PIG", data = Attendance)
 ```
 
@@ -145,18 +146,16 @@ bind_cols(new_cov, "Predicted_Means_PIG" = pred_values_pig)
 
 # Residual analysis
 
-Let us fit the reduced models with envelopes. To reduce computational cost, we will fit
-these models with the direct maximum likelihood estimation and with respect to the Pearson
-residual.
+Let us fit the reduced models with envelopes. We will fit these models with the Pearson residual.
 
 ```{r warning = FALSE}
 set.seed(2021) 
 # We are fixing the seed for reproducibility
 fit_nb_red_env <- mixpoissonregML(daysabs ~ gender + math + prog | prog,
-                             model = "NB", data = Attendance, envelope = 50)
+                             model = "NB", data = Attendance, envelope = 20)
 
 fit_pig_red_env <- mixpoissonregML(daysabs ~ gender + math + prog | prog,
-                             model = "PIG", data = Attendance, envelope = 50)
+                             model = "PIG", data = Attendance, envelope = 20)
 ```
 
 Since this is an illustration, we are using `envelope = 50` to reduce computational cost.

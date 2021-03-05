@@ -149,7 +149,7 @@
 #'
 #' DOI:10.2307/3314912 \doi{10.2307/3314912}(Lawless; 1987)
 #'
-#' DOI:10.1214/09-AOAS306 (\href{https://www.jstor.org/stable/29765537}{Sellers and Shmueli; 2010})
+#' Sellers, K.F. and Shmueli, G. (2010) *A flexible regression model for count data.* Ann. Appl. Stat., 4, 943-961
 #'
 #' @seealso
 #' \code{\link{summary.mixpoissonreg}}, \code{\link{plot.mixpoissonreg}}, \code{\link{autoplot.mixpoissonreg}},
@@ -666,7 +666,7 @@ mixpoissonreg.fit <- function(x, y, w = NULL, link.mean = c("log", "sqrt"),
 #'
 #' DOI:10.2307/3314912 \doi{10.2307/3314912}(Lawless; 1987)
 #'
-#' DOI:10.1214/09-AOAS306 (\href{https://www.jstor.org/stable/29765537}{Sellers and Shmueli; 2010})
+#' Sellers, K.F. and Shmueli, G. (2010) *A flexible regression model for count data.* Ann. Appl. Stat., 4, 943-961
 #'
 #' @seealso
 #' \code{\link{summary.mixpoissonreg}}, \code{\link{plot.mixpoissonreg}}, \code{\link{autoplot.mixpoissonreg}},

@@ -282,7 +282,7 @@ We can easily plot Cook's distance and generalized Cook's distance by including 
 autoplot(fit, which = c(3,4))
 ```
 
-There are also several options to customize the appearance of the plots. Several of these options are presented in the [Building and customizing ggplot2-based diagnostic plots with the *mixpoissonreg* package](ggplot2-plots-mixpoissonreg.html) vignette. 
+There are also several options to customize the appearance of the plots. Several of these options are presented in the [Building and customizing ggplot2-based diagnostic plots with the mixpoissonreg package](https://vpnsctl.github.io/mixpoissonreg/articles/ggplot2-plots-mixpoissonreg.html) vignette. 
 
 The `local_influence_autoplot` provides plots of the curvatures under the perturbation schemes for all the possible combinations of arguments of the `local_influence` method. We refer the reader to the [Global and local influence analysis with the *mixpoissonreg* package](influence-mixpoissonreg.html) vignette for further details on these arguments.
 
