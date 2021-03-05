@@ -124,7 +124,7 @@
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/vpnsctl/mixpoissonreg/">mixpoissonreg</a></span><span class="op">)</span>
 
 <span class="va">fit_ml</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonreg.html">mixpoissonreg</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span>, method <span class="op">=</span> <span class="st">"ML"</span>, 
-                        data <span class="op">=</span> <span class="va">Attendance</span>, optim_controls <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>maxit<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>
+                        data <span class="op">=</span> <span class="va">Attendance</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit_ml</span><span class="op">)</span>
 <span class="co">#&gt; </span>
@@ -132,7 +132,7 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Call:</span>
 <span class="co">#&gt; mixpoissonreg(formula = daysabs ~ gender + math + prog, data = Attendance, </span>
-<span class="co">#&gt;     method = "ML", optim_controls = list(maxit = 1))</span>
+<span class="co">#&gt;     method = "ML")</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Pearson residuals:</span>
@@ -155,19 +155,17 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Efron's pseudo R-squared:  0.1854615 </span>
 <span class="co">#&gt; Number of function calls by 'optim' = 4</span></code></pre></div>
-<p>We are using the option <code>optim_controls = list(maxit=1)</code> to reduce computational cost.</p>
 <p>These estimates can also be obtained by using the <code>mixpoissonregML</code> function:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit_ml2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonregML.html">mixpoissonregML</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span>,
-                        data <span class="op">=</span> <span class="va">Attendance</span>, optim_controls <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>maxit<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>
+                        data <span class="op">=</span> <span class="va">Attendance</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit_ml2</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Negative Binomial Regression - Maximum-Likelihood Estimation</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Call:</span>
-<span class="co">#&gt; mixpoissonregML(formula = daysabs ~ gender + math + prog, data = Attendance, </span>
-<span class="co">#&gt;     optim_controls = list(maxit = 1))</span>
+<span class="co">#&gt; mixpoissonregML(formula = daysabs ~ gender + math + prog, data = Attendance)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Pearson residuals:</span>
@@ -199,8 +197,7 @@
 <p>For instance:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit_ml_prec</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonregML.html">mixpoissonregML</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span> <span class="op">|</span> <span class="va">prog</span>,
-                        model <span class="op">=</span> <span class="st">"PIG"</span>, data <span class="op">=</span> <span class="va">Attendance</span>,
-                        optim_controls <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>maxit<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>
+                        model <span class="op">=</span> <span class="st">"PIG"</span>, data <span class="op">=</span> <span class="va">Attendance</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit_ml_prec</span><span class="op">)</span></code></pre></div>
 <p><img src="ml-mixpoissonreg_files/figure-html/unnamed-chunk-5-1.png" width="700"><img src="ml-mixpoissonreg_files/figure-html/unnamed-chunk-5-2.png" width="700"><img src="ml-mixpoissonreg_files/figure-html/unnamed-chunk-5-3.png" width="700"><img src="ml-mixpoissonreg_files/figure-html/unnamed-chunk-5-4.png" width="700"></p>
@@ -222,8 +219,7 @@
 <span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
 
 <span class="va">fit_ml_reduced</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonregML.html">mixpoissonregML</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span>,
-                        model <span class="op">=</span> <span class="st">"PIG"</span>, data <span class="op">=</span> <span class="va">Attendance</span>,
-                        optim_controls <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>maxit<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>
+                        model <span class="op">=</span> <span class="st">"PIG"</span>, data <span class="op">=</span> <span class="va">Attendance</span><span class="op">)</span>
 
 <span class="fu">lmtest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/lrtest.html">lrtest</a></span><span class="op">(</span><span class="va">fit_ml_prec</span>, <span class="va">fit_ml_reduced</span><span class="op">)</span>
 <span class="co">#&gt; Likelihood ratio test</span>
@@ -239,8 +235,7 @@
 <p>Finally, one can obtain simulated envelopes by setting the <code>envelope</code> argument to the number of draws to be simulated. If there are simulated envelopes, the Q-Q plot from the <code>plot</code> and <code>autoplot</code> methods will contain the envelopes and the <code>summary</code> method will print the percentage of observations within the simulated envelopes. For example:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit_ml_env</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonregML.html">mixpoissonregML</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span> <span class="op">|</span> <span class="va">prog</span>,
-                        model <span class="op">=</span> <span class="st">"PIG"</span>, envelope <span class="op">=</span> <span class="fl">10</span>, data <span class="op">=</span> <span class="va">Attendance</span>,
-                        optim_controls <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>maxit<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>
+                        model <span class="op">=</span> <span class="st">"PIG"</span>, envelope <span class="op">=</span> <span class="fl">100</span>, data <span class="op">=</span> <span class="va">Attendance</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit_ml_env</span><span class="op">)</span>
 <span class="co">#&gt; </span>
@@ -248,7 +243,7 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Call:</span>
 <span class="co">#&gt; mixpoissonregML(formula = daysabs ~ gender + math + prog | prog, </span>
-<span class="co">#&gt;     data = Attendance, model = "PIG", envelope = 10, optim_controls = list(maxit = 1))</span>
+<span class="co">#&gt;     data = Attendance, model = "PIG", envelope = 100)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Pearson residuals:</span>
@@ -272,7 +267,7 @@
 <span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Efron's pseudo R-squared:  0.1858035 </span>
-<span class="co">#&gt; Percentage of residuals within the envelope = 71.9745</span>
+<span class="co">#&gt; Percentage of residuals within the envelope = 97.7707</span>
 <span class="co">#&gt; Number of function calls by 'optim' = 6</span>
 
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit_ml_env</span>, which <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>

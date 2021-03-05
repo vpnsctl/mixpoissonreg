@@ -128,18 +128,17 @@
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/vpnsctl/mixpoissonreg/">mixpoissonreg</a></span><span class="op">)</span>
 
 <span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonreg.html">mixpoissonreg</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span> <span class="op">|</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span>, 
-                        data <span class="op">=</span> <span class="va">Attendance</span>, em_controls <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>maxit<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>
+                        data <span class="op">=</span> <span class="va">Attendance</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">hatvalues</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;           1           2           3           4           5           6 </span>
-<span class="co">#&gt; 0.009079739 0.006988289 0.004624420 0.006642726 0.009645113 0.026264887</span></code></pre></div>
-<p>We are using the option <code>em_controls = list(maxit=1)</code> to reduce computational cost.</p>
+<span class="co">#&gt; 0.009079739 0.006988288 0.004624419 0.006642724 0.009645108 0.026264888</span></code></pre></div>
 <p>The hat values are used to obtain Cook’s distance. One can also use the hat values to define leverage-adjusted residuals by dividing the residuals by <code><a href="https://rdrr.io/r/base/MathFun.html">sqrt(hatvalues(fitted_object))</a></code>.</p>
 <p>To obtain precision-related hat values one must set <code>parameters</code> to “precision”:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">hatvalues</a></span><span class="op">(</span><span class="va">fit</span>, parameters <span class="op">=</span> <span class="st">"precision"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;           1           2           3           4           5           6 </span>
-<span class="co">#&gt; 0.003308847 0.004137405 0.015968674 0.012503519 0.020321253 0.007444494</span></code></pre></div>
+<span class="co">#&gt; 0.003308865 0.004137420 0.015968704 0.012503542 0.020321253 0.007444368</span></code></pre></div>
 </div>
 <div id="cooks-distance-method" class="section level2">
 <h2 class="hasAnchor">
@@ -152,12 +151,12 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">cooks.distance</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;            1            2            3            4            5            6 </span>
-<span class="co">#&gt; 7.412521e-05 1.938596e-04 6.180137e-04 6.839692e-04 1.170998e-03 5.061764e-03</span></code></pre></div>
+<span class="co">#&gt; 7.412875e-05 1.938615e-04 6.180147e-04 6.839705e-04 1.170998e-03 5.061612e-03</span></code></pre></div>
 <p>Since there is also a “hat” matrix with respect to the precision parameters, we may compute Cook’s distance using the hat values with respect to the precision parameters. To compute Cook’s distance with the “hat” matrix with respect to the precision parameters we simply set the <code>hat</code> argument to “precision”:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">cooks.distance</a></span><span class="op">(</span><span class="va">fit</span>, hat <span class="op">=</span> <span class="st">"precision"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;            1            2            3            4            5            6 </span>
-<span class="co">#&gt; 2.670088e-05 1.141181e-04 2.183563e-03 1.302754e-03 2.521237e-03 1.380809e-03</span></code></pre></div>
+<span class="co">#&gt; 0.0000267023 0.0001141196 0.0021835715 0.0013027589 0.0025212380 0.0013807438</span></code></pre></div>
 </div>
 <div id="generalized-cooks-distance-and-q-displacement" class="section level3">
 <h3 class="hasAnchor">
@@ -167,22 +166,22 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">cooks.distance</a></span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="st">"GCD"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;           1           2           3           4           5           6 </span>
-<span class="co">#&gt; 0.004246929 0.002821274 0.002072301 0.001018638 0.001979334 0.003445122</span></code></pre></div>
+<span class="co">#&gt; 0.004246910 0.002821262 0.002072318 0.001018639 0.001979334 0.003445146</span></code></pre></div>
 <p>To compute the generalized Cook’s distance with respect to the mean-related parameters, set the <code>type</code> argument to “GCDmean”:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">cooks.distance</a></span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="st">"GCDmean"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;            1            2            3            4            5            6 </span>
-<span class="co">#&gt; 6.176462e-05 1.885868e-04 1.180570e-03 1.009909e-03 1.806187e-03 1.660843e-03</span></code></pre></div>
+<span class="co">#&gt; 6.176761e-05 1.885887e-04 1.180572e-03 1.009911e-03 1.806187e-03 1.660795e-03</span></code></pre></div>
 <p>and to compute the generalized Cook’s distance with respect to the precision-related parameters, set the <code>type</code> argument to “GCDprecision”:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">cooks.distance</a></span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="st">"GCDprecision"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;            1            2            3            4            5            6 </span>
-<span class="co">#&gt; 4.185164e-03 2.632687e-03 8.917309e-04 8.728862e-06 1.731461e-04 1.784279e-03</span></code></pre></div>
+<span class="co">#&gt; 4.185142e-03 2.632673e-03 8.917459e-04 8.727751e-06 1.731469e-04 1.784352e-03</span></code></pre></div>
 <p>To compute the Q-displacement one sets the <code>type</code> argument to “QD”:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">cooks.distance</a></span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="st">"QD"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;           1           2           3           4           5           6 </span>
-<span class="co">#&gt; 0.004223071 0.002777084 0.002040897 0.001022165 0.001969990 0.003508785</span></code></pre></div>
+<span class="co">#&gt; 0.004222877 0.002776973 0.002041359 0.001022342 0.001969761 0.003506476</span></code></pre></div>
 </div>
 <div id="likelihood-displacement" class="section level3">
 <h3 class="hasAnchor">
@@ -191,7 +190,7 @@
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">cooks.distance</a></span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="st">"LD"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;            1            2            3            4            5            6 </span>
-<span class="co">#&gt; 0.0019140235 0.0013801409 0.0006543277 0.0001519963 0.0003607121 0.0012554162</span></code></pre></div>
+<span class="co">#&gt; 0.0019138351 0.0013800327 0.0006547844 0.0001521722 0.0003604836 0.0012531224</span></code></pre></div>
 </div>
 </div>
 <div id="influence-method" class="section level2">
@@ -223,12 +222,12 @@
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">influence_fit</span><span class="op">$</span><span class="va">coefficients.mean</span><span class="op">)</span>
 <span class="co">#&gt;   (Intercept) gendermale         math progAcademic progVocational</span>
-<span class="co">#&gt; 1    2.745887 -0.2448940 -0.006613360   -0.4258482      -1.269851</span>
-<span class="co">#&gt; 2    2.746077 -0.2447048 -0.006619964   -0.4257226      -1.269747</span>
-<span class="co">#&gt; 3    2.747010 -0.2459932 -0.006631644   -0.4252007      -1.269402</span>
-<span class="co">#&gt; 4    2.747015 -0.2459013 -0.006632624   -0.4252938      -1.269393</span>
-<span class="co">#&gt; 5    2.747544 -0.2460342 -0.006644830   -0.4252217      -1.269154</span>
-<span class="co">#&gt; 6    2.746786 -0.2443429 -0.006641383   -0.4268347      -1.269387</span></code></pre></div>
+<span class="co">#&gt; 1    2.745887 -0.2448940 -0.006613246   -0.4258482      -1.269851</span>
+<span class="co">#&gt; 2    2.746077 -0.2447048 -0.006619850   -0.4257226      -1.269747</span>
+<span class="co">#&gt; 3    2.747010 -0.2459932 -0.006631529   -0.4252007      -1.269402</span>
+<span class="co">#&gt; 4    2.747015 -0.2459012 -0.006632510   -0.4252938      -1.269393</span>
+<span class="co">#&gt; 5    2.747544 -0.2460341 -0.006644716   -0.4252217      -1.269154</span>
+<span class="co">#&gt; 6    2.746786 -0.2443429 -0.006641268   -0.4268347      -1.269387</span></code></pre></div>
 </div>
 <div id="global-influence-plots" class="section level2">
 <h2 class="hasAnchor">
@@ -250,7 +249,7 @@
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span><span class="op">)</span>, label.n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
 <p><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-15-1.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-15-2.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-15-3.png" width="700"></p>
-<p>For further details customizing plots of <code>mixpoissonreg</code> objects, we refer the reader to the <a href="plots-mixpoissonreg.html">Diagnostic plots with the <em>mixpoissonreg</em> package</a> vignette.</p>
+<p>For further details customizing plots of <code>mixpoissonreg</code> objects, we refer the reader to the <a href="https://vpnsctl.github.io/mixpoissonreg/articles/plots-mixpoissonreg.html">Building and customizing base-R diagnostic plots with the mixpoissonreg package</a> and <a href="https://vpnsctl.github.io/mixpoissonreg/articles/ggplot2-plots-mixpoissonreg.html">Building and customizing ggplot2-based diagnostic plots with the mixpoissonreg package</a> vignettes.</p>
 <p>We now turn to the problem of plotting Q-displacements and likelihood displacements. Both of these plots can easily be built “by hand”.</p>
 <p>R’s base graphics:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
@@ -333,7 +332,7 @@
 <p>For example:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonreg.html">mixpoissonreg</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span> <span class="op">|</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span>, 
-                        data <span class="op">=</span> <span class="va">Attendance</span>, em_controls <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>maxit<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>
+                        data <span class="op">=</span> <span class="va">Attendance</span><span class="op">)</span>
 
 <span class="va">loc_inf_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/local_influence.html">local_influence</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>
 
@@ -344,10 +343,10 @@
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">loc_inf_fit</span><span class="op">$</span><span class="va">case_weights</span><span class="op">)</span>
 <span class="co">#&gt;            1            2            3            4            5            6 </span>
-<span class="co">#&gt; 0.0014599089 0.0009698309 0.0007123667 0.0003501633 0.0006804085 0.0011842828</span>
+<span class="co">#&gt; 0.0014599080 0.0009698306 0.0007123753 0.0003501649 0.0006804113 0.0011842955</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">loc_inf_fit</span><span class="op">$</span><span class="va">case_weights</span>, <span class="st">"benchmark"</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.01398722</span></code></pre></div>
+<span class="co">#&gt; [1] 0.01398709</span></code></pre></div>
 <p>To compute the normal curvature, simply set the <code>curvature</code> argument to “normal”. For normal curvature the <code>benchmark</code> attribute contains the benchmark suggested by <a href="https://www.springer.com/gp/book/9781441902993">Verbeke and Molenberghs (2000, sect. 11.3)</a>. For example:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">loc_inf_normal_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/local_influence.html">local_influence</a></span><span class="op">(</span><span class="va">fit</span>, curvature <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span>
@@ -359,10 +358,10 @@
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">loc_inf_normal_fit</span><span class="op">$</span><span class="va">case_weights</span><span class="op">)</span>
 <span class="co">#&gt;           1           2           3           4           5           6 </span>
-<span class="co">#&gt; 0.004246929 0.002821274 0.002072301 0.001018638 0.001979334 0.003445122</span>
+<span class="co">#&gt; 0.004246910 0.002821262 0.002072318 0.001018639 0.001979334 0.003445146</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">loc_inf_normal_fit</span><span class="op">$</span><span class="va">case_weights</span>, <span class="st">"benchmark"</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.0185289</span></code></pre></div>
+<span class="co">#&gt; [1] 0.01852883</span></code></pre></div>
 </div>
 <div id="direction" class="section level2">
 <h2 class="hasAnchor">
@@ -384,7 +383,7 @@
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">loc_inf_fit_larg_curv</span><span class="op">$</span><span class="va">case_weights</span><span class="op">)</span>
 <span class="co">#&gt;            1            2            3            4            5            6 </span>
-<span class="co">#&gt; -0.057396493 -0.068340893  0.021970638 -0.004724979  0.006115105 -0.015803334</span>
+<span class="co">#&gt; -0.057396784 -0.068340607  0.021970870 -0.004724743  0.006115203 -0.015803801</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">loc_inf_fit_larg_curv</span><span class="op">$</span><span class="va">case_weights</span>, <span class="st">"benchmark"</span><span class="op">)</span>
 <span class="co">#&gt; [1] NA</span>
@@ -401,7 +400,7 @@
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">loc_inf_normal_fit_larg_curv</span><span class="op">$</span><span class="va">case_weights</span><span class="op">)</span>
 <span class="co">#&gt;            1            2            3            4            5            6 </span>
-<span class="co">#&gt; -0.057396493 -0.068340893  0.021970638 -0.004724979  0.006115105 -0.015803334</span>
+<span class="co">#&gt; -0.057396784 -0.068340607  0.021970870 -0.004724743  0.006115203 -0.015803801</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">loc_inf_normal_fit_larg_curv</span><span class="op">$</span><span class="va">case_weights</span>, <span class="st">"benchmark"</span><span class="op">)</span>
 <span class="co">#&gt; [1] NA</span></code></pre></div>
@@ -421,8 +420,7 @@
 <p>Notice that if there is no precision covariates, then the returned values for “precision_explanatory” and “simultaneous_explanatory” are <code>NA</code> and a <em>warning</em> message is generated:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonreg.html">mixpoissonreg</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span>, 
-                        data <span class="op">=</span> <span class="va">Attendance</span>, 
-                      em_controls <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>maxit<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>
+                        data <span class="op">=</span> <span class="va">Attendance</span><span class="op">)</span>
 
 <span class="va">loc_inf_fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/local_influence.html">local_influence</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span>
 
@@ -451,7 +449,7 @@
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">loc_inf_1</span><span class="op">$</span><span class="va">case_weights</span><span class="op">)</span>
 <span class="co">#&gt;            1            2            3            4            5            6 </span>
-<span class="co">#&gt; 0.0014599089 0.0009698309 0.0007123667 0.0003501633 0.0006804085 0.0011842828</span>
+<span class="co">#&gt; 0.0014599080 0.0009698306 0.0007123753 0.0003501649 0.0006804113 0.0011842955</span>
 
 <span class="va">loc_inf_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/local_influence.html">local_influence</a></span><span class="op">(</span><span class="va">fit</span>, perturbation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"case_weights"</span>, <span class="st">"hidden_variable"</span><span class="op">)</span>,
                              curvature <span class="op">=</span> <span class="st">"normal"</span>,
@@ -462,7 +460,7 @@
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">loc_inf_2</span><span class="op">$</span><span class="va">case_weights</span><span class="op">)</span>
 <span class="co">#&gt;            1            2            3            4            5            6 </span>
-<span class="co">#&gt; -0.057396493 -0.068340893  0.021970638 -0.004724979  0.006115105 -0.015803334</span></code></pre></div>
+<span class="co">#&gt; -0.057396784 -0.068340607  0.021970870 -0.004724743  0.006115203 -0.015803801</span></code></pre></div>
 </div>
 <div id="parameters" class="section level2">
 <h2 class="hasAnchor">
@@ -474,14 +472,14 @@
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">loc_inf_fit_mean</span><span class="op">$</span><span class="va">case_weights</span><span class="op">)</span>
 <span class="co">#&gt;            1            2            3            4            5            6 </span>
-<span class="co">#&gt; 6.649242e-05 2.030222e-04 1.270937e-03 1.087213e-03 1.944443e-03 1.787973e-03</span></code></pre></div>
+<span class="co">#&gt; 6.649621e-05 2.030260e-04 1.270950e-03 1.087224e-03 1.944459e-03 1.787936e-03</span></code></pre></div>
 <p>Analogously, to return <em>case weights</em> and <em>hidden variable</em> perturbations with respect to the <em>precision</em>-related parameters, one must set the <code>parameters</code> argument to “precision”:</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">loc_inf_fit_precision</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/local_influence.html">local_influence</a></span><span class="op">(</span><span class="va">fit</span>, parameters <span class="op">=</span> <span class="st">"precision"</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">loc_inf_fit_precision</span><span class="op">$</span><span class="va">case_weights</span><span class="op">)</span>
 <span class="co">#&gt;            1            2            3            4            5            6 </span>
-<span class="co">#&gt; 2.113570e-03 1.329546e-03 4.503374e-04 4.408205e-06 8.744134e-05 9.010877e-04</span></code></pre></div>
+<span class="co">#&gt; 2.113563e-03 1.329541e-03 4.503457e-04 4.407651e-06 8.744190e-05 9.011256e-04</span></code></pre></div>
 </div>
 <div id="perturbation-schemes-with-respect-to-a-subset-of-the-covariates" class="section level2">
 <h2 class="hasAnchor">
@@ -501,39 +499,38 @@
     <span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/NegBinomial.html">rnbinom</a></span><span class="op">(</span><span class="fl">200</span>, mu <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">x1</span><span class="op">-</span><span class="va">x2</span><span class="op">-</span><span class="op">(</span><span class="va">x3</span><span class="op">==</span><span class="fl">2</span><span class="op">)</span><span class="op">+</span><span class="fl">0.1</span><span class="op">*</span><span class="va">x4</span><span class="op">)</span>, 
                        size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fl">1</span><span class="op">+</span><span class="fl">2</span><span class="op">*</span><span class="va">x1</span><span class="op">+</span><span class="va">x2</span><span class="op">)</span><span class="op">)</span>
     
-    <span class="va">fit_example</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonreg.html">mixpoissonreg</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span> <span class="op">+</span> <span class="va">x3</span> <span class="op">+</span> <span class="va">x4</span> <span class="op">|</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span>,
-                                 em_controls <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>maxit<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>
+    <span class="va">fit_example</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonreg.html">mixpoissonreg</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span> <span class="op">+</span> <span class="va">x3</span> <span class="op">+</span> <span class="va">x4</span> <span class="op">|</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span><span class="op">)</span>
     
     <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit_example</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Negative Binomial Regression - Expectation-Maximization Algorithm</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Call:</span>
-<span class="co">#&gt; mixpoissonreg(formula = y ~ x1 + x2 + x3 + x4 | x1 + x2, em_controls = list(maxit = 1))</span>
+<span class="co">#&gt; mixpoissonreg(formula = y ~ x1 + x2 + x3 + x4 | x1 + x2)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Pearson residuals:</span>
 <span class="co">#&gt;      RSS      Min       1Q   Median       3Q      Max </span>
-<span class="co">#&gt; 184.5508  -1.5734  -0.6603  -0.3186   0.4243   3.8465 </span>
+<span class="co">#&gt; 184.5453  -1.5734  -0.6603  -0.3186   0.4244   3.8463 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Coefficients modeling the mean (with  link):</span>
 <span class="co">#&gt;             Estimate Std.error z-value Pr(&gt;|z|)    </span>
-<span class="co">#&gt; (Intercept)  0.88304   0.18902   4.672 2.99e-06 ***</span>
-<span class="co">#&gt; x1          -1.28107   0.18555  -6.904 5.05e-12 ***</span>
-<span class="co">#&gt; x2          -0.99686   0.08599 -11.592  &lt; 2e-16 ***</span>
-<span class="co">#&gt; x32         -1.16351   0.15225  -7.642 2.14e-14 ***</span>
-<span class="co">#&gt; x4           0.14925   0.02512   5.940 2.84e-09 ***</span>
+<span class="co">#&gt; (Intercept)  0.88326   0.18901   4.673 2.97e-06 ***</span>
+<span class="co">#&gt; x1          -1.28119   0.18554  -6.905 5.02e-12 ***</span>
+<span class="co">#&gt; x2          -0.99689   0.08599 -11.593  &lt; 2e-16 ***</span>
+<span class="co">#&gt; x32         -1.16354   0.15225  -7.642 2.13e-14 ***</span>
+<span class="co">#&gt; x4           0.14923   0.02512   5.940 2.86e-09 ***</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Coefficients modeling the precision (with  link):</span>
 <span class="co">#&gt;             Estimate Std.error z-value Pr(&gt;|z|)   </span>
-<span class="co">#&gt; (Intercept)   1.0731    0.4655   2.305  0.02115 * </span>
-<span class="co">#&gt; x1            2.6327    1.0925   2.410  0.01597 * </span>
-<span class="co">#&gt; x2            1.0746    0.3353   3.204  0.00135 **</span>
+<span class="co">#&gt; (Intercept)   1.0732    0.4655   2.305  0.02114 * </span>
+<span class="co">#&gt; x1            2.6328    1.0926   2.410  0.01597 * </span>
+<span class="co">#&gt; x2            1.0744    0.3353   3.204  0.00136 **</span>
 <span class="co">#&gt; ---</span>
 <span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Efron's pseudo R-squared:  0.52115 </span>
-<span class="co">#&gt; Number of iterations of the EM algorithm = 1</span></code></pre></div>
+<span class="co">#&gt; Efron's pseudo R-squared:  0.521234 </span>
+<span class="co">#&gt; Number of iterations of the EM algorithm = 39</span></code></pre></div>
 <p><strong>Remark:</strong> Notice that since <em>x3</em> is a factor and <em>x4</em> is integer-valued, they are discrete and it <strong>does not</strong> make sense to make infinitesimal perturbations on them. You should only perturb continuous variables.</p>
 <p>To consider the “mean_explanatory” and “simultaneous_explanatory” perturbation schemes with respect to the “x1” covariate, we simply set the <code>mean.covariates</code> argument to “x1”:</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
@@ -541,14 +538,14 @@
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">loc_inf_x1</span><span class="op">$</span><span class="va">mean_explanatory</span><span class="op">)</span>
 <span class="co">#&gt;            1            2            3            4            5            6 </span>
-<span class="co">#&gt; 9.184808e-09 3.332425e-06 1.352478e-06 4.736643e-07 5.720140e-09 1.752231e-06</span></code></pre></div>
+<span class="co">#&gt; 9.183691e-09 3.334748e-06 1.352123e-06 4.736427e-07 5.714998e-09 1.752997e-06</span></code></pre></div>
 <p>To consider more than one covariate, simply enter the covariates as a vector. For instance, to consider the “mean_explanatory” and “simultaneous_explanatory” perturbation schemes with respect to the “x1” and “x2” covariates, we simply set the <code>mean.covariates</code> argument to <code><a href="https://rdrr.io/r/base/c.html">c("x1", "x2")</a></code>:</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">loc_inf_x1_x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/local_influence.html">local_influence</a></span><span class="op">(</span><span class="va">fit_example</span>, mean.covariates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"x1"</span>, <span class="st">"x2"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">loc_inf_x1_x2</span><span class="op">$</span><span class="va">mean_explanatory</span><span class="op">)</span>
 <span class="co">#&gt;            1            2            3            4            5            6 </span>
-<span class="co">#&gt; 9.184808e-09 3.332425e-06 1.352478e-06 4.736643e-07 5.720140e-09 1.752231e-06</span></code></pre></div>
+<span class="co">#&gt; 9.183691e-09 3.334748e-06 1.352123e-06 4.736427e-07 5.714998e-09 1.752997e-06</span></code></pre></div>
 <p>The covariates used in the “mean_explanatory” and “simultaneous_explanatory” perturbation schemes are returned as <code>covariates</code> attributes in the “mean_explanatory” and “simultaneous_explanatory” perturbation schemes:</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">loc_inf_x1</span><span class="op">$</span><span class="va">mean_explanatory</span>, <span class="st">"covariates"</span><span class="op">)</span>
@@ -574,14 +571,14 @@
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">loc_inf_prec_x1</span><span class="op">$</span><span class="va">precision_explanatory</span><span class="op">)</span>
 <span class="co">#&gt;            1            2            3            4            5            6 </span>
-<span class="co">#&gt; 0.0112811796 0.0008030722 0.0015556764 0.0073939712 0.0054385258 0.0015444537</span></code></pre></div>
+<span class="co">#&gt; 0.0112811713 0.0008059272 0.0015554050 0.0073938677 0.0054376517 0.0015445382</span></code></pre></div>
 <p>In the same manner as in the “mean_explanatory” perturbation scheme, to consider more than one covariate, simply enter the covariates as a vector. For instance, to consider the “precision_explanatory” and “simultaneous_explanatory” perturbation schemes with respect to the “x1” and “x2” covariates, we simply set the <code>precision.covariates</code> argument to <code><a href="https://rdrr.io/r/base/c.html">c("x1", "x2")</a></code>:</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">loc_inf_prec_x1_x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/local_influence.html">local_influence</a></span><span class="op">(</span><span class="va">fit_example</span>, precision.covariates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"x1"</span>, <span class="st">"x2"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">loc_inf_prec_x1_x2</span><span class="op">$</span><span class="va">precision_explanatory</span><span class="op">)</span>
 <span class="co">#&gt;            1            2            3            4            5            6 </span>
-<span class="co">#&gt; 0.0112811796 0.0008030722 0.0015556764 0.0073939712 0.0054385258 0.0015444537</span></code></pre></div>
+<span class="co">#&gt; 0.0112811713 0.0008059272 0.0015554050 0.0073938677 0.0054376517 0.0015445382</span></code></pre></div>
 <p>The covariates used in the “precision_explanatory” and “simultaneous_explanatory” perturbation schemes are returned as <code>covariates</code> attributes in the “precision_explanatory” and “simultaneous_explanatory” perturbation schemes:</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">loc_inf_prec_x1</span><span class="op">$</span><span class="va">precision_explanatory</span>, <span class="st">"covariates"</span><span class="op">)</span>
@@ -610,7 +607,7 @@
 <p>Let us build these plots. First, the standard arguments provide the plots of conformal normal curvature in the canonical directions for the “case_weights”, “hidden_variable”, “mean_explanatory” and “precision_explanatory” perturbation schemes with “case_weights” and “hidden_variable” being computed for all parameters, and the explanatory perturbations being computed for all covariates:</p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonreg.html">mixpoissonreg</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span> <span class="op">|</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span>, 
-                        data <span class="op">=</span> <span class="va">Attendance</span>, em_controls <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>maxit<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>
+                        data <span class="op">=</span> <span class="va">Attendance</span><span class="op">)</span>
 
 <span class="co"># Notice that since gender and prog are factors,</span>
 <span class="co"># they are not considered in the computation of the </span>
@@ -676,8 +673,7 @@
     <span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/NegBinomial.html">rnbinom</a></span><span class="op">(</span><span class="fl">200</span>, mu <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">x1</span><span class="op">-</span><span class="va">x2</span><span class="op">-</span><span class="op">(</span><span class="va">x3</span><span class="op">==</span><span class="fl">2</span><span class="op">)</span><span class="op">+</span><span class="fl">0.1</span><span class="op">*</span><span class="va">x4</span><span class="op">)</span>, 
                        size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fl">1</span><span class="op">+</span><span class="fl">2</span><span class="op">*</span><span class="va">x1</span><span class="op">+</span><span class="va">x2</span><span class="op">)</span><span class="op">)</span>
     
-    <span class="va">fit_example</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonreg.html">mixpoissonreg</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span> <span class="op">+</span> <span class="va">x3</span> <span class="op">+</span> <span class="va">x4</span> <span class="op">|</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span>, 
-                                 em_controls <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>maxit<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+    <span class="va">fit_example</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonreg.html">mixpoissonreg</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span> <span class="op">+</span> <span class="va">x3</span> <span class="op">+</span> <span class="va">x4</span> <span class="op">|</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span><span class="op">)</span></code></pre></div>
 <p>We will consider the “mean explanatory”, “precision explanatory” and “simultaneous explanatory” perturbations with respect to the <code>x1</code> covariate:</p>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/local_influence.html">local_influence_plot</a></span><span class="op">(</span><span class="va">fit_example</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span><span class="op">)</span>, 

@@ -221,7 +221,7 @@ URL:https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1751-5823.2005.tb00250.x (
 
 DOI:10.2307/3314912 \doi{10.2307/3314912}(Lawless; 1987)
 
-DOI:10.1214/09-AOAS306 (\href{https://www.jstor.org/stable/29765537}{Sellers and Shmueli; 2010})
+Sellers, K.F. and Shmueli, G. (2010) \emph{A flexible regression model for count data.} Ann. Appl. Stat., 4, 943-961
 }
 \seealso{
 \code{\link{summary.mixpoissonreg}}, \code{\link{plot.mixpoissonreg}}, \code{\link{autoplot.mixpoissonreg}},

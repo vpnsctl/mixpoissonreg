@@ -163,7 +163,7 @@ and
 autoplot(fit, which = c(3,4,5), label.n = 5)
 ```
 
-For further details customizing plots of `mixpoissonreg` objects, we refer the reader to the [Diagnostic plots with the *mixpoissonreg* package](plots-mixpoissonreg.html) vignette.
+For further details customizing plots of `mixpoissonreg` objects, we refer the reader to the [Building and customizing base-R diagnostic plots with the mixpoissonreg package](https://vpnsctl.github.io/mixpoissonreg/articles/plots-mixpoissonreg.html) and [Building and customizing ggplot2-based diagnostic plots with the mixpoissonreg package](https://vpnsctl.github.io/mixpoissonreg/articles/ggplot2-plots-mixpoissonreg.html) vignettes.
 
 We now turn to the problem of plotting Q-displacements and likelihood displacements. Both of these plots can easily be built "by hand". 
 
