@@ -37,12 +37,10 @@ If the argument `which` is not provided, then, by default, the plots 1, 2, 5 and
 library(mixpoissonreg)
 
 fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, 
-                        data = Attendance, em_controls = list(maxit=1))
+                        data = Attendance)
 
 plot(fit)
 ```
-
-We are using the option `em_controls = list(maxit=1)` to reduce computational cost.
 
 If we want only a single plot, we simply indicate its number. For instance, if we only want the plot of Cook's distances, we simply set `which = 3`:
 
@@ -268,8 +266,7 @@ Finally, let us consider a fitting with simulated envelopes:
 
 ```{r warning=FALSE}
 fit_env <- mixpoissonregML(daysabs ~ gender + math + prog | gender + 
-                           math + prog, envelope = 10, data = Attendance,
-                           optim_controls = list(maxit=1))
+                           math + prog, envelope = 100, data = Attendance)
 
 plot(fit_env, which = 2)
 ```

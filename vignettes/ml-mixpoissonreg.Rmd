@@ -29,18 +29,16 @@ One can obtain parameters estimates through direct maximization of the likelihoo
 library(mixpoissonreg)
 
 fit_ml <- mixpoissonreg(daysabs ~ gender + math + prog, method = "ML", 
-                        data = Attendance, optim_controls = list(maxit=1))
+                        data = Attendance)
 
 summary(fit_ml)
 ```
-
-We are using the option `optim_controls = list(maxit=1)` to reduce computational cost.
 
 These estimates can also be obtained by using the `mixpoissonregML` function:
 
 ```{r warning=FALSE}
 fit_ml2 <- mixpoissonregML(daysabs ~ gender + math + prog,
-                        data = Attendance, optim_controls = list(maxit=1))
+                        data = Attendance)
 
 summary(fit_ml2)
 ```
@@ -62,8 +60,7 @@ For instance:
 
 ```{r warning = FALSE}
 fit_ml_prec <- mixpoissonregML(daysabs ~ gender + math + prog | prog,
-                        model = "PIG", data = Attendance,
-                        optim_controls = list(maxit=1))
+                        model = "PIG", data = Attendance)
 
 autoplot(fit_ml_prec)
 
@@ -72,8 +69,7 @@ local_influence_autoplot(fit_ml_prec)
 lmtest::lrtest(fit_ml_prec)
 
 fit_ml_reduced <- mixpoissonregML(daysabs ~ gender + math + prog,
-                        model = "PIG", data = Attendance,
-                        optim_controls = list(maxit=1))
+                        model = "PIG", data = Attendance)
 
 lmtest::lrtest(fit_ml_prec, fit_ml_reduced)
 ```
@@ -87,8 +83,7 @@ Finally, one can obtain simulated envelopes by setting the `envelope` argument t
 
 ```{r warning = FALSE}
 fit_ml_env <- mixpoissonregML(daysabs ~ gender + math + prog | prog,
-                        model = "PIG", envelope = 10, data = Attendance,
-                        optim_controls = list(maxit=1))
+                        model = "PIG", envelope = 100, data = Attendance)
 
 summary(fit_ml_env)
 

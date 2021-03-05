@@ -35,12 +35,10 @@ To obtain the mean-related hat values one simply calls the `hatvalues` method:
 library(mixpoissonreg)
 
 fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, 
-                        data = Attendance, em_controls = list(maxit=1))
+                        data = Attendance)
 
 head(hatvalues(fit))
 ```
-
-We are using the option `em_controls = list(maxit=1)` to reduce computational cost.
 
 The hat values are used to obtain Cook's distance. One can also use the hat values to define leverage-adjusted residuals by dividing the residuals by `sqrt(hatvalues(fitted_object))`.
 
@@ -267,7 +265,7 @@ For example:
 
 ```{r warning = FALSE}
 fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, 
-                        data = Attendance, em_controls = list(maxit=1))
+                        data = Attendance)
 
 loc_inf_fit <- local_influence(fit)
 
@@ -346,8 +344,7 @@ Notice that if there is no precision covariates, then the returned values for "p
 
 ```{r warning = FALSE}
 fit2 <- mixpoissonreg(daysabs ~ gender + math + prog, 
-                        data = Attendance, 
-                      em_controls = list(maxit=1))
+                        data = Attendance)
 
 loc_inf_fit2 <- local_influence(fit2)
 
@@ -420,8 +417,7 @@ Let us consider, for example, the following model:
     y <- stats::rnbinom(200, mu = exp(1-x1-x2-(x3==2)+0.1*x4), 
                        size = exp(1+2*x1+x2))
     
-    fit_example <- mixpoissonreg(y ~ x1 + x2 + x3 + x4 | x1 + x2,
-                                 em_controls = list(maxit=1))
+    fit_example <- mixpoissonreg(y ~ x1 + x2 + x3 + x4 | x1 + x2)
     
     summary(fit_example)
 ```
@@ -489,7 +485,7 @@ Let us build these plots. First, the standard arguments provide the plots of con
 
 ```{r warning = FALSE}
 fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, 
-                        data = Attendance, em_controls = list(maxit=1))
+                        data = Attendance)
 
 # Notice that since gender and prog are factors,
 # they are not considered in the computation of the 
@@ -580,8 +576,7 @@ Finally, we can change the covariates by setting the `mean.covariates` and `prec
     y <- stats::rnbinom(200, mu = exp(1-x1-x2-(x3==2)+0.1*x4), 
                        size = exp(1+2*x1+x2))
     
-    fit_example <- mixpoissonreg(y ~ x1 + x2 + x3 + x4 | x1 + x2, 
-                                 em_controls = list(maxit=1))
+    fit_example <- mixpoissonreg(y ~ x1 + x2 + x3 + x4 | x1 + x2)
 ```
 
 We will consider the "mean explanatory", "precision explanatory" and "simultaneous explanatory" perturbations with respect to the `x1` covariate:

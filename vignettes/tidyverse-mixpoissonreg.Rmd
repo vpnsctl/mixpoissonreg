@@ -29,8 +29,7 @@ The `augment` method for `mixpoissonreg` objects provides a `tibble::tibble` wit
 library(mixpoissonreg)
 
 fit <- mixpoissonreg(daysabs ~ gender + math + prog | prog, 
-                       model = "PIG", data = Attendance,
-                     em_controls = list(maxit=1))
+                       model = "PIG", data = Attendance)
 
 augment(fit)
 ```
@@ -100,8 +99,7 @@ First, the plot with confidence intervals for the means:
 library(ggplot2)
 
 fit_math <- mixpoissonreg(daysabs ~ math, 
-                        data = Attendance,
-                        em_controls = list(maxit=1))
+                        data = Attendance)
 
 fit_data <- augment(fit_math) %>% dplyr::select(math, daysabs) %>% 
   dplyr::rename("Math Score" = math, "Days Abscent" = daysabs)
@@ -271,7 +269,7 @@ likelihood function to reduce computational cost.
 ```{r warning=FALSE}
 fit_env <- mixpoissonregML(daysabs ~ gender + math + prog | prog, 
                        model = "PIG", data = Attendance,
-                       envelope = 10, optim_controls = list(maxit=1))
+                       envelope = 100)
 
 autoplot(fit_env)
 ```
