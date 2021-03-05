@@ -143,13 +143,13 @@
 #' and \code{\link{local_influence_autoplot.mixpoissonreg}}.
 #'
 #' @references
-#' DOI:10.1007/s11222-015-9601-6 (\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2016})
+#' DOI:10.1007/s11222-015-9601-6 \doi{10.1007/s11222-015-9601-6}(Barreto-Souza and Simas; 2016)
 #'
-#' URL:https://projecteuclid.org/euclid.isr/1112304811 (\href{https://projecteuclid.org/euclid.isr/1112304811}{Karlis and Xekalaki; 2005})
+#' URL:https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1751-5823.2005.tb00250.x (\href{https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1751-5823.2005.tb00250.x}{Karlis and Xekalaki; 2005})
 #'
-#' DOI:10.2307/3314912 (\href{https://doi.org/10.2307/3314912}{Lawless; 1987})
+#' DOI:10.2307/3314912 \doi{10.2307/3314912}(Lawless; 1987)
 #'
-#' DOI:10.1214/09-AOAS306 (\href{http://doi.org/10.1214/09-AOAS306}{Sellers and Shmueli; 2010})
+#' DOI:10.1214/09-AOAS306 (\href{https://www.jstor.org/stable/29765537}{Sellers and Shmueli; 2010})
 #'
 #' @seealso
 #' \code{\link{summary.mixpoissonreg}}, \code{\link{plot.mixpoissonreg}}, \code{\link{autoplot.mixpoissonreg}},
@@ -660,13 +660,13 @@ mixpoissonreg.fit <- function(x, y, w = NULL, link.mean = c("log", "sqrt"),
 #' and \code{\link{local_influence_autoplot.mixpoissonreg}}.
 #'
 #' @references
-#' DOI:10.1007/s11222-015-9601-6 (\\href{https://doi.org/10.1007/s11222-015-9601-6}{Barreto-Souza and Simas; 2016})
+#' DOI:10.1007/s11222-015-9601-6 \doi{10.1007/s11222-015-9601-6}(Barreto-Souza and Simas; 2016)
 #'
-#' URL:https://projecteuclid.org/euclid.isr/1112304811 (\\href{https://projecteuclid.org/euclid.isr/1112304811}{Karlis and Xekalaki; 2005})
+#' URL:https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1751-5823.2005.tb00250.x (\href{https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1751-5823.2005.tb00250.x}{Karlis and Xekalaki; 2005})
 #'
-#' DOI:10.2307/3314912 (\\href{https://doi.org/10.2307/3314912}{Lawless; 1987})
+#' DOI:10.2307/3314912 \doi{10.2307/3314912}(Lawless; 1987)
 #'
-#' DOI:10.1214/09-AOAS306 (\\href{http://doi.org/10.1214/09-AOAS306}{Sellers and Shmueli; 2010})
+#' DOI:10.1214/09-AOAS306 (\href{https://www.jstor.org/stable/29765537}{Sellers and Shmueli; 2010})
 #'
 #' @seealso
 #' \code{\link{summary.mixpoissonreg}}, \code{\link{plot.mixpoissonreg}}, \code{\link{autoplot.mixpoissonreg}},

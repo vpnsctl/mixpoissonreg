@@ -106,7 +106,7 @@
       <h1 data-toc-skip>Building and customizing ggplot2-based diagnostic plots with the mixpoissonreg package</h1>
                         <h4 class="author">Alexandre B. Simas</h4>
             
-            <h4 class="date">2021-03-04</h4>
+            <h4 class="date">2021-03-05</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/vpnsctl/mixpoissonreg/blob/master/vignettes/ggplot2-plots-mixpoissonreg.Rmd"><code>vignettes/ggplot2-plots-mixpoissonreg.Rmd</code></a></small>
       <div class="hidden name"><code>ggplot2-plots-mixpoissonreg.Rmd</code></div>
@@ -138,7 +138,7 @@
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/vpnsctl/mixpoissonreg/">mixpoissonreg</a></span><span class="op">)</span>
 
 <span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonreg.html">mixpoissonreg</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span> <span class="op">|</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span>, 
-                        data <span class="op">=</span> <span class="va">Attendance</span><span class="op">)</span>
+                        data <span class="op">=</span> <span class="va">Attendance</span>, em_controls <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>maxit<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></code></pre></div>
 <p><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-2-1.png" width="700"><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-2-2.png" width="700"><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-2-3.png" width="700"><img src="ggplot2-plots-mixpoissonreg_files/figure-html/unnamed-chunk-2-4.png" width="700"></p>

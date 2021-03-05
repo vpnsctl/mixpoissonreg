@@ -2,7 +2,7 @@
 
 ### Dev badges:
 <!-- badges: start -->
-[![](https://img.shields.io/badge/devel%20version-1.0.0-blue.svg)](https://github.com/vpnsctl/mixpoissonreg/main)
+[![](https://img.shields.io/badge/devel%20version-1.0.0-blue.svg)](https://github.com/vpnsctl/mixpoissonreg/)
 [![R build status](https://github.com/vpnsctl/mixpoissonreg/workflows/R-CMD-check/badge.svg)](https://github.com/vpnsctl/mixpoissonreg/actions)
 [![Codecov test coverage](https://codecov.io/gh/vpnsctl/mixpoissonreg/branch/main/graph/badge.svg?token=JXDPBKWGYE)](https://codecov.io/gh/vpnsctl/mixpoissonreg)
 <!-- badges: end -->

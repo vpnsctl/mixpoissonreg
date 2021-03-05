@@ -25,11 +25,12 @@ We will now provide a few examples of outputs and applications of these methods 
 ## `augment`
 
 The `augment` method for `mixpoissonreg` objects provides a `tibble::tibble` with several important quantities such as residuals, Cook's distance, generalized Cook's distance, the model's matrix, confidence intervals for the means, etc. 
-```{r}
+```{r warning=FALSE}
 library(mixpoissonreg)
 
 fit <- mixpoissonreg(daysabs ~ gender + math + prog | prog, 
-                       model = "PIG", data = Attendance)
+                       model = "PIG", data = Attendance,
+                     em_controls = list(maxit=1))
 
 augment(fit)
 ```
@@ -99,7 +100,8 @@ First, the plot with confidence intervals for the means:
 library(ggplot2)
 
 fit_math <- mixpoissonreg(daysabs ~ math, 
-                        data = Attendance)
+                        data = Attendance,
+                        em_controls = list(maxit=1))
 
 fit_data <- augment(fit_math) %>% dplyr::select(math, daysabs) %>% 
   dplyr::rename("Math Score" = math, "Days Abscent" = daysabs)
@@ -269,7 +271,7 @@ likelihood function to reduce computational cost.
 ```{r warning=FALSE}
 fit_env <- mixpoissonregML(daysabs ~ gender + math + prog | prog, 
                        model = "PIG", data = Attendance,
-                       envelope = 100)
+                       envelope = 10, optim_controls = list(maxit=1))
 
 autoplot(fit_env)
 ```

@@ -1,9 +1,9 @@
 set.seed(33333)
 
 fit1 <- mixpoissonreg(daysabs ~ prog + math, data = Attendance,
-                                     em_controls = list(maxit = 5))
+                                     em_controls = list(maxit = 1))
 fit2 <- mixpoissonreg(daysabs ~ prog + math | math, data = Attendance,
-                                     em_controls = list(maxit = 5))
+                                     em_controls = list(maxit = 1))
 
 hatvalues(fit1)
 
@@ -46,9 +46,9 @@ influence(fit1, do.coef = TRUE)
 influence(fit2, do.coef = TRUE)
 
 fit1_PIG <- expect_warning(mixpoissonreg(daysabs ~ prog + math, data = Attendance, model = "PIG",
-                                     em_controls = list(maxit = 5)))
+                                     em_controls = list(maxit = 1)))
 fit2_PIG <- expect_warning(mixpoissonreg(daysabs ~ prog + math | math, data = Attendance, model = "PIG",
-                                     em_controls = list(maxit = 5)))
+                                     em_controls = list(maxit = 1)))
 
 hatvalues(fit1_PIG)
 

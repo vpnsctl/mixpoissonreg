@@ -37,11 +37,11 @@ These plots can be chosen by giving a list of the numbers of the wanted plots in
 
 If the argument `which` is not provided, then, by default, the plots 1, 2, 5 and 6 will be displayed:
 
-```{r}
+```{r warning = FALSE}
 library(mixpoissonreg)
 
 fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, 
-                        data = Attendance)
+                        data = Attendance, em_controls = list(maxit=1))
 
 autoplot(fit)
 ```

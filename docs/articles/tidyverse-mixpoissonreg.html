@@ -106,7 +106,7 @@
       <h1 data-toc-skip>mixpoissonreg in the tidyverse</h1>
                         <h4 class="author">Alexandre B. Simas</h4>
             
-            <h4 class="date">2021-03-04</h4>
+            <h4 class="date">2021-03-05</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/vpnsctl/mixpoissonreg/blob/master/vignettes/tidyverse-mixpoissonreg.Rmd"><code>vignettes/tidyverse-mixpoissonreg.Rmd</code></a></small>
       <div class="hidden name"><code>tidyverse-mixpoissonreg.Rmd</code></div>
@@ -129,7 +129,8 @@
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/vpnsctl/mixpoissonreg/">mixpoissonreg</a></span><span class="op">)</span>
 
 <span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonreg.html">mixpoissonreg</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span> <span class="op">|</span> <span class="va">prog</span>, 
-                       model <span class="op">=</span> <span class="st">"PIG"</span>, data <span class="op">=</span> <span class="va">Attendance</span><span class="op">)</span>
+                       model <span class="op">=</span> <span class="st">"PIG"</span>, data <span class="op">=</span> <span class="va">Attendance</span>,
+                     em_controls <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>maxit<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/augment.mixpoissonreg.html">augment</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 314 x 12</span>
@@ -190,7 +191,7 @@
 <span class="co">#&gt;    daysabs gender  math prog      .fitted .fittedlwrconf .fitteduprconf   .resid</span>
 <span class="co">#&gt;      &lt;dbl&gt; &lt;fct&gt;  &lt;dbl&gt; &lt;fct&gt;       &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;    &lt;dbl&gt;</span>
 <span class="co">#&gt;  1       4 male      63 Academic     5.00           3.91           6.41  0.189  </span>
-<span class="co">#&gt;  2       4 male      27 Academic     6.62           5.23           8.37 -0.00561</span>
+<span class="co">#&gt;  2       4 male      27 Academic     6.62           5.23           8.37 -0.00560</span>
 <span class="co">#&gt;  3       2 female    20 Academic     9.27           7.23          11.9  -0.839  </span>
 <span class="co">#&gt;  4       3 female    16 Academic     9.56           7.39          12.4  -0.542  </span>
 <span class="co">#&gt;  5       3 female     2 Academic    10.7            7.94          14.3  -0.642  </span>
@@ -225,8 +226,8 @@
 <span class="co">#&gt; # A tibble: 2 x 6</span>
 <span class="co">#&gt;   gender  math prog     .fitted .fittedlwrpred .fitteduprpred</span>
 <span class="co">#&gt;   &lt;chr&gt;  &lt;dbl&gt; &lt;fct&gt;      &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 male      34 General     9.57              0             42</span>
-<span class="co">#&gt; 2 female    85 Academic    5.59              0             39</span></code></pre></div>
+<span class="co">#&gt; 1 male      34 General     9.57              0             40</span>
+<span class="co">#&gt; 2 female    85 Academic    5.59              0             44</span></code></pre></div>
 <p>With the <code>augment</code> method it is simple to sort the observations by their Cook’s distance or by their generalized Cook’s distance along with their indexes and the model’s matrix in order to facilitate the study of their influence:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
@@ -271,7 +272,8 @@
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 
 <span class="va">fit_math</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonreg.html">mixpoissonreg</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">math</span>, 
-                        data <span class="op">=</span> <span class="va">Attendance</span><span class="op">)</span>
+                        data <span class="op">=</span> <span class="va">Attendance</span>,
+                        em_controls <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>maxit<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>
 
 <span class="va">fit_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/augment.mixpoissonreg.html">augment</a></span><span class="op">(</span><span class="va">fit_math</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">math</span>, <span class="va">daysabs</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span><span class="st">"Math Score"</span> <span class="op">=</span> <span class="va">math</span>, <span class="st">"Days Abscent"</span> <span class="op">=</span> <span class="va">daysabs</span><span class="op">)</span>
@@ -326,11 +328,11 @@
 <span class="co">#&gt; # A tibble: 8 x 6</span>
 <span class="co">#&gt;   component term           estimate std.error statistic  p.value</span>
 <span class="co">#&gt;   &lt;chr&gt;     &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 mean      (Intercept)     2.81      0.162       17.3  5.02e-67</span>
+<span class="co">#&gt; 1 mean      (Intercept)     2.81      0.162       17.3  5.01e-67</span>
 <span class="co">#&gt; 2 mean      gendermale     -0.282     0.123       -2.30 2.15e- 2</span>
 <span class="co">#&gt; 3 mean      math           -0.00777   0.00240     -3.24 1.20e- 3</span>
 <span class="co">#&gt; 4 mean      progAcademic   -0.423     0.148       -2.86 4.28e- 3</span>
-<span class="co">#&gt; 5 mean      progVocational -1.22      0.197       -6.16 7.11e-10</span>
+<span class="co">#&gt; 5 mean      progVocational -1.22      0.197       -6.16 7.10e-10</span>
 <span class="co">#&gt; 6 precision (Intercept)     0.928     0.331        2.80 5.04e- 3</span>
 <span class="co">#&gt; 7 precision progAcademic   -1.28      0.385       -3.32 8.94e- 4</span>
 <span class="co">#&gt; 8 precision progVocational -1.74      0.451       -3.87 1.09e- 4</span></code></pre></div>
@@ -340,11 +342,11 @@
 <span class="co">#&gt; # A tibble: 8 x 8</span>
 <span class="co">#&gt;   component term        estimate std.error statistic  p.value conf.low conf.high</span>
 <span class="co">#&gt;   &lt;chr&gt;     &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 mean      (Intercept)  2.81      0.162       17.3  5.02e-67   2.49     3.12   </span>
+<span class="co">#&gt; 1 mean      (Intercept)  2.81      0.162       17.3  5.01e-67   2.49     3.12   </span>
 <span class="co">#&gt; 2 mean      gendermale  -0.282     0.123       -2.30 2.15e- 2  -0.523   -0.0417 </span>
 <span class="co">#&gt; 3 mean      math        -0.00777   0.00240     -3.24 1.20e- 3  -0.0125  -0.00307</span>
 <span class="co">#&gt; 4 mean      progAcadem… -0.423     0.148       -2.86 4.28e- 3  -0.713   -0.133  </span>
-<span class="co">#&gt; 5 mean      progVocati… -1.22      0.197       -6.16 7.11e-10  -1.60    -0.829  </span>
+<span class="co">#&gt; 5 mean      progVocati… -1.22      0.197       -6.16 7.10e-10  -1.60    -0.829  </span>
 <span class="co">#&gt; 6 precision (Intercept)  0.928     0.331        2.80 5.04e- 3   0.279    1.58   </span>
 <span class="co">#&gt; 7 precision progAcadem… -1.28      0.385       -3.32 8.94e- 4  -2.03    -0.525  </span>
 <span class="co">#&gt; 8 precision progVocati… -1.74      0.451       -3.87 1.09e- 4  -2.63    -0.861</span></code></pre></div>
@@ -485,7 +487,7 @@
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit_env</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonregML.html">mixpoissonregML</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span> <span class="op">|</span> <span class="va">prog</span>, 
                        model <span class="op">=</span> <span class="st">"PIG"</span>, data <span class="op">=</span> <span class="va">Attendance</span>,
-                       envelope <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
+                       envelope <span class="op">=</span> <span class="fl">10</span>, optim_controls <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>maxit<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit_env</span><span class="op">)</span></code></pre></div>
 <p><img src="tidyverse-mixpoissonreg_files/figure-html/unnamed-chunk-23-1.png" width="700"><img src="tidyverse-mixpoissonreg_files/figure-html/unnamed-chunk-23-2.png" width="700"><img src="tidyverse-mixpoissonreg_files/figure-html/unnamed-chunk-23-3.png" width="700"><img src="tidyverse-mixpoissonreg_files/figure-html/unnamed-chunk-23-4.png" width="700"></p>

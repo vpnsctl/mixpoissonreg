@@ -153,12 +153,13 @@ residual.
 set.seed(2021) 
 # We are fixing the seed for reproducibility
 fit_nb_red_env <- mixpoissonregML(daysabs ~ gender + math + prog | prog,
-                             model = "NB", data = Attendance, envelope = 100)
+                             model = "NB", data = Attendance, envelope = 50)
 
 fit_pig_red_env <- mixpoissonregML(daysabs ~ gender + math + prog | prog,
-                             model = "PIG", data = Attendance, envelope = 100)
+                             model = "PIG", data = Attendance, envelope = 50)
 ```
 
+Since this is an illustration, we are using `envelope = 50` to reduce computational cost.
 
 Let us check the coverage of the envelopes for the NB fit:
 

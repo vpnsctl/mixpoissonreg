@@ -24,21 +24,23 @@ refer the reader to the [Analyzing overdispersed count data with the *mixpoisson
 ## `hatvalues` method
 To define "hat values" for mixed Poisson regression models, we follow [Zhu et al. (2001)](https://www.jstor.org/stable/2673442) to consider the negative of the 
 hessian of the Q-function as weight matrix, and follow
-[Pregibon (1981)](https://projecteuclid.org/euclid.aos/1176345513) to define the "hat" matrix with respect to this weight matrix. 
+[Pregibon (1981)](https://www.jstor.org/stable/2240841) to define the "hat" matrix with respect to this weight matrix.
 We can consider the hessian of the Q-function with respect to mean-related parameters,
 which is the default. We can also consider the hessian of the Q-function with respect to the precision-related parameters to 
 give rise to hat values related to the precision parameters.
 
 To obtain the mean-related hat values one simply calls the `hatvalues` method:
 
-```{r}
+```{r warning=FALSE}
 library(mixpoissonreg)
 
 fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, 
-                        data = Attendance)
+                        data = Attendance, em_controls = list(maxit=1))
 
 head(hatvalues(fit))
 ```
+
+We are using the option `em_controls = list(maxit=1)` to reduce computational cost.
 
 The hat values are used to obtain Cook's distance. One can also use the hat values to define leverage-adjusted residuals by dividing the residuals by `sqrt(hatvalues(fitted_object))`.
 
@@ -250,7 +252,7 @@ The *mixpoissonreg* package contains the `local_influence` method implemented. T
 It returns a list whose elements are the perturbation schemes contained in the `perturbation` argument. 
 
 The local influence was introduced in the seminal paper [Cook (1986)](https://www.doi.org/10.1111/j.2517-6161.1986.tb01398.x), in which the normal curvatures under different perturbations
-schemes were introduced. Cook suggested the analysis of the perturbation schemes in the directions of largest curvatures. [Lesaffre and Verbeke (1998)](https://doi.org/10.2307/3109764) suggested the analysis for each canonical direction and called this "total local influence". [Poon and Poon (1999)](https://doi.org/10.1111/1467-9868.00162) introduced the *conformal
+schemes were introduced. Cook suggested the analysis of the perturbation schemes in the directions of largest curvatures. [Lesaffre and Verbeke (1998)](https://www.jstor.org/stable/3109764) suggested the analysis for each canonical direction and called this "total local influence". [Poon and Poon (1999)](https://doi.org/10.1111/1467-9868.00162) introduced the *conformal
 normal curvature* which has the advantadge of taking values in the standard unit interval [0,1]. Finally, [Zhu and Lee (2001)](https://doi.org/10.1111/1467-9868.00279) introduced local influence measures for EM-based models. They computed normal and conformal normal curvatures for EM-based models. 
 
 Below, we discuss the arguments of the `local_influence` method in detail. Notice that in this vignette we do not provide interpretations of the influence results, we focus on how to compute the measures. For interpretations of the influence measures we
@@ -263,9 +265,9 @@ For conformal normal curvatures the *benchmark* suggested by [Zhu and Lee (2001)
 
 For example:
 
-```{r}
+```{r warning = FALSE}
 fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, 
-                        data = Attendance)
+                        data = Attendance, em_controls = list(maxit=1))
 
 loc_inf_fit <- local_influence(fit)
 
@@ -291,7 +293,7 @@ attr(loc_inf_normal_fit$case_weights, "benchmark")
 
 ## Direction
 
-The default direction of `local_influence` method for `mixpoissonreg` objects is the canonical direction, that is, it computes the *total local influence* ([Lesaffre and Verbeke, 1998](https://doi.org/10.2307/3109764)). 
+The default direction of `local_influence` method for `mixpoissonreg` objects is the canonical direction, that is, it computes the *total local influence* ([Lesaffre and Verbeke, 1998](https://www.jstor.org/stable/3109764)). 
 
 For canonical directions the `local_influence` method also returns *benchmarks* for each perturbation scheme, following  [Zhu and Lee (2001)](https://doi.org/10.1111/1467-9868.00279)
 for conformal normal curvatures and [Verbeke and Molenberghs (2000, sect. 11.3)](https://www.springer.com/gp/book/9781441902993) for normal curvatures.
@@ -342,9 +344,10 @@ ls(loc_inf_fit)
 
 Notice that if there is no precision covariates, then the returned values for "precision_explanatory" and "simultaneous_explanatory" are `NA` and a *warning* message is generated:
 
-```{r}
+```{r warning = FALSE}
 fit2 <- mixpoissonreg(daysabs ~ gender + math + prog, 
-                        data = Attendance)
+                        data = Attendance, 
+                      em_controls = list(maxit=1))
 
 loc_inf_fit2 <- local_influence(fit2)
 
@@ -406,7 +409,7 @@ By default both `mean.covariates` and `precision.covariates` are `NULL`, so all 
 
 Let us consider, for example, the following model:
 
-```{r}
+```{r warning = FALSE}
     set.seed(1234)
     
     x1 <- rexp(200, rate = 2)
@@ -417,7 +420,8 @@ Let us consider, for example, the following model:
     y <- stats::rnbinom(200, mu = exp(1-x1-x2-(x3==2)+0.1*x4), 
                        size = exp(1+2*x1+x2))
     
-    fit_example <- mixpoissonreg(y ~ x1 + x2 + x3 + x4 | x1 + x2)
+    fit_example <- mixpoissonreg(y ~ x1 + x2 + x3 + x4 | x1 + x2,
+                                 em_controls = list(maxit=1))
     
     summary(fit_example)
 ```
@@ -483,9 +487,9 @@ If the `direction` argument is set to "canonical" (the default), then the `n.inf
 
 Let us build these plots. First, the standard arguments provide the plots of conformal normal curvature in the canonical directions for the "case_weights", "hidden_variable", "mean_explanatory" and "precision_explanatory" perturbation schemes with "case_weights" and "hidden_variable" being computed for all parameters, and the explanatory perturbations being computed for all covariates:
 
-```{r}
+```{r warning = FALSE}
 fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, 
-                        data = Attendance)
+                        data = Attendance, em_controls = list(maxit=1))
 
 # Notice that since gender and prog are factors,
 # they are not considered in the computation of the 
@@ -565,7 +569,7 @@ local_influence_autoplot(fit, draw.benchmark = TRUE)
 
 Finally, we can change the covariates by setting the `mean.covariates` and `precision.covariates` argument. Consider the `fit_example` we fit above:
 
-```{r}
+```{r warning = FALSE}
     set.seed(1234)
     
     x1 <- rexp(200, rate = 2)
@@ -576,7 +580,8 @@ Finally, we can change the covariates by setting the `mean.covariates` and `prec
     y <- stats::rnbinom(200, mu = exp(1-x1-x2-(x3==2)+0.1*x4), 
                        size = exp(1+2*x1+x2))
     
-    fit_example <- mixpoissonreg(y ~ x1 + x2 + x3 + x4 | x1 + x2)
+    fit_example <- mixpoissonreg(y ~ x1 + x2 + x3 + x4 | x1 + x2, 
+                                 em_controls = list(maxit=1))
 ```
 
 We will consider the "mean explanatory", "precision explanatory" and "simultaneous explanatory" perturbations with respect to the `x1` covariate:
@@ -601,7 +606,9 @@ local_influence_autoplot(fit_example, which = c(3,4,5),
 
 * Cook, R. D. and Weisberg, S. (1982) *Residuals and Influence in Regression.* New York and London: Chapman and Hall.
 
-* Poon, W.-Y. and Poon, Y.S. (1999) *Conformal normal curvature and assessment of local influence.*  Journal of the Royal Statistical Society. Series B (Methodological), Vol. 61, pp.51-61.
+* Lesaffre, E. and Verbeke, G. (1998) *Local Influence in Linear Mixed Models.* Biometrics, 54, 570-582.
+
+* Poon, W.-Y. and Poon, Y.S. (1999) *Conformal normal curvature and assessment of local influence.*  Journal of the Royal Statistical Society. Series B (Methodological), 61, 51-61.
 
 * Pregibon, D. (1981) *Logistic Regression Diagnostics*. Ann. Stat. 9, 705-724.
 

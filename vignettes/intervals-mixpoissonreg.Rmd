@@ -26,11 +26,11 @@ with two components: `fit` containing the fitted values and `se.fit` containing 
 
 For example:
 
-```{r}
+```{r warning=FALSE}
 library(mixpoissonreg)
 
 fit <- mixpoissonreg(daysabs ~ gender + math + prog, 
-                        data = Attendance)
+                        data = Attendance, em_controls = list(maxit=1))
 
 pred_fit <- predict(fit, type = "link", se.fit = TRUE)
 
@@ -38,6 +38,8 @@ head(pred_fit$fit)
 
 head(pred_fit$se.fit)
 ```
+
+We are using the option `em_controls = list(maxit=1)` to reduce computational cost.
 
 Since no data was passed, the predicted values were obtained with respect to the model's data.
 
@@ -72,9 +74,10 @@ to change the level of confidence by setting the `level` argument, which default
 
 For example:
 
-```{r}
+```{r warning=FALSE}
 fit_math <- mixpoissonreg(daysabs ~ math, 
-                        data = Attendance)
+                        data = Attendance, 
+                        em_controls = list(maxit=1))
 
 head(predict(fit_math, interval = "confidence"))
 
@@ -146,7 +149,8 @@ For example, we will consider `nsim_pred = 50` and `nsim_pred_y = 50` to avoid l
 
 ```{r warning=FALSE}
 fit_math <- mixpoissonreg(daysabs ~ math, 
-                        data = Attendance)
+                        data = Attendance,
+                        em_controls = list(maxit=1))
 
 head(predict(fit_math, interval = "prediction", nsim_pred = 50, nsim_pred_y = 50))
 
@@ -180,11 +184,11 @@ To obtain prediction intervals using the `augment` method, one must set the `pre
 `level` argument to the desired level. To change the number of mean and prediction parameter generated,  one must set the `nsim_pred` argument to the desired value, the default is 100, and to change the number of response variables *y* generated for each pair of mean and precision parameters, one must set the `nsim_pred_y` to the desired value, the default is 100.
 
 For example, let us consider the `fit_math` object and obtain prediction intervals with 99% level along with the response variable `daysabs` and the covariate `math`. We will
-also set `nsim_pred` and `nsim_pred_y` to 50 to reduce computational cost.
+also set `nsim_pred` and `nsim_pred_y` to 10 to reduce computational cost.
 
 ```{r warning=FALSE}
 augment(fit_math, pred_int = TRUE, level = 0.99,
-        nsim_pred = 50, nsim_pred_y = 50) %>% select(math, daysabs, .fittedlwrpred, .fitteduprpred)
+        nsim_pred = 10, nsim_pred_y = 10) %>% select(math, daysabs, .fittedlwrpred, .fitteduprpred)
 ```
 
 Let us now use the `augment` method to produce a plot of the data, the fitted curve and the prediction intervals with the default significance level:
@@ -197,7 +201,7 @@ fit_data <- augment(fit_math) %>%
 new_math <- seq(0, 100, by=0.25)
 
 fit_pred <- augment(fit_math, newdata = data.frame(math = new_math), 
-                   pred_int = TRUE, nsim_pred = 50, nsim_pred_y = 50) %>% 
+                   pred_int = TRUE, nsim_pred = 10, nsim_pred_y = 10) %>% 
   dplyr::rename("Math Score" = math) %>% mutate("Days Abscent" = 0)
 
 ggplot(fit_data, aes(x = `Math Score`, y = `Days Abscent`)) + geom_point() +

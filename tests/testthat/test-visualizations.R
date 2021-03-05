@@ -1,8 +1,10 @@
 set.seed(33333)
 
-fit_ml1env <- expect_warning(mixpoissonregML(daysabs ~ prog + math, data = Attendance, envelope = 10))
+fit_ml1env <- suppressWarnings(mixpoissonregML(daysabs ~ prog + math, data = Attendance, envelope = 10,
+                                             optim_controls = list(maxit=1)))
 
-fit_ml1 <- mixpoissonregML(daysabs ~ math, data = Attendance)
+fit_ml1 <- mixpoissonregML(daysabs ~ math, data = Attendance,
+                           optim_controls = list(maxit=1))
 
 plot(fit_ml1, which = 1:6)
 
@@ -32,3 +34,4 @@ plot(fit_ml1env)
 plot(fit_ml1env, which = 2)
 
 autoplot(fit_ml1env, which = 2)
+

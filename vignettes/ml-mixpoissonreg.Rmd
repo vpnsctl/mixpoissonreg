@@ -25,20 +25,22 @@ the `gamlss` function from the `gamlss` package.
 
 One can obtain parameters estimates through direct maximization of the likelihood function by setting the `method` argument to "ML":
 
-```{r}
+```{r warning=FALSE}
 library(mixpoissonreg)
 
 fit_ml <- mixpoissonreg(daysabs ~ gender + math + prog, method = "ML", 
-                        data = Attendance)
+                        data = Attendance, optim_controls = list(maxit=1))
 
 summary(fit_ml)
 ```
 
+We are using the option `optim_controls = list(maxit=1)` to reduce computational cost.
+
 These estimates can also be obtained by using the `mixpoissonregML` function:
 
-```{r}
+```{r warning=FALSE}
 fit_ml2 <- mixpoissonregML(daysabs ~ gender + math + prog,
-                        data = Attendance)
+                        data = Attendance, optim_controls = list(maxit=1))
 
 summary(fit_ml2)
 ```
@@ -60,7 +62,8 @@ For instance:
 
 ```{r warning = FALSE}
 fit_ml_prec <- mixpoissonregML(daysabs ~ gender + math + prog | prog,
-                        model = "PIG", data = Attendance)
+                        model = "PIG", data = Attendance,
+                        optim_controls = list(maxit=1))
 
 autoplot(fit_ml_prec)
 
@@ -69,7 +72,8 @@ local_influence_autoplot(fit_ml_prec)
 lmtest::lrtest(fit_ml_prec)
 
 fit_ml_reduced <- mixpoissonregML(daysabs ~ gender + math + prog,
-                        model = "PIG", data = Attendance)
+                        model = "PIG", data = Attendance,
+                        optim_controls = list(maxit=1))
 
 lmtest::lrtest(fit_ml_prec, fit_ml_reduced)
 ```
@@ -83,7 +87,8 @@ Finally, one can obtain simulated envelopes by setting the `envelope` argument t
 
 ```{r warning = FALSE}
 fit_ml_env <- mixpoissonregML(daysabs ~ gender + math + prog | prog,
-                        model = "PIG", envelope = 100, data = Attendance)
+                        model = "PIG", envelope = 10, data = Attendance,
+                        optim_controls = list(maxit=1))
 
 summary(fit_ml_env)
 

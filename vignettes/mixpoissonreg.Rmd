@@ -56,7 +56,7 @@ We will now delve into the reasons above in more detail.
 If you know how to fit `glm` models then you already know how to fit `mixpoissonreg` models. You use a `formula` expression for the
 regression with respect to mean parameter:
 
-```{r}
+```{r warning=FALSE}
 library(mixpoissonreg)
 
 fit <- mixpoissonreg(daysabs ~ gender + math + prog, data = Attendance)
@@ -73,8 +73,9 @@ summary(fit)
 
 If you want to fit a Poisson Inverse Gaussian regression model, just set the `model` argument to `PIG`:
 
-```{r}
-fit_pig <- mixpoissonreg(daysabs ~ gender + math + prog, model = "PIG", data = Attendance)
+```{r warning=FALSE}
+fit_pig <- mixpoissonreg(daysabs ~ gender + math + prog, model = "PIG", 
+                         data = Attendance)
 
 summary(fit_pig)
 ```
@@ -124,7 +125,7 @@ lmtest::waldtest(fit)
 
 Let us now consider a reduced model:
 
-```{r}
+```{r warning=FALSE}
 fit_red <- mixpoissonreg(daysabs ~ math, data = Attendance)
 ```
 
@@ -153,7 +154,7 @@ The `mixpoissonreg` package allows the regression models to also have a regressi
 
 Consider the following example:
 
-```{r}
+```{r warning=FALSE}
 fit_prec <- mixpoissonreg(daysabs ~ gender + math + prog | gender + math + prog, 
                           data = Attendance)
 

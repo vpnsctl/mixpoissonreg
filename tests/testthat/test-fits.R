@@ -1,53 +1,62 @@
 set.seed(33333)
 
 fit1 <- mixpoissonreg(daysabs ~ prog + math, data = Attendance,
-                      em_controls = list(maxit = 5))
+                      em_controls = list(maxit = 1))
 fit2 <- mixpoissonreg(daysabs ~ prog + math | math, data = Attendance,
-                      em_controls = list(maxit = 5))
+                      em_controls = list(maxit = 1))
 
-fit1env <- suppressWarnings(mixpoissonreg(daysabs ~ prog + math, data = Attendance, envelope = 10,
-                         em_controls = list(maxit = 5)))
+fit1env <- suppressWarnings(mixpoissonreg(daysabs ~ prog + math, data = Attendance, envelope = 19,
+                         em_controls = list(maxit = 1)))
 fit2env <- suppressWarnings(mixpoissonreg(daysabs ~ prog + math, data = Attendance, envelope = 10,
-                         em_controls = list(maxit = 5)))
+                         em_controls = list(maxit = 1)))
 
 fit1pig <- suppressWarnings(mixpoissonreg(daysabs ~ prog + math, data = Attendance, model = "PIG",
-                         em_controls = list(maxit = 5)))
+                         em_controls = list(maxit = 1)))
 fit2pig <- suppressWarnings(mixpoissonreg(daysabs ~ prog + math | math, data = Attendance, model = "PIG",
-                         em_controls = list(maxit = 5)))
+                         em_controls = list(maxit = 1)))
 
 fit1pigenv <- suppressWarnings(mixpoissonreg(daysabs ~ prog + math, data = Attendance, model = "PIG", envelope = 10,
-                            em_controls = list(maxit = 5)))
+                            em_controls = list(maxit = 1)))
 fit2pigenv <- suppressWarnings(mixpoissonreg(daysabs ~ prog + math | math, data = Attendance, model = "PIG", envelope = 10,
-                            em_controls = list(maxit = 10)))
+                            em_controls = list(maxit = 1)))
 
 fit_ml1 <- mixpoissonregML(daysabs ~ prog + math, data = Attendance)
 
 fit_ml2 <- mixpoissonregML(daysabs ~ prog + math | math, data = Attendance)
 
-fit_ml1env <- mixpoissonregML(daysabs ~ prog + math, data = Attendance, envelope = 10)
-fit_ml2env <- mixpoissonregML(daysabs ~ prog + math | math, data = Attendance, envelope = 10)
+fit_ml1env <- mixpoissonregML(daysabs ~ prog + math, data = Attendance, envelope = 10,
+                              optim_controls = list(maxit=1))
+fit_ml2env <- mixpoissonregML(daysabs ~ prog + math | math, data = Attendance, envelope = 10,
+                              optim_controls = list(maxit=1))
 
-fit_ml1pig <- suppressWarnings(mixpoissonregML(daysabs ~ prog + math, data = Attendance, model = "PIG"))
-fit_ml2pig <- suppressWarnings(mixpoissonregML(daysabs ~ prog + math | math, data = Attendance, model = "PIG"))
+fit_ml1pig <- suppressWarnings(mixpoissonregML(daysabs ~ prog + math, data = Attendance, model = "PIG",
+                               optim_controls = list(maxit=1)))
+fit_ml2pig <- suppressWarnings(mixpoissonregML(daysabs ~ prog + math | math, data = Attendance, model = "PIG",
+                               optim_controls = list(maxit=1)))
 
-fit_ml1pigenv <- suppressWarnings(mixpoissonregML(daysabs ~ prog + math, data = Attendance, model = "PIG", envelope = 10))
-fit_ml2pigenv <- suppressWarnings(mixpoissonregML(daysabs ~ prog + math | math, data = Attendance, model = "PIG", envelope = 10))
+fit_ml1pigenv <- suppressWarnings(mixpoissonregML(daysabs ~ prog + math, data = Attendance, model = "PIG", envelope = 10,
+                                  optim_controls = list(maxit=1)))
+fit_ml2pigenv <- suppressWarnings(mixpoissonregML(daysabs ~ prog + math | math, data = Attendance, model = "PIG", envelope = 10,
+                                  optim_controls = list(maxit=1)))
 
 fit1sq <- suppressWarnings(mixpoissonreg(daysabs ~ prog + math, data = Attendance, link.mean = "sqrt",
-                                       em_controls = list(maxit = 10)))
+                                       em_controls = list(maxit = 1)))
 fit2sq <- suppressWarnings(mixpoissonreg(daysabs ~ math | math, data = Attendance, link.precision = "inverse.sqrt",
-                                       em_controls = list(maxit = 10)))
+                                       em_controls = list(maxit = 1)))
 
 fit_ml1sq <- mixpoissonregML(daysabs ~ prog + math, data = Attendance, link.mean = "sqrt")
 fit_ml2sq <- suppressWarnings(mixpoissonregML(daysabs ~ math | math, data = Attendance, link.precision = "inverse.sqrt"))
 
-fit1pigsq <- mixpoissonreg(daysabs ~ prog + math, data = Attendance, model = "PIG", link.mean = "sqrt")
+fit1pigsq <- suppressWarnings(mixpoissonreg(daysabs ~ prog + math, data = Attendance, model = "PIG", link.mean = "sqrt",
+                           em_controls = list(maxit = 1)))
 fit2pigsq <- suppressWarnings(mixpoissonreg(daysabs ~ math | math, data = Attendance,
                                           model = "PIG", link.precision = "inverse.sqrt",
-                                          em_controls = list(maxit = 5)))
+                                          em_controls = list(maxit = 1)))
 
-fit_ml1pigsq <- mixpoissonregML(daysabs ~ prog + math, data = Attendance, model = "PIG", link.mean = "sqrt")
-fit_ml2pigsq <- suppressWarnings(mixpoissonregML(daysabs ~ math | math, data = Attendance, model = "PIG", link.precision = "inverse.sqrt"))
+fit_ml1pigsq <- mixpoissonregML(daysabs ~ prog + math, data = Attendance, model = "PIG", link.mean = "sqrt",
+                                optim_controls = list(maxit=1))
+fit_ml2pigsq <- suppressWarnings(mixpoissonregML(daysabs ~ math | math, data = Attendance, model = "PIG", link.precision = "inverse.sqrt",
+                                                 optim_controls = list(maxit=1)))
 
 
 print(fit1)
@@ -196,56 +205,3 @@ expect_error(mixpoissonregML(y ~ x1+x2 | x2 + x1 -1, envelope = 500, model = "NB
 
 expect_error(mixpoissonregML(y ~ x1 + x2 | x1 + x2, envelope = 500, model = "PIG"))
 
-
-
-
-
-## Testing fitting algorithms
-
-set.seed(123)
-
-beta <- c(1,-2,1)
-alpha <- c(1,-2,1)
-
-c_mean_em <- c()
-c_mean_ml <- c()
-for(i in 1:50){
-  x1 <- runif(1000)
-  x2 <- rnorm(1000)
-  
-  y <- stats::rnbinom(1000, mu = exp(beta[1] + beta[2] * x1 + beta[3] * x2), size = exp(alpha[1] + alpha[2] * x1 + alpha[3] * x2))
-  
-  fit_test <- mixpoissonreg(y ~ x1+x2 | x1 + x2)
-  c_mean_em <- rbind(c_mean_em, coef(fit_test))
-  
-  fit_test <- mixpoissonregML(y ~ x1+x2 | x1 + x2)
-  c_mean_ml <- rbind(c_mean_ml, coef(fit_test))
-}
-
-expect_true(abs(max(colMeans(c_mean_em) - c(beta,alpha))) < 0.05) 
-expect_true(abs(max(colMeans(c_mean_ml) - c(beta,alpha))) < 0.05) 
-
-set.seed(123)
-
-c_mean_em <- c()
-c_mean_ml <- c()
-for(i in 1:50){
-  x1 <- runif(1000)
-  x2 <- rnorm(1000)
-  
-  y <- gamlss.dist::rPIG(1000, mu = exp(beta[1] + beta[2] * x1 + beta[3] * x2), sigma = exp(-alpha[1] - alpha[2] * x1 - alpha[3] * x2))
-  
-  fit_test <- mixpoissonreg(y ~ x1+x2 | x1 + x2, model = "PIG")
-  c_mean_em <- rbind(c_mean_em, coef(fit_test))
-  
-  if(i == 7){
-    fit_test <- suppressWarnings(mixpoissonregML(y ~ x1+x2 | x1 + x2, model = "PIG"))
-  } else{
-    fit_test <- mixpoissonregML(y ~ x1+x2 | x1 + x2, model = "PIG")
-  }
-  
-  c_mean_ml <- rbind(c_mean_ml, coef(fit_test))
-}
-
-expect_true(abs(max(colMeans(c_mean_em) - c(beta,alpha))) < 0.05) 
-expect_true(abs(max(colMeans(c_mean_ml) - c(beta,alpha))) < 0.05) 

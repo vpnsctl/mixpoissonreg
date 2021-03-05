@@ -1,6 +1,7 @@
 set.seed(33333)
 
-fit_ml1 <- mixpoissonregML(daysabs ~ prog + math, data = Attendance)
+fit_ml1 <- mixpoissonregML(daysabs ~ prog + math, data = Attendance, 
+                           optim_controls = list(maxit=1))
 
 expect_warning(local_influence(fit_ml1))
 
