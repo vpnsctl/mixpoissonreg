@@ -4,5 +4,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^index\.md$
+^cran-comments\.md$
 ^pkgdown$
 ^docs$
