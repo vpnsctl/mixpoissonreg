@@ -100,13 +100,13 @@
 
       
 
-      </header><script src="influence-mixpoissonreg_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="influence-mixpoissonreg_files/header-attrs-2.7/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Global and local influence analysis with the <em>mixpoissonreg</em> package</h1>
                         <h4 class="author">Alexandre B. Simas</h4>
             
-            <h4 class="date">2021-03-04</h4>
+            <h4 class="date">2021-03-05</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/vpnsctl/mixpoissonreg/blob/master/vignettes/influence-mixpoissonreg.Rmd"><code>vignettes/influence-mixpoissonreg.Rmd</code></a></small>
       <div class="hidden name"><code>influence-mixpoissonreg.Rmd</code></div>
@@ -122,7 +122,7 @@
 <div id="hatvalues-method" class="section level2">
 <h2 class="hasAnchor">
 <a href="#hatvalues-method" class="anchor"></a><code>hatvalues</code> method</h2>
-<p>To define “hat values” for mixed Poisson regression models, we follow <a href="https://www.jstor.org/stable/2673442">Zhu et al. (2001)</a> to consider the negative of the hessian of the Q-function as weight matrix, and follow <a href="https://projecteuclid.org/euclid.aos/1176345513">Pregibon (1981)</a> to define the “hat” matrix with respect to this weight matrix. We can consider the hessian of the Q-function with respect to mean-related parameters, which is the default. We can also consider the hessian of the Q-function with respect to the precision-related parameters to give rise to hat values related to the precision parameters.</p>
+<p>To define “hat values” for mixed Poisson regression models, we follow <a href="https://www.jstor.org/stable/2673442">Zhu et al. (2001)</a> to consider the negative of the hessian of the Q-function as weight matrix, and follow <a href="https://www.jstor.org/stable/2240841">Pregibon (1981)</a> to define the “hat” matrix with respect to this weight matrix. We can consider the hessian of the Q-function with respect to mean-related parameters, which is the default. We can also consider the hessian of the Q-function with respect to the precision-related parameters to give rise to hat values related to the precision parameters.</p>
 <p>To obtain the mean-related hat values one simply calls the <code>hatvalues</code> method:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/vpnsctl/mixpoissonreg/">mixpoissonreg</a></span><span class="op">)</span>
@@ -249,7 +249,7 @@
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/autoplot.mixpoissonreg.html">autoplot</a></span><span class="op">(</span><span class="va">fit</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span><span class="op">)</span>, label.n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
 <p><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-15-1.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-15-2.png" width="700"><img src="influence-mixpoissonreg_files/figure-html/unnamed-chunk-15-3.png" width="700"></p>
-<p>For further details customizing plots of <code>mixpoissonreg</code> objects, we refer the reader to the <a href="plots-mixpoissonreg.html">Diagnostic plots with the <em>mixpoissonreg</em> package</a> vignette.</p>
+<p>For further details customizing plots of <code>mixpoissonreg</code> objects, we refer the reader to the <a href="https://vpnsctl.github.io/mixpoissonreg/articles/plots-mixpoissonreg.html">Building and customizing base-R diagnostic plots with the mixpoissonreg package</a> and <a href="https://vpnsctl.github.io/mixpoissonreg/articles/ggplot2-plots-mixpoissonreg.html">Building and customizing ggplot2-based diagnostic plots with the mixpoissonreg package</a> vignettes.</p>
 <p>We now turn to the problem of plotting Q-displacements and likelihood displacements. Both of these plots can easily be built “by hand”.</p>
 <p>R’s base graphics:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
@@ -323,7 +323,7 @@
 <h1 class="hasAnchor">
 <a href="#local-influence" class="anchor"></a>Local Influence</h1>
 <p>The <em>mixpoissonreg</em> package contains the <code>local_influence</code> method implemented. This method contains conformal normal curvatures and normal curvatures under several perturbation schemes. It returns a list whose elements are the perturbation schemes contained in the <code>perturbation</code> argument.</p>
-<p>The local influence was introduced in the seminal paper <a href="https://www.doi.org/10.1111/j.2517-6161.1986.tb01398.x">Cook (1986)</a>, in which the normal curvatures under different perturbations schemes were introduced. Cook suggested the analysis of the perturbation schemes in the directions of largest curvatures. <a href="https://doi.org/10.2307/3109764">Lesaffre and Verbeke (1998)</a> suggested the analysis for each canonical direction and called this “total local influence”. <a href="https://doi.org/10.1111/1467-9868.00162">Poon and Poon (1999)</a> introduced the <em>conformal normal curvature</em> which has the advantadge of taking values in the standard unit interval [0,1]. Finally, <a href="https://doi.org/10.1111/1467-9868.00279">Zhu and Lee (2001)</a> introduced local influence measures for EM-based models. They computed normal and conformal normal curvatures for EM-based models.</p>
+<p>The local influence was introduced in the seminal paper <a href="https://www.doi.org/10.1111/j.2517-6161.1986.tb01398.x">Cook (1986)</a>, in which the normal curvatures under different perturbations schemes were introduced. Cook suggested the analysis of the perturbation schemes in the directions of largest curvatures. <a href="https://www.jstor.org/stable/3109764">Lesaffre and Verbeke (1998)</a> suggested the analysis for each canonical direction and called this “total local influence”. <a href="https://doi.org/10.1111/1467-9868.00162">Poon and Poon (1999)</a> introduced the <em>conformal normal curvature</em> which has the advantadge of taking values in the standard unit interval [0,1]. Finally, <a href="https://doi.org/10.1111/1467-9868.00279">Zhu and Lee (2001)</a> introduced local influence measures for EM-based models. They computed normal and conformal normal curvatures for EM-based models.</p>
 <p>Below, we discuss the arguments of the <code>local_influence</code> method in detail. Notice that in this vignette we do not provide interpretations of the influence results, we focus on how to compute the measures. For interpretations of the influence measures we refer the reader to the <a href="tutorial-mixpoissonreg.html">Analyzing overdispersed count data with the <em>mixpoissonreg</em> package</a> vignette.</p>
 <div id="curvature" class="section level2">
 <h2 class="hasAnchor">
@@ -366,7 +366,7 @@
 <div id="direction" class="section level2">
 <h2 class="hasAnchor">
 <a href="#direction" class="anchor"></a>Direction</h2>
-<p>The default direction of <code>local_influence</code> method for <code>mixpoissonreg</code> objects is the canonical direction, that is, it computes the <em>total local influence</em> (<a href="https://doi.org/10.2307/3109764">Lesaffre and Verbeke, 1998</a>).</p>
+<p>The default direction of <code>local_influence</code> method for <code>mixpoissonreg</code> objects is the canonical direction, that is, it computes the <em>total local influence</em> (<a href="https://www.jstor.org/stable/3109764">Lesaffre and Verbeke, 1998</a>).</p>
 <p>For canonical directions the <code>local_influence</code> method also returns <em>benchmarks</em> for each perturbation scheme, following <a href="https://doi.org/10.1111/1467-9868.00279">Zhu and Lee (2001)</a> for conformal normal curvatures and <a href="https://www.springer.com/gp/book/9781441902993">Verbeke and Molenberghs (2000, sect. 11.3)</a> for normal curvatures.</p>
 <p>To change the directions to the directions of largest curvatures one must set the <code>direction</code> argument to “max.eigen”.</p>
 <p>For mixed Poisson regression models (and actually for very large class of regression models) both the normal and conformal normal curvatures are quadratic forms with respect to the direction, that is, by seeing the direction as the variable. The name “max.eigen” for the direction of largest curvature comes from the fact that the direction of largest curvature is the direction of the eigenvector of the associated quadratic form associated to the eigenvalue with largest absolute value.</p>
@@ -423,8 +423,6 @@
                         data <span class="op">=</span> <span class="va">Attendance</span><span class="op">)</span>
 
 <span class="va">loc_inf_fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/local_influence.html">local_influence</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span>
-<span class="co">#&gt; Warning in local_influence.mixpoissonreg(fit2): Precision explanatory and simultaneous explanatory should not be considered since</span>
-<span class="co">#&gt;           there is only the intercept for the precision parameter.</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="va">loc_inf_fit2</span><span class="op">)</span>
 <span class="co">#&gt; [1] "case_weights"             "hidden_variable"         </span>
@@ -695,7 +693,8 @@
 <li><p>Barreto-Souza, W. and Simas, A.B. (2016) <em>General mixed Poisson regression models with varying dispersion.</em> Statistics and Computing volume 26, pp.1263-1280.</p></li>
 <li><p>Cook, R. D. (1986) <em>Assessment of Local Influence.</em> Journal of the Royal Statistical Society. Series B (Methodological), Vol. 48, pp.133-169.</p></li>
 <li><p>Cook, R. D. and Weisberg, S. (1982) <em>Residuals and Influence in Regression.</em> New York and London: Chapman and Hall.</p></li>
-<li><p>Poon, W.-Y. and Poon, Y.S. (1999) <em>Conformal normal curvature and assessment of local influence.</em> Journal of the Royal Statistical Society. Series B (Methodological), Vol. 61, pp.51-61.</p></li>
+<li><p>Lesaffre, E. and Verbeke, G. (1998) <em>Local Influence in Linear Mixed Models.</em> Biometrics, 54, 570-582.</p></li>
+<li><p>Poon, W.-Y. and Poon, Y.S. (1999) <em>Conformal normal curvature and assessment of local influence.</em> Journal of the Royal Statistical Society. Series B (Methodological), 61, 51-61.</p></li>
 <li><p>Pregibon, D. (1981) <em>Logistic Regression Diagnostics</em>. Ann. Stat. 9, 705-724.</p></li>
 <li><p>Verbeke, G. and Molenberghs, G. (2000) <em>Linear Mixed Models for Longitudinal Data</em>. Springer-Verlag New York</p></li>
 <li><p>Zhu, H.-T. and Lee, S.-Y. (2001) <em>Local influence for incomplete data models.</em> Journal of the Royal Statistical Society. Series B (Methodological), Vol. 63, pp.111-126.</p></li>

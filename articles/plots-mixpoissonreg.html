@@ -100,13 +100,13 @@
 
       
 
-      </header><script src="plots-mixpoissonreg_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="plots-mixpoissonreg_files/header-attrs-2.7/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Building and customizing base-R diagnostic plots with the mixpoissonreg package</h1>
                         <h4 class="author">Alexandre B. Simas</h4>
             
-            <h4 class="date">2021-03-04</h4>
+            <h4 class="date">2021-03-05</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/vpnsctl/mixpoissonreg/blob/master/vignettes/plots-mixpoissonreg.Rmd"><code>vignettes/plots-mixpoissonreg.Rmd</code></a></small>
       <div class="hidden name"><code>plots-mixpoissonreg.Rmd</code></div>
@@ -294,7 +294,7 @@
 <p>Finally, let us consider a fitting with simulated envelopes:</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit_env</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonregML.html">mixpoissonregML</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span> <span class="op">|</span> <span class="va">gender</span> <span class="op">+</span> 
-                           <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span>, envelope <span class="op">=</span> <span class="fl">10</span>, data <span class="op">=</span> <span class="va">Attendance</span><span class="op">)</span>
+                           <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span>, envelope <span class="op">=</span> <span class="fl">100</span>, data <span class="op">=</span> <span class="va">Attendance</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit_env</span>, which <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
 <p><img src="plots-mixpoissonreg_files/figure-html/unnamed-chunk-34-1.png" width="700"></p>
