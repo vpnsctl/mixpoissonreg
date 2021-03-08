@@ -169,6 +169,10 @@
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Returns an object of class <code>LogLik</code> containing the log-likelihood
+of the fitted <em>mixpoissonreg</em> object.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='vcov.mixpoissonreg.html'>vcov.mixpoissonreg</a></code></p></div>
@@ -181,6 +185,10 @@
 <span class='va'>prog</span> <span class='op'>|</span> <span class='va'>gender</span> <span class='op'>+</span> <span class='va'>math</span> <span class='op'>+</span> <span class='va'>prog</span>, data <span class='op'>=</span> <span class='va'>Attendance</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/stats/logLik.html'>logLik</a></span><span class='op'>(</span><span class='va'>daysabs_fit</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; 'log Lik.' -853.2027 (df=10)</div><div class='input'><span class='co'># }</span>
+
+<span class='va'>daysabs_prog</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mixpoissonreg.html'>mixpoissonreg</a></span><span class='op'>(</span><span class='va'>daysabs</span> <span class='op'>~</span> <span class='va'>prog</span>, data <span class='op'>=</span> <span class='va'>Attendance</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/stats/logLik.html'>logLik</a></span><span class='op'>(</span><span class='va'>daysabs_prog</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; 'log Lik.' -868.4331 (df=4)</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

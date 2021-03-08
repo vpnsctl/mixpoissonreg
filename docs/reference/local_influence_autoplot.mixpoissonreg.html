@@ -434,6 +434,9 @@ the top 'n.influential' observations will be identified in the plot by their ind
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Called for its side effects.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>DOI:10.1007/s11222-015-9601-6 doi: <a href='https://doi.org/10.1007/s11222-015-9601-6'>10.1007/s11222-015-9601-6</a>
@@ -460,6 +463,10 @@ the top 'n.influential' observations will be identified in the plot by their ind
 <span class='va'>prog</span> <span class='op'>|</span> <span class='va'>gender</span> <span class='op'>+</span> <span class='va'>math</span> <span class='op'>+</span> <span class='va'>prog</span>, data <span class='op'>=</span> <span class='va'>Attendance</span>, envelope <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span>
 <span class='fu'><a href='tidy_local_influence.html'>local_influence_autoplot</a></span><span class='op'>(</span><span class='va'>daysabs_fit_ml</span>, which <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
 </div><div class='img'><img src='local_influence_autoplot.mixpoissonreg-6.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
+
+<span class='va'>daysabs_prog</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mixpoissonreg.html'>mixpoissonreg</a></span><span class='op'>(</span><span class='va'>daysabs</span> <span class='op'>~</span> <span class='va'>prog</span> <span class='op'>|</span> <span class='va'>prog</span>, data <span class='op'>=</span> <span class='va'>Attendance</span><span class='op'>)</span>
+<span class='fu'><a href='tidy_local_influence.html'>local_influence_autoplot</a></span><span class='op'>(</span><span class='va'>daysabs_prog</span><span class='op'>)</span>
+</div><div class='img'><img src='local_influence_autoplot.mixpoissonreg-7.png' alt='' width='700' height='433' /></div><div class='img'><img src='local_influence_autoplot.mixpoissonreg-8.png' alt='' width='700' height='433' /></div><div class='img'><img src='local_influence_autoplot.mixpoissonreg-9.png' alt='' width='700' height='433' /></div><div class='img'><img src='local_influence_autoplot.mixpoissonreg-10.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

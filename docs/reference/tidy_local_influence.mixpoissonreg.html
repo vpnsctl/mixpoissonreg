@@ -232,6 +232,9 @@ precision-related covariates. The default is NULL.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A tibble containing the perturbations schemes as columns.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>DOI:10.1007/s11222-015-9601-6 doi: <a href='https://doi.org/10.1007/s11222-015-9601-6'>10.1007/s11222-015-9601-6</a>
@@ -282,6 +285,23 @@ precision-related covariates. The default is NULL.</p></td>
 #&gt; </span><span style='color: #BCBCBC;'> 9</span><span>     0.001</span><span style='text-decoration: underline;'>07</span><span> 
 #&gt; </span><span style='color: #BCBCBC;'>10</span><span>     0.002</span><span style='text-decoration: underline;'>49</span><span> 
 #&gt; </span><span style='color: #949494;'># … with 304 more rows</span><span></div><div class='input'><span class='co'># }</span>
+
+<span class='va'>daysabs_prog</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mixpoissonreg.html'>mixpoissonreg</a></span><span class='op'>(</span><span class='va'>daysabs</span> <span class='op'>~</span> <span class='va'>prog</span> <span class='op'>|</span> <span class='va'>prog</span>, data <span class='op'>=</span> <span class='va'>Attendance</span><span class='op'>)</span>
+<span class='fu'><a href='tidy_local_influence.html'>tidy_local_influence</a></span><span class='op'>(</span><span class='va'>daysabs_prog</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 314 x 5</span><span>
+#&gt;    case_weights hidden_variable mean_explanatory precision_explanatory
+#&gt;           </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>           </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>            </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>                 </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 1</span><span>     0.000</span><span style='text-decoration: underline;'>847</span><span>        0.000</span><span style='text-decoration: underline;'>249</span><span>         0.000</span><span style='text-decoration: underline;'>887</span><span>             0.001</span><span style='text-decoration: underline;'>42</span><span>  
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span>     0.000</span><span style='text-decoration: underline;'>847</span><span>        0.000</span><span style='text-decoration: underline;'>249</span><span>         0.000</span><span style='text-decoration: underline;'>887</span><span>             0.001</span><span style='text-decoration: underline;'>42</span><span>  
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span>     0.000</span><span style='text-decoration: underline;'>198</span><span>        0.000</span><span style='text-decoration: underline;'>169</span><span>         0.000</span><span style='text-decoration: underline;'>365</span><span>             0.000</span><span style='text-decoration: underline;'>061</span><span>1
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span>     0.000</span><span style='text-decoration: underline;'>483</span><span>        0.000</span><span style='text-decoration: underline;'>172</span><span>         0.000</span><span style='text-decoration: underline;'>598</span><span>             0.000</span><span style='text-decoration: underline;'>703</span><span> 
+#&gt; </span><span style='color: #BCBCBC;'> 5</span><span>     0.000</span><span style='text-decoration: underline;'>483</span><span>        0.000</span><span style='text-decoration: underline;'>172</span><span>         0.000</span><span style='text-decoration: underline;'>598</span><span>             0.000</span><span style='text-decoration: underline;'>703</span><span> 
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span>     0.000</span><span style='text-decoration: underline;'>913</span><span>        0.002</span><span style='text-decoration: underline;'>66</span><span>          0.006</span><span style='text-decoration: underline;'>05</span><span>              0.001</span><span style='text-decoration: underline;'>18</span><span>  
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span>     0.001</span><span style='text-decoration: underline;'>13</span><span>         0.001</span><span style='text-decoration: underline;'>91</span><span>          0.004</span><span style='text-decoration: underline;'>51</span><span>              0.001</span><span style='text-decoration: underline;'>81</span><span>  
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span>     0.001</span><span style='text-decoration: underline;'>39</span><span>         0.000</span><span style='text-decoration: underline;'>758</span><span>         0.002</span><span style='text-decoration: underline;'>10</span><span>              0.002</span><span style='text-decoration: underline;'>45</span><span>  
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span>     0.001</span><span style='text-decoration: underline;'>25</span><span>         0.001</span><span style='text-decoration: underline;'>58</span><span>          0.003</span><span style='text-decoration: underline;'>82</span><span>              0.002</span><span style='text-decoration: underline;'>09</span><span>  
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span>     0.003</span><span style='text-decoration: underline;'>26</span><span>         0.004</span><span style='text-decoration: underline;'>60</span><span>          0.000</span><span style='text-decoration: underline;'>454</span><span>             0.000</span><span style='text-decoration: underline;'>646</span><span> 
+#&gt; </span><span style='color: #949494;'># … with 304 more rows, and 1 more variable: simultaneous_explanatory &lt;dbl&gt;</span><span></div><div class='input'>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
