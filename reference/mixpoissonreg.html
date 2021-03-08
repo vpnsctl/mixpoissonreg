@@ -456,6 +456,33 @@ and <code><a href='local_influence_autoplot.mixpoissonreg.html'>local_influence_
 #&gt; 1    304                     
 #&gt; 2    306 -2 2.4149      0.299</div><div class='input'><span class='co'># }</span>
 
+<span class='va'>daysabs_prog</span> <span class='op'>&lt;-</span> <span class='fu'>mixpoissonreg</span><span class='op'>(</span><span class='va'>daysabs</span> <span class='op'>~</span> <span class='va'>prog</span>, data <span class='op'>=</span> <span class='va'>Attendance</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>daysabs_prog</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; 
+#&gt; Negative Binomial Regression - Expectation-Maximization Algorithm
+#&gt; 
+#&gt; Call:
+#&gt; mixpoissonreg(formula = daysabs ~ prog, data = Attendance)
+#&gt; 
+#&gt; 
+#&gt; Pearson residuals:
+#&gt;      RSS      Min       1Q   Median       3Q      Max 
+#&gt; 340.4808  -0.9371  -0.6885  -0.2614   0.4086   5.2215 
+#&gt; 
+#&gt; Coefficients modeling the mean (with  link):
+#&gt;                Estimate Std.error z-value Pr(&gt;|z|)    
+#&gt; (Intercept)      2.3656    0.1650  14.341  &lt; 2e-16 ***
+#&gt; progAcademic    -0.4291    0.1845  -2.326     0.02 *  
+#&gt; progVocational  -1.3824    0.2000  -6.912 4.78e-12 ***
+#&gt; 
+#&gt; Coefficients modeling the precision (with  link):
+#&gt;             Estimate Std.error z-value Pr(&gt;|z|)    
+#&gt; (Intercept)   1.0056    0.1023   9.832   &lt;2e-16 ***
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+#&gt; 
+#&gt; Efron's pseudo R-squared:  0.1415831 
+#&gt; Number of iterations of the EM algorithm = 1</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

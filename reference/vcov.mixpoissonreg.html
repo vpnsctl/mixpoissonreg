@@ -175,6 +175,9 @@ indicates for which parameters the variance-covariance matrix should be computed
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A matrix containing the covariance matrix of a <em>mixpoissonreg</em> object.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='coef.mixpoissonreg.html'>coef.mixpoissonreg</a></code></p></div>
@@ -242,6 +245,19 @@ indicates for which parameters the variance-covariance matrix should be computed
 #&gt; math            -0.0001019043
 #&gt; progAcademic     0.0106291493
 #&gt; progVocational   0.0304306592</div><div class='input'><span class='co'># }</span>
+
+<span class='va'>daysabs_prog</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mixpoissonreg.html'>mixpoissonreg</a></span><span class='op'>(</span><span class='va'>daysabs</span> <span class='op'>~</span> <span class='va'>prog</span>, data <span class='op'>=</span> <span class='va'>Attendance</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/stats/vcov.html'>vcov</a></span><span class='op'>(</span><span class='va'>daysabs_prog</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;                         (Intercept)  progAcademic progVocational
+#&gt; (Intercept)            2.720872e-02 -2.720872e-02  -2.720872e-02
+#&gt; progAcademic          -2.720872e-02  3.402708e-02   2.720872e-02
+#&gt; progVocational        -2.720872e-02  2.720872e-02   3.999917e-02
+#&gt; (Intercept).precision  1.531513e-14  6.568027e-15  -3.236057e-15
+#&gt;                       (Intercept).precision
+#&gt; (Intercept)                    1.531513e-14
+#&gt; progAcademic                   6.568027e-15
+#&gt; progVocational                -3.236057e-15
+#&gt; (Intercept).precision          1.045938e-02</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

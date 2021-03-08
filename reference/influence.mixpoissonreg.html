@@ -211,6 +211,19 @@ if 'hat' is set to 'precision', the model must be fitted with 'w' set to TRUE.</
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>The method <code>influence.mixpoissonreg</code> returns a list containing
+<em>hat.mean</em>, a vector containing the hat values with respect to the mean, <em>hat.precision</em>,
+a vector containing the hat values with respect to the precision, <em>coefficients.mean</em> (if <code>do.coef=TRUE</code>), a matrix
+containing the first
+order approximations for the mean-related coefficients after the removal
+of each observation, <em>coefficients.precision</em> (if <code>do.coef=TRUE</code>), a matrix containing the first
+order approximations for the precision-related coefficients after the removal
+of each observation, <em>pear.res</em>, a vector containing the Pearson residuals,
+<em>score.res</em>, a vector containing the score residuals.</p>
+<p>The <em>cooks.distance.mixpoissonreg</em> returns a vector containing the Cook's distances.</p>
+<p>The <em>hatvalues.mixpoissonreg</em> returns a vector containing the hat values.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>For hat values of mixed Poisson regression models, we follow Zhu et al. (2001) to consider the negative of the hessian of the Q-function as weight matrix, and follow

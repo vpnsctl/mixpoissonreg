@@ -290,11 +290,7 @@ precision-related covariates. The default is NULL.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a list containing the resulting perturbation schemes as elements. Each returned element has an attribute 'benchmark', which for
-the conformal normal curvature, it is computed following Zhu and Lee (2001), and for normal curvature it is computed following Verbeke and ...
-If the 'direction' is 'max.eigen' the 'benchmark' attribute is NA.</p>
-<p>The 'mean_explanatory', 'precision_explanatory' and 'simultaneous_explanatory' elements of the list contain an attribute 'covariates' indicating
-which covariates were used in the perturbation schemes.</p>
+    <p>Called for its side effects.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p><code>local_influence.mixpoissonreg</code> provides local influence diagnostics for mixed Poisson regression models for all perturbation schemes considered in
@@ -330,6 +326,10 @@ will be displayed. One can also set the option 'draw_benchmark' to TRUE to plot 
 <span class='va'>prog</span> <span class='op'>|</span> <span class='va'>gender</span> <span class='op'>+</span> <span class='va'>math</span> <span class='op'>+</span> <span class='va'>prog</span>, data <span class='op'>=</span> <span class='va'>Attendance</span>, envelope <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span>
 <span class='fu'><a href='local_influence.html'>local_influence_plot</a></span><span class='op'>(</span><span class='va'>daysabs_fit_ml</span>, which <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
 </div><div class='img'><img src='local_influence_plot.mixpoissonreg-5.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
+
+<span class='va'>daysabs_progML</span> <span class='op'>&lt;-</span> <span class='fu'><a href='mixpoissonregML.html'>mixpoissonregML</a></span><span class='op'>(</span><span class='va'>daysabs</span> <span class='op'>~</span> <span class='va'>prog</span> <span class='op'>|</span> <span class='va'>prog</span>, data <span class='op'>=</span> <span class='va'>Attendance</span><span class='op'>)</span>
+<span class='fu'><a href='local_influence.html'>local_influence_plot</a></span><span class='op'>(</span><span class='va'>daysabs_progML</span><span class='op'>)</span>
+</div><div class='img'><img src='local_influence_plot.mixpoissonreg-6.png' alt='' width='700' height='433' /></div><div class='img'><img src='local_influence_plot.mixpoissonreg-7.png' alt='' width='700' height='433' /></div><div class='img'><img src='local_influence_plot.mixpoissonreg-8.png' alt='' width='700' height='433' /></div><div class='img'><img src='local_influence_plot.mixpoissonreg-9.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
