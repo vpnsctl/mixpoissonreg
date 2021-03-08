@@ -1,0 +1,123 @@
+---
+title: "Maximum-likelihood estimation with the mixpoissonreg package"
+author: "Alexandre B. Simas"
+date: '`r format(Sys.time(), "%Y-%m-%d")`'
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Maximum-likelihood estimation with the mixpoissonreg package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+# Fitting `mixpoissonreg` models via direct maximization of the likelihood function
+
+In the `mixpoissonreg` package one can easily obtain estimates for the parameters of the model through direct maximization of likelihood function. This estimation procedure
+has the advantage of being very fast, so we recommend this estimation as an alternative when the EM-algorithm takes too long to converge. We use **very good** initial guesses using
+the `gamlss` function from the `gamlss` package. 
+
+One can obtain parameters estimates through direct maximization of the likelihood function by setting the `method` argument to "ML":
+
+```{r warning=FALSE}
+library(mixpoissonreg)
+
+fit_ml <- mixpoissonreg(daysabs ~ gender + math + prog, method = "ML", 
+                        data = Attendance, optim_controls = list(maxit=1))
+
+summary(fit_ml)
+```
+
+We are using the option `optim_controls = list(maxit=1)` to reduce computational cost.
+
+These estimates can also be obtained by using the `mixpoissonregML` function:
+
+```{r warning=FALSE}
+fit_ml2 <- mixpoissonregML(daysabs ~ gender + math + prog,
+                        data = Attendance, optim_controls = list(maxit=1))
+
+summary(fit_ml2)
+```
+
+Notice that both of these methods produce identical estimates:
+
+```{r}
+identical(coef(fit_ml), coef(fit_ml2))
+```
+
+Both of these functions return objects of class `mixpoissonreg` and therefore all these methods are available for them: `summary`, `plot`, `coef`, `predict`, `fitted`, `influence`, `hatvalues`, `cooks.distance`, `local_influence`, `local_influence`, `local_influence_plot`, `augment`, `glance`, `tidy`, `tidy_local_influence`, `local_influence_benchmarks`, `autoplot`, `local_influence_autoplot`. One can also use the `lrtest`, `waldtest`, `coeftest` and `coefci` methods from the `lmtest` package to them.
+
+By using the structure `formula_1 | formula_2`, one can define a regression structure for the mean using `formula_1` (which must contain the reponse variable) and a regression structure for
+the precision parameter using `formula_2` (which must **not** contain the response variable). To fit a Poisson Inverse Gaussian regression model just set the `model` argument to "PIG". To change the link function for the mean parameter by changing the `link.mean` parameter (the possible link functions for the mean are "log" and "sqrt"). Analogously, to change the 
+link function for the precision parameter, one must change the `link.precision` parameter (the possible link functions for the precision parameter are "identity", "log" and 
+"inverse.sqrt"). 
+
+For instance:
+
+```{r warning = FALSE}
+fit_ml_prec <- mixpoissonregML(daysabs ~ gender + math + prog | prog,
+                        model = "PIG", data = Attendance,
+                        optim_controls = list(maxit=1))
+
+autoplot(fit_ml_prec)
+
+local_influence_autoplot(fit_ml_prec)
+
+lmtest::lrtest(fit_ml_prec)
+
+fit_ml_reduced <- mixpoissonregML(daysabs ~ gender + math + prog,
+                        model = "PIG", data = Attendance,
+                        optim_controls = list(maxit=1))
+
+lmtest::lrtest(fit_ml_prec, fit_ml_reduced)
+```
+
+**Remark**: *Notice that when using the methods `lmtest::lrtest` and `lmtest::waldtest` to compare more than one model, all the models must be of the same type, that is, they all must
+be or Negative Binomial regression models or they all must be Poisson Inverse Gaussian regression models.*
+
+
+Finally, one can obtain simulated envelopes by setting the `envelope` argument to the number of draws to be simulated. If there are simulated envelopes, the Q-Q plot from the
+`plot` and `autoplot` methods will contain the envelopes and the `summary` method will print the percentage of observations within the simulated envelopes. For example:
+
+```{r warning = FALSE}
+fit_ml_env <- mixpoissonregML(daysabs ~ gender + math + prog | prog,
+                        model = "PIG", envelope = 10, data = Attendance,
+                        optim_controls = list(maxit=1))
+
+summary(fit_ml_env)
+
+plot(fit_ml_env, which = 2)
+
+autoplot(fit_ml_env, which = 2)
+```
+
+
+# Obtaining estimates without *formulas*
+
+If one has a matrix `X` of mean-related covariates, optionally a matrix `W` of precision-related covariates,  and a vector (or one-dimensional matrix) `y`, one can fit a 
+Mixed Poisson Regression model estimated via direct maximization of the likelihood function without the usage of *formulas* by using the `mixpoissonreg.fit` (with `method` argument set to "ML") or `mixpoissonregML.fit`.
+
+**Remark**: *It is important to notice that these functions* ***do not*** *return `mixpoissonreg` objects. Instead they return `mixpoissonreg_fit` objects. This means that several methods
+that are available for `mixpoissonreg` objects are* ***not*** *available for `mixpoissonreg_fit` objects.*
+
+
+```{r}
+
+data("Attendance", package = "mixpoissonreg")
+
+X = cbind(1, Attendance$math)
+y = Attendance$daysabs
+
+mixpoissonregML.fit(X, y)$coefficients
+
+W = X
+
+mixpoissonregML.fit(X, y, W)$coefficients
+
+```

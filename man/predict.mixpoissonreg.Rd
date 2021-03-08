@@ -54,14 +54,6 @@ the uncertainty. In this case prediction intervals should be used. Currently, we
 are obtained by simulation and can be computationally-intensive.
 }
 \examples{
-\donttest{
-data("Attendance", package = "mixpoissonreg")
-
-daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
-prog | gender + math + prog, data = Attendance)
-predict(daysabs_fit, interval = "confidence")
-predict(daysabs_fit, type = "link", se.fit = TRUE)
-}
 
 daysabs_prog <- mixpoissonreg(daysabs ~ prog, data = Attendance)
 predict(daysabs_prog)

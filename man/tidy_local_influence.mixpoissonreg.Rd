@@ -66,17 +66,6 @@ provides a \code{\link[tibble:tibble]{tibble::tibble()}} containing the local in
 for each selected perturbation scheme containing influential benchmarks for each perturbation scheme.
 }
 \examples{
-\donttest{
-data("Attendance", package = "mixpoissonreg")
-
-daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
-prog | gender + math + prog, data = Attendance)
-tidy_local_influence(daysabs_fit)
-
-daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
-prog | gender + math + prog, data = Attendance, envelope = 20)
-tidy_local_influence(daysabs_fit_ml, perturbation = "case_weights")
-}
 
 daysabs_prog <- mixpoissonreg(daysabs ~ prog | prog, data = Attendance)
 tidy_local_influence(daysabs_prog)

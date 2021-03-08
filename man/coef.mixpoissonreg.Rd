@@ -22,14 +22,6 @@ with \code{parameters = 'all'}; if the coefficients of the mean-related paramete
 precision-related parameters should be extracted, with \code{parameters = 'precision'}.
 }
 \examples{
-\donttest{
-data("Attendance", package = "mixpoissonreg")
-
-daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
-prog | gender + math + prog, data = Attendance)
-coef(daysabs_fit)
-coef(daysabs_fit, parameters = "precision")
-}
 
 daysabs_prog <- mixpoissonreg(daysabs ~ prog, data = Attendance)
 coef(daysabs_prog)

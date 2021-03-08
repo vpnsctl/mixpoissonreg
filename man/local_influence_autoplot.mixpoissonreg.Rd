@@ -185,20 +185,6 @@ Called for its side effects.
 Function to provide customizable ggplot2-based plots of local influence diagnostics.
 }
 \examples{
-\donttest{
-data("Attendance", package = "mixpoissonreg")
-
-daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
-prog | gender + math + prog, data = Attendance)
-local_influence_autoplot(daysabs_fit)
-
-local_influence_autoplot(daysabs_fit, nrow = 2)
-
-daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
-prog | gender + math + prog, data = Attendance, envelope = 20)
-local_influence_autoplot(daysabs_fit_ml, which = 2)
-}
-
 daysabs_prog <- mixpoissonreg(daysabs ~ prog | prog, data = Attendance)
 local_influence_autoplot(daysabs_prog)
 

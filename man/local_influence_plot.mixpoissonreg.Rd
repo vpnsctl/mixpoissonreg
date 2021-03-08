@@ -112,18 +112,6 @@ attributes in the returned list from \code{local_influence.mixpoissonreg}. When 
 will be displayed. One can also set the option 'draw_benchmark' to TRUE to plot the benchmark line.
 }
 \examples{
-\donttest{
-data("Attendance", package = "mixpoissonreg")
-
-daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
-prog | gender + math + prog, data = Attendance)
-local_influence_plot(daysabs_fit)
-
-daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
-prog | gender + math + prog, data = Attendance, envelope = 20)
-local_influence_plot(daysabs_fit_ml, which = 2)
-}
-
 daysabs_progML <- mixpoissonregML(daysabs ~ prog | prog, data = Attendance)
 local_influence_plot(daysabs_progML)
 

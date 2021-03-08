@@ -186,20 +186,6 @@ sub.caption - by default the function call - is shown as a subtitle (under the x
 in the outer margin when there are multiple plots per page.
 }
 \examples{
-\donttest{
-data("Attendance", package = "mixpoissonreg")
-
-daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
-prog | gender + math + prog, data = Attendance)
-autoplot(daysabs_fit, which = 1:6)
-
-autoplot(daysabs_fit, nrow = 2)
-
-daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
-prog | gender + math + prog, data = Attendance, envelope = 20)
-autoplot(daysabs_fit_ml, which = 2)
-}
-
 daysabs_prog <- mixpoissonregML(daysabs ~ prog, data = Attendance)
 autoplot(daysabs_prog)
 

@@ -19,14 +19,6 @@ of the fitted \emph{mixpoissonreg} object.
 Function to compute the log-likelihood at the estimated parameters for mixed Poisson regression models.
 }
 \examples{
-\donttest{
-data("Attendance", package = "mixpoissonreg")
-
-daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
-prog | gender + math + prog, data = Attendance)
-logLik(daysabs_fit)
-}
-
 daysabs_prog <- mixpoissonreg(daysabs ~ prog, data = Attendance)
 logLik(daysabs_prog)
 

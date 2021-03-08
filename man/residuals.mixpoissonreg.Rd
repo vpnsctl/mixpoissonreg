@@ -21,16 +21,6 @@ A vector containing the residuals of a \emph{mixpoissonreg} object.
 Function to return 'pearson' or 'score' residuals for mixed Poisson regression models.
 }
 \examples{
-\donttest{
-data("Attendance", package = "mixpoissonreg")
-
-daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
-prog | gender + math + prog, data = Attendance)
-residuals(daysabs_fit)
-
-#Score residuals:
-residuals(daysabs_fit, type = "score")
-}
 
 daysabs_prog <- mixpoissonreg(daysabs ~ prog, data = Attendance)
 residuals(daysabs_prog)

@@ -57,21 +57,6 @@
 #' \code{\link{autoplot.mixpoissonreg}}, \code{\link{local_influence_plot.mixpoissonreg}}, \code{\link{local_influence_autoplot.mixpoissonreg}},
 #' \code{\link{summary.mixpoissonreg}}, \code{\link{predict.mixpoissonreg}}, \code{\link{influence.mixpoissonreg}}
 #' @examples
-#' \donttest{
-#' data("Attendance", package = "mixpoissonreg")
-#'
-#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
-#' prog | prog, data = Attendance)
-#' plot(daysabs_fit, which = 1:6)
-#' 
-#' plot(daysabs_fit)
-#' 
-#' daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
-#' prog | prog, data = Attendance, envelope = 20)
-#'
-#' plot(daysabs_fit_ml, which = 2)
-#' }
-#' 
 #' daysabs_prog <- mixpoissonreg(daysabs ~ prog, data = Attendance)
 #' plot(daysabs_prog)
 #' 
@@ -362,14 +347,6 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
 #' \code{\link{coef.mixpoissonreg}}, \code{\link{vcov.mixpoissonreg}},
 #' \code{\link{plot.mixpoissonreg}}
 #' @examples
-#' \donttest{
-#' data("Attendance", package = "mixpoissonreg")
-#'
-#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
-#' prog | gender + math + prog, data = Attendance)
-#' fitted(daysabs_fit)
-#' fitted(daysabs_fit, type = "precision")
-#' }
 #' 
 #' daysabs_prog <- mixpoissonreg(daysabs ~ prog, data = Attendance)
 #' fitted(daysabs_prog)
@@ -458,14 +435,6 @@ fitted.mixpoissonreg <- function(object, type = c("response", "link", "precision
 #' \code{\link{coef.mixpoissonreg}}, \code{\link{vcov.mixpoissonreg}},
 #' \code{\link{plot.mixpoissonreg}}
 #' @examples
-#' \donttest{
-#' data("Attendance", package = "mixpoissonreg")
-#'
-#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
-#' prog | gender + math + prog, data = Attendance)
-#' predict(daysabs_fit, interval = "confidence")
-#' predict(daysabs_fit, type = "link", se.fit = TRUE)
-#' }
 #' 
 #' daysabs_prog <- mixpoissonreg(daysabs ~ prog, data = Attendance)
 #' predict(daysabs_prog)
@@ -816,14 +785,6 @@ predict.mixpoissonreg <- function(object, newdata = NULL, type = c("response", "
 #' @seealso
 #' \code{\link{coef.mixpoissonreg}}
 #' @examples
-#' \donttest{
-#' data("Attendance", package = "mixpoissonreg")
-#'
-#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
-#' prog | gender + math + prog, data = Attendance)
-#' vcov(daysabs_fit)
-#' vcov(daysabs_fit, parameters = "mean")
-#' }
 #' 
 #' daysabs_prog <- mixpoissonreg(daysabs ~ prog, data = Attendance)
 #' vcov(daysabs_prog)
@@ -871,14 +832,6 @@ vcov.mixpoissonreg <- function(object, parameters = c("all", "mean", "precision"
 #' @seealso
 #' \code{\link{vcov.mixpoissonreg}}
 #' @examples
-#' \donttest{
-#' data("Attendance", package = "mixpoissonreg")
-#'
-#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
-#' prog | gender + math + prog, data = Attendance)
-#' coef(daysabs_fit)
-#' coef(daysabs_fit, parameters = "precision")
-#' }
 #' 
 #' daysabs_prog <- mixpoissonreg(daysabs ~ prog, data = Attendance)
 #' coef(daysabs_prog)
@@ -936,18 +889,6 @@ terms.mixpoissonreg <- function(x, parameters = c("mean", "precision"), ...){
 #' \code{\link{plot.mixpoissonreg}}, \code{\link{autoplot.mixpoissonreg}},
 #' \code{\link{local_influence_plot.mixpoissonreg}}, \code{\link{local_influence_autoplot.mixpoissonreg}}
 #' @examples
-#' \donttest{
-#' data("Attendance", package = "mixpoissonreg")
-#'
-#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
-#' prog | gender + math + prog, data = Attendance)
-#' summary(daysabs_fit)
-#'
-#' daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
-#' prog | gender + math + prog, data = Attendance)
-#' summary(daysabs_fit_ml)
-#' }
-#' 
 #' daysabs_prog <- mixpoissonreg(daysabs ~ prog, data = Attendance)
 #' summary(daysabs_prog)
 #' 
@@ -1115,16 +1056,6 @@ print.summary_mixpoissonreg <- function(x, ...) {
 #' \code{\link{plot.mixpoissonreg}}, \code{\link{predict.mixpoissonreg}},
 #' \code{\link{autoplot.mixpoissonreg}}, \code{\link{summary.mixpoissonreg}}
 #' @examples
-#' \donttest{
-#' data("Attendance", package = "mixpoissonreg")
-#'
-#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
-#' prog | gender + math + prog, data = Attendance)
-#' residuals(daysabs_fit)
-#'
-#' #Score residuals:
-#' residuals(daysabs_fit, type = "score")
-#' }
 #' 
 #' daysabs_prog <- mixpoissonreg(daysabs ~ prog, data = Attendance)
 #' residuals(daysabs_prog)
@@ -1185,14 +1116,6 @@ if(is.null(object$y)){
 #' @seealso
 #' \code{\link{vcov.mixpoissonreg}}
 #' @examples
-#' \donttest{
-#' data("Attendance", package = "mixpoissonreg")
-#'
-#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
-#' prog | gender + math + prog, data = Attendance)
-#' logLik(daysabs_fit)
-#' }
-#' 
 #' daysabs_prog <- mixpoissonreg(daysabs ~ prog, data = Attendance)
 #' logLik(daysabs_prog)
 #' 

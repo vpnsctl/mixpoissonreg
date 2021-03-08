@@ -110,21 +110,6 @@ These plots allows one to perform residuals analsysis and influence diagnostics.
 See Barreto-Souza and Simas (2016), Cook and Weisberg (1982) and Zhu et al. (2001).
 }
 \examples{
-\donttest{
-data("Attendance", package = "mixpoissonreg")
-
-daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
-prog | prog, data = Attendance)
-plot(daysabs_fit, which = 1:6)
-
-plot(daysabs_fit)
-
-daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
-prog | prog, data = Attendance, envelope = 20)
-
-plot(daysabs_fit_ml, which = 2)
-}
-
 daysabs_prog <- mixpoissonreg(daysabs ~ prog, data = Attendance)
 plot(daysabs_prog)
 

@@ -21,14 +21,6 @@ Returns the variance-covariance matrix of the parameters for fitted mixed Poisso
 indicates for which parameters the variance-covariance matrix should be computed, namely, 'mean' for mean-relatex parameters or 'precision' for precision-related parameters.
 }
 \examples{
-\donttest{
-data("Attendance", package = "mixpoissonreg")
-
-daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
-prog | gender + math + prog, data = Attendance)
-vcov(daysabs_fit)
-vcov(daysabs_fit, parameters = "mean")
-}
 
 daysabs_prog <- mixpoissonreg(daysabs ~ prog, data = Attendance)
 vcov(daysabs_prog)

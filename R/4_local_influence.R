@@ -60,18 +60,6 @@
 #'
 #' Zhu, H.-T. and Lee, S.-Y. (2001) *Local influence for incomplete data models.* Journal of the Royal Statistical Society. Series B (Methodological), Vol. 63, pp.111-126. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}
 #' @examples
-#' \donttest{
-#' data("Attendance", package = "mixpoissonreg")
-#'
-#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
-#' prog | gender + math + prog, data = Attendance)
-#' local_influence(daysabs_fit)
-#'
-#' daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
-#' prog | gender + math + prog, data = Attendance, envelope = 20)
-#' local_influence_plot(daysabs_fit_ml, which = 1)
-#' }
-#' 
 #' daysabs_progML <- mixpoissonregML(daysabs ~ prog | prog, data = Attendance)
 #' local_influence(daysabs_progML)
 #' 
@@ -372,18 +360,6 @@ loc_infl
 #'
 #' Zhu, H.-T. and Lee, S.-Y. (2001) *Local influence for incomplete data models.* Journal of the Royal Statistical Society. Series B (Methodological), Vol. 63, pp.111-126. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}
 #' @examples
-#' \donttest{
-#' data("Attendance", package = "mixpoissonreg")
-#'
-#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
-#' prog | gender + math + prog, data = Attendance)
-#' local_influence_plot(daysabs_fit)
-#'
-#' daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
-#' prog | gender + math + prog, data = Attendance, envelope = 20)
-#' local_influence_plot(daysabs_fit_ml, which = 2)
-#' }
-#' 
 #' daysabs_progML <- mixpoissonregML(daysabs ~ prog | prog, data = Attendance)
 #' local_influence_plot(daysabs_progML)
 #' 

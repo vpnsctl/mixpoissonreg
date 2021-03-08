@@ -264,20 +264,6 @@ tidy.mixpoissonreg <- function(x, conf.int = FALSE, conf.level = 0.95, ...){
 #' in the outer margin when there are multiple plots per page.
 #'
 #' @examples
-#' \donttest{
-#' data("Attendance", package = "mixpoissonreg")
-#'
-#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
-#' prog | gender + math + prog, data = Attendance)
-#' autoplot(daysabs_fit, which = 1:6)
-#'
-#' autoplot(daysabs_fit, nrow = 2)
-#'
-#' daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
-#' prog | gender + math + prog, data = Attendance, envelope = 20)
-#' autoplot(daysabs_fit_ml, which = 2)
-#' }
-#' 
 #' daysabs_prog <- mixpoissonregML(daysabs ~ prog, data = Attendance)
 #' autoplot(daysabs_prog)
 #' 
@@ -800,17 +786,6 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
 #' Zhu, H.-T. and Lee, S.-Y. (2001) *Local influence for incomplete data models.* Journal of the Royal Statistical Society. Series B (Methodological), Vol. 63, pp.111-126. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}
 #' @seealso \code{\link{glance.mixpoissonreg}}, \code{\link{augment.mixpoissonreg}}, \code{\link{tidy.mixpoissonreg}}, \code{\link{autoplot.mixpoissonreg}}
 #' @examples
-#' \donttest{
-#' data("Attendance", package = "mixpoissonreg")
-#'
-#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
-#' prog | gender + math + prog, data = Attendance)
-#' tidy_local_influence(daysabs_fit)
-#'
-#' daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
-#' prog | gender + math + prog, data = Attendance, envelope = 20)
-#' tidy_local_influence(daysabs_fit_ml, perturbation = "case_weights")
-#' }
 #' 
 #' daysabs_prog <- mixpoissonreg(daysabs ~ prog | prog, data = Attendance)
 #' tidy_local_influence(daysabs_prog)
@@ -935,20 +910,6 @@ local_influence_benchmarks.mixpoissonreg <- function(model, perturbation = c("ca
 #' Zhu, H.-T. and Lee, S.-Y. (2001) *Local influence for incomplete data models.* Journal of the Royal Statistical Society. Series B (Methodological), Vol. 63, pp.111-126. \href{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00279}
 #' @seealso \code{\link{glance.mixpoissonreg}}, \code{\link{augment.mixpoissonreg}}, \code{\link{tidy.mixpoissonreg}}, \code{\link{autoplot.mixpoissonreg}}
 #' @examples
-#' \donttest{
-#' data("Attendance", package = "mixpoissonreg")
-#'
-#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
-#' prog | gender + math + prog, data = Attendance)
-#' local_influence_autoplot(daysabs_fit)
-#'
-#' local_influence_autoplot(daysabs_fit, nrow = 2)
-#'
-#' daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
-#' prog | gender + math + prog, data = Attendance, envelope = 20)
-#' local_influence_autoplot(daysabs_fit_ml, which = 2)
-#' }
-#' 
 #' daysabs_prog <- mixpoissonreg(daysabs ~ prog | prog, data = Attendance)
 #' local_influence_autoplot(daysabs_prog)
 #' 

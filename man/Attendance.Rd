@@ -29,25 +29,12 @@ The response variable of interest is days absent, \code{daysabs}. The variable \
 The variable \code{prog} is a three-level factor indicating the type of instructional program in which the student is enrolled.
 }
 \examples{
-\donttest{
 data("Attendance", package = "mixpoissonreg")
 
-daysabs_fit <- mixpoissonreg(daysabs ~ gender + math + prog | gender + 
-math + prog, data = Attendance, model = "PIG")
+daysabs_fit <- mixpoissonregML(daysabs ~ gender + math + prog | gender + 
+math + prog, data = Attendance)
 summary(daysabs_fit)
 
-daysabs_fit_red <- mixpoissonreg(daysabs ~ gender + math + prog | prog, 
-data = Attendance, model = "PIG")
-summary(daysabs_fit_red)
-
-# Plot of the fit with all precision covariates
-plot(daysabs_fit)
-local_influence_plot(daysabs_fit)
-
-# Plot, using ggplot2, of the reduced fit
-autoplot(daysabs_fit_red)
-local_influence_autoplot(daysabs_fit_red)
-}
 }
 \references{
 Hughes, M. and Fisher, T. (2020)  \href{http://www.users.miamioh.edu/fishert4/sta363/}{Introduction to Statistical Modeling.}

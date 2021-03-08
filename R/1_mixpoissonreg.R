@@ -159,26 +159,6 @@
 #'
 #' @examples
 #' # Examples using the Attendance dataset:
-#' \donttest{
-#' daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
-#' prog | gender + math + prog, data = Attendance)
-#' summary(daysabs_fit)
-#' # Base R plot of the fit
-#' plot(daysabs_fit)
-#' # ggplot2 plot of the fit
-#' autoplot(daysabs_fit)
-#' # plot of local influence measures
-#' local_influence_plot(daysabs_fit)
-#' # ggplot2 plot of local influence measures
-#' local_influence_autoplot(daysabs_fit)
-#' # Fitting a reduced model of the sabe type as the previous one
-#' daysabs_fit_red <- mixpoissonreg(daysabs ~ gender + math +
-#' prog | prog, data = Attendance, model = daysabs_fit$modeltype)
-#' # Likelihood ratio test:
-#' lmtest::lrtest(daysabs_fit, daysabs_fit_red)
-#' # Wald test:
-#' lmtest::waldtest(daysabs_fit, daysabs_fit_red)
-#' }
 #' 
 #' daysabs_prog <- mixpoissonreg(daysabs ~ prog, data = Attendance)
 #' summary(daysabs_prog)
@@ -679,26 +659,6 @@ mixpoissonreg.fit <- function(x, y, w = NULL, link.mean = c("log", "sqrt"),
 #'
 #' @examples
 #' # Examples using the Attendance dataset:
-#' \donttest{
-#' daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
-#' prog | gender + math + prog, data = Attendance)
-#' summary(daysabs_fit_ml)
-#' # Base R plot of the fit
-#' plot(daysabs_fit_ml)
-#' # ggplot2 plot of the fit
-#' autoplot(daysabs_fit_ml)
-#' # plot of local influence measures
-#' local_influence_plot(daysabs_fit_ml)
-#' # ggplot2 plot of local influence measures
-#' local_influence_autoplot(daysabs_fit_ml)
-#' # Fitting a reduced model of the sabe type as the previous one
-#' daysabs_fit_ml_red <- mixpoissonregML(daysabs ~ gender + math +
-#' prog | prog, data = Attendance, model = daysabs_fit_ml$modeltype)
-#' # Likelihood ratio test:
-#' lmtest::lrtest(daysabs_fit_ml, daysabs_fit_ml_red)
-#' # Wald test:
-#' lmtest::waldtest(daysabs_fit_ml, daysabs_fit_ml_red)
-#' }
 #' 
 #' daysabs_progML <- mixpoissonregML(daysabs ~ prog, data = Attendance)
 #' summary(daysabs_progML)
