@@ -17,6 +17,11 @@ local_influence_benchmarks(model, ...)
 
 \item{...}{additional arguments to be passed.}
 }
+\value{
+The \emph{tidy_local_influence} method returns a \emph{tibble} containing the resulting perturbation schemes as columns.
+The \emph{local_influence_benchmarks} method returns a \emph{tibble} with the benchmarks as columns.
+The \emph{local_influence_autoplot} method is called for its side effects.
+}
 \description{
 Functions to provide tidy outputs or ggplot2-based plots of local influence diagnostics.
 }

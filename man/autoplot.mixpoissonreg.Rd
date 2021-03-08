@@ -167,6 +167,9 @@ the help of \code{\link[grid]{gpar}} function from the \pkg{grid} package for al
 
 \item{...}{other arguments passed to methods.}
 }
+\value{
+Called for its side effects.
+}
 \description{
 This function provides \pkg{ggplot2}-based counterparts to the plots produced by \code{\link{plot.mixpoissonreg}}.
 Currently there are six plots available. They contain residual analysis and global influence diagnostics. The plots are selectable by
@@ -196,4 +199,8 @@ daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
 prog | gender + math + prog, data = Attendance, envelope = 100)
 autoplot(daysabs_fit_ml, which = 2)
 }
+
+daysabs_prog <- mixpoissonregML(daysabs ~ prog, data = Attendance)
+autoplot(daysabs_prog)
+
 }

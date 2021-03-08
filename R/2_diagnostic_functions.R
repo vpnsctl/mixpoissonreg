@@ -37,6 +37,7 @@
 #' envelopes, a qqline passing through the first and third quartiles of a standard normal distribution will be added to the normal Q-Q plot.
 #' @param col.qqline color of the qqline.
 #' @param ... graphical parameters to be passed.
+#' @return It is called for its side effects. 
 #' @details
 #' The \code{plot} method is implemented following the same structure as the \link[stats]{plot.lm}, so it will be easy to be used by practitioners that
 #' are familiar with \code{glm} objects.
@@ -70,6 +71,10 @@
 #'
 #' plot(daysabs_fit_ml, which = 2)
 #' }
+#' 
+#' daysabs_prog <- mixpoissonreg(daysabs ~ prog, data = Attendance)
+#' plot(daysabs_prog)
+#' 
 #' @export
 plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
                                caption = list("Residuals vs Obs. number",
@@ -351,6 +356,7 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
 #' The type "link" provides the estimates for the linear predictor of the mean. The type "precision" provides estimates for the precision parameters
 #' whereas the type "variance" provides estimates for the variances.
 #' @param ... Currently not used.
+#' @return A vector containing the fitted values of a *mixpoissonreg* object.
 #' @seealso
 #' \code{\link{predict.mixpoissonreg}}, \code{\link{summary.mixpoissonreg}},
 #' \code{\link{coef.mixpoissonreg}}, \code{\link{vcov.mixpoissonreg}},
@@ -364,6 +370,10 @@ plot.mixpoissonreg <- function(x, which = c(1,2,5,6),
 #' fitted(daysabs_fit)
 #' fitted(daysabs_fit, type = "precision")
 #' }
+#' 
+#' daysabs_prog <- mixpoissonreg(daysabs ~ prog, data = Attendance)
+#' fitted(daysabs_prog)
+#' 
 #' @export
 fitted.mixpoissonreg <- function(object, type = c("response", "link", "precision", "variance"), ...) {
   fit <- object
@@ -434,6 +444,9 @@ fitted.mixpoissonreg <- function(object, type = c("response", "link", "precision
 #' @param nsim_pred number of means and predictions to be generated in each step of the simulation. The default is set to 100.
 #' @param nsim_pred_y number of response variables generated for each pair of mean and precision to compute the prediction intervals. The default is set to 100.
 #' @param ... further arguments passed to or from other methods.
+#' @return A vector containing the predicted values if \code{se.fit=FALSE}, a list with 
+#' elements *fit* and *se.fit* if \code{se.fit=TRUE}, and a matrix if \code{interval}
+#' is set to *confidence* or *prediction*.
 #' @details
 #' The \code{se.fit} argument only returns a non-NA vector for type = 'link', that is, on the scale of the linear predictor for the mean parameter. For the response scale,
 #' one can obtain confidence or prediction intervals. It is important to notice that confidence intervals *must not* be used for future observations as they will underestimate
@@ -453,6 +466,10 @@ fitted.mixpoissonreg <- function(object, type = c("response", "link", "precision
 #' predict(daysabs_fit, interval = "confidence")
 #' predict(daysabs_fit, type = "link", se.fit = TRUE)
 #' }
+#' 
+#' daysabs_prog <- mixpoissonreg(daysabs ~ prog, data = Attendance)
+#' predict(daysabs_prog)
+#' 
 #' @export
 predict.mixpoissonreg <- function(object, newdata = NULL, type = c("response", "link", "precision", "variance"), se.fit = FALSE,
                                   interval = c("none", "confidence", "prediction"), level = 0.95, nsim_pred = 100, nsim_pred_y = 100, ...) {
@@ -795,6 +812,7 @@ predict.mixpoissonreg <- function(object, newdata = NULL, type = c("response", "
 #' @param object an object of class "mixpoissonreg" containing results from the fitted model.
 #' @param parameters a string to determine which coefficients should be extracted: 'all' extracts all coefficients, 'mean' extracts the coefficients of the mean parameters and 'precision' extracts coefficients of the precision parameters.
 #' @param ... further arguments passed to or from other methods.
+#' @return A matrix containing the covariance matrix of a *mixpoissonreg* object.
 #' @seealso
 #' \code{\link{coef.mixpoissonreg}}
 #' @examples
@@ -806,6 +824,10 @@ predict.mixpoissonreg <- function(object, newdata = NULL, type = c("response", "
 #' vcov(daysabs_fit)
 #' vcov(daysabs_fit, parameters = "mean")
 #' }
+#' 
+#' daysabs_prog <- mixpoissonreg(daysabs ~ prog, data = Attendance)
+#' vcov(daysabs_prog)
+#' 
 #' @export
 vcov.mixpoissonreg <- function(object, parameters = c("all", "mean", "precision"), ...) {
   if (length(parameters) > 1) {
@@ -845,6 +867,7 @@ vcov.mixpoissonreg <- function(object, parameters = c("all", "mean", "precision"
 #' @param object object of class "mixpoissonreg" containing results from the fitted model.
 #' @param parameters a string to determine which coefficients should be extracted: 'all' extracts all coefficients, 'mean' extracts the coefficients of the mean parameters and 'precision' extracts coefficients of the precision parameters.
 #' @param ... further arguments passed to or from other methods.
+#' @return A vector containing the coefficients of a *mixpoissonreg* object.
 #' @seealso
 #' \code{\link{vcov.mixpoissonreg}}
 #' @examples
@@ -856,6 +879,10 @@ vcov.mixpoissonreg <- function(object, parameters = c("all", "mean", "precision"
 #' coef(daysabs_fit)
 #' coef(daysabs_fit, parameters = "precision")
 #' }
+#' 
+#' daysabs_prog <- mixpoissonreg(daysabs ~ prog, data = Attendance)
+#' coef(daysabs_prog)
+#' 
 #' @export
 coef.mixpoissonreg <- function(object, parameters = c("all", "mean", "precision"), ...) {
   parameters <- rlang::arg_match(parameters)
@@ -886,6 +913,8 @@ coef.mixpoissonreg <- function(object, parameters = c("all", "mean", "precision"
 #' @param x an object of class "mixpoissonreg" containing results from the fitted model.
 #' @param parameters characters the parameters to be chosen. The options are 'mean' and 'precision'.
 #' @param ... Currently not used.
+#' @return An object of class \code{c("terms", "formula")} which contains 
+#' the terms representation of a symbolic model.
 #' @noRd
 #' @export
 
@@ -901,6 +930,8 @@ terms.mixpoissonreg <- function(x, parameters = c("mean", "precision"), ...){
 #' @description Function providing a summary of results related to mixed Poisson regression models.
 #' @param object an object of class "mixpoissonreg" containing results from the fitted model.
 #' @param ... further arguments passed to or from other methods.
+#' @return An object of class \code{summary_mixpoissonreg} containing several
+#' informations of a *mixpoissonreg* object.
 #' @seealso
 #' \code{\link{plot.mixpoissonreg}}, \code{\link{autoplot.mixpoissonreg}},
 #' \code{\link{local_influence_plot.mixpoissonreg}}, \code{\link{local_influence_autoplot.mixpoissonreg}}
@@ -916,6 +947,10 @@ terms.mixpoissonreg <- function(x, parameters = c("mean", "precision"), ...){
 #' prog | gender + math + prog, data = Attendance)
 #' summary(daysabs_fit_ml)
 #' }
+#' 
+#' daysabs_prog <- mixpoissonreg(daysabs ~ prog, data = Attendance)
+#' summary(daysabs_prog)
+#' 
 #' @export
 summary.mixpoissonreg <- function(object, ...) {
   ans <- list()
@@ -964,6 +999,7 @@ summary.mixpoissonreg <- function(object, ...) {
 #' @description Provides a brief description of results related to mixed Poisson regression models.
 #' @param x object of class "mixpoissonreg" containing results from the fitted model.
 #' @param ... further arguments passed to or from other methods.
+#' @return Called for its side effects.
 #' @noRd
 #' @export
 
@@ -1001,6 +1037,7 @@ print.mixpoissonreg <- function(x, ...) {
 #' @description Provides a brief description of results related to mixed Poisson regression models.
 #' @param x object of class "summary_mixpoissonreg" containing results of summary method applied to a fitted model.
 #' @param ... further arguments passed to or from other methods.
+#' @return Called for its side effects.
 #' @noRd
 #' @export
 print.summary_mixpoissonreg <- function(x, ...) {
@@ -1073,6 +1110,7 @@ print.summary_mixpoissonreg <- function(x, ...) {
 #' @param type the type of residual to be returned. Currently, the options are 'pearson' or 'score'. The default is set to 'pearson'. Notice that these
 #' residuals coincide for Negative-Binomial models.
 #' @param ... Currently not used.
+#' @return A vector containing the residuals of a *mixpoissonreg* object.
 #' @seealso
 #' \code{\link{plot.mixpoissonreg}}, \code{\link{predict.mixpoissonreg}},
 #' \code{\link{autoplot.mixpoissonreg}}, \code{\link{summary.mixpoissonreg}}
@@ -1087,6 +1125,10 @@ print.summary_mixpoissonreg <- function(x, ...) {
 #' #Score residuals:
 #' residuals(daysabs_fit, type = "score")
 #' }
+#' 
+#' daysabs_prog <- mixpoissonreg(daysabs ~ prog, data = Attendance)
+#' residuals(daysabs_prog)
+#' 
 #' @export
 residuals.mixpoissonreg <- function(object, type = c("pearson", "score"), ...) {
   type <- rlang::arg_match(type)
@@ -1138,6 +1180,8 @@ if(is.null(object$y)){
 #' @description Function to compute the log-likelihood at the estimated parameters for mixed Poisson regression models.
 #' @param object an object of class "mixpoissonreg" containing results from the fitted model.
 #' @param ... further arguments passed to or from other methods.
+#' @return Returns an object of class \code{LogLik} containing the log-likelihood
+#' of the fitted *mixpoissonreg* object.
 #' @seealso
 #' \code{\link{vcov.mixpoissonreg}}
 #' @examples
@@ -1148,6 +1192,10 @@ if(is.null(object$y)){
 #' prog | gender + math + prog, data = Attendance)
 #' logLik(daysabs_fit)
 #' }
+#' 
+#' daysabs_prog <- mixpoissonreg(daysabs ~ prog, data = Attendance)
+#' logLik(daysabs_prog)
+#' 
 #' @export
 logLik.mixpoissonreg <- function(object, ...){
   logLik <- object$logLik
@@ -1167,6 +1215,7 @@ logLik.mixpoissonreg <- function(object, ...){
 #' @param level the confidence level required.
 #' @param parm a specification of which parameters are to be given confidence intervals, either a vector of numbers or a vector of names. If missing, all parameters are considered.
 #' @param ... further arguments passed to or from other methods.
+#' @return Called for its side effects.
 #' @noRd
 #' @export
 coeftest.mixpoissonreg <- function(x, vcov. = NULL, df = Inf, ...){
@@ -1174,6 +1223,7 @@ coeftest.mixpoissonreg <- function(x, vcov. = NULL, df = Inf, ...){
 }
 
 #' @noRd
+#' @return Called for its side effects.
 #' @export
 
 coefci.mixpoissonreg <- function(x, parm = NULL, level = 0.95, vcov. = NULL, df = Inf, ...){

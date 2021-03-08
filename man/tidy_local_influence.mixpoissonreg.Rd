@@ -56,6 +56,9 @@ precision-related covariates. The default is NULL.}
 
 \item{...}{Currently not used.}
 }
+\value{
+A tibble containing the perturbations schemes as columns.
+}
 \description{
 Functions to provide tidy outputs of local influence diagnostics. \code{tidy_local_influence.mixpoissonreg}
 provides a \code{\link[tibble:tibble]{tibble::tibble()}} containing the local influence diagnostics under the chosen perturbation schemes.
@@ -74,6 +77,10 @@ daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
 prog | gender + math + prog, data = Attendance, envelope = 100)
 tidy_local_influence(daysabs_fit_ml, perturbation = "case_weights")
 }
+
+daysabs_prog <- mixpoissonreg(daysabs ~ prog | prog, data = Attendance)
+tidy_local_influence(daysabs_prog)
+
 }
 \references{
 DOI:10.1007/s11222-015-9601-6 \doi{10.1007/s11222-015-9601-6}(Barreto-Souza and Simas; 2016)

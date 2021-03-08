@@ -23,6 +23,19 @@
 #' the model must be fitted with 'x' set to TRUE, and for hatvalues with respect to the precision the model must be fitted with 'w' set to TRUE.
 #' @param do.coef logical indicating if the the approximation to the change of coefficients values after case removal are desired. The model must be fitted with x = TRUE. See details for further explanations.
 #' @param ... Currently not used.
+#' @return The method \code{influence.mixpoissonreg} returns a list containing
+#' *hat.mean*, a vector containing the hat values with respect to the mean, *hat.precision*, 
+#' a vector containing the hat values with respect to the precision, *coefficients.mean* (if \code{do.coef=TRUE}), a matrix
+#' containing the first
+#' order approximations for the mean-related coefficients after the removal
+#' of each observation, *coefficients.precision* (if \code{do.coef=TRUE}), a matrix containing the first
+#' order approximations for the precision-related coefficients after the removal
+#' of each observation, *pear.res*, a vector containing the Pearson residuals,
+#' *score.res*, a vector containing the score residuals.
+#' 
+#' The *cooks.distance.mixpoissonreg* returns a vector containing the Cook's distances.
+#' 
+#' The *hatvalues.mixpoissonreg* returns a vector containing the hat values.
 #' @details
 #' For hat values of mixed Poisson regression models, we follow Zhu et al. (2001) to consider the negative of the hessian of the Q-function as weight matrix, and follow
 #' Pregibon (1981) to define the 'hat' matrix with respect to this weight matrix. We can consider the hessian of the Q-function with respect to mean-related parameters,

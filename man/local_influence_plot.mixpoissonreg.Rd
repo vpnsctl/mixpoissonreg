@@ -87,12 +87,7 @@ precision-related covariates. The default is NULL.}
 \item{...}{other graphical arguments to be passed.}
 }
 \value{
-a list containing the resulting perturbation schemes as elements. Each returned element has an attribute 'benchmark', which for
-the conformal normal curvature, it is computed following Zhu and Lee (2001), and for normal curvature it is computed following Verbeke and ...
-If the 'direction' is 'max.eigen' the 'benchmark' attribute is NA.
-
-The 'mean_explanatory', 'precision_explanatory' and 'simultaneous_explanatory' elements of the list contain an attribute 'covariates' indicating
-which covariates were used in the perturbation schemes.
+Called for its side effects.
 }
 \description{
 Local influence plots for mixed Poisson regression models. Currently the conformal normal and normal curvatures are available
@@ -128,6 +123,10 @@ daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
 prog | gender + math + prog, data = Attendance, envelope = 100)
 local_influence_plot(daysabs_fit_ml, which = 2)
 }
+
+daysabs_progML <- mixpoissonregML(daysabs ~ prog | prog, data = Attendance)
+local_influence_plot(daysabs_progML)
+
 }
 \references{
 DOI:10.1007/s11222-015-9601-6 \doi{10.1007/s11222-015-9601-6}(Barreto-Souza and Simas; 2016)

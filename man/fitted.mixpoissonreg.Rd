@@ -15,6 +15,9 @@ whereas the type "variance" provides estimates for the variances.}
 
 \item{...}{Currently not used.}
 }
+\value{
+A vector containing the fitted values of a \emph{mixpoissonreg} object.
+}
 \description{
 Function providing the fitted means, linear predictors, precisions or variances for mixed Poisson regression models.
 }
@@ -27,6 +30,10 @@ prog | gender + math + prog, data = Attendance)
 fitted(daysabs_fit)
 fitted(daysabs_fit, type = "precision")
 }
+
+daysabs_prog <- mixpoissonreg(daysabs ~ prog, data = Attendance)
+fitted(daysabs_prog)
+
 }
 \seealso{
 \code{\link{predict.mixpoissonreg}}, \code{\link{summary.mixpoissonreg}},

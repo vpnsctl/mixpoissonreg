@@ -17,6 +17,10 @@ Must be strictly greater than 0 and less than 1. Defaults to 0.95, which corresp
 
 \item{...}{Additional arguments. Currently not used.}
 }
+\value{
+A \emph{tibble} containing the coefficients of the fitted \emph{mixpoissonreg}
+object along with its estimates, std. errors, z-statistics and p-values.
+}
 \description{
 Tidy returns a \code{\link[tibble:tibble]{tibble::tibble()}} containing
 informations on the coefficients of the model, such as the estimated parameters,

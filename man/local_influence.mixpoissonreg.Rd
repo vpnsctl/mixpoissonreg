@@ -85,6 +85,10 @@ daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
 prog | gender + math + prog, data = Attendance, envelope = 100)
 local_influence_plot(daysabs_fit_ml, which = 1)
 }
+
+daysabs_progML <- mixpoissonregML(daysabs ~ prog | prog, data = Attendance)
+local_influence(daysabs_progML)
+
 }
 \references{
 DOI:10.1007/s11222-015-9601-6 \doi{10.1007/s11222-015-9601-6}(Barreto-Souza and Simas; 2016)

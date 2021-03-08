@@ -13,6 +13,9 @@
 
 \item{...}{further arguments passed to or from other methods.}
 }
+\value{
+A vector containing the coefficients of a \emph{mixpoissonreg} object.
+}
 \description{
 Extract model coefficients of fitted mixed Poisson regression models. The parameters arguments allows one to chose if all coefficients should be extracted,
 with \code{parameters = 'all'}; if the coefficients of the mean-related parameters should be extracted, with \code{parameters = 'mean'}; if the coefficients of the
@@ -27,6 +30,10 @@ prog | gender + math + prog, data = Attendance)
 coef(daysabs_fit)
 coef(daysabs_fit, parameters = "precision")
 }
+
+daysabs_prog <- mixpoissonreg(daysabs ~ prog, data = Attendance)
+coef(daysabs_prog)
+
 }
 \seealso{
 \code{\link{vcov.mixpoissonreg}}
