@@ -16,7 +16,37 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Description of the dataset
+# The *mixpoissonreg* package
+
+The *mixpoissonreg* package deals with regression models with response variables being count data. 
+It is aimed towards overdispersed data. It currently provides implementation of two regression models: Negative Binomial and Poisson Inverse Gaussian regression models. For both of these models there are two estimation procedures implemented: the EM-algorithm and direct maximization of the 
+log-likelihood function.  The definition of both these regression models along with the EM-algorithm approach
+for them can be found at [Barreto-Souza and Simas (2016)](https://doi.org/10.1007/s11222-015-9601-6). 
+
+
+# Useful Resources
+
+* The [*mixpoissonreg* home page](https://vpnsctl.github.io/mixpoissonreg/) contains the documentation (with examples), vignettes, etc.
+
+* The *mixpoissonreg* Documentation can be accessed directly through [this link](https://vpnsctl.github.io/mixpoissonreg/reference/index.html)
+
+* Currently, the *mixpoissonreg* package has the following vignettes:
+
+    * [Getting started: Introduction to the *mixpoissonreg* package](https://vpnsctl.github.io/mixpoissonreg/articles/mixpoissonreg.html)
+    * [Analyzing overdispersed count data with the *mixpoissonreg* package](https://vpnsctl.github.io/mixpoissonreg/articles/tutorial-mixpoissonreg.html)
+    * [Maximum-likelihood estimation with the *mixpoissonreg* package](https://vpnsctl.github.io/mixpoissonreg/articles/ml-mixpoissonreg.html)
+    * [Building and customizing base-R diagnostic plots with the mixpoissonreg package](https://vpnsctl.github.io/mixpoissonreg/articles/plots-mixpoissonreg.html)
+    * [Building and customizing ggplot2-based diagnostic plots with the mixpoissonreg package](https://vpnsctl.github.io/mixpoissonreg/articles/ggplot2-plots-mixpoissonreg.html)
+    * [Global and local influence analysis with the *mixpoissonreg* package](https://vpnsctl.github.io/mixpoissonreg/articles/influence-mixpoissonreg.html)
+    * [Confidence and prediction intervals with  the *mixpoissonreg* package](https://vpnsctl.github.io/mixpoissonreg/articles/intervals-mixpoissonreg.html)
+    * [*mixpoissonreg* in the *tidyverse*](https://vpnsctl.github.io/mixpoissonreg/articles/tidyverse-mixpoissonreg.html)
+
+* Theoretical details can be obtained in [Barreto-Souza and Simas (2016)](https://doi.org/10.1007/s11222-015-9601-6) and also in its [Supplementary Material](https://link.springer.com/article/10.1007%2Fs11222-015-9601-6#Sec23)
+
+
+# Analyzing overdispersed count data with the mixpoissonreg package
+
+## Description of the dataset
 
 We will consider the dataset studied in [Barreto-Souza and Simas (2016)](https://doi.org/10.1007/s11222-015-9601-6). The motivation for this study 
 was to assess the attendance of high school students with respect to their gender, math score and which program they are enrolled. The data consists on 314 high school juniors from two urban high schools. The response variable, denoted by *y*, and the covariates of interest are:
@@ -31,7 +61,7 @@ was to assess the attendance of high school students with respect to their gende
 
 * *vocational*: indicator of vocational program.
 
-# Model fitting and inference
+## Model fitting and inference
 
 It is well-known (see, for instance, https://stats.idre.ucla.edu/r/dae/negative-binomial-regression/) that the Poisson regression is not adequate for fitting this dataset. They also conclude that, when compared to the Poisson regression model, the Negative Binomial is more adequate. Therefore, this indicates that the data is overdispersed.
 
@@ -144,7 +174,7 @@ pred_values_pig <- predict(fit_pig_red, newdata = new_cov)
 bind_cols(new_cov, "Predicted_Means_PIG" = pred_values_pig)
 ```
 
-# Residual analysis
+## Residual analysis
 
 Let us fit the reduced models with envelopes. We will fit these models with the Pearson residual.
 
@@ -158,7 +188,7 @@ fit_pig_red_env <- mixpoissonregML(daysabs ~ gender + math + prog | prog,
                              model = "PIG", data = Attendance, envelope = 20)
 ```
 
-Since this is an illustration, we are using `envelope = 50` to reduce computational cost.
+Since this is an illustration, we are using `envelope = 20` to reduce computational cost.
 
 Let us check the coverage of the envelopes for the NB fit:
 
@@ -197,7 +227,7 @@ Notice that in Residuals vs. Obs. number, the residuals appear to be randomly di
 and with no noticeable trend. Thus, also suggesting an adequate fit, together with
 the quantile-quantile plot with simulated envelopes. 
 
-# Influence analysis
+## Influence analysis
 
 Let us begin with the global influence analysis. First, for the NB regression model:
 
