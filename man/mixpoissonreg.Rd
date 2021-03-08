@@ -223,6 +223,9 @@ lmtest::lrtest(daysabs_fit, daysabs_fit_red)
 lmtest::waldtest(daysabs_fit, daysabs_fit_red)
 }
 
+daysabs_prog <- mixpoissonreg(daysabs ~ prog, data = Attendance)
+summary(daysabs_prog)
+
 }
 \references{
 DOI:10.1007/s11222-015-9601-6 \doi{10.1007/s11222-015-9601-6}(Barreto-Souza and Simas; 2016)

@@ -13,6 +13,9 @@
 
 \item{...}{further arguments passed to or from other methods.}
 }
+\value{
+A matrix containing the covariance matrix of a \emph{mixpoissonreg} object.
+}
 \description{
 Returns the variance-covariance matrix of the parameters for fitted mixed Poisson regression models. The \code{parameters} argument
 indicates for which parameters the variance-covariance matrix should be computed, namely, 'mean' for mean-relatex parameters or 'precision' for precision-related parameters.
@@ -26,6 +29,10 @@ prog | gender + math + prog, data = Attendance)
 vcov(daysabs_fit)
 vcov(daysabs_fit, parameters = "mean")
 }
+
+daysabs_prog <- mixpoissonreg(daysabs ~ prog, data = Attendance)
+vcov(daysabs_prog)
+
 }
 \seealso{
 \code{\link{coef.mixpoissonreg}}

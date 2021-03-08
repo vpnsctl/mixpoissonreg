@@ -39,6 +39,11 @@ predictions intervals, the fit must be done with \code{x = TRUE} and \code{w = T
 
 \item{...}{further arguments passed to or from other methods.}
 }
+\value{
+A vector containing the predicted values if \code{se.fit=FALSE}, a list with
+elements \emph{fit} and \emph{se.fit} if \code{se.fit=TRUE}, and a matrix if \code{interval}
+is set to \emph{confidence} or \emph{prediction}.
+}
 \description{
 Function to obtain various predictions based on the fitted mixed Poisson regression models.
 }
@@ -57,6 +62,10 @@ prog | gender + math + prog, data = Attendance)
 predict(daysabs_fit, interval = "confidence")
 predict(daysabs_fit, type = "link", se.fit = TRUE)
 }
+
+daysabs_prog <- mixpoissonreg(daysabs ~ prog, data = Attendance)
+predict(daysabs_prog)
+
 }
 \seealso{
 \code{\link{fitted.mixpoissonreg}}, \code{\link{summary.mixpoissonreg}}, \code{\link{plot.mixpoissonreg}}, \code{\link{autoplot.mixpoissonreg}},

@@ -39,6 +39,21 @@ if 'hat' is set to 'precision', the model must be fitted with 'w' set to TRUE.}
 
 \item{do.coef}{logical indicating if the the approximation to the change of coefficients values after case removal are desired. The model must be fitted with x = TRUE. See details for further explanations.}
 }
+\value{
+The method \code{influence.mixpoissonreg} returns a list containing
+\emph{hat.mean}, a vector containing the hat values with respect to the mean, \emph{hat.precision},
+a vector containing the hat values with respect to the precision, \emph{coefficients.mean} (if \code{do.coef=TRUE}), a matrix
+containing the first
+order approximations for the mean-related coefficients after the removal
+of each observation, \emph{coefficients.precision} (if \code{do.coef=TRUE}), a matrix containing the first
+order approximations for the precision-related coefficients after the removal
+of each observation, \emph{pear.res}, a vector containing the Pearson residuals,
+\emph{score.res}, a vector containing the score residuals.
+
+The \emph{cooks.distance.mixpoissonreg} returns a vector containing the Cook's distances.
+
+The \emph{hatvalues.mixpoissonreg} returns a vector containing the hat values.
+}
 \description{
 These functions provides global influence diagnostic quantities such as Cook's distance, hat values, generalized Cook's distance (through argument
 on \code{cooks.distance.mixpoissonreg} function), likelihood displacement (through argument

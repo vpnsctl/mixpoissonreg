@@ -179,6 +179,9 @@
 #' # Wald test:
 #' lmtest::waldtest(daysabs_fit, daysabs_fit_red)
 #' }
+#' 
+#' daysabs_prog <- mixpoissonreg(daysabs ~ prog, data = Attendance)
+#' summary(daysabs_prog)
 #'
 #' @rdname mixpoissonreg
 #' @export
@@ -696,6 +699,9 @@ mixpoissonreg.fit <- function(x, y, w = NULL, link.mean = c("log", "sqrt"),
 #' # Wald test:
 #' lmtest::waldtest(daysabs_fit_ml, daysabs_fit_ml_red)
 #' }
+#' 
+#' daysabs_progML <- mixpoissonregML(daysabs ~ prog, data = Attendance)
+#' summary(daysabs_progML)
 #'
 #' @rdname mixpoissonregML
 #' @export

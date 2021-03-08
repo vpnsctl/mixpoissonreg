@@ -14,6 +14,9 @@ residuals coincide for Negative-Binomial models.}
 
 \item{...}{Currently not used.}
 }
+\value{
+A vector containing the residuals of a \emph{mixpoissonreg} object.
+}
 \description{
 Function to return 'pearson' or 'score' residuals for mixed Poisson regression models.
 }
@@ -28,6 +31,10 @@ residuals(daysabs_fit)
 #Score residuals:
 residuals(daysabs_fit, type = "score")
 }
+
+daysabs_prog <- mixpoissonreg(daysabs ~ prog, data = Attendance)
+residuals(daysabs_prog)
+
 }
 \seealso{
 \code{\link{plot.mixpoissonreg}}, \code{\link{predict.mixpoissonreg}},

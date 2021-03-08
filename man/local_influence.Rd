@@ -14,6 +14,10 @@ local_influence_plot(model, ...)
 
 \item{...}{further arguments passed to or from other methods.}
 }
+\value{
+The \emph{local_influence} method returns a list containing the resulting perturbation schemes as elements.
+The \emph{local_influence_plot} is called for its side effects.
+}
 \description{
 Local Influence Diagnostics
 }

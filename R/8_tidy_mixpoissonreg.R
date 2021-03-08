@@ -159,6 +159,8 @@ glance.mixpoissonreg <- function(x, ...){
 #' @param conf.level The confidence level to use for the confidence interval if conf.int = TRUE.
 #' Must be strictly greater than 0 and less than 1. Defaults to 0.95, which corresponds to a 95 percent confidence interval.
 #' @param ... Additional arguments. Currently not used.
+#' @return A *tibble* containing the coefficients of the fitted *mixpoissonreg* 
+#' object along with its estimates, std. errors, z-statistics and p-values.
 #' @seealso \code{\link{glance.mixpoissonreg}}, \code{\link{augment.mixpoissonreg}}, \code{\link{tidy_local_influence.mixpoissonreg}},
 #' \code{\link{autoplot.mixpoissonreg}}, \code{\link{local_influence_autoplot.mixpoissonreg}}
 #' @export
@@ -255,6 +257,7 @@ tidy.mixpoissonreg <- function(x, conf.int = FALSE, conf.level = 0.95, ...){
 #' @param ad.linetype	Line type for additional lines.
 #' @param ad.size	Fill colour for additional lines.
 #' @param ... other arguments passed to methods.
+#' @return Called for its side effects.
 #' @details Based on \code{autoplot.lm} from the excellent \pkg{ggfortify} package, \href{https://github.com/sinhrks/ggfortify/}{ggfortify}.
 #'
 #' sub.caption - by default the function call - is shown as a subtitle (under the x-axis title) on each plot when plots are on separate pages, or as a subtitle
@@ -271,9 +274,13 @@ tidy.mixpoissonreg <- function(x, conf.int = FALSE, conf.level = 0.95, ...){
 #' autoplot(daysabs_fit, nrow = 2)
 #'
 #' daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
-#' prog | gender + math + prog, data = Attendance, envelope = 100)
+#' prog | gender + math + prog, data = Attendance, envelope = 20)
 #' autoplot(daysabs_fit_ml, which = 2)
 #' }
+#' 
+#' daysabs_prog <- mixpoissonregML(daysabs ~ prog, data = Attendance)
+#' autoplot(daysabs_prog)
+#' 
 #' @export
 
 
@@ -780,6 +787,7 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
 #' perturbation schemes. If NULL, the 'precision-explanatory' and 'simultaneous-explanatory' perturbation schemes will be computed by perturbing all
 #' precision-related covariates. The default is NULL.
 #' @param ... Currently not used.
+#' @return A tibble containing the perturbations schemes as columns.
 #' @references
 #' DOI:10.1007/s11222-015-9601-6 \doi{10.1007/s11222-015-9601-6}(Barreto-Souza and Simas; 2016)
 #'
@@ -800,9 +808,13 @@ autoplot.mixpoissonreg <- function(object, which = c(1,2,5,6), title = list("Res
 #' tidy_local_influence(daysabs_fit)
 #'
 #' daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
-#' prog | gender + math + prog, data = Attendance, envelope = 100)
+#' prog | gender + math + prog, data = Attendance, envelope = 20)
 #' tidy_local_influence(daysabs_fit_ml, perturbation = "case_weights")
 #' }
+#' 
+#' daysabs_prog <- mixpoissonreg(daysabs ~ prog | prog, data = Attendance)
+#' tidy_local_influence(daysabs_prog)
+#' 
 #' @rdname tidy_local_influence.mixpoissonreg
 #' @export
 tidy_local_influence.mixpoissonreg <- function(model, perturbation = c("case_weights", "hidden_variable",
@@ -910,6 +922,7 @@ local_influence_benchmarks.mixpoissonreg <- function(model, perturbation = c("ca
 #' @param ad.linetype	Line type for additional lines.
 #' @param ad.size	Fill colour for additional lines.
 #' @param ... Currently not used.
+#' @return Called for its side effects.
 #' @references
 #' DOI:10.1007/s11222-015-9601-6 \doi{10.1007/s11222-015-9601-6}(Barreto-Souza and Simas; 2016)
 #'
@@ -932,9 +945,13 @@ local_influence_benchmarks.mixpoissonreg <- function(model, perturbation = c("ca
 #' local_influence_autoplot(daysabs_fit, nrow = 2)
 #'
 #' daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
-#' prog | gender + math + prog, data = Attendance, envelope = 100)
+#' prog | gender + math + prog, data = Attendance, envelope = 20)
 #' local_influence_autoplot(daysabs_fit_ml, which = 2)
 #' }
+#' 
+#' daysabs_prog <- mixpoissonreg(daysabs ~ prog | prog, data = Attendance)
+#' local_influence_autoplot(daysabs_prog)
+#' 
 #' @export
 local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), title = list("Case Weights Perturbation",
                                                                                            "Hidden Variable Perturbation",
@@ -1250,6 +1267,9 @@ local_influence_autoplot.mixpoissonreg <- function(model, which = c(1,2,3,4), ti
 #' @description Functions to provide tidy outputs or ggplot2-based plots of local influence diagnostics.
 #' @param model A model object for which local influence diagnostics are desired.
 #' @param ... additional arguments to be passed.
+#' @return The *tidy_local_influence* method returns a *tibble* containing the resulting perturbation schemes as columns.
+#' The *local_influence_benchmarks* method returns a *tibble* with the benchmarks as columns.
+#' The *local_influence_autoplot* method is called for its side effects.
 #' @details
 #' Local influence diagnostics were first introduced by Cook (1986), where several perturbation schemes were introduced and normal curvatures were obtained. Poon and Poon (1999)
 #' introduced the conformal normal curvature, which has nice properties and takes values on the unit interval \eqn{[0,1]}. Zhu and Lee (2001) following Cook (1986) and Poon and Poon (1999)

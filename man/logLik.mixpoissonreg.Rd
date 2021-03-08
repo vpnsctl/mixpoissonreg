@@ -11,6 +11,10 @@
 
 \item{...}{further arguments passed to or from other methods.}
 }
+\value{
+Returns an object of class \code{LogLik} containing the log-likelihood
+of the fitted \emph{mixpoissonreg} object.
+}
 \description{
 Function to compute the log-likelihood at the estimated parameters for mixed Poisson regression models.
 }
@@ -22,6 +26,10 @@ daysabs_fit <- mixpoissonreg(daysabs ~ gender + math +
 prog | gender + math + prog, data = Attendance)
 logLik(daysabs_fit)
 }
+
+daysabs_prog <- mixpoissonreg(daysabs ~ prog, data = Attendance)
+logLik(daysabs_prog)
+
 }
 \seealso{
 \code{\link{vcov.mixpoissonreg}}

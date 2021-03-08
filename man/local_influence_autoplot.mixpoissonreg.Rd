@@ -178,6 +178,9 @@ the top 'n.influential' observations will be identified in the plot by their ind
 
 \item{...}{Currently not used.}
 }
+\value{
+Called for its side effects.
+}
 \description{
 Function to provide customizable ggplot2-based plots of local influence diagnostics.
 }
@@ -192,9 +195,13 @@ local_influence_autoplot(daysabs_fit)
 local_influence_autoplot(daysabs_fit, nrow = 2)
 
 daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
-prog | gender + math + prog, data = Attendance, envelope = 100)
+prog | gender + math + prog, data = Attendance, envelope = 20)
 local_influence_autoplot(daysabs_fit_ml, which = 2)
 }
+
+daysabs_prog <- mixpoissonreg(daysabs ~ prog | prog, data = Attendance)
+local_influence_autoplot(daysabs_prog)
+
 }
 \references{
 DOI:10.1007/s11222-015-9601-6 \doi{10.1007/s11222-015-9601-6}(Barreto-Souza and Simas; 2016)

@@ -92,6 +92,9 @@ envelopes, a qqline passing through the first and third quartiles of a standard 
 
 \item{...}{graphical parameters to be passed.}
 }
+\value{
+It is called for its side effects.
+}
 \description{
 Currently there are six plots available. They contain residual analysis and global influence diagnostics. The plots are selectable by
 the \code{which} argument. The plots are: Residuals vs. obs. numbers; Normal Q-Q plots, which may contain simulated envelopes, if the fitted object
@@ -117,10 +120,14 @@ plot(daysabs_fit, which = 1:6)
 plot(daysabs_fit)
 
 daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
-prog | prog, data = Attendance, envelope = 100)
+prog | prog, data = Attendance, envelope = 20)
 
 plot(daysabs_fit_ml, which = 2)
 }
+
+daysabs_prog <- mixpoissonreg(daysabs ~ prog, data = Attendance)
+plot(daysabs_prog)
+
 }
 \references{
 DOI:10.1007/s11222-015-9601-6 \doi{10.1007/s11222-015-9601-6}(Barreto-Souza and Simas; 2016)

@@ -68,9 +68,13 @@
 #' local_influence(daysabs_fit)
 #'
 #' daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
-#' prog | gender + math + prog, data = Attendance, envelope = 100)
+#' prog | gender + math + prog, data = Attendance, envelope = 20)
 #' local_influence_plot(daysabs_fit_ml, which = 1)
 #' }
+#' 
+#' daysabs_progML <- mixpoissonregML(daysabs ~ prog | prog, data = Attendance)
+#' local_influence(daysabs_progML)
+#' 
 #' @export
 local_influence.mixpoissonreg <- function(model, perturbation = c("case_weights", "hidden_variable",
                                                                   "mean_explanatory", "precision_explanatory",
@@ -339,12 +343,7 @@ loc_infl
 #' @param cex.oma.main controls the size of the sub.caption only if that is above the figures when there is more than one.
 #' @param include.modeltype logical. Indicates whether the model type ('NB' or 'PIG') should be displayed on the captions.
 #' @param ... other graphical arguments to be passed.
-#' @return a list containing the resulting perturbation schemes as elements. Each returned element has an attribute 'benchmark', which for
-#' the conformal normal curvature, it is computed following Zhu and Lee (2001), and for normal curvature it is computed following Verbeke and ...
-#' If the 'direction' is 'max.eigen' the 'benchmark' attribute is NA.
-#'
-#' The 'mean_explanatory', 'precision_explanatory' and 'simultaneous_explanatory' elements of the list contain an attribute 'covariates' indicating
-#' which covariates were used in the perturbation schemes.
+#' @return Called for its side effects.
 #' @details
 #' \code{local_influence.mixpoissonreg} provides local influence diagnostics for mixed Poisson regression models for all perturbation schemes considered in
 #' Barreto-Souza and Simas (2016), for normal and conformal normal curvatures. Further, it is also provides results for the canonical directions, which is called
@@ -381,9 +380,13 @@ loc_infl
 #' local_influence_plot(daysabs_fit)
 #'
 #' daysabs_fit_ml <- mixpoissonregML(daysabs ~ gender + math +
-#' prog | gender + math + prog, data = Attendance, envelope = 100)
+#' prog | gender + math + prog, data = Attendance, envelope = 20)
 #' local_influence_plot(daysabs_fit_ml, which = 2)
 #' }
+#' 
+#' daysabs_progML <- mixpoissonregML(daysabs ~ prog | prog, data = Attendance)
+#' local_influence_plot(daysabs_progML)
+#' 
 #' @export
 
 local_influence_plot.mixpoissonreg <- function(model, which = c(1,2,3,4),
@@ -544,6 +547,8 @@ invisible()
 #' @title Local Influence Diagnostics
 #' @param model an object for which the local influence is desired
 #' @param ... further arguments passed to or from other methods.
+#' @return The *local_influence* method returns a list containing the resulting perturbation schemes as elements.
+#' The *local_influence_plot* is called for its side effects.
 #' @details
 #' \code{local_influence} is a generic function to return local influence diagnostics under different perturbation schemes and different directions.
 #' \code{local_influence_plot} is a generic function to provide friendly plots of such diagnostics.
