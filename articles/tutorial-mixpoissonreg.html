@@ -100,13 +100,13 @@
 
       
 
-      </header><script src="tutorial-mixpoissonreg_files/header-attrs-2.7/header-attrs.js"></script><div class="row">
+      </header><script src="tutorial-mixpoissonreg_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Analyzing overdispersed count data with the mixpoissonreg package</h1>
                         <h4 class="author">Wagner Barreto-Souza and Alexandre B. Simas</h4>
             
-            <h4 class="date">2021-03-08</h4>
+            <h4 class="date">2021-03-11</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/vpnsctl/mixpoissonreg/blob/master/vignettes/tutorial-mixpoissonreg.Rmd"><code>vignettes/tutorial-mixpoissonreg.Rmd</code></a></small>
       <div class="hidden name"><code>tutorial-mixpoissonreg.Rmd</code></div>
@@ -191,28 +191,28 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Pearson residuals:</span>
 <span class="co">#&gt;      RSS      Min       1Q   Median       3Q      Max </span>
-<span class="co">#&gt; 239.1932  -1.0839  -0.6058  -0.3062   0.2518   4.1190 </span>
+<span class="co">#&gt; 239.2040  -1.0836  -0.6058  -0.3062   0.2519   4.1196 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Coefficients modeling the mean (with  link):</span>
 <span class="co">#&gt;                 Estimate Std.error z-value Pr(&gt;|z|)    </span>
-<span class="co">#&gt; (Intercept)     2.750791  0.165376  16.634  &lt; 2e-16 ***</span>
-<span class="co">#&gt; gendermale     -0.251195  0.136861  -1.835  0.06645 .  </span>
-<span class="co">#&gt; math           -0.006730  0.002679  -2.512  0.01200 *  </span>
-<span class="co">#&gt; progAcademic   -0.423365  0.148448  -2.852  0.00435 ** </span>
-<span class="co">#&gt; progVocational -1.260746  0.203430  -6.197 5.74e-10 ***</span>
+<span class="co">#&gt; (Intercept)     2.750853  0.165416  16.630  &lt; 2e-16 ***</span>
+<span class="co">#&gt; gendermale     -0.251161  0.136873  -1.835  0.06651 .  </span>
+<span class="co">#&gt; math           -0.006730  0.002679  -2.512  0.01202 *  </span>
+<span class="co">#&gt; progAcademic   -0.423484  0.148479  -2.852  0.00434 ** </span>
+<span class="co">#&gt; progVocational -1.260924  0.203436  -6.198 5.71e-10 ***</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Coefficients modeling the precision (with  link):</span>
 <span class="co">#&gt;                 Estimate Std.error z-value Pr(&gt;|z|)    </span>
-<span class="co">#&gt; (Intercept)     1.212095  0.438390   2.765 0.005694 ** </span>
-<span class="co">#&gt; gendermale     -0.114162  0.304677  -0.375 0.707886    </span>
-<span class="co">#&gt; math           -0.005688  0.006098  -0.933 0.350952    </span>
-<span class="co">#&gt; progAcademic   -1.284970  0.386300  -3.326 0.000880 ***</span>
-<span class="co">#&gt; progVocational -1.611123  0.475586  -3.388 0.000705 ***</span>
+<span class="co">#&gt; (Intercept)     1.211252  0.438442   2.763 0.005734 ** </span>
+<span class="co">#&gt; gendermale     -0.114332  0.304682  -0.375 0.707475    </span>
+<span class="co">#&gt; math           -0.005686  0.006098  -0.932 0.351111    </span>
+<span class="co">#&gt; progAcademic   -1.284018  0.386350  -3.323 0.000889 ***</span>
+<span class="co">#&gt; progVocational -1.610037  0.475613  -3.385 0.000711 ***</span>
 <span class="co">#&gt; ---</span>
 <span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Efron's pseudo R-squared:  0.1861612 </span>
-<span class="co">#&gt; Number of iterations of the EM algorithm = 1733</span></code></pre></div>
+<span class="co">#&gt; Efron's pseudo R-squared:  0.1861608 </span>
+<span class="co">#&gt; Number of iterations of the EM algorithm = 2632</span></code></pre></div>
 <p>These summaries suggest that <em>gender</em> and <em>math</em> covariates are not significant to explain the precision parameter. So we will obtain fits for the NB and PIG regressions without these variables for the precision paramters, then we will perform Wald and likelihood-ratio tests to confirm that indeed they are not significant.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit_nb_red</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixpoissonreg.html">mixpoissonreg</a></span><span class="op">(</span><span class="va">daysabs</span> <span class="op">~</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">math</span> <span class="op">+</span> <span class="va">prog</span> <span class="op">|</span> <span class="va">prog</span>,
@@ -305,7 +305,7 @@
 <span class="co">#&gt; Model 2: daysabs ~ gender + math + prog | gender + math + prog</span>
 <span class="co">#&gt;   Res.Df Df  Chisq Pr(&gt;Chisq)</span>
 <span class="co">#&gt; 1    306                     </span>
-<span class="co">#&gt; 2    304  2 0.9306     0.6279</span></code></pre></div>
+<span class="co">#&gt; 2    304  2 0.9304      0.628</span></code></pre></div>
 <p>Now, let us perform likelihood tests:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">lmtest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/lrtest.html">lrtest</a></span><span class="op">(</span><span class="va">fit_nb_red</span>, <span class="va">fit_nb_full</span><span class="op">)</span>
@@ -325,7 +325,7 @@
 <span class="co">#&gt; Model 2: daysabs ~ gender + math + prog | gender + math + prog</span>
 <span class="co">#&gt;   #Df  LogLik Df  Chisq Pr(&gt;Chisq)</span>
 <span class="co">#&gt; 1   8 -857.52                     </span>
-<span class="co">#&gt; 2  10 -857.05  2 0.9508     0.6216</span></code></pre></div>
+<span class="co">#&gt; 2  10 -857.05  2 0.9507     0.6217</span></code></pre></div>
 <p>The above tests indicate that, indeed, <em>gender</em> and <em>math</em> are not significant for the precision parameter. So we will work with the reduced models.</p>
 <p>Let us also build a small data frame containing the estimated mean, <span class="math inline">\(\widehat{\mu}\)</span>, for some combinations of the covariates. First for the NB regression model:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
@@ -463,7 +463,7 @@
 <span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Efron's pseudo R-squared:  0.1858035 </span>
-<span class="co">#&gt; Percentage of residuals within the envelope = 95.5414</span>
+<span class="co">#&gt; Percentage of residuals within the envelope = 94.9045</span>
 <span class="co">#&gt; Number of function calls by 'optim' = 6</span></code></pre></div>
 <p>By looking at both coverages, the assumption of the response following a mixed Poisson distribution seems reasonable. Furthermore, both regressions seem to provide adequate fit.</p>
 <p>Also, notice that, even though the fits seem adequate, their Efron’s <span class="math inline">\(R^2\)</span> are low, around 18%. This is due to the high overdispersion of the responses, together with the fact that the mean is not a good predictor for the response when using counting data. Therefore, for datasets with low Efron’s pseudo-<span class="math inline">\(R^2\)</span>, such as this one, we recommend to use the mode. We plan on providing a function from prediction based on the mode in the future.</p>

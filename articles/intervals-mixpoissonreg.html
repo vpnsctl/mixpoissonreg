@@ -100,13 +100,13 @@
 
       
 
-      </header><script src="intervals-mixpoissonreg_files/header-attrs-2.7/header-attrs.js"></script><div class="row">
+      </header><script src="intervals-mixpoissonreg_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Confidence and prediction intervals with the mixpoissonreg package</h1>
                         <h4 class="author">Alexandre B. Simas</h4>
             
-            <h4 class="date">2021-03-08</h4>
+            <h4 class="date">2021-03-11</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/vpnsctl/mixpoissonreg/blob/master/vignettes/intervals-mixpoissonreg.Rmd"><code>vignettes/intervals-mixpoissonreg.Rmd</code></a></small>
       <div class="hidden name"><code>intervals-mixpoissonreg.Rmd</code></div>
@@ -282,21 +282,21 @@
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit_math</span>, interval <span class="op">=</span> <span class="st">"prediction"</span>, nsim_pred <span class="op">=</span> <span class="fl">50</span>, nsim_pred_y <span class="op">=</span> <span class="fl">50</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;        fit lwr upr</span>
-<span class="co">#&gt; 1 4.930072   0  21</span>
+<span class="co">#&gt; 1 4.930072   0  22</span>
 <span class="co">#&gt; 2 7.152910   0  31</span>
-<span class="co">#&gt; 3 7.689724   0  32</span>
-<span class="co">#&gt; 4 8.014373   0  33</span>
-<span class="co">#&gt; 5 9.262442   0  44</span>
-<span class="co">#&gt; 6 4.538743   0  21</span>
+<span class="co">#&gt; 3 7.689724   0  31</span>
+<span class="co">#&gt; 4 8.014373   0  32</span>
+<span class="co">#&gt; 5 9.262442   0  38</span>
+<span class="co">#&gt; 6 4.538743   0  19</span>
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit_math</span>, interval <span class="op">=</span> <span class="st">"prediction"</span>, level <span class="op">=</span> <span class="fl">0.99</span>, nsim_pred <span class="op">=</span> <span class="fl">50</span>, nsim_pred_y <span class="op">=</span> <span class="fl">50</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;        fit lwr upr</span>
-<span class="co">#&gt; 1 4.930072   0  30</span>
-<span class="co">#&gt; 2 7.152910   0  42</span>
-<span class="co">#&gt; 3 7.689724   0  48</span>
-<span class="co">#&gt; 4 8.014373   0  51</span>
-<span class="co">#&gt; 5 9.262442   0  57</span>
-<span class="co">#&gt; 6 4.538743   0  35</span></code></pre></div>
+<span class="co">#&gt; 1 4.930072   0  32</span>
+<span class="co">#&gt; 2 7.152910   0  47</span>
+<span class="co">#&gt; 3 7.689724   0  46</span>
+<span class="co">#&gt; 4 8.014373   0  52</span>
+<span class="co">#&gt; 5 9.262442   0  58</span>
+<span class="co">#&gt; 6 4.538743   0  29</span></code></pre></div>
 <p>Notice that the intervals are now much wider.</p>
 <p>We will now use the above matrix to create a plot of the fitted values against the <code>math</code> variable along with their prediction intervals using R’s base graphics:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -326,16 +326,16 @@
 <span class="co">#&gt; # A tibble: 314 x 4</span>
 <span class="co">#&gt;     math daysabs .fittedlwrpred .fitteduprpred</span>
 <span class="co">#&gt;    &lt;dbl&gt;   &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;</span>
-<span class="co">#&gt;  1    63       4              0             30</span>
-<span class="co">#&gt;  2    27       4              0             42</span>
-<span class="co">#&gt;  3    20       2              0             50</span>
-<span class="co">#&gt;  4    16       3              0             50</span>
-<span class="co">#&gt;  5     2       3              0             61</span>
-<span class="co">#&gt;  6    71      13              0             30</span>
-<span class="co">#&gt;  7    63      11              0             29</span>
-<span class="co">#&gt;  8     3       7              0             66</span>
-<span class="co">#&gt;  9    51      10              0             39</span>
-<span class="co">#&gt; 10    49       9              0             31</span>
+<span class="co">#&gt;  1    63       4              0             33</span>
+<span class="co">#&gt;  2    27       4              0             40</span>
+<span class="co">#&gt;  3    20       2              0             48</span>
+<span class="co">#&gt;  4    16       3              0             48</span>
+<span class="co">#&gt;  5     2       3              0             59</span>
+<span class="co">#&gt;  6    71      13              0             27</span>
+<span class="co">#&gt;  7    63      11              0             31</span>
+<span class="co">#&gt;  8     3       7              0             61</span>
+<span class="co">#&gt;  9    51      10              0             34</span>
+<span class="co">#&gt; 10    49       9              0             35</span>
 <span class="co">#&gt; # … with 304 more rows</span></code></pre></div>
 <p>Let us now use the <code>augment</code> method to produce a plot of the data, the fitted curve and the prediction intervals with the default significance level:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
