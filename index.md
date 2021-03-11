@@ -18,6 +18,11 @@ or by using `vignette(mixpoissonreg)`.
 
 ## Installing the *mixpoissonreg* package
 
+To install the CRAN version, run:
+```{r}
+install.packages("mixpoissonreg")
+```
+
 The latest **stable** development version can be installed from github:
 
 ```{r}
