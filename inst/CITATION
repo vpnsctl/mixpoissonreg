@@ -1,0 +1,28 @@
+citHeader("To cite mixpoissonreg in publications use:")
+
+citEntry(entry = "Article",
+         title        = "{mixpoissonreg}: Mixed Poisson Regression for Overdispersed Count Data",
+         author       = personList(person(given = "Alexandre B.",
+           family = "Simas",
+           role = c("aut", "cre"),
+           email = "alexandre.impa@gmail.com",
+           comment = c(ORCID = "0000-0003-2562-2829")),
+	person(given = "Wagner",
+             family = "Barreto-Souza",
+             role = "aut",
+             email = "wagnerbs85@gmail.com",
+             comment = c(ORCID = "0000-0003-0831-7881"))),
+         year         = "2021",
+         journal = "Zenodo",
+         doi          = "https://doi.org/10.5281/zenodo.4602320",
+         note = "R package version 1.0.0",
+
+         textVersion  =
+           paste("Simas, A.B. and Barreto-Souza, W. (2021).",
+                 "mixpoissonreg: Mixed Poisson Regression",
+                 "for Overdispersed Count Data.",
+                 "https://doi.org/10.5281/zenodo.4602320", 
+                 "R package version 1.0.0", 
+                 "https://vpnsctl.github.io/mixpoissonreg/"
+           )
+)
