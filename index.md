@@ -5,6 +5,7 @@
 [![](https://img.shields.io/badge/devel%20version-1.0.0-blue.svg)](https://github.com/vpnsctl/mixpoissonreg/main)
 [![R build status](https://github.com/vpnsctl/mixpoissonreg/workflows/R-CMD-check/badge.svg)](https://github.com/vpnsctl/mixpoissonreg/actions)
 [![Codecov test coverage](https://codecov.io/gh/vpnsctl/mixpoissonreg/branch/main/graph/badge.svg?token=JXDPBKWGYE)](https://codecov.io/gh/vpnsctl/mixpoissonreg)
+[![DOI](https://zenodo.org/badge/321743818.svg)](https://zenodo.org/badge/latestdoi/321743818)
 <!-- badges: end -->
 
 The *mixpoissonreg* package deals with regression models with response variables being count data. 
@@ -48,6 +49,15 @@ yum install gsl gsl-devel
 The *mixpoissonreg* package also imports the following packages:
 `pbapply`, `Formula`,  `gamlss`, `gamlss.dist`, `rlang`, `statmod`, `lmtest`, `generics`, `magrittr`, `tibble`, `dplyr`, `ggplot2`,
 `ggrepel`, `gridExtra`
+
+## Citation
+
+To cite *mixpoissonreg* in publications use:
+
+> Simas, A.B. and Barreto-Souza, W. (2021).
+> mixpoissonreg: Mixed Poisson Regression for Overdispersed Count Data.
+> https://doi.org/10.5281/zenodo.4602320 
+> R package version 1.0.0, https://vpnsctl.github.io/mixpoissonreg/
 
 ## Useful Resources
 

@@ -62,7 +62,7 @@ The summary for the NB-regression fitting is:
 summary(fit_nb_full)
 ```
 
-For the PIG-regressionm, the summary is
+For the PIG-regression, the summary is
 
 ```{r}
 summary(fit_pig_full)
